@@ -1,6 +1,7 @@
 package com.vicious.loadmychunks.config;
 
 import com.google.gson.Gson;
+import net.minecraft.FileUtil;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -14,6 +15,7 @@ public class LMCConfig {
     private static final Path path = Paths.get("config/loadmychunks.json");
     public static void init(){
         Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
+        path.toFile().getParentFile().mkdirs();
         try {
             if(Files.exists(path)) {
                 instance = gson.fromJson(new FileReader(path.toFile()), LMCConfig.class);
@@ -22,12 +24,12 @@ public class LMCConfig {
             else{
                 instance = new LMCConfig();
             }
-            try(FileWriter fw = new FileWriter(path.toFile())){
-                fw.write(gson.toJson(instance));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         } catch (FileNotFoundException e) {
+            instance = new LMCConfig();
+        }
+        try(FileWriter fw = new FileWriter(path.toFile())){
+            fw.write(gson.toJson(instance));
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -57,7 +59,7 @@ public class LMCConfig {
     // bases.
     @ConfigValue
     @Range(value = 5,min = 0,max = 1000)
-    public long msPerChunk = 0;
+    public long msPerChunk = 5;
 
     //The time in seconds an overticked chunk needs to wait before being reloaded by a chunk loader.
     @ConfigValue

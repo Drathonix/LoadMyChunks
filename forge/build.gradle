@@ -1,6 +1,7 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
+
 architectury {
     platformSetupLoomIde()
     forge()
@@ -43,10 +44,9 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-
+    inputs.property "version", project.mod_version
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand "version": project.mod_version
     }
 }
 
@@ -65,6 +65,7 @@ remapJar {
 
 jar {
     archiveClassifier.set("dev")
+    manifest.attributes.put("MixinConfigs","loadmychunks.mixins.json")
 }
 
 sourcesJar {

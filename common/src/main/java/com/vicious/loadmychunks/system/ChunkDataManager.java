@@ -1,6 +1,5 @@
 package com.vicious.loadmychunks.system;
 
-import com.vicious.loadmychunks.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.system.loaders.IOwnable;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
@@ -20,7 +19,7 @@ import java.util.function.Supplier;
 /**
  * Maintains the records of all chunk loaders and chunk load states handled by LoadMyChunks.
  */
-public class ChunkLoaderManager {
+public class ChunkDataManager {
     private static final Map<String,LevelChunkLoaderManager> levelManagers = new HashMap<>();
 
     public static LevelChunkLoaderManager getManager(ServerLevel level){

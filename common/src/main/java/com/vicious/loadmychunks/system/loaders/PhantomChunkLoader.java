@@ -1,6 +1,7 @@
 package com.vicious.loadmychunks.system.loaders;
 
 import com.vicious.loadmychunks.LoaderTypes;
+import com.vicious.loadmychunks.system.control.LoadState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -10,6 +11,11 @@ import java.util.Objects;
 
 public class PhantomChunkLoader implements IChunkLoader{
     private ChunkPos position;
+    private LoadState state = LoadState.TICKING;
+
+    public PhantomChunkLoader(){}
+    public PhantomChunkLoader(ChunkPos pos){}
+
     @Override
     public @NotNull CompoundTag save(CompoundTag tag) {
         tag.putLong("l",position.toLong());
@@ -37,5 +43,14 @@ public class PhantomChunkLoader implements IChunkLoader{
     @Override
     public int hashCode() {
         return Objects.hash(position);
+    }
+
+    public void setLoadState(LoadState state){
+        this.state = state;
+    }
+
+    @Override
+    public LoadState getLoadState() {
+        return state;
     }
 }

@@ -28,12 +28,13 @@ public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
     private Period gracePeriod;
     private Period disabledPeriod;
-    private LoadState loadState = LoadState.DISABLED;
+    public LoadState defaultLoadState = LoadState.DISABLED;
+    private LoadState loadState = defaultLoadState;
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
     private ILevelChunkMixin chunk;
-    public boolean timeRegardless;
     private final Set<ServerPlayer> recipients = new HashSet<>();
+    public boolean timeRegardless;
 
     public ChunkDataModule(ChunkPos position){
         this.position=position;
@@ -51,6 +52,8 @@ public class ChunkDataModule {
         if(tag.contains("disabled")){
             disabledPeriod = new Period(tag.getLong("disabled"));
         }
+        defaultLoadState = LoadState.values()[tag.getInt("default")];
+        loadState=defaultLoadState;
         ListTag loaders = tag.getList("loaders",Tag.TAG_COMPOUND);
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag ct){
@@ -58,6 +61,9 @@ public class ChunkDataModule {
                 inst.load(ct);
                 addLoader(inst);
             }
+        }
+        if(loadState.shouldLoad()) {
+            startGrace();
         }
     }
 
@@ -78,6 +84,7 @@ public class ChunkDataModule {
             loaders.add(data);
         }
         tag.put("loaders",loaders);
+        tag.putInt("default",defaultLoadState.ordinal());
         return tag;
     }
 
@@ -90,7 +97,7 @@ public class ChunkDataModule {
         loaders.add(loader);
         LoadState previous = loadState;
         if(onCooldown()){
-            loadState = LoadState.DISABLED;
+            loadState = LoadState.OVERTICKED;
         }
         else{
             loadState = loader.getLoadState().getSuperiorLoadState(loadState);
@@ -114,7 +121,7 @@ public class ChunkDataModule {
      * Updates the LoadState based on the loaders in the chunk.
      */
     public void update(){
-        loadState = LoadState.DISABLED;
+        loadState = defaultLoadState;
         if(!onCooldown()) {
             for (IChunkLoader loader : loaders) {
                 loadState = loader.getLoadState().getSuperiorLoadState(loadState);
@@ -124,6 +131,7 @@ public class ChunkDataModule {
             }
         }
         else{
+            loadState=LoadState.OVERTICKED;
             disabledPeriod=null;
         }
         if(shouldUseTimings()){
@@ -164,7 +172,7 @@ public class ChunkDataModule {
     }
 
     public void startShutoff(){
-        loadState = LoadState.DISABLED;
+        loadState = LoadState.OVERTICKED;
         disabledPeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.instance.delayBeforeReload));
     }
 
@@ -218,5 +226,10 @@ public class ChunkDataModule {
             }
         }
         return owners;
+    }
+
+    public void clearCooldowns() {
+        disabledPeriod=null;
+        gracePeriod=null;
     }
 }

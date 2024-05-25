@@ -19,6 +19,10 @@ public class LoadMyChunksClient {
             NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
             return LoadMyChunksClient.lagLevel;
         });
+        ItemPropertiesRegistry.register(LoadMyChunks.itemChunkometer.get(), new ResourceLocation("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+            NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
+            return LoadMyChunksClient.lagLevel;
+        });
         NetworkManager.registerReceiver(NetworkManager.Side.S2C,LoadMyChunks.LAG_READING_PACKET_ID,((buf, context) -> {
             lagLevel=buf.readFloat();
         }));

@@ -12,18 +12,24 @@ public enum LoadState {
         public boolean shouldLoad() {
             return false;
         }
-
-        @Override
-        public void apply(ServerLevel level, ChunkPos pos) {
-            LoadMyChunks.logger.log(LoadMyChunks.debugLevel,"Unforceloading Chunk at: (" + pos.x + "," + pos.z + ")");
-            ThreadSafetyHelper.unforceChunk(level,pos);
-        }
     },
     TICKING,
+    OVERTICKED{
+        @Override
+        public boolean shouldLoad() {
+            return false;
+        }
+    },
     PERMANENT{
         @Override
         public boolean permanent() {
             return true;
+        }
+    },
+    PERMANENTLY_DISABLED{
+        @Override
+        public boolean shouldLoad() {
+            return false;
         }
     };
 
@@ -46,8 +52,14 @@ public enum LoadState {
 
     //TODO: make sure this is thread safe.
     public void apply(ServerLevel level, ChunkPos pos){
-        LoadMyChunks.logger.log(LoadMyChunks.debugLevel,"Forceloading Chunk at: (" + pos.x + "," + pos.z + ") at level: " + name());
-        ThreadSafetyHelper.forceChunk(level,pos);
+        if(shouldLoad()){
+            LoadMyChunks.logger.log(LoadMyChunks.debugLevel,"Forceloading Chunk at: (" + pos.x + "," + pos.z + ") at level: " + name());
+            ThreadSafetyHelper.forceChunk(level,pos);
+        }
+        else{
+            LoadMyChunks.logger.log(LoadMyChunks.debugLevel,"Unforceloading Chunk at: (" + pos.x + "," + pos.z + ")");
+            ThreadSafetyHelper.unforceChunk(level,pos);
+        }
     }
 
     public void apply(ServerLevel level, long pos){

@@ -2,7 +2,7 @@ package com.vicious.loadmychunks.block;
 
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.bridge.IDestroyable;
-import com.vicious.loadmychunks.system.ChunkLoaderManager;
+import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.loaders.PlacedChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +26,7 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
     @Override
     public void destroy() {
         if(level instanceof ServerLevel sl) {
-            ChunkLoaderManager.removeChunkLoader(sl,getBlockPos(),chunkLoader);
+            ChunkDataManager.removeChunkLoader(sl,getBlockPos(),chunkLoader);
         }
     }
 
@@ -34,7 +34,7 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
     public void setLevel(Level level) {
         super.setLevel(level);
         if(level instanceof ServerLevel sl && chunkLoader == null) {
-            chunkLoader = ChunkLoaderManager.computeChunkLoaderIfAbsent(sl,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos()));
+            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent(sl,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos()));
             if(owner != null){
                 chunkLoader.setOwner(owner);
             }

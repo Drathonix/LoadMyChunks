@@ -3,9 +3,8 @@ package com.vicious.loadmychunks.mixins;
 import com.vicious.loadmychunks.bridge.IDestroyable;
 import com.vicious.loadmychunks.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.bridge.ILevelMixin;
+import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.ChunkDataModule;
-import com.vicious.loadmychunks.system.ChunkLoaderManager;
-import com.vicious.loadmychunks.system.TickDelayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -43,7 +42,7 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V",at = @At("RETURN"))
     public void setup(Level level, ChunkPos chunkPos, UpgradeData upgradeData, LevelChunkTicks levelChunkTicks, LevelChunkTicks levelChunkTicks2, long l, LevelChunkSection[] levelChunkSections, LevelChunk.PostLoadProcessor postLoadProcessor, BlendingData blendingData, CallbackInfo ci){
         if(level instanceof ServerLevel sl) {
-            this.loadMyChunks$loadDataModule = ChunkLoaderManager.getOrCreateChunkData(sl,chunkPos);
+            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData(sl,chunkPos);
             this.loadMyChunks$loadDataModule.assignChunk(this);
         }
     }
@@ -76,7 +75,7 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
         if(flag){
             if(loadMyChunks$loadDataModule.isOverticked()){
                 loadMyChunks$loadDataModule.startShutoff();
-                ChunkLoaderManager.markShutDown((ServerLevel)level,chunkPos);
+                ChunkDataManager.markShutDown((ServerLevel)level,chunkPos);
             }
         }
     }
