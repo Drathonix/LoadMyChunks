@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "loadmychunks:block/lime_chunk_loader"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "loadmychunks:block/gray_chunk_loader"
+    }
+  }
+}

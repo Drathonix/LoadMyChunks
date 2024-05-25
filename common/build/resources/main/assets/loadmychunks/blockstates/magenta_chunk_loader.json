@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "loadmychunks:block/magenta_chunk_loader"
+    }
+  }
+}

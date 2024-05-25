@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "loadmychunks:block/lime_chunk_loader"
+
+  }
+}

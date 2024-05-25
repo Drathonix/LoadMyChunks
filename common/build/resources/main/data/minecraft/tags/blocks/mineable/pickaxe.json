@@ -1,0 +1,21 @@
+{
+  "values": [
+    "loadmychunks:chunk_loader",
+    "loadmychunks:orange_chunk_loader",
+    "loadmychunks:magenta_chunk_loader",
+    "loadmychunks:light_blue_chunk_loader",
+    "loadmychunks:yellow_chunk_loader",
+    "loadmychunks:lime_chunk_loader",
+    "loadmychunks:pink_chunk_loader",
+    "loadmychunks:gray_chunk_loader",
+    "loadmychunks:light_gray_chunk_loader",
+    "loadmychunks:cyan_chunk_loader",
+    "loadmychunks:purple_chunk_loader",
+    "loadmychunks:blue_chunk_loader",
+    "loadmychunks:brown_chunk_loader",
+    "loadmychunks:green_chunk_loader",
+    "loadmychunks:red_chunk_loader",
+    "loadmychunks:black_chunk_loader",
+    "loadmychunks:white_chunk_loader"
+  ]
+}

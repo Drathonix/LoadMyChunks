@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "loadmychunks",
+  "version": "${version}",
+
+  "name": "LoadMyChunks",
+  "description": "An advanced chunk loader that temporarily shuts off after it has overstayed its welcome. Chunks that take excess time to tick will not be loaded.",
+  "authors": [],
+  "contact": {},
+
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+  "accessWidener": "loadmychunks.accesswidener",
+  "environment": "*",
+  "entrypoints": {
+    "client": ["com.vicious.loadmychunks.fabric.LoadMyChunksClientFabric"],
+    "main": ["com.vicious.loadmychunks.fabric.LoadMyChunksFabric"]
+  },
+  "mixins": [
+    "loadmychunks.mixins.json",
+    "loadmychunks-common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": ">=1.20.1"
+  }
+}

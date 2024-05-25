@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "T": {
+      "item": "loadmychunks:tickometer"
+    },
+    "D": {
+      "item": "loadmychunks:dimensional_locator"
+    },
+    "P": {
+      "item": "loadmychunks:player_spoofer"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+
+  },
+  "pattern": [
+    " P ",
+    "DOT",
+    "OOO"
+  ],
+  "result": {
+    "item": "loadmychunks:chunk_loader"
+  },
+  "show_notification": true
+}

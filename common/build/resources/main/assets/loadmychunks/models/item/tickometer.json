@@ -1,0 +1,20 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "loadmychunks:item/tickometer0"
+    },
+    "overrides": [
+        { "predicate": { "lag": 0.00 }, "model": "loadmychunks:item/tickometer" },
+        { "predicate": { "lag": 0.09 }, "model": "loadmychunks:item/tickometer1" },
+        { "predicate": { "lag": 0.18 }, "model": "loadmychunks:item/tickometer2" },
+        { "predicate": { "lag": 0.27 }, "model": "loadmychunks:item/tickometer3" },
+        { "predicate": { "lag": 0.36 }, "model": "loadmychunks:item/tickometer4" },
+        { "predicate": { "lag": 0.45 }, "model": "loadmychunks:item/tickometer5" },
+        { "predicate": { "lag": 0.54 }, "model": "loadmychunks:item/tickometer6" },
+        { "predicate": { "lag": 0.63 }, "model": "loadmychunks:item/tickometer7" },
+        { "predicate": { "lag": 0.72 }, "model": "loadmychunks:item/tickometer8" },
+        { "predicate": { "lag": 0.81 }, "model": "loadmychunks:item/tickometer9" },
+        { "predicate": { "lag": 0.90 }, "model": "loadmychunks:item/tickometer10" },
+        { "predicate": { "lag": 0.999 }, "model": "loadmychunks:item/tickometer11" }
+    ]
+}

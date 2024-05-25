@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.test.iml" filepath="$PROJECT_DIR$/.idea/modules/common/LoadMyChunks.common.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/LoadMyChunks.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/LoadMyChunks.fabric.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/LoadMyChunks.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/LoadMyChunks.fabric.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/LoadMyChunks.forge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/LoadMyChunks.forge.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/LoadMyChunks.forge.test.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/LoadMyChunks.forge.test.iml" />
+    </modules>
+  </component>
+</project>

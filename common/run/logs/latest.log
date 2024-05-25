@@ -1,0 +1,17 @@
+[20:13:31] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.20.1 with Fabric Loader 0.15.11
+[20:13:32] [main/WARN] (FabricLoader/Resolution) Mod resolution failed
+[20:13:32] [main/INFO] (FabricLoader/Resolution) Immediate reason: [HARD_DEP architectury 9.2.14 {depends fabric-api @ [>=0.66.0]}, HARD_DEP_INCOMPATIBLE_PRESELECTED fabric-api 0.83.0+1.20 {depends minecraft @ [>=1.20- <1.20.1-]}, ROOT_FORCELOAD_SINGLE architectury 9.2.14]
+[20:13:32] [main/INFO] (FabricLoader/Resolution) Reason: [HARD_DEP fabric-api 0.83.0+1.20 {depends minecraft @ [>=1.20- <1.20.1-]}]
+[20:13:32] [main/INFO] (FabricLoader/Resolution) Fix: add [], remove [], replace [[minecraft 1.20.1] -> add:minecraft 1.20- ([[1.20-,1.20.1-)])]
+[20:13:32] [main/ERROR] (FabricLoader) Incompatible mods found!
+net.fabricmc.loader.impl.FormattedException: Some of your mods are incompatible with the game or each other!
+A potential solution has been determined, this may resolve your problem:
+	 - Replace 'Minecraft' (minecraft) 1.20.1 with any version between 1.20- (inclusive) and 1.20.1- (exclusive).
+More details:
+	 - Mod 'Fabric API' (fabric-api) 0.83.0+1.20 requires any version between 1.20- (inclusive) and 1.20.1- (exclusive) of 'Minecraft' (minecraft), but only the wrong version is present: 1.20.1!
+	at net.fabricmc.loader.impl.FormattedException.ofLocalized(FormattedException.java:51) ~[fabric-loader-0.15.11.jar:?]
+	at net.fabricmc.loader.impl.FabricLoaderImpl.load(FabricLoaderImpl.java:195) ~[fabric-loader-0.15.11.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.Knot.init(Knot.java:146) ~[fabric-loader-0.15.11.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.Knot.launch(Knot.java:68) ~[fabric-loader-0.15.11.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.KnotClient.main(KnotClient.java:23) ~[fabric-loader-0.15.11.jar:?]
+	at net.fabricmc.devlaunchinjector.Main.main(Main.java:86) ~[?:?]

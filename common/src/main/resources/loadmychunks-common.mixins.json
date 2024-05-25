@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.vicious.loadmychunks.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinChunkAccess",
+    "MixinChunkMap",
+    "MixinLevel",
+    "MixinLevelChunk",
+    "MixinServerLevel"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
