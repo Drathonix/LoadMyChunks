@@ -9,7 +9,7 @@
   "contact": {},
 
   "license": "All Rights Reserved",
-  "icon": "icon.png",
+  "icon": "lmc.png",
   "accessWidener": "loadmychunks.accesswidener",
   "environment": "*",
   "entrypoints": {
