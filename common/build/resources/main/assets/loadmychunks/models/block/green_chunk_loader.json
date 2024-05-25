@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "loadmychunks:block/green_chunk_loader"
-
-  }
-}
