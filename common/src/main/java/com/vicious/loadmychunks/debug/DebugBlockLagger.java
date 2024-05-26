@@ -20,13 +20,6 @@ class DebugBlockLagger extends BaseEntityBlock {
         super(properties);
     }
 
-    public static final MapCodec<DebugBlockLagger> CODEC = simpleCodec(DebugBlockLagger::new);
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
     @Nullable
     @Override
     public DebugBlockEntityLagger newBlockEntity(BlockPos blockPos, BlockState blockState) {
