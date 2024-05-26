@@ -1,6 +1,8 @@
 package com.vicious.loadmychunks.debug;
 
 
+import com.mojang.serialization.MapCodec;
+import com.vicious.loadmychunks.block.BlockChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +18,13 @@ import org.jetbrains.annotations.Nullable;
 class DebugBlockLagger extends BaseEntityBlock {
     public DebugBlockLagger(Properties properties) {
         super(properties);
+    }
+
+    public static final MapCodec<DebugBlockLagger> CODEC = simpleCodec(DebugBlockLagger::new);
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Nullable
