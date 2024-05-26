@@ -1,21 +1,19 @@
 package com.vicious.loadmychunks;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.block.BlockChunkLoader;
 import com.vicious.loadmychunks.block.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.block.LMCBEType;
-import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
 import com.vicious.loadmychunks.config.LMCConfig;
 import com.vicious.loadmychunks.debug.DebugLoadMyChunks;
 import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
 import com.vicious.loadmychunks.item.ItemHasTooltip;
 import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.ChunkDataManager;
+import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.util.BoolEnum;
@@ -25,18 +23,13 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.Registrar;
-import dev.architectury.registry.registries.RegistrarManager;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -46,21 +39,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import java.util.*;
-import java.util.function.Supplier;
-
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
@@ -81,9 +72,7 @@ public class LoadMyChunks {
 	public static RegistrySupplier<Item> itemDiamondWire;
 	public static RegistrySupplier<ItemChunkometer> itemChunkometer;
 
-	public static RegistrySupplier<CreativeModeTab> creativeTab;
-
-	public static Map<RegistryInit, List<Runnable>> toExec = new HashMap<>();
+	public static CreativeTabRegistry.TabSupplier creativeTab;
 
 	public static ModResource LAG_READING_PACKET_ID = new ModResource("lag");
 
@@ -96,12 +85,12 @@ public class LoadMyChunks {
 			logger.info("Using Debug Logging");
 		}
 		logger.info("Creating Creative Tab.");
-		DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(MOD_ID, Registries.CREATIVE_MODE_TAB);
-		creativeTab = TABS.register(new ModResource("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->ITEM.getRegistrar().get(new ModResource("chunk_loader")).getDefaultInstance()));
-		TABS.register();
+
+		creativeTab = CreativeTabRegistry.create(new ModResource("creative_tab"),()->ITEM.getRegistrar().get(new ModResource("chunk_loader")).getDefaultInstance());
+
 		logger.info("Adding Chunk loader blocks");
 		RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem("chunk_loader", () -> {
-			BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
+			BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).color(MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
 			return new BlockChunkLoader(properties);
 		});
 		chunkLoaderBlocks.add(chunkLoaderBlock);
@@ -109,7 +98,7 @@ public class LoadMyChunks {
 		String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
 		for (String color : colors) {
 			chunkLoaderBlocks.add(registerCLBlockWithItem(color + "_chunk_loader", () -> {
-				BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
+				BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).color(MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
 				return new BlockChunkLoader(properties);
 			}));
 		}
@@ -139,7 +128,7 @@ public class LoadMyChunks {
 		logger.info("Chunk Loader Loading Complete.");
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
+			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.getLevel(), plr.blockPosition());
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.timeRegardless = true;
@@ -227,14 +216,14 @@ public class LoadMyChunks {
 		cdm.clearCooldowns();
 		cdm.update();
 		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
-		ctx.getSource().sendSuccess(()->{
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
 			if(permanent) {
 				return Component.translatable("loadmychunks.command.forceload.set.permanent",pos.x,pos.z);
 			}
 			else{
 				return Component.translatable("loadmychunks.command.forceload.set",pos.x,pos.z);
 			}
-		},true);
+		}).get(),true);
 		return 0;
 	}
 
@@ -245,14 +234,14 @@ public class LoadMyChunks {
 		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;
 		cdm.update();
 		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
-		ctx.getSource().sendSuccess(()->{
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
 			if(ban) {
 				return Component.translatable("loadmychunks.command.forceload.unset.permanent",pos.x,pos.z);
 			}
 			else{
 				return Component.translatable("loadmychunks.command.forceload.unset",pos.x,pos.z);
 			}
-		},true);
+		}).get(),true);
 		return 0;
 	}
 }

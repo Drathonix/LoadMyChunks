@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class DebugLoadMyChunks {
     static RegistrySupplier<BlockEntityType<DebugBlockEntityLagger>> laggerBlockEntity;
 
     public static void init(){
-        RegistrySupplier<DebugBlockLagger> laggerBlock = LoadMyChunks.registerBlockWithItem("lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of()));
+        RegistrySupplier<DebugBlockLagger> laggerBlock = LoadMyChunks.registerBlockWithItem("lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of(Material.STONE)));
         DebugLoadMyChunks.laggerBlockEntity = LoadMyChunks.BLOCKENTITIES.register(new ModResource("lagger"), () -> {
             Set<Block> blocks = new HashSet<>();
             blocks.add(laggerBlock.get());
