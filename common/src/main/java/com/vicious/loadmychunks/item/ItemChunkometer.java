@@ -31,7 +31,9 @@ public class ItemChunkometer extends ItemHasTooltip {
             ChunkPos pos = new ChunkPos(player.blockPosition());
             ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
             if (!LMCConfig.instance.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
-                MutableComponent response = Component.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z).setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true)).append("\n");
+                MutableComponent response = Component.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withBold(true));
+                player.sendSystemMessage(response);
+                response = Component.empty().withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(false));
                 if (cdm.onCooldown()) {
                     response.append(Component.translatable("loadmychunks.chunkinfo.line2.overticked"));
                 } else {
