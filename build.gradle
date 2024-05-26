@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
 }
 
 architectury {
@@ -30,8 +30,6 @@ allprojects {
 
     archivesBaseName = rootProject.archives_base_name
     mod_version = rootProject.mod_version
-    minecraft_version_min=rootProject.minecraft_version_min
-    minecraft_version_max=rootProject.minecraft_version_max
     version = "${rootProject.mod_version}-${rootProject.minecraft_version}"
     group = rootProject.maven_group
 
