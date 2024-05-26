@@ -50,6 +50,7 @@ tasks.withType(ProcessResources).configureEach {
             fabric_api_version     : fabric_api_version,
             forge_version          : forge_version,
             forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
             neo_version            : neo_version,
             neo_version_range      : neo_version_range,
             mod_id                 : mod_id,
@@ -79,7 +80,7 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveClassifier.set(null)
+    archiveClassifier.set("neoforge")
 }
 
 jar {

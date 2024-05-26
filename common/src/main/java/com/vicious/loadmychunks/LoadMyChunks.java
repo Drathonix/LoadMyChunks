@@ -184,9 +184,9 @@ public class LoadMyChunks {
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos())).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos")))));
-		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,true,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos())).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos")))));
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
 		root.then(Commands.literal("list").then(Commands.literal("forced").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
 			ctx.getSource().sendSystemMessage(Component.literal("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
