@@ -39,8 +39,6 @@ dependencies {
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
-
-    modRuntimeOnly("mezz.jei:jei-1.20.1-forge:15.3.0.4")
 }
 
 tasks.withType(ProcessResources).configureEach {
