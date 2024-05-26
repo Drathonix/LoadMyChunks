@@ -41,5 +41,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-*/runConfigurations
-.idea/
+.idea/runConfigurations/
