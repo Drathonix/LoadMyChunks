@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "T": {
+      "item": "loadmychunks:tickometer"
+    },
+    "D": {
+      "item": "loadmychunks:diamond_wire"
+    },
+    "G": {
+      "item": "minecraft:tinted_glass"
+    }
+  },
+  "pattern": [
+    "D A",
+    "DAA",
+    "GTG"
+  ],
+  "result": {
+    "item": "loadmychunks:chunkometer"
+  },
+  "show_notification": true
+}
