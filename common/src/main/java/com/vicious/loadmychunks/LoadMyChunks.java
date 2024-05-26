@@ -1,46 +1,39 @@
 package com.vicious.loadmychunks;
 
+import com.google.common.base.Suppliers;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.block.BlockChunkLoader;
 import com.vicious.loadmychunks.block.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.block.LMCBEType;
-import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
 import com.vicious.loadmychunks.config.LMCConfig;
 import com.vicious.loadmychunks.debug.DebugLoadMyChunks;
 import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
 import com.vicious.loadmychunks.item.ItemHasTooltip;
 import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.ChunkDataManager;
+import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.util.BoolEnum;
 import com.vicious.loadmychunks.util.EnumArgument;
 import com.vicious.loadmychunks.util.ModResource;
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.networking.NetworkManager;
-import dev.architectury.registry.CreativeTabRegistry;
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.Registrar;
-import dev.architectury.registry.registries.RegistrarManager;
-import dev.architectury.registry.registries.RegistrySupplier;
+import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+import me.shedaniel.architectury.networking.NetworkManager;
+import me.shedaniel.architectury.registry.CreativeTabs;
+import me.shedaniel.architectury.registry.Registries;
+import me.shedaniel.architectury.registry.RegistrySupplier;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,16 +44,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import java.util.*;
-import java.util.function.Supplier;
-
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
@@ -68,22 +60,22 @@ public class LoadMyChunks {
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Level debugLevel = Level.DEBUG;
 
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, Registries.BLOCK);
-	public static final DeferredRegister<Item> ITEM = DeferredRegister.create(MOD_ID, Registries.ITEM);
-	public static final DeferredRegister<BlockEntityType<?>> BLOCKENTITIES = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.BLOCK_ENTITY_TYPE);
+	public static final Supplier<Registries> REGISTRIES = Suppliers.memoize(() -> Registries.get(MOD_ID));
+
+	public static final me.shedaniel.architectury.registry.Registry<Block> BLOCKS = REGISTRIES.get().get(Registry.BLOCK_REGISTRY);
+	public static final me.shedaniel.architectury.registry.Registry<Item> ITEM = REGISTRIES.get().get(Registry.ITEM_REGISTRY);
+	public static final me.shedaniel.architectury.registry.Registry<BlockEntityType<?>> BLOCKENTITIES = REGISTRIES.get().get(Registry.BLOCK_ENTITY_TYPE_REGISTRY);
 
 	public static final Set<RegistrySupplier<Block>> chunkLoaderBlocks = new HashSet<>();
-	public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
+	public static Supplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
 
-	public static RegistrySupplier<Item> itemTickometer;
-	public static RegistrySupplier<Item> itemPlayerSpoofer;
-	public static RegistrySupplier<Item> itemLocatingCore;
-	public static RegistrySupplier<Item> itemDiamondWire;
-	public static RegistrySupplier<ItemChunkometer> itemChunkometer;
+	public static Supplier<Item> itemTickometer;
+	public static Supplier<Item> itemPlayerSpoofer;
+	public static Supplier<Item> itemLocatingCore;
+	public static Supplier<Item> itemDiamondWire;
+	public static Supplier<ItemChunkometer> itemChunkometer;
 
-	public static RegistrySupplier<CreativeModeTab> creativeTab;
-
-	public static Map<RegistryInit, List<Runnable>> toExec = new HashMap<>();
+	public static CreativeModeTab creativeTab;
 
 	public static ModResource LAG_READING_PACKET_ID = new ModResource("lag");
 
@@ -96,12 +88,10 @@ public class LoadMyChunks {
 			logger.info("Using Debug Logging");
 		}
 		logger.info("Creating Creative Tab.");
-		DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(MOD_ID, Registries.CREATIVE_MODE_TAB);
-		creativeTab = TABS.register(new ModResource("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->ITEM.getRegistrar().get(new ModResource("chunk_loader")).getDefaultInstance()));
-		TABS.register();
+		creativeTab = CreativeTabs.create(new ModResource("creative_tab"),()->Registry.ITEM.get(new ModResource("chunk_loader")).getDefaultInstance());
 		logger.info("Adding Chunk loader blocks");
 		RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem("chunk_loader", () -> {
-			BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
+			BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
 			return new BlockChunkLoader(properties);
 		});
 		chunkLoaderBlocks.add(chunkLoaderBlock);
@@ -109,7 +99,7 @@ public class LoadMyChunks {
 		String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
 		for (String color : colors) {
 			chunkLoaderBlocks.add(registerCLBlockWithItem(color + "_chunk_loader", () -> {
-				BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
+				BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
 				return new BlockChunkLoader(properties);
 			}));
 		}
@@ -122,9 +112,7 @@ public class LoadMyChunks {
 		if(allowUsingDebugFeatures()){
 			DebugLoadMyChunks.init();
 		}
-		BLOCKS.register();
 		RegistryInit.BLOCKS.run();
-		ITEM.register();
 		RegistryInit.ITEMS.run();
 
 		LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(new ModResource("chunk_loader"), () -> {
@@ -134,12 +122,14 @@ public class LoadMyChunks {
 			}
 			return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
 		});
-		BLOCKENTITIES.register();
+
+		//noinspection rawtypes
+		ArgumentTypes.register("lmcenum", EnumArgument.class,(ArgumentSerializer)new EnumArgument.Serializer());
 
 		logger.info("Chunk Loader Loading Complete.");
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
+			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.timeRegardless = true;
@@ -150,7 +140,7 @@ public class LoadMyChunks {
 
 	public static <T extends Block> RegistrySupplier<T> registerBlockWithItem(String name, Supplier<? extends T> supplier) {
 		ModResource resource = new ModResource(name);
-		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
+		RegistrySupplier<T> block = (RegistrySupplier<T>) BLOCKS.register(resource, supplier);
 		RegistryInit.ITEMS.queue(()->{
 			ITEM.register(resource, () -> new BlockItem(block.get(), new LMCProperties()));
 		});
@@ -159,7 +149,7 @@ public class LoadMyChunks {
 
 	public static <T extends Block> RegistrySupplier<T> registerCLBlockWithItem(String name, Supplier<? extends T> supplier) {
 		ModResource resource = new ModResource(name);
-		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
+		RegistrySupplier<T> block = (RegistrySupplier<T>) BLOCKS.register(resource, supplier);
 		RegistryInit.ITEMS.queue(()->{
 			ITEM.register(resource, () -> new ItemChunkLoader(block.get(), new LMCProperties()));
 		});
@@ -181,37 +171,37 @@ public class LoadMyChunks {
 
 
 
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getOrLoadBlockPos(ctx,"pos"))))));
 		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getOrLoadBlockPos(ctx,"pos"))))));
 		root.then(Commands.literal("list").then(Commands.literal("forced").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
-			ctx.getSource().sendSystemMessage(Component.literal("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
+			ctx.getSource().sendSuccess(new TextComponent("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)),false);
 			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState().shouldLoad()).forEach(cdm->{
 				ChunkPos pos = cdm.getPosition();
-				BlockPos dest = new BlockPos(pos.getMiddleBlockX(), 255, pos.getMiddleBlockZ());
+				BlockPos dest = new BlockPos(pos.getMinBlockX(), 255, pos.getMaxBlockX());
 				if(cdm.getLoadState().permanent()) {
-					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ") permanent").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+					ctx.getSource().sendSuccess(new TextComponent("(" + pos.x + "," + pos.z + ") permanent").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))),false);
 				}
 				else{
-					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+					ctx.getSource().sendSuccess(new TextComponent("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))),false);
 				}
 			});
 			return 0;
 		})).then(Commands.literal("overticked").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
-			ctx.getSource().sendSystemMessage(Component.literal("Overticked Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
+			ctx.getSource().sendSuccess(new TextComponent("Overticked Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)),false);
 			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadState.OVERTICKED).forEach(cdm->{
 				ChunkPos pos = cdm.getPosition();
-				BlockPos dest = new BlockPos(pos.getMiddleBlockX(), 255, pos.getMiddleBlockZ());
+				BlockPos dest = new BlockPos(pos.getMinBlockX(), 255, pos.getMaxBlockX());
 				if(cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED) {
-					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ") permanently disabled").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+					ctx.getSource().sendSuccess(new TextComponent("(" + pos.x + "," + pos.z + ") permanently disabled").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))),false);
 				}
 				else{
-					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+					ctx.getSource().sendSuccess(new TextComponent("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))),false);
 				}
 			});
 			return 0;
@@ -220,39 +210,41 @@ public class LoadMyChunks {
 	}
 
 	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
-		bp = bp == null ? BlockPos.containing(ctx.getSource().getPosition()) : bp;
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
 		cdm.clearCooldowns();
 		cdm.update();
 		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
-		ctx.getSource().sendSuccess(()->{
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
 			if(permanent) {
-				return Component.translatable("loadmychunks.command.forceload.set.permanent",pos.x,pos.z);
+				return new TranslatableComponent("loadmychunks.command.forceload.set.permanent",pos.x,pos.z);
 			}
 			else{
-				return Component.translatable("loadmychunks.command.forceload.set",pos.x,pos.z);
+				return new TranslatableComponent("loadmychunks.command.forceload.set",pos.x,pos.z);
 			}
-		},true);
+		}).get(),true);
 		return 0;
 	}
 
 	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
-		bp = bp == null ? BlockPos.containing(ctx.getSource().getPosition()) : bp;
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;
 		cdm.update();
 		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
-		ctx.getSource().sendSuccess(()->{
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
 			if(ban) {
-				return Component.translatable("loadmychunks.command.forceload.unset.permanent",pos.x,pos.z);
+				return new TranslatableComponent("loadmychunks.command.forceload.unset.permanent",pos.x,pos.z);
 			}
 			else{
-				return Component.translatable("loadmychunks.command.forceload.unset",pos.x,pos.z);
+				return new TranslatableComponent("loadmychunks.command.forceload.unset",pos.x,pos.z);
 			}
-		},true);
+		}).get(),true);
 		return 0;
 	}
 }

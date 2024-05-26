@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.UUID;
 
@@ -16,8 +15,8 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
     private PlacedChunkLoader chunkLoader;
     private UUID owner;
 
-    public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
-        super(LoadMyChunks.chunkLoaderBlockEntity.get(), blockPos, blockState);
+    public BlockEntityChunkLoader() {
+        super(LoadMyChunks.chunkLoaderBlockEntity.get());
     }
 
     public PlacedChunkLoader getChunkLoader() {
@@ -25,16 +24,16 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
     }
     @Override
     public void destroy() {
-        if(level instanceof ServerLevel sl) {
-            ChunkDataManager.removeChunkLoader(sl,getBlockPos(),chunkLoader);
+        if(level instanceof ServerLevel) {
+            ChunkDataManager.removeChunkLoader((ServerLevel) level,getBlockPos(),chunkLoader);
         }
     }
 
     @Override
-    public void setLevel(Level level) {
-        super.setLevel(level);
-        if(level instanceof ServerLevel sl && chunkLoader == null) {
-            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent(sl,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos()));
+    public void setLevelAndPosition(Level level, BlockPos blockPos) {
+        super.setLevelAndPosition(level, blockPos);
+        if(level instanceof ServerLevel && chunkLoader == null) {
+            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel)level,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos()));
             if(owner != null){
                 chunkLoader.setOwner(owner);
             }

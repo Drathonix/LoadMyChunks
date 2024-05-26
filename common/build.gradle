@@ -2,12 +2,13 @@ dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modImplementation "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    // Hard coding this, it won't need to change.
+    modApi "me.shedaniel:architectury:${rootProject.architectury_version}"
 
 }
 
 architectury {
-    common("fabric", "forge", "neoforge")
+    common("fabric", "forge")
 }
 
 publishing {

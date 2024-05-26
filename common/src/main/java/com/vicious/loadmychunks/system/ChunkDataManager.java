@@ -26,19 +26,6 @@ public class ChunkDataManager {
         return levelManagers.computeIfAbsent(((ServerLevelData)level.getLevelData()).getLevelName(), k->new LevelChunkLoaderManager(level));
     }
 
-    public static LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
-        String levelName = ((ServerLevelData)level.getLevelData()).getLevelName();
-        if(levelManagers.containsKey(levelName)){
-            levelManagers.get(levelName).clear();
-            LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
-            levelManagers.replace(levelName,out);
-            return out;
-        }
-        else{
-            return levelManagers.put(levelName, new LevelChunkLoaderManager(level,tag));
-        }
-    }
-
     public static @NotNull Map<String,List<IChunkLoader>> getChunkLoadersOf(@Nullable UUID owner) {
         if(owner == null){
             return new HashMap<>();
@@ -48,7 +35,7 @@ public class ChunkDataManager {
             List<IChunkLoader> loaders = results.computeIfAbsent(value.getLevelName(),k->new ArrayList<>());
             for (ChunkDataModule dataModule : value.getChunkDataModules()) {
                 for (IChunkLoader loader : dataModule.getLoaders()) {
-                    if(loader instanceof IOwnable ownable && owner.equals(ownable.getOwner())){
+                    if(loader instanceof IOwnable && owner.equals(((IOwnable)loader).getOwner())){
                         loaders.add(loader);
                     }
                 }
@@ -64,7 +51,7 @@ public class ChunkDataManager {
         for (LevelChunkLoaderManager value : levelManagers.values()) {
             for (ChunkDataModule dataModule : value.getChunkDataModules()) {
                 for (IChunkLoader loader : dataModule.getLoaders()) {
-                    if(loader instanceof IOwnable ownable && owner.equals(ownable.getOwner())){
+                    if(loader instanceof IOwnable && owner.equals(((IOwnable)loader).getOwner())){
                         count++;
                     }
                 }
@@ -81,7 +68,7 @@ public class ChunkDataManager {
             l1:
             for (ChunkDataModule dataModule : value.getChunkDataModules()) {
                 for (IChunkLoader loader : dataModule.getLoaders()) {
-                    if(loader instanceof IOwnable ownable && owner.equals(ownable.getOwner())){
+                    if(loader instanceof IOwnable && owner.equals(((IOwnable)loader).getOwner())){
                         count++;
                         continue l1;
                     }
@@ -147,25 +134,9 @@ public class ChunkDataManager {
         private final ServerLevel level;
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
+            super("loadmychunks_manager");
             this.level=level;
             level.getServer().addTickable(this::tick);
-        }
-
-        public LevelChunkLoaderManager(@NotNull ServerLevel level, @NotNull CompoundTag tag){
-            this(level);
-            for (String key : tag.getAllKeys()) {
-                long index = Long.parseLong(key);
-                ChunkPos pos = new ChunkPos(index);
-                ChunkDataModule module = getOrCreateData(index);
-                module.load(tag.getCompound(key));
-                module.update();
-                if(module.onCooldown()){
-                    shutDown(pos);
-                }
-                else{
-                    module.getLoadState().apply(level,pos);
-                }
-            }
         }
 
         public @Nullable ChunkDataModule getData(@NotNull ChunkPos pos){
@@ -214,6 +185,23 @@ public class ChunkDataManager {
             ChunkDataModule cdm = data.computeIfAbsent(pos, ChunkDataModule::new);
             setDirty();
             return cdm;
+        }
+
+        @Override
+        public void load(CompoundTag tag) {
+            for (String key : tag.getAllKeys()) {
+                long index = Long.parseLong(key);
+                ChunkPos pos = new ChunkPos(index);
+                ChunkDataModule module = getOrCreateData(index);
+                module.load(tag.getCompound(key));
+                module.update();
+                if(module.onCooldown()){
+                    shutDown(pos);
+                }
+                else{
+                    module.getLoadState().apply(level,pos);
+                }
+            }
         }
 
         @Override

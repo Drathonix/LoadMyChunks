@@ -1,9 +1,12 @@
 package com.vicious.loadmychunks.config;
 
 import com.google.gson.Gson;
-import net.minecraft.FileUtil;
+import com.google.gson.GsonBuilder;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -14,7 +17,7 @@ public class LMCConfig {
     public static LMCConfig instance;
     private static final Path path = Paths.get("config/loadmychunks.json");
     public static void init(){
-        Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         path.toFile().getParentFile().mkdirs();
         try {
             if(Files.exists(path)) {

@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "A": {
-      "item": "minecraft:amethyst_shard"
+      "item": "minecraft:obsidian"
     },
     "T": {
       "item": "loadmychunks:tickometer"
@@ -12,7 +12,7 @@
       "item": "loadmychunks:diamond_wire"
     },
     "G": {
-      "item": "minecraft:tinted_glass"
+      "item": "minecraft:glass"
     }
   },
   "pattern": [

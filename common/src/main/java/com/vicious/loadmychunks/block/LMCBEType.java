@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -19,8 +18,8 @@ public class LMCBEType<T extends BlockEntity> extends BlockEntityType<T> {
     }
 
     @Nullable
-    public T create(BlockPos blockPos, BlockState blockState) {
-        return this.supp.create(blockPos, blockState);
+    public T create() {
+        return this.supp.create();
     }
 
     @Nullable
@@ -31,6 +30,6 @@ public class LMCBEType<T extends BlockEntity> extends BlockEntityType<T> {
 
     @FunctionalInterface
     public interface Factory<T extends BlockEntity> {
-        T create(BlockPos blockPos, BlockState blockState);
+        T create();
     }
 }

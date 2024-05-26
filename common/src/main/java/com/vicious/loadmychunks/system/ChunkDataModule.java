@@ -8,20 +8,22 @@ import com.vicious.loadmychunks.system.control.Period;
 import com.vicious.loadmychunks.system.control.Timings;
 import com.vicious.loadmychunks.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.system.loaders.IOwnable;
-import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.Unpooled;
+import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ChunkDataModule {
@@ -54,9 +56,10 @@ public class ChunkDataModule {
         }
         defaultLoadState = LoadState.values()[tag.getInt("default")];
         loadState=defaultLoadState;
-        ListTag loaders = tag.getList("loaders",Tag.TAG_COMPOUND);
+        ListTag loaders = tag.getList("loaders", 10);
         for (Tag loader : loaders) {
-            if(loader instanceof CompoundTag ct){
+            if(loader instanceof CompoundTag){
+                CompoundTag ct = (CompoundTag) loader;
                 IChunkLoader inst = LoaderTypeRegistry.getFactory(new ResourceLocation(ct.getString("type_id"))).get();
                 inst.load(ct);
                 addLoader(inst);
@@ -80,7 +83,7 @@ public class ChunkDataModule {
         for (IChunkLoader loader : this.loaders) {
             CompoundTag data = new CompoundTag();
             data.putString("type_id",loader.getTypeId().toString());
-            loader.save(data);
+            data = loader.save(data);
             loaders.add(data);
         }
         tag.put("loaders",loaders);
@@ -193,7 +196,7 @@ public class ChunkDataModule {
 
     public boolean containsOwnedLoader(@NotNull UUID uuid) {
         for (IChunkLoader loader : loaders) {
-            if(loader instanceof IOwnable ownable && uuid.equals(ownable.getOwner())){
+            if(loader instanceof IOwnable && uuid.equals(((IOwnable)loader).getOwner())){
                return true;
             }
         }
@@ -219,9 +222,9 @@ public class ChunkDataModule {
     public Set<UUID> getOwners() {
         HashSet<UUID> owners = new HashSet<>();
         for (IChunkLoader loader : loaders) {
-            if(loader instanceof IOwnable ownable){
+            if(loader instanceof IOwnable){
                 if(((IOwnable) loader).hasOwner()){
-                    owners.add(ownable.getOwner());
+                    owners.add(((IOwnable) loader).getOwner());
                 }
             }
         }

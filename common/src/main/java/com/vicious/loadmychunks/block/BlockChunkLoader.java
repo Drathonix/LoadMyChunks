@@ -1,17 +1,14 @@
 package com.vicious.loadmychunks.block;
 
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,8 +21,10 @@ public class BlockChunkLoader extends BaseEntityBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
         super.setPlacedBy(level, blockPos, blockState, livingEntity, itemStack);
-        if(livingEntity != null && level.getBlockEntity(blockPos) instanceof BlockEntityChunkLoader cl){
-            cl.setOwner(livingEntity.getUUID());
+        if(livingEntity != null){
+            BlockEntity entity = level.getBlockEntity(blockPos);
+            if(entity instanceof BlockEntityChunkLoader)
+            ((BlockEntityChunkLoader)entity).setOwner(livingEntity.getUUID());
         }
     }
 
@@ -36,15 +35,7 @@ public class BlockChunkLoader extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new BlockEntityChunkLoader(blockPos,blockState);
+    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
+        return new BlockEntityChunkLoader();
     }
-
-    /*@Override
-    public void destroy(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
-        super.destroy(levelAccessor, blockPos, blockState);
-        if(level instanceof ServerLevel sl) {
-            ChunkLoaderManager.removeChunkLoader(sl, chunkLoader, getBlockPos());
-        }
-    }*/
 }

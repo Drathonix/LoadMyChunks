@@ -1,7 +1,6 @@
 package com.vicious.loadmychunks.system.loaders;
 
 import com.vicious.loadmychunks.LoaderTypes;
-import com.vicious.loadmychunks.system.control.LoadState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +21,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
         if(hasOwner()) {
             tag.putUUID("owner", owner);
         }
@@ -41,11 +40,6 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     @Override
     public @Nullable UUID getOwner() {
         return owner;
-    }
-
-    @Override
-    public LoadState getLoadState() {
-        return LoadState.TICKING;
     }
 
     @Override

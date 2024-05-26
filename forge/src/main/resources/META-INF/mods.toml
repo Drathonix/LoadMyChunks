@@ -22,3 +22,9 @@ ${mod_description}
    versionRange="${minecraft_version_range}"
    ordering="NONE"
    side="BOTH"
+[[dependencies.${mod_id}]]
+   modId="architectury"
+   mandatory=true
+   versionRange="[1.32.68,)"
+   ordering="AFTER"
+   side="BOTH"

@@ -5,17 +5,23 @@ import com.vicious.loadmychunks.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.bridge.ILevelMixin;
 import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.ChunkDataModule;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkBiomeContainer;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.UpgradeData;
-import net.minecraft.world.level.levelgen.blending.BlendingData;
-import net.minecraft.world.ticks.LevelChunkTicks;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,45 +31,65 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @Mixin(LevelChunk.class)
 
-public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevelChunkMixin {
+public abstract class MixinLevelChunk implements ILevelChunkMixin {
     @Shadow @Final Level level;
-    @Shadow @Final private Map<BlockPos, TickingBlockEntity> tickersInLevel;
+    //1.16.5 specific.
+    @Unique @Final private Map<BlockPos, BlockEntity> loadmychunks$tickersInLevel = new HashMap<>();
 
     @Shadow @Nullable
     public abstract BlockEntity getBlockEntity(BlockPos arg);
 
+    @Shadow @Final private ChunkPos chunkPos;
+
+    @Shadow public abstract BlockState getBlockState(BlockPos blockPos);
+
+    @Shadow @Nullable public abstract BlockEntity getBlockEntity(BlockPos blockPos, LevelChunk.EntityCreationType entityCreationType);
+
     @Unique private ChunkDataModule loadMyChunks$loadDataModule;
 
-    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V",at = @At("RETURN"))
-    public void setup(Level level, ChunkPos chunkPos, UpgradeData upgradeData, LevelChunkTicks levelChunkTicks, LevelChunkTicks levelChunkTicks2, long l, LevelChunkSection[] levelChunkSections, LevelChunk.PostLoadProcessor postLoadProcessor, BlendingData blendingData, CallbackInfo ci){
-        if(level instanceof ServerLevel sl) {
-            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData(sl,chunkPos);
+    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/ChunkBiomeContainer;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/level/TickList;Lnet/minecraft/world/level/TickList;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Ljava/util/function/Consumer;)V",at = @At("RETURN"))
+    public void setup(Level level, ChunkPos chunkPos, ChunkBiomeContainer chunkBiomeContainer, UpgradeData upgradeData, TickList tickList, TickList tickList2, long l, LevelChunkSection[] levelChunkSections, Consumer consumer, CallbackInfo ci){
+        if(level instanceof ServerLevel) {
+            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData((ServerLevel)level,chunkPos);
             this.loadMyChunks$loadDataModule.assignChunk(this);
         }
     }
 
-    @Unique
-    private static final ChunkPos check = new ChunkPos(62,124);
-
     @Override
-    public void loadMyChunks$tick() {
+    public void loadMyChunks$tick(ProfilerFiller profilerFiller) {
         boolean flag = loadMyChunks$loadDataModule.shouldUseTimings() && !level.isClientSide;
         if(flag || loadMyChunks$loadDataModule.timeRegardless){
             loadMyChunks$loadDataModule.getTickTimer().start();
         }
-        Iterator<TickingBlockEntity> iterator = tickersInLevel.values().iterator();
+        Iterator<BlockEntity> iterator = loadmychunks$tickersInLevel.values().iterator();
         while(iterator.hasNext()){
-            TickingBlockEntity tickingblockentity = iterator.next();
+            BlockEntity tickingblockentity = iterator.next();
+
             if (tickingblockentity.isRemoved()) {
                 ((ILevelMixin)level).loadMyChunks$removeTicker(tickingblockentity);
                 iterator.remove();
-            } else {
-                tickingblockentity.tick();
+            } else if(tickingblockentity instanceof TickableBlockEntity){
+                try {
+                    profilerFiller.push(() -> String.valueOf(BlockEntityType.getKey(tickingblockentity.getType())));
+                    if (tickingblockentity.getType().isValid(getBlockState(tickingblockentity.getBlockPos()).getBlock())) {
+                        ((TickableBlockEntity)tickingblockentity).tick();
+                    } else {
+                        tickingblockentity.logInvalidState();
+                    }
+                    profilerFiller.pop();
+                } catch (Throwable var8) {
+                    CrashReport crashReport = CrashReport.forThrowable(var8, "Ticking block entity");
+                    CrashReportCategory crashReportCategory = crashReport.addCategory("Block entity being ticked");
+                    tickingblockentity.fillCrashReportCategory(crashReportCategory);
+                    throw new ReportedException(crashReport);
+                }
             }
         }
         if(flag || loadMyChunks$loadDataModule.timeRegardless){
@@ -82,8 +108,17 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
 
     @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
     public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
-        if(getBlockEntity(blockPos) instanceof IDestroyable destroyable){
-            destroyable.destroy();
+        BlockEntity blockEntity = getBlockEntity(blockPos);
+        if(blockEntity instanceof IDestroyable){
+            ((IDestroyable)blockEntity).destroy();
+        }
+        loadmychunks$tickersInLevel.remove(blockPos);
+    }
+
+    @Inject(method = "setBlockEntity",at = @At(value = "INVOKE",target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",shift = At.Shift.AFTER))
+    public void addTicker(BlockPos blockPos, BlockEntity blockEntity, CallbackInfo ci){
+        if(blockEntity instanceof TickableBlockEntity) {
+            loadmychunks$tickersInLevel.put(blockPos, blockEntity);
         }
     }
 

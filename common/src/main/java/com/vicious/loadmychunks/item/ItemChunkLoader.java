@@ -1,6 +1,7 @@
 package com.vicious.loadmychunks.item;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -18,7 +19,7 @@ public class ItemChunkLoader extends BlockItem {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
-        list.add(Component.translatable(getTooltipTranslationKey()));
+        list.add(new TranslatableComponent(getTooltipTranslationKey()));
     }
 
     public String getTooltipTranslationKey() {

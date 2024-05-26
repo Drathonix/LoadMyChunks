@@ -8,57 +8,66 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Mixin(Level.class)
 public abstract class MixinLevel implements ILevelMixin {
-    @Shadow private boolean tickingBlockEntities;
-
-    @Shadow @Final protected List<TickingBlockEntity> blockEntityTickers;
-
     @Shadow public abstract LevelChunk getChunk(int i, int j);
 
+    @Unique private static final List<BlockEntity> loadmychunks$emptyList = new ArrayList<>();
 
     @Shadow public abstract boolean isClientSide();
 
+    @Shadow @Final public List<BlockEntity> tickableBlockEntities;
+
+    @Shadow @Final public List<BlockEntity> blockEntityList;
+
+    @Shadow public abstract ProfilerFiller getProfiler();
+
     /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
+     *
+     * @return An empty list to spoof the original method
      */
     //TODO: investigate if this has significant mod conflicts.
-    @Inject(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    public void tickChunkWise(CallbackInfo ci, ProfilerFiller profilerFiller){
+    @Redirect(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;"))
+    public Iterator<BlockEntity> tickChunkWise(List<BlockEntity> instance){
         if(!this.isClientSide()) {
             //noinspection resource
-            if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
+            if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache) {
+                ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    if (value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
-                        if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
-                            chunk.loadMyChunks$tick();
+                    LevelChunk tickingChunk = value.getTickingChunk();
+                    if (tickingChunk instanceof ILevelChunkMixin) {
+                        if (scc.isTickingChunk(tickingChunk.getPos().getWorldPosition())) {
+                            ((ILevelChunkMixin)tickingChunk).loadMyChunks$tick(getProfiler());
                         }
                     }
                 }
             }
-            this.tickingBlockEntities = false;
-            profilerFiller.pop();
-            ci.cancel();
+            return loadmychunks$emptyList.iterator();
+        }
+        else{
+            return instance.iterator();
         }
     }
 
     @Override
-    public void loadMyChunks$removeTicker(TickingBlockEntity tickingBlockEntity) {
-        blockEntityTickers.remove(tickingBlockEntity);
+    public void loadMyChunks$removeTicker(BlockEntity tickingBlockEntity) {
+        tickableBlockEntities.remove(tickingBlockEntity);
+        blockEntityList.remove(tickingBlockEntity);
     }
 
     @Unique

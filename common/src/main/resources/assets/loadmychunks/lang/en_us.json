@@ -35,7 +35,7 @@
     "loadmychunks.chunkinfo.line3": "Last Tick Duration: %sms",
     "loadmychunks.chunkinfo.line4": "Contains %s chunk loaders owned by (%s).",
     "loadmychunks.chunkinfo.line5": "Will forceload again in %s seconds.",
-    "loadmychunks.creativetab.title": "Load My Chunks",
+    "itemGroup.loadmychunks.creative_tab": "Load My Chunks",
     "loadmychunks.command.forceload.set": "Now forceloading (%s,%s)",
     "loadmychunks.command.forceload.set.permanent": "Now permanently forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset": "No longer automatically forceloading (%s,%s)",

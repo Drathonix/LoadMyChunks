@@ -17,7 +17,7 @@ public class PhantomChunkLoader implements IChunkLoader{
     public PhantomChunkLoader(ChunkPos pos){}
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
         tag.putLong("l",position.toLong());
         return tag;
     }

@@ -1,8 +1,8 @@
 package com.vicious.loadmychunks.item;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,10 +19,10 @@ public class ItemHasTooltip extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
-        list.add(Component.translatable(getTooltipTranslationKey()));
+        list.add(new TranslatableComponent(getTooltipTranslationKey()));
     }
 
     public String getTooltipTranslationKey(){
-        return BuiltInRegistries.ITEM.getKey(this).toLanguageKey("tooltip");
+        return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".");
     }
 }
