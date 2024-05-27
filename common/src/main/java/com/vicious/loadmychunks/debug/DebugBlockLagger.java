@@ -1,14 +1,9 @@
 package com.vicious.loadmychunks.debug;
 
 
-import com.mojang.serialization.MapCodec;
-import com.vicious.loadmychunks.block.BlockChunkLoader;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,12 +15,6 @@ class DebugBlockLagger extends BaseEntityBlock {
         super(properties);
     }
 
-    public static final MapCodec<DebugBlockLagger> CODEC = simpleCodec(DebugBlockLagger::new);
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 
     @Nullable
     @Override

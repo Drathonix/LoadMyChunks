@@ -4,7 +4,6 @@
   "package": "com.vicious.loadmychunks.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinArgumentTypeInfos",
     "MixinChunkAccess",
     "MixinChunkMap",
     "MixinLevel",
