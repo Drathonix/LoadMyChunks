@@ -30,7 +30,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -39,6 +39,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
@@ -46,11 +47,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class LoadMyChunks {
@@ -59,9 +62,9 @@ public class LoadMyChunks {
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Level debugLevel = Level.DEBUG;
 
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, Registries.BLOCK);
-	public static final DeferredRegister<Item> ITEM = DeferredRegister.create(MOD_ID, Registries.ITEM);
-	public static final DeferredRegister<BlockEntityType<?>> BLOCKENTITIES = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.BLOCK_ENTITY_TYPE);
+	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, Registry.BLOCK_REGISTRY);
+	public static final DeferredRegister<Item> ITEM = DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCKENTITIES = DeferredRegister.create(LoadMyChunks.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
 
 	public static final Set<RegistrySupplier<Block>> chunkLoaderBlocks = new HashSet<>();
 	public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
@@ -72,7 +75,7 @@ public class LoadMyChunks {
 	public static RegistrySupplier<Item> itemDiamondWire;
 	public static RegistrySupplier<ItemChunkometer> itemChunkometer;
 
-	public static CreativeTabRegistry.TabSupplier creativeTab;
+	public static CreativeModeTab creativeTab;
 
 	public static ModResource LAG_READING_PACKET_ID = new ModResource("lag");
 
@@ -173,9 +176,9 @@ public class LoadMyChunks {
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getSpawnablePos(ctx,"pos"))))));
 		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getSpawnablePos(ctx,"pos"))))));
 		root.then(Commands.literal("list").then(Commands.literal("forced").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
 			ctx.getSource().sendSystemMessage(Component.literal("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
@@ -209,7 +212,8 @@ public class LoadMyChunks {
 	}
 
 	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
-		bp = bp == null ? BlockPos.containing(ctx.getSource().getPosition()) : bp;
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
@@ -228,7 +232,8 @@ public class LoadMyChunks {
 	}
 
 	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
-		bp = bp == null ? BlockPos.containing(ctx.getSource().getPosition()) : bp;
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;

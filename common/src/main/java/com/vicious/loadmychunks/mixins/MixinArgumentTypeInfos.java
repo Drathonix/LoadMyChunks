@@ -5,7 +5,6 @@ import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,6 +18,6 @@ public abstract class MixinArgumentTypeInfos implements IMixinArgumentTypeInfos 
 
     @Unique
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> ArgumentTypeInfo<A, T> lmc$register(String string, Object class_, Object info) {
-        return register(BuiltInRegistries.COMMAND_ARGUMENT_TYPE,string,(Class<A>)class_,(ArgumentTypeInfo<A, T>)info);
+        return register(Registry.COMMAND_ARGUMENT_TYPE,string,(Class<A>)class_,(ArgumentTypeInfo<A, T>)info);
     }
 }

@@ -1,7 +1,6 @@
 package com.vicious.loadmychunks.item;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +22,6 @@ public class ItemHasTooltip extends Item {
     }
 
     public String getTooltipTranslationKey(){
-        return BuiltInRegistries.ITEM.getKey(this).toLanguageKey("tooltip");
+        return Registry.ITEM.getKey(this).toLanguageKey("tooltip");
     }
 }
