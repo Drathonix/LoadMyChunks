@@ -7,6 +7,6 @@
     }
   ],
   "result": {
-    "item": "loadmychunks:chunk_loader"
+    "id": "loadmychunks:chunk_loader"
   }
 }

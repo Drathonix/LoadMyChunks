@@ -16,6 +16,5 @@ public class LoadMyChunksFabric implements ModInitializer {
 
         IMixinArgumentTypeInfos infos = IMixinArgumentTypeInfos.class.cast(new ArgumentTypeInfos());
         infos.lmc$register("lmcenum", EnumArgument.class,new EnumArgument.Info<>());
-
     }
 }

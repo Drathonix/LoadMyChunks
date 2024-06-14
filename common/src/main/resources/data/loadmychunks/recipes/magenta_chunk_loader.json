@@ -11,6 +11,6 @@
     }
   ],
   "result": {
-    "item": "loadmychunks:magenta_chunk_loader"
+    "id": "loadmychunks:magenta_chunk_loader"
   }
 }

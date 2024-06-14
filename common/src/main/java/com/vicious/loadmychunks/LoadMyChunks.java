@@ -1,21 +1,21 @@
 package com.vicious.loadmychunks;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.block.BlockChunkLoader;
 import com.vicious.loadmychunks.block.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.block.LMCBEType;
-import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
 import com.vicious.loadmychunks.config.LMCConfig;
 import com.vicious.loadmychunks.debug.DebugLoadMyChunks;
 import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
 import com.vicious.loadmychunks.item.ItemHasTooltip;
 import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.system.ChunkDataModule;
+import com.vicious.loadmychunks.network.LagReadingPacket;
+import com.vicious.loadmychunks.network.LagReadingRequest;
 import com.vicious.loadmychunks.system.ChunkDataManager;
+import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.util.BoolEnum;
@@ -25,42 +25,36 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.Registrar;
-import dev.architectury.registry.registries.RegistrarManager;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.protocol.game.ClientboundCommandsPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import java.util.*;
-import java.util.function.Supplier;
-
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
@@ -82,10 +76,6 @@ public class LoadMyChunks {
 	public static RegistrySupplier<ItemChunkometer> itemChunkometer;
 
 	public static RegistrySupplier<CreativeModeTab> creativeTab;
-
-	public static Map<RegistryInit, List<Runnable>> toExec = new HashMap<>();
-
-	public static ModResource LAG_READING_PACKET_ID = new ModResource("lag");
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -135,17 +125,9 @@ public class LoadMyChunks {
 			return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
 		});
 		BLOCKENTITIES.register();
-
 		logger.info("Chunk Loader Loading Complete.");
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
-			Player plr = context.getPlayer();
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
-			//TODO: integrate permissions with LP
-			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
-				cdm.timeRegardless = true;
-				cdm.addRecipient((ServerPlayer) plr);
-			}
-		}));
+		NetworkManager.registerReceiver(NetworkManager.Side.S2C, LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC,LagReadingPacket::handleClient);
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 	}
 
 	public static <T extends Block> RegistrySupplier<T> registerBlockWithItem(String name, Supplier<? extends T> supplier) {
@@ -178,8 +160,6 @@ public class LoadMyChunks {
 	public static boolean allowUsingDebugFeatures() {
 		return false;
 	}
-
-
 
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));

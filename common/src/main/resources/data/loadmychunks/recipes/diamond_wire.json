@@ -18,7 +18,7 @@
     "III"
   ],
   "result": {
-    "item": "loadmychunks:diamond_wire",
+    "id": "loadmychunks:diamond_wire",
     "count": 8
   },
   "show_notification": true

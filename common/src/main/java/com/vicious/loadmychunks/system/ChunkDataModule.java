@@ -1,8 +1,8 @@
 package com.vicious.loadmychunks.system;
 
-import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.config.LMCConfig;
+import com.vicious.loadmychunks.network.LagReadingPacket;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.system.control.Period;
 import com.vicious.loadmychunks.system.control.Timings;
@@ -16,12 +16,14 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ChunkDataModule {
@@ -209,9 +211,7 @@ public class ChunkDataModule {
         float frac = chunkTickTimer.getLagFraction();
         while(iterator.hasNext()){
             ServerPlayer plr = iterator.next();
-            FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
-            newBuf.writeFloat(frac);
-            NetworkManager.sendToPlayer(plr, LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
+            NetworkManager.sendToPlayer(plr, new LagReadingPacket(frac));
             iterator.remove();
         }
     }

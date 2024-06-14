@@ -18,7 +18,7 @@
     "GDD"
   ],
   "result": {
-    "item": "loadmychunks:player_spoofer"
+    "id": "loadmychunks:player_spoofer"
   },
   "show_notification": true
 }

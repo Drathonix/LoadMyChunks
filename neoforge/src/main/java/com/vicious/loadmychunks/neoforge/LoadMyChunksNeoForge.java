@@ -3,21 +3,18 @@ package com.vicious.loadmychunks.neoforge;
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.client.LoadMyChunksClient;
 import com.vicious.loadmychunks.util.EnumArgument;
-import dev.architectury.platform.hooks.EventBusesHooks;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 
 @Mod(LoadMyChunks.MOD_ID)
@@ -32,7 +29,8 @@ public class LoadMyChunksNeoForge {
         infos.register("lmcenum",()-> info);
     }
 
-    @Mod.EventBusSubscriber(modid=LoadMyChunks.MOD_ID,bus=Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
+
+    @EventBusSubscriber(modid=LoadMyChunks.MOD_ID,bus=EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
     public static class CMEs {
         @SubscribeEvent
         public static void clientInit(FMLClientSetupEvent event) {

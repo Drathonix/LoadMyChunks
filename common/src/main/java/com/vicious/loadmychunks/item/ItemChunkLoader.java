@@ -4,9 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -15,9 +13,10 @@ public class ItemChunkLoader extends BlockItem {
         super(block, properties);
     }
 
+
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         list.add(Component.translatable(getTooltipTranslationKey()));
     }
 
