@@ -35,6 +35,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
@@ -85,7 +86,7 @@ public class LoadMyChunks {
 		}
 		logger.info("Creating Creative Tab.");
 		DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(MOD_ID, Registries.CREATIVE_MODE_TAB);
-		creativeTab = TABS.register(new ModResource("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->ITEM.getRegistrar().get(new ModResource("chunk_loader")).getDefaultInstance()));
+		creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->ITEM.getRegistrar().get(ModResource.of("chunk_loader")).getDefaultInstance()));
 		TABS.register();
 		logger.info("Adding Chunk loader blocks");
 		RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem("chunk_loader", () -> {
@@ -102,11 +103,11 @@ public class LoadMyChunks {
 			}));
 		}
 		CommandRegistrationEvent.EVENT.register(LoadMyChunks::registerCommands);
-		itemTickometer = ITEM.register(new ModResource("tickometer"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemPlayerSpoofer = ITEM.register(new ModResource("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemLocatingCore = ITEM.register(new ModResource("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemDiamondWire = ITEM.register(new ModResource("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemChunkometer = ITEM.register(new ModResource("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
+		itemTickometer = ITEM.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties()));
+		itemPlayerSpoofer = ITEM.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties()));
+		itemLocatingCore = ITEM.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
+		itemDiamondWire = ITEM.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
+		itemChunkometer = ITEM.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
 		if(allowUsingDebugFeatures()){
 			DebugLoadMyChunks.init();
 		}
@@ -115,7 +116,7 @@ public class LoadMyChunks {
 		ITEM.register();
 		RegistryInit.ITEMS.run();
 
-		LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(new ModResource("chunk_loader"), () -> {
+		LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(ModResource.of("chunk_loader"), () -> {
 			Set<Block> blocks = new HashSet<>();
 			for (RegistrySupplier<Block> blk : chunkLoaderBlocks) {
 				blocks.add(blk.get());
@@ -129,7 +130,7 @@ public class LoadMyChunks {
 	}
 
 	public static <T extends Block> RegistrySupplier<T> registerBlockWithItem(String name, Supplier<? extends T> supplier) {
-		ModResource resource = new ModResource(name);
+		ResourceLocation resource = ModResource.of(name);
 		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
 		RegistryInit.ITEMS.queue(()->{
 			ITEM.register(resource, () -> new BlockItem(block.get(), new LMCProperties()));
@@ -138,7 +139,7 @@ public class LoadMyChunks {
 	}
 
 	public static <T extends Block> RegistrySupplier<T> registerCLBlockWithItem(String name, Supplier<? extends T> supplier) {
-		ModResource resource = new ModResource(name);
+		ResourceLocation resource = ModResource.of(name);
 		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
 		RegistryInit.ITEMS.queue(()->{
 			ITEM.register(resource, () -> new ItemChunkLoader(block.get(), new LMCProperties()));

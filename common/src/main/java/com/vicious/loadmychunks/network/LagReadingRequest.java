@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record LagReadingRequest() implements CustomPacketPayload {
 
-    public static final Type<LagReadingRequest> TYPE = new Type<>(new ModResource("lag_request"));
+    public static final Type<LagReadingRequest> TYPE = new Type<>(ModResource.of("lag_request"));
     public static final StreamCodec<ByteBuf, LagReadingRequest> STREAM_CODEC = StreamCodec.of(
             (object, object2) -> {}, object -> new LagReadingRequest());
 

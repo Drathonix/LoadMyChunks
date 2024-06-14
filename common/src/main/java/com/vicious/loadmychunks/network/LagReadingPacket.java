@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record LagReadingPacket(float lag) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<LagReadingPacket> TYPE = new CustomPacketPayload.Type<>(new ModResource("lag"));
+    public static final CustomPacketPayload.Type<LagReadingPacket> TYPE = new CustomPacketPayload.Type<>(ModResource.of("lag"));
     public static final StreamCodec<ByteBuf, LagReadingPacket> STREAM_CODEC = StreamCodec.of(
             (object, object2) -> object.writeFloat(object2.lag), object -> new LagReadingPacket(object.readFloat()));
 

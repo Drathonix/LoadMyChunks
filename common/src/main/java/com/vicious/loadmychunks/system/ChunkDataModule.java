@@ -59,7 +59,7 @@ public class ChunkDataModule {
         ListTag loaders = tag.getList("loaders",Tag.TAG_COMPOUND);
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag ct){
-                IChunkLoader inst = LoaderTypeRegistry.getFactory(new ResourceLocation(ct.getString("type_id"))).get();
+                IChunkLoader inst = LoaderTypeRegistry.getFactory(ResourceLocation.parse(ct.getString("type_id"))).get();
                 inst.load(ct);
                 addLoader(inst);
             }

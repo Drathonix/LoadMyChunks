@@ -11,11 +11,11 @@ public class LoadMyChunksClient {
 
     public static void init(){
         LoadMyChunks.logger.info("Initializing Client Side");
-        ItemPropertiesRegistry.register(LoadMyChunks.itemTickometer.get(), new ResourceLocation("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+        ItemPropertiesRegistry.register(LoadMyChunks.itemTickometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
             NetworkManager.sendToServer(new LagReadingRequest());
             return LoadMyChunksClient.lagLevel;
         });
-        ItemPropertiesRegistry.register(LoadMyChunks.itemChunkometer.get(), new ResourceLocation("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+        ItemPropertiesRegistry.register(LoadMyChunks.itemChunkometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
             NetworkManager.sendToServer(new LagReadingRequest());
             return LoadMyChunksClient.lagLevel;
         });

@@ -25,7 +25,7 @@ public class DebugLoadMyChunks {
 
     public static void init(){
         RegistrySupplier<DebugBlockLagger> laggerBlock = LoadMyChunks.registerBlockWithItem("lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of()));
-        DebugLoadMyChunks.laggerBlockEntity = LoadMyChunks.BLOCKENTITIES.register(new ModResource("lagger"), () -> {
+        DebugLoadMyChunks.laggerBlockEntity = LoadMyChunks.BLOCKENTITIES.register(ModResource.of("lagger"), () -> {
             Set<Block> blocks = new HashSet<>();
             blocks.add(laggerBlock.get());
             return new LMCBEType<>(DebugBlockEntityLagger::new, blocks, null);
