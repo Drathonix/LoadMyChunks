@@ -5,52 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="321b55a4-16eb-4b62-9621-b418f51cbb57" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinLevelChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinLevelChunk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinServerLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinServerLevel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/system/ChunkDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/system/ChunkDataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/system/ChunkDataModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/system/ChunkDataModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/black_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/black_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/blue_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/blue_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/brown_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/brown_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunk_loader_decolor.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunk_loader_decolor.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunkometer.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/chunkometer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/cyan_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/cyan_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/diamond_wire.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/diamond_wire.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/dimensional_locator.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/dimensional_locator.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/gray_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/gray_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/green_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/green_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/light_blue_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/light_blue_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/light_gray_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/light_gray_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/lime_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/lime_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/magenta_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/magenta_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/orange_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/orange_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/pink_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/pink_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/player_spoofer.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/player_spoofer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/purple_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/purple_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/red_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/red_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/tickometer.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/tickometer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/white_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/white_chunk_loader.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/yellow_chunk_loader.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/data/loadmychunks/recipes/yellow_chunk_loader.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/util/BoolEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/util/EnumArgument.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/util/BoolArgument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/resources/assets/loadmychunks/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/assets/loadmychunks/lang/en_us.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fabric/src/main/java/com/vicious/loadmychunks/fabric/LoadMyChunksFabric.java" beforeDir="false" afterPath="$PROJECT_DIR$/fabric/src/main/java/com/vicious/loadmychunks/fabric/LoadMyChunksFabric.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/src/main/java/com/vicious/loadmychunks/forge/LoadMyChunksForge.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/src/main/resources/META-INF/mods.toml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/src/main/resources/pack.mcmeta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/neoforge/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/neoforge/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/neoforge/src/main/java/com/vicious/loadmychunks/neoforge/LoadMyChunksNeoForge.java" beforeDir="false" afterPath="$PROJECT_DIR$/neoforge/src/main/java/com/vicious/loadmychunks/neoforge/LoadMyChunksNeoForge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/neoforge/src/main/resources/META-INF/mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/neoforge/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +70,24 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="fabric" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="fabric" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="fabric" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="loom" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
                 <item name="neoforge" type="2d1252cf:ModuleNode" />
               </path>
               <path>
@@ -121,6 +102,20 @@
                 <item name="neoforge" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="neoforge" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="help" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="neoforge" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="loom" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -198,35 +193,14 @@
       <recent name="C:\Users\jacks\IDEA\LoadMyChunks\common\src\main\resources\assets\loadmychunks\models\item" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.vicious.loadmychunks.util" />
       <recent name="com.vicious.loadmychunks.network" />
       <recent name="" />
       <recent name="com.vicious.loadmychunks.fabric" />
       <recent name="com.vicious.loadmychunks" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks:neoforge [build]">
-    <configuration name="LoadMyChunks [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="runClient" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.neoforge build">
     <configuration name="LoadMyChunks build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="LoadMyChunks build" />
@@ -337,6 +311,28 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
+    <configuration name="LoadMyChunks:neoforge [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/neoforge" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runClient" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="neoforge build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="neoforge build" />
@@ -361,11 +357,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.LoadMyChunks:neoforge [build]" />
-        <item itemvalue="Gradle.LoadMyChunks:fabric [build]" />
-        <item itemvalue="Gradle.LoadMyChunks:forge [build]" />
-        <item itemvalue="Gradle.LoadMyChunks [runClient]" />
+        <item itemvalue="Gradle.LoadMyChunks:neoforge [runClient]" />
         <item itemvalue="Gradle.LoadMyChunks:fabric [runClient]" />
+        <item itemvalue="Gradle.LoadMyChunks:fabric [build]" />
+        <item itemvalue="Gradle.LoadMyChunks:neoforge [build]" />
+        <item itemvalue="Gradle.LoadMyChunks:forge [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -390,7 +386,7 @@
       <workItem from="1718389910855" duration="80000" />
       <workItem from="1718390040420" duration="42000" />
       <workItem from="1718390178662" duration="2878000" />
-      <workItem from="1718393121106" duration="1990000" />
+      <workItem from="1718393121106" duration="6785000" />
     </task>
     <servers />
   </component>
@@ -435,7 +431,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java</url>
-          <line>237</line>
+          <line>236</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

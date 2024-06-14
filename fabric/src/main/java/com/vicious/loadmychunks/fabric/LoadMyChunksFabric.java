@@ -2,7 +2,7 @@ package com.vicious.loadmychunks.fabric;
 
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
-import com.vicious.loadmychunks.util.EnumArgument;
+import com.vicious.loadmychunks.util.BoolArgument;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -15,6 +15,6 @@ public class LoadMyChunksFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
 
         IMixinArgumentTypeInfos infos = IMixinArgumentTypeInfos.class.cast(new ArgumentTypeInfos());
-        infos.lmc$register("lmcenum", EnumArgument.class,new EnumArgument.Info<>());
+        infos.lmc$register("lmcbool", BoolArgument.class,new BoolArgument.Info());
     }
 }

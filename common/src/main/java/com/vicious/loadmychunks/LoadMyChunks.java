@@ -18,8 +18,7 @@ import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
-import com.vicious.loadmychunks.util.BoolEnum;
-import com.vicious.loadmychunks.util.EnumArgument;
+import com.vicious.loadmychunks.util.BoolArgument;
 import com.vicious.loadmychunks.util.ModResource;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
@@ -36,7 +35,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.protocol.game.ClientboundCommandsPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
@@ -163,10 +161,10 @@ public class LoadMyChunks {
 
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
-		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
-		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", EnumArgument.enumArgument(BoolEnum.class)).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),null))
-				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",BoolEnum.class).asBoolean(),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),BlockPosArgument.getBlockPos(ctx,"pos"))))));
+		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",Boolean.class),BlockPosArgument.getBlockPos(ctx,"pos"))))));
 		root.then(Commands.literal("list").then(Commands.literal("forced").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
 			ctx.getSource().sendSystemMessage(Component.literal("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));

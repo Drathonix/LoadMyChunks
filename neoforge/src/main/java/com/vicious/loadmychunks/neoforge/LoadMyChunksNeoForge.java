@@ -2,12 +2,12 @@ package com.vicious.loadmychunks.neoforge;
 
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.client.LoadMyChunksClient;
-import com.vicious.loadmychunks.util.EnumArgument;
-import dev.architectury.registry.registries.DeferredRegister;
+import com.vicious.loadmychunks.util.BoolArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -15,20 +15,20 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 
 @Mod(LoadMyChunks.MOD_ID)
 public class LoadMyChunksNeoForge {
-    public LoadMyChunksNeoForge() {
-        //TODO fix?
-        //EventBus.registerModEventBus(LoadMyChunks.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
+    public LoadMyChunksNeoForge(IEventBus modBus) {
         LoadMyChunks.init();
         NeoForge.EVENT_BUS.register(this);
-        DeferredRegister<ArgumentTypeInfo<?,?>> infos = DeferredRegister.create(LoadMyChunks.MOD_ID,Registries.COMMAND_ARGUMENT_TYPE);
-        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(EnumArgument.class,new EnumArgument.Info());
-        infos.register("lmcenum",()-> info);
+        //TODO: WATCH NEO FOR CHANGES REGARDING THIS FEATURE.
+        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
+        args.register("lmcbool",()->info);
+        args.register(modBus);
     }
-
 
     @EventBusSubscriber(modid=LoadMyChunks.MOD_ID,bus=EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
     public static class CMEs {
