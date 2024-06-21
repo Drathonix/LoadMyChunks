@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinArgumentTypeInfos.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinArgumentTypeInfos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-    </list>
+    <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,24 +51,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="forge" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="forge" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="forge" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
