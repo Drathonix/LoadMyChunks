@@ -24,7 +24,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Logs**
-Provide logs and/or crash reports here.
+Provide logs here.
 
 **Screenshots or Video**
 Provide if you have them.
