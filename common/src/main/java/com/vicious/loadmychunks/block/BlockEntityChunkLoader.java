@@ -10,11 +10,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable {
     private PlacedChunkLoader chunkLoader;
     private UUID owner;
+    private final Map<Object, Supplier<Object>> capabilities = new HashMap<>();
 
     public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
         super(LoadMyChunks.chunkLoaderBlockEntity.get(), blockPos, blockState);
@@ -47,4 +51,5 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
             this.chunkLoader.setOwner(uuid);
         }
     }
+
 }

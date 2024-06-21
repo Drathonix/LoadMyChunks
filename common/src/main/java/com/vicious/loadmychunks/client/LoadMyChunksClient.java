@@ -3,10 +3,7 @@ package com.vicious.loadmychunks.client;
 import com.vicious.loadmychunks.LoadMyChunks;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
-import dev.architectury.registry.registries.DeferredRegister;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 

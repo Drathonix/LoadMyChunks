@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.vicious.loadmychunks.neoforge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "self.MixinBlockEntityChunkLoader"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

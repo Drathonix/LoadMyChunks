@@ -10,6 +10,8 @@ public interface IChunkLoader {
         return LoadState.TICKING;
     }
 
+    default void setLoadState(LoadState state){}
+
     @NotNull CompoundTag save(@NotNull CompoundTag tag);
     void load(@NotNull CompoundTag tag);
 

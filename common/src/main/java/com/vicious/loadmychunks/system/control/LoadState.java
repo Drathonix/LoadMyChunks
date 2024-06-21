@@ -2,7 +2,6 @@ package com.vicious.loadmychunks.system.control;
 
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.system.ThreadSafetyHelper;
-import com.vicious.loadmychunks.system.TickDelayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 

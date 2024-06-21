@@ -14,6 +14,7 @@ import java.util.UUID;
 public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     private UUID owner;
     private BlockPos position;
+    private LoadState loadState = LoadState.TICKING;
 
     public PlacedChunkLoader(){}
 
@@ -45,7 +46,12 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
 
     @Override
     public LoadState getLoadState() {
-        return LoadState.TICKING;
+        return loadState;
+    }
+
+    @Override
+    public void setLoadState(LoadState state) {
+        this.loadState =state;
     }
 
     @Override

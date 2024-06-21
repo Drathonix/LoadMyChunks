@@ -31,11 +31,24 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        url "https://squiddev.cc/maven/"
+        content {
+            includeGroup("cc.tweaked")
+        }
+    }
     maven { url "https://maven.neoforged.net/releases/" }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neo_version}"
+
+    // CCT
+    modApi("cc.tweaked:cc-tweaked-${rootProject.minecraft_version}-common-api:${rootProject.cctVersion}")
+    modCompileOnly("cc.tweaked:cc-tweaked-$minecraft_version-core-api:$cctVersion")
+    modCompileOnly("cc.tweaked:cc-tweaked-${rootProject.minecraft_version}-forge-api:${cctVersion}")
+    modRuntimeOnly("cc.tweaked:cc-tweaked-$minecraft_version-forge:$cctVersion")
+
 
     modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
@@ -71,7 +84,7 @@ tasks.withType(ProcessResources).configureEach {
 
 shadowJar {
     exclude "fabric.mod.json"
-    exclude "META-INF/mods.toml"
+    //exclude "META-INF/mods.toml"
 
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set("dev-shadow")
