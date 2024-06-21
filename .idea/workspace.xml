@@ -185,29 +185,7 @@
       <recent name="com.vicious.loadmychunks" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks:fabric [runClient]">
-    <configuration name="LoadMyChunks [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="runClient" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.LoadMyChunks:fabric [build]">
     <configuration name="LoadMyChunks build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="LoadMyChunks build" />
@@ -242,6 +220,28 @@
         <option name="taskNames">
           <list>
             <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="LoadMyChunks:fabric [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/fabric" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -296,10 +296,10 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="LoadMyChunks:neoforge [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LoadMyChunks:forge [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/neoforge" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/forge" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -307,7 +307,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -342,11 +342,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.LoadMyChunks:fabric [runClient]" />
         <item itemvalue="Gradle.LoadMyChunks:fabric [build]" />
         <item itemvalue="Gradle.LoadMyChunks:forge [build]" />
-        <item itemvalue="Gradle.LoadMyChunks:neoforge [build]" />
-        <item itemvalue="Gradle.LoadMyChunks [runClient]" />
+        <item itemvalue="Gradle.LoadMyChunks:forge [clean]" />
+        <item itemvalue="Gradle.LoadMyChunks:fabric [clean]" />
+        <item itemvalue="Gradle.LoadMyChunks:fabric [runClient]" />
       </list>
     </recent_temporary>
   </component>
