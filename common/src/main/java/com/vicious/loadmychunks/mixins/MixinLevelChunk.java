@@ -54,9 +54,6 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
         }
     }
 
-    @Unique
-    private static final ChunkPos check = new ChunkPos(62,124);
-
     @Override
     public void loadMyChunks$tick() {
         boolean flag = loadMyChunks$loadDataModule.shouldUseTimings() && !level.isClientSide;
