@@ -124,7 +124,6 @@ public class LoadMyChunks {
 		});
 		BLOCKENTITIES.register();
 		logger.info("Chunk Loader Loading Complete.");
-		NetworkManager.registerReceiver(NetworkManager.Side.S2C, LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC,LagReadingPacket::handleClient);
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 	}
 
