@@ -226,6 +226,8 @@ public class ChunkDataManager {
             return compoundTag;
         }
 
+        private int purgeScheduler = 0;
+
         public void tick(){
             Iterator<ChunkDataModule> iterator = shutoffLoaders.iterator();
             while (iterator.hasNext()){
@@ -240,7 +242,13 @@ public class ChunkDataManager {
                 }
 
             }
+            // 1.0.3 Remove unloaded CDMs from memory.
+            if(purgeScheduler>=2000){
+                data.values().removeIf(module -> module.getLoaders().isEmpty());
+                purgeScheduler=0;
+            }
             setDirty();
+            purgeScheduler++;
         }
 
         public void shutDown(@NotNull ChunkPos chunkPos) {
