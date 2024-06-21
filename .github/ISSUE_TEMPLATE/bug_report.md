@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Report a bug
-title: ''
+title: "[BUG]"
 labels: ''
 assignees: ''
 
@@ -22,6 +22,9 @@ Steps to reproduce the behavior:
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
+
+**Logs**
+Provide logs and/or crash reports here.
 
 **Screenshots or Video**
 Provide if you have them.
