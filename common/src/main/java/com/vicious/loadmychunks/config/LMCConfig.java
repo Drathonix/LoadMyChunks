@@ -1,9 +1,11 @@
 package com.vicious.loadmychunks.config;
 
 import com.google.gson.Gson;
-import net.minecraft.FileUtil;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -58,7 +60,7 @@ public class LMCConfig {
     // lag. The default here is equal to -2 TPS per loaded chunk max which should be fair for well-designed end game
     // bases.
     @ConfigValue
-    @Range(value = 5,min = 0,max = 1000)
+    @Range(value = 5,min = 1,max = 1000)
     public long msPerChunk = 5;
 
     //The time in seconds an overticked chunk needs to wait before being reloaded by a chunk loader.
@@ -84,4 +86,16 @@ public class LMCConfig {
 
     @ConfigValue
     public boolean useDebugLogging = false;
+
+    @ConfigValue
+    @Range(value = 2,min = 0, max = 2)
+    public int lagometerComputerExposureLevel=2;
+
+    public static boolean isLagometerAllowedOnTurtle(){
+        return instance.lagometerComputerExposureLevel == 2;
+    }
+
+    public static boolean isLagometerAllowedOnComputer(){
+        return instance.lagometerComputerExposureLevel == 1;
+    }
 }

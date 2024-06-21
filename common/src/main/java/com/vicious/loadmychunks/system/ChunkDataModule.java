@@ -16,12 +16,14 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ChunkDataModule {
@@ -178,6 +180,11 @@ public class ChunkDataModule {
 
     public boolean onCooldown() {
         return disabledPeriod != null && !disabledPeriod.hasEnded();
+    }
+
+    @SuppressWarnings("all")
+    public long getCooldownTime(){
+        return onCooldown() ? getDisabledPeriod().getTimeRemaining() : 0;
     }
 
     public @NotNull ChunkPos getPosition(){

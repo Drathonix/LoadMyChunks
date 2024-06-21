@@ -1,21 +1,19 @@
 package com.vicious.loadmychunks;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.block.BlockChunkLoader;
 import com.vicious.loadmychunks.block.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.block.LMCBEType;
-import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
 import com.vicious.loadmychunks.config.LMCConfig;
 import com.vicious.loadmychunks.debug.DebugLoadMyChunks;
 import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
 import com.vicious.loadmychunks.item.ItemHasTooltip;
 import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.ChunkDataManager;
+import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.util.BoolEnum;
@@ -25,18 +23,13 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.Registrar;
-import dev.architectury.registry.registries.RegistrarManager;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -51,16 +44,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import java.util.*;
-import java.util.function.Supplier;
-
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.*;
+import java.util.function.Supplier;
 
 public class LoadMyChunks {
 	public static MinecraftServer server;

@@ -27,6 +27,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
         if(hasOwner()) {
             tag.putUUID("owner", owner);
         }
+        tag.putInt("state",loadState.ordinal());
         tag.putLong("pos",position.asLong());
         return tag;
     }
@@ -35,6 +36,9 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     public void load(@NotNull CompoundTag tag) {
         if(tag.contains("owner")){
             owner = tag.getUUID("owner");
+        }
+        if(tag.contains("state")){
+            loadState = LoadState.values()[tag.getInt("state")];
         }
         position = BlockPos.of(tag.getLong("pos"));
     }

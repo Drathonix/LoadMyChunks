@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable {
     private PlacedChunkLoader chunkLoader;
     private UUID owner;
-    private final Map<Object, Supplier<Object>> capabilities = new HashMap<>();
+    public final Map<Object, Supplier<Object>> capabilities = new HashMap<>();
 
     public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
         super(LoadMyChunks.chunkLoaderBlockEntity.get(), blockPos, blockState);

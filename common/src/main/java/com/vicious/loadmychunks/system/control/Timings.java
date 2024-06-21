@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 public class Timings {
     private long startSystemMS;
     private long endSystemMS;
+    private long lastDuration;
 
     public Timings(){}
 
@@ -15,7 +16,7 @@ public class Timings {
     }
 
     public long getDuration(){
-        return endSystemMS-startSystemMS;
+        return lastDuration;
     }
 
     public void start(){
@@ -24,6 +25,7 @@ public class Timings {
 
     public void end(){
         endSystemMS = System.currentTimeMillis();
+        lastDuration = getDuration();
     }
 
     public boolean durationExceeds(long time){
