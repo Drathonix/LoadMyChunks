@@ -12,7 +12,6 @@ import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
 import com.vicious.loadmychunks.item.ItemHasTooltip;
 import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.network.LagReadingPacket;
 import com.vicious.loadmychunks.network.LagReadingRequest;
 import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.ChunkDataModule;
@@ -108,24 +107,27 @@ public class LoadMyChunks {
 		itemLocatingCore = ITEM.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
 		itemDiamondWire = ITEM.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
 		itemChunkometer = ITEM.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
-		if(allowUsingDebugFeatures()){
+		if (allowUsingDebugFeatures()) {
 			DebugLoadMyChunks.init();
 		}
-		BLOCKS.register();
-		RegistryInit.BLOCKS.run();
+		if(!LMCConfig.instance.disableLMCChunkLoaderBlocks) {
+			BLOCKS.register();
+			RegistryInit.BLOCKS.run();
+		}
 		ITEM.register();
 		RegistryInit.ITEMS.run();
 
-		LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(ModResource.of("chunk_loader"), () -> {
-			Set<Block> blocks = new HashSet<>();
-			for (RegistrySupplier<Block> blk : chunkLoaderBlocks) {
-				blocks.add(blk.get());
-			}
-			return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
-		});
-		BLOCKENTITIES.register();
+		if(!LMCConfig.instance.disableLMCChunkLoaderBlocks) {
+			LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(ModResource.of("chunk_loader"), () -> {
+				Set<Block> blocks = new HashSet<>();
+				for (RegistrySupplier<Block> blk : chunkLoaderBlocks) {
+					blocks.add(blk.get());
+				}
+				return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
+			});
+			BLOCKENTITIES.register();
+		}
 		logger.info("Chunk Loader Loading Complete.");
-		NetworkManager.registerReceiver(NetworkManager.Side.S2C, LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC,LagReadingPacket::handleClient);
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 	}
 

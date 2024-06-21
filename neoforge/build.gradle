@@ -37,7 +37,15 @@ repositories {
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neo_version}"
 
+
+    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
+    modRuntimeOnly("mekanism:Mekanism:${rootProject.mekanism_version}")// Mekanism
+    modRuntimeOnly("mekanism:Mekanism:${rootProject.mekanism_version}:additions")// Mekanism: Additions
+    modRuntimeOnly("mekanism:Mekanism:${rootProject.mekanism_version}:generators")// Mekanism: Generators
+    modRuntimeOnly("mekanism:Mekanism:${rootProject.mekanism_version}:tools")// Mekanism: Tools
+
     modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
+    implementation "mekanism:Mekanism:${rootProject.mekanism_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }

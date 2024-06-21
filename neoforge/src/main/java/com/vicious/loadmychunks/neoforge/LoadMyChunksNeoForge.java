@@ -28,6 +28,7 @@ public class LoadMyChunksNeoForge {
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
         args.register(modBus);
+        ForgeLoaderTypes.init();;
     }
 
     @EventBusSubscriber(modid=LoadMyChunks.MOD_ID,bus=EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)

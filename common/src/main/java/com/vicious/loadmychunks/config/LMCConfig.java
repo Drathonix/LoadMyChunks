@@ -1,9 +1,11 @@
 package com.vicious.loadmychunks.config;
 
 import com.google.gson.Gson;
-import net.minecraft.FileUtil;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -84,4 +86,7 @@ public class LMCConfig {
 
     @ConfigValue
     public boolean useDebugLogging = false;
+
+    @ConfigValue
+    public boolean disableLMCChunkLoaderBlocks = false;
 }
