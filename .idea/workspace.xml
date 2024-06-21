@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="321b55a4-16eb-4b62-9621-b418f51cbb57" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +144,7 @@
       <recent name="com.vicious.loadmychunks" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks:neoforge [runClient]">
+  <component name="RunManager" selected="Gradle.LoadMyChunks:neoforge [build]">
     <configuration name="LoadMyChunks build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="LoadMyChunks build" />
@@ -299,10 +301,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.LoadMyChunks:neoforge [build]" />
+        <item itemvalue="Gradle.LoadMyChunks:fabric [build]" />
         <item itemvalue="Gradle.LoadMyChunks:neoforge [runClient]" />
         <item itemvalue="Gradle.LoadMyChunks:fabric [runClient]" />
-        <item itemvalue="Gradle.LoadMyChunks:fabric [build]" />
-        <item itemvalue="Gradle.LoadMyChunks:neoforge [build]" />
         <item itemvalue="Gradle.LoadMyChunks:forge [build]" />
       </list>
     </recent_temporary>
@@ -374,7 +376,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java</url>
-          <line>237</line>
+          <line>236</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
