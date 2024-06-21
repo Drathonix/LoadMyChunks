@@ -71,7 +71,7 @@ tasks.withType(ProcessResources).configureEach {
 
 shadowJar {
     exclude "fabric.mod.json"
-    exclude "META-INF/mods.toml"
+   // exclude "META-INF/mods.toml"
 
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set("dev-shadow")
