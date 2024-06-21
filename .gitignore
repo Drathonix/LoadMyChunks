@@ -43,3 +43,6 @@ bin/
 .DS_Store
 .idea/runConfigurations/
 .idea/workspace.xml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/gradle.xml
