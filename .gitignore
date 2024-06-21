@@ -44,3 +44,5 @@ bin/
 .idea/runConfigurations/
 .idea/gradle.xml
 .idea/workspace.xml
+.idea/misc.xml
+.idea/workspace.xml
