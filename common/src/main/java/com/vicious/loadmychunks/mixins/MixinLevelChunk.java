@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -24,15 +25,21 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevelChunkMixin {
     @Shadow @Final Level level;
-    @Shadow @Final private Map<BlockPos, TickingBlockEntity> tickersInLevel;
+    @Unique
+    private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
+    @Unique
+    private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
+
 
     @Shadow @Nullable
     public abstract BlockEntity getBlockEntity(BlockPos arg);
@@ -56,7 +63,15 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
         if(flag || loadMyChunks$loadDataModule.timeRegardless){
             loadMyChunks$loadDataModule.getTickTimer().start();
         }
-        Iterator<TickingBlockEntity> iterator = tickersInLevel.values().iterator();
+        Iterator<TickingBlockEntity> iterator = loadMyChunks$queuedTickers.iterator();
+        // 1.0.3 Conmod patch
+        while(iterator.hasNext()){
+            TickingBlockEntity tickingblockentity = iterator.next();
+            loadMyChunks$tickers.add(tickingblockentity);
+            iterator.remove();
+        }
+        iterator = loadMyChunks$tickers.iterator();
+        // patch end
         while(iterator.hasNext()){
             TickingBlockEntity tickingblockentity = iterator.next();
             if (tickingblockentity.isRemoved()) {
@@ -85,6 +100,17 @@ public abstract class MixinLevelChunk extends MixinChunkAccess implements ILevel
         if(getBlockEntity(blockPos) instanceof IDestroyable destroyable){
             destroyable.destroy();
         }
+    }
+
+    @Inject(method = "clearAllBlockEntities",at = @At("RETURN"))
+    public void clearQueues(CallbackInfo ci){
+        loadMyChunks$queuedTickers.clear();
+        loadMyChunks$tickers.clear();
+    }
+
+    @Inject(method = "createTicker",at = @At("RETURN"))
+    public <T extends BlockEntity> void addToQueue(T blockEntity, BlockEntityTicker<T> blockEntityTicker, CallbackInfoReturnable<TickingBlockEntity> cir){
+        loadMyChunks$queuedTickers.add(cir.getReturnValue());
     }
 
     @Override
