@@ -5,29 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockChunkLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/bridge/IMixinArgumentTypeInfos.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugBlockLagger.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugBlockLagger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugLoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugLoadMyChunks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkometer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemChunkometer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/ItemHasTooltip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinArgumentTypeInfos.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinServerLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinServerLevel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/util/EnumArgument.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/util/EnumArgument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/assets/loadmychunks/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/assets/loadmychunks/lang/en_us.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/loadmychunks.mixins.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/loadmychunks.mixins.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fabric/src/main/java/com/vicious/loadmychunks/fabric/LoadMyChunksFabric.java" beforeDir="false" afterPath="$PROJECT_DIR$/fabric/src/main/java/com/vicious/loadmychunks/fabric/LoadMyChunksFabric.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge/src/main/java/com/vicious/loadmychunks/forge/LoadMyChunksForge.java" beforeDir="false" afterPath="$PROJECT_DIR$/forge/src/main/java/com/vicious/loadmychunks/forge/LoadMyChunksForge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,32 +115,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.com.intellij.ui.dsl.builder.impl.RowImpl.sdk": "openjdk-21",
-    "last_opened_file_path": "C:/Users/jacks/IDEA/LoadMyChunks",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.32068965",
-    "settings.editor.selected.configurable": "editor.preferences.import",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.com.intellij.ui.dsl.builder.impl.RowImpl.sdk&quot;: &quot;openjdk-21&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jacks/IDEA/LoadMyChunks&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.32068965&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "jdk.preference.com.intellij.ui.dsl.builder.impl.RowImpl.sdk": [
-      "21=C:/Users/jacks/.jdks/openjdk-21.0.1"
+  &quot;keyToStringList&quot;: {
+    &quot;jdk.preference.com.intellij.ui.dsl.builder.impl.RowImpl.sdk&quot;: [
+      &quot;21=C:/Users/jacks/.jdks/openjdk-21.0.1&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.vicious.loadmychunks.system" />
@@ -369,6 +348,8 @@
       <workItem from="1716734670566" duration="1306000" />
       <workItem from="1716736003012" duration="31000" />
       <workItem from="1716832134625" duration="2658000" />
+      <workItem from="1716835934404" duration="1167000" />
+      <workItem from="1717008216852" duration="625000" />
     </task>
     <servers />
   </component>
