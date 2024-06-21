@@ -2,8 +2,8 @@
 name: Feature request
 about: Suggest something for the mod.
 title: ''
-labels: ''
-assignees: ''
+labels: feature
+assignees: Drathonix
 
 ---
 

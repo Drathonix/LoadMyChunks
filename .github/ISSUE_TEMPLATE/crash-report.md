@@ -2,8 +2,8 @@
 name: Crash Report
 about: Report a Crash.
 title: ''
-labels: ''
-assignees: ''
+labels: bug
+assignees: Drathonix
 
 ---
 
