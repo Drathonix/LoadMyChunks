@@ -31,17 +31,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk implements ILevelChunkMixin {
     @Shadow @Final Level level;
-    //1.16.5 specific.
-    @Unique @Final private Map<BlockPos, BlockEntity> loadmychunks$tickersInLevel = new HashMap<>();
+
+    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
     public abstract BlockEntity getBlockEntity(BlockPos arg);
@@ -68,7 +67,13 @@ public abstract class MixinLevelChunk implements ILevelChunkMixin {
         if(flag || loadMyChunks$loadDataModule.timeRegardless){
             loadMyChunks$loadDataModule.getTickTimer().start();
         }
-        Iterator<BlockEntity> iterator = loadmychunks$tickersInLevel.values().iterator();
+        Iterator<BlockEntity> iterator = loadMyChunks$queued.iterator();
+        while(iterator.hasNext()){
+            loadMyChunks$tickers.add(iterator.next());
+            iterator.remove();
+        }
+
+        iterator = loadMyChunks$tickers.iterator();
         while(iterator.hasNext()){
             BlockEntity tickingblockentity = iterator.next();
 
@@ -112,13 +117,14 @@ public abstract class MixinLevelChunk implements ILevelChunkMixin {
         if(blockEntity instanceof IDestroyable){
             ((IDestroyable)blockEntity).destroy();
         }
-        loadmychunks$tickersInLevel.remove(blockPos);
+        loadMyChunks$tickers.remove(blockEntity);
+        loadMyChunks$queued.remove(blockEntity);
     }
 
     @Inject(method = "setBlockEntity",at = @At(value = "INVOKE",target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",shift = At.Shift.AFTER))
     public void addTicker(BlockPos blockPos, BlockEntity blockEntity, CallbackInfo ci){
         if(blockEntity instanceof TickableBlockEntity) {
-            loadmychunks$tickersInLevel.put(blockPos, blockEntity);
+            loadMyChunks$queued.add(blockEntity);
         }
     }
 
