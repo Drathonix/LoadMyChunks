@@ -7,4 +7,15 @@
  
 ## Functionality
 Block Entity ticking is now executed chunk-wise rather than dimension wise. Chunks time their tick duration only if necessary.
-Chunks 
+
+Chunks are forceloaded only if they contain at least one chunk loader. If the chunk tick duration exceeds the server side maximum, then the chunk will cease being forceloaded and enter a dormant state for some time.
+
+Dormant forced chunks will awaken once more at the end of the dormant period and enter a brief grace period where they are immune from tick duration checks, this is done to give multiblock structures a chance to reinitialize (I.E. Mekanism multiblocks which have an initial overhead on chunk load).
+
+Chunk loaders work with or without the player being online.
+
+## Utility Items
+Advanced Information about a chunk's lag and load state can be obtained using the chunkometer.
+
+## Configurability
+For info on configurability see the [Wiki](https://github.com/Drathonix/LoadMyChunks/wiki).
