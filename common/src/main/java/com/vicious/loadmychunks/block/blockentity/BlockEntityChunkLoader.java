@@ -1,9 +1,9 @@
 package com.vicious.loadmychunks.block.blockentity;
 
 import com.vicious.loadmychunks.bridge.IDestroyable;
+import com.vicious.loadmychunks.registry.LMCContent;
 import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.loaders.PlacedChunkLoader;
-import com.vicious.loadmychunks.registry.LMCContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;

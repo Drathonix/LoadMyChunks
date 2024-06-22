@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "lag=0": {
+      "model": "loadmychunks:blocks/lagometer/s0"
+    },
+    "lag=1": {
+      "model": "loadmychunks:blocks/lagometer/s1"
+    },
+    "lag=2": {
+      "model": "loadmychunks:blocks/lagometer/s2"
+    },
+    "lag=3": {
+      "model": "loadmychunks:blocks/lagometer/s3"
+    },
+    "lag=4": {
+      "model": "loadmychunks:blocks/lagometer/s4"
+    },
+    "lag=5": {
+      "model": "loadmychunks:blocks/lagometer/s5"
+    },
+    "lag=6": {
+      "model": "loadmychunks:blocks/lagometer/s6"
+    },
+    "lag=7": {
+      "model": "loadmychunks:blocks/lagometer/s7"
+    },
+    "lag=8": {
+      "model": "loadmychunks:blocks/lagometer/s8"
+    },
+    "lag=9": {
+      "model": "loadmychunks:blocks/lagometer/s9"
+    },
+    "lag=10": {
+      "model": "loadmychunks:blocks/lagometer/s10"
+    },
+    "lag=11": {
+      "model": "loadmychunks:blocks/lagometer/s11"
+    },
+    "lag=12": {
+      "model": "loadmychunks:blocks/lagometer/s12"
+    },
+    "lag=13": {
+      "model": "loadmychunks:blocks/lagometer/s13"
+    },
+    "lag=14": {
+      "model": "loadmychunks:blocks/lagometer/s14"
+    },
+    "lag=15": {
+      "model": "loadmychunks:blocks/lagometer/s15"
+    }
+  }
+}

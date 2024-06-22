@@ -2,7 +2,9 @@ package com.vicious.loadmychunks.registry;
 
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.block.BlockChunkLoader;
+import com.vicious.loadmychunks.block.BlockLagometer;
 import com.vicious.loadmychunks.block.blockentity.BlockEntityChunkLoader;
+import com.vicious.loadmychunks.block.blockentity.BlockEntityLagometer;
 import com.vicious.loadmychunks.block.blockentity.LMCBEType;
 import com.vicious.loadmychunks.item.ItemChunkLoader;
 import com.vicious.loadmychunks.item.ItemChunkometer;
@@ -32,6 +34,7 @@ public class LMCContent {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
     public static final Set<RegistrySupplier<Block>> chunkLoaderBlocks = new HashSet<>();
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
+    public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
 
     public static RegistrySupplier<Item> itemTickometer;
     public static RegistrySupplier<Item> itemPlayerSpoofer;
@@ -57,6 +60,13 @@ public class LMCContent {
                 }));
             }
             chunkLoaderBlocks.add(chunkLoaderBlock);
+            RegistrySupplier<Block> lagometerBlock = registerBlockWithItem(reg,"lagometer",()->{
+                BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.5F);
+                return new BlockLagometer(properties);
+            });
+            LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
+                lagometerBlockEntity = breg.register(ModResource.of("lagometer"), ()->new LMCBEType<>(BlockEntityLagometer::new, Set.of(lagometerBlock.get()), null));
+            });
         });
         LMCRegistrar.ITEM.queue(reg->{
             itemTickometer = reg.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties()));
