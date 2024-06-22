@@ -19,3 +19,10 @@ Advanced Information about a chunk's lag and load state can be obtained using th
 
 ## Configurability
 For info on configurability see the [Wiki](https://github.com/Drathonix/LoadMyChunks/wiki).
+
+## Conflicts and Dependencies
+Load My Chunks depends Architectury on architectury for platform abstraction.
+
+The mod supports Java 8 on MC1.16.5, Java 17 on 1.18.2-1.20.4, and Java 21 on 1.20.6+. It is recommended to use the correct Java version to avoid issues.
+
+There are currently no known mod conflicts.
