@@ -1,4 +1,4 @@
-package com.vicious.loadmychunks.block;
+package com.vicious.loadmychunks.block.blockentity;
 
 import com.mojang.datafixers.types.Type;
 import net.minecraft.core.BlockPos;

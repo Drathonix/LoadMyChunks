@@ -3,78 +3,38 @@ package com.vicious.loadmychunks;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.vicious.loadmychunks.block.BlockChunkLoader;
-import com.vicious.loadmychunks.block.BlockEntityChunkLoader;
-import com.vicious.loadmychunks.block.LMCBEType;
 import com.vicious.loadmychunks.config.LMCConfig;
 import com.vicious.loadmychunks.debug.DebugLoadMyChunks;
-import com.vicious.loadmychunks.item.ItemChunkLoader;
-import com.vicious.loadmychunks.item.ItemChunkometer;
-import com.vicious.loadmychunks.item.ItemHasTooltip;
-import com.vicious.loadmychunks.item.LMCProperties;
-import com.vicious.loadmychunks.network.LagReadingPacket;
 import com.vicious.loadmychunks.network.LagReadingRequest;
+import com.vicious.loadmychunks.registry.LMCContent;
 import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.ChunkDataModule;
 import com.vicious.loadmychunks.system.TickDelayer;
 import com.vicious.loadmychunks.system.control.LoadState;
 import com.vicious.loadmychunks.util.BoolArgument;
-import com.vicious.loadmychunks.util.ModResource;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
-import dev.architectury.registry.CreativeTabRegistry;
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
 	public static final String MOD_ID = "loadmychunks";
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Level debugLevel = Level.DEBUG;
-
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MOD_ID, Registries.BLOCK);
-	public static final DeferredRegister<Item> ITEM = DeferredRegister.create(MOD_ID, Registries.ITEM);
-	public static final DeferredRegister<BlockEntityType<?>> BLOCKENTITIES = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.BLOCK_ENTITY_TYPE);
-
-	public static final Set<RegistrySupplier<Block>> chunkLoaderBlocks = new HashSet<>();
-	public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
-
-	public static RegistrySupplier<Item> itemTickometer;
-	public static RegistrySupplier<Item> itemPlayerSpoofer;
-	public static RegistrySupplier<Item> itemLocatingCore;
-	public static RegistrySupplier<Item> itemDiamondWire;
-	public static RegistrySupplier<ItemChunkometer> itemChunkometer;
-
-	public static RegistrySupplier<CreativeModeTab> creativeTab;
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -84,67 +44,18 @@ public class LoadMyChunks {
 			debugLevel = Level.INFO;
 			logger.info("Using Debug Logging");
 		}
-		logger.info("Creating Creative Tab.");
-		DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(MOD_ID, Registries.CREATIVE_MODE_TAB);
-		creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->ITEM.getRegistrar().get(ModResource.of("chunk_loader")).getDefaultInstance()));
-		TABS.register();
-		logger.info("Adding Chunk loader blocks");
-		RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem("chunk_loader", () -> {
-			BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
-			return new BlockChunkLoader(properties);
-		});
-		chunkLoaderBlocks.add(chunkLoaderBlock);
 
-		String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
-		for (String color : colors) {
-			chunkLoaderBlocks.add(registerCLBlockWithItem(color + "_chunk_loader", () -> {
-				BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
-				return new BlockChunkLoader(properties);
-			}));
-		}
 		CommandRegistrationEvent.EVENT.register(LoadMyChunks::registerCommands);
-		itemTickometer = ITEM.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemPlayerSpoofer = ITEM.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemLocatingCore = ITEM.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemDiamondWire = ITEM.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
-		itemChunkometer = ITEM.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
+		LoadMyChunks.logger.info("Adding Chunk loader blocks");
+		LMCContent.init();
 		if(allowUsingDebugFeatures()){
 			DebugLoadMyChunks.init();
 		}
-		BLOCKS.register();
-		RegistryInit.BLOCKS.run();
-		ITEM.register();
-		RegistryInit.ITEMS.run();
-
-		LoadMyChunks.chunkLoaderBlockEntity = BLOCKENTITIES.register(ModResource.of("chunk_loader"), () -> {
-			Set<Block> blocks = new HashSet<>();
-			for (RegistrySupplier<Block> blk : chunkLoaderBlocks) {
-				blocks.add(blk.get());
-			}
-			return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
-		});
-		BLOCKENTITIES.register();
 		logger.info("Chunk Loader Loading Complete.");
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 	}
 
-	public static <T extends Block> RegistrySupplier<T> registerBlockWithItem(String name, Supplier<? extends T> supplier) {
-		ResourceLocation resource = ModResource.of(name);
-		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
-		RegistryInit.ITEMS.queue(()->{
-			ITEM.register(resource, () -> new BlockItem(block.get(), new LMCProperties()));
-		});
-		return block;
-	}
 
-	public static <T extends Block> RegistrySupplier<T> registerCLBlockWithItem(String name, Supplier<? extends T> supplier) {
-		ResourceLocation resource = ModResource.of(name);
-		RegistrySupplier<T> block = BLOCKS.register(resource, supplier);
-		RegistryInit.ITEMS.queue(()->{
-			ITEM.register(resource, () -> new ItemChunkLoader(block.get(), new LMCProperties()));
-		});
-		return block;
-	}
 
 	public static void serverStarted(MinecraftServer server) {
 		LoadMyChunks.server = server;

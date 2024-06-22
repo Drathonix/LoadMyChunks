@@ -1,9 +1,9 @@
-package com.vicious.loadmychunks.block;
+package com.vicious.loadmychunks.block.blockentity;
 
-import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.bridge.IDestroyable;
 import com.vicious.loadmychunks.system.ChunkDataManager;
 import com.vicious.loadmychunks.system.loaders.PlacedChunkLoader;
+import com.vicious.loadmychunks.registry.LMCContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -17,7 +17,7 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
     private UUID owner;
 
     public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
-        super(LoadMyChunks.chunkLoaderBlockEntity.get(), blockPos, blockState);
+        super(LMCContent.chunkLoaderBlockEntity.get(), blockPos, blockState);
     }
 
     public PlacedChunkLoader getChunkLoader() {
@@ -48,3 +48,5 @@ public class BlockEntityChunkLoader extends BlockEntity implements IDestroyable 
         }
     }
 }
+
+

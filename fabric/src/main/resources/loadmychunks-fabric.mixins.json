@@ -4,6 +4,7 @@
   "package": "com.vicious.loadmychunks.fabric.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinArgumentTypeInfos"
   ],
   "client": [
   ],

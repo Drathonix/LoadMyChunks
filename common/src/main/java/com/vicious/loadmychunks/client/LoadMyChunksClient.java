@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.client;
 
+import com.vicious.loadmychunks.registry.LMCContent;
 import com.vicious.loadmychunks.LoadMyChunks;
 import com.vicious.loadmychunks.network.LagReadingPacket;
 import com.vicious.loadmychunks.network.LagReadingRequest;
@@ -12,11 +13,11 @@ public class LoadMyChunksClient {
 
     public static void init(){
         LoadMyChunks.logger.info("Initializing Client Side");
-        ItemPropertiesRegistry.register(LoadMyChunks.itemTickometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+        ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
             NetworkManager.sendToServer(new LagReadingRequest());
             return LoadMyChunksClient.lagLevel;
         });
-        ItemPropertiesRegistry.register(LoadMyChunks.itemChunkometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+        ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ResourceLocation.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
             NetworkManager.sendToServer(new LagReadingRequest());
             return LoadMyChunksClient.lagLevel;
         });

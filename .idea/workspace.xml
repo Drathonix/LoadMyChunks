@@ -5,9 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="321b55a4-16eb-4b62-9621-b418f51cbb57" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LMC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockLagometer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/blockentity/BlockEntityChunkLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/registry/LMCRegistrar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockChunkLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/BlockEntityChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/blockentity/BlockEntityLagometer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/LMCBEType.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/block/blockentity/LMCBEType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/client/LoadMyChunksClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugLoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/debug/DebugLoadMyChunks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/item/LMCProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/mixins/MixinArgumentTypeInfos.java" beforeDir="false" afterPath="$PROJECT_DIR$/fabric/src/main/java/com/vicious/loadmychunks/fabric/mixins/MixinArgumentTypeInfos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/resources/loadmychunks.mixins.json" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/loadmychunks.mixins.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fabric/src/main/resources/loadmychunks-fabric.mixins.json" beforeDir="false" afterPath="$PROJECT_DIR$/fabric/src/main/resources/loadmychunks-fabric.mixins.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,12 +148,15 @@
       <recent name="C:\Users\jacks\IDEA\LoadMyChunks\common\src\main\resources\data\loadmychunks\" />
       <recent name="C:\Users\jacks\IDEA\LoadMyChunks\common\src\main\resources\assets\loadmychunks\models\item" />
     </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.vicious.loadmychunks.registry.LMC" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.vicious.loadmychunks.registry" />
+      <recent name="com.vicious.loadmychunks.block.blockentity" />
+      <recent name="com.vicious.loadmychunks.block" />
       <recent name="com.vicious.loadmychunks.util" />
       <recent name="com.vicious.loadmychunks.network" />
-      <recent name="" />
-      <recent name="com.vicious.loadmychunks.fabric" />
-      <recent name="com.vicious.loadmychunks" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.LoadMyChunks:fabric [build]">
@@ -376,7 +391,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/common/src/main/java/com/vicious/loadmychunks/LoadMyChunks.java</url>
-          <line>236</line>
+          <line>183</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

@@ -1,4 +1,4 @@
-package com.vicious.loadmychunks.mixins;
+package com.vicious.loadmychunks.fabric.mixins;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.vicious.loadmychunks.bridge.IMixinArgumentTypeInfos;
