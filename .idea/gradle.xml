@@ -10,6 +10,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/versions/1.16.5-fabric" />
             <option value="$PROJECT_DIR$/versions/1.16.5-forge" />
+            <option value="$PROJECT_DIR$/versions/1.18.2-fabric" />
+            <option value="$PROJECT_DIR$/versions/1.18.2-forge" />
+            <option value="$PROJECT_DIR$/versions/1.19.2-fabric" />
+            <option value="$PROJECT_DIR$/versions/1.19.2-forge" />
+            <option value="$PROJECT_DIR$/versions/1.19.4-fabric" />
+            <option value="$PROJECT_DIR$/versions/1.19.4-forge" />
             <option value="$PROJECT_DIR$/versions/1.20.1-fabric" />
             <option value="$PROJECT_DIR$/versions/1.20.1-forge" />
             <option value="$PROJECT_DIR$/versions/1.20.4-fabric" />

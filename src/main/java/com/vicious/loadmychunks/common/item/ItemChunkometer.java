@@ -8,10 +8,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-//? if <=1.16.5 {
-/*import net.minecraft.network.chat.TextComponent;
+//? if <1.18.3 {
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-*///?}
+//?}
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -29,8 +29,8 @@ public class ItemChunkometer extends ItemHasTooltip {
         super(properties);
     }
 
-    //? if >1.16.5 {
-    @Override
+    //? if >1.18.2 {
+    /*@Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel sl) {
             ChunkPos pos = new ChunkPos(player.blockPosition());
@@ -76,11 +76,11 @@ public class ItemChunkometer extends ItemHasTooltip {
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
     }
-    //?}
+    *///?}
 
     //TODO: Improve messaging abstraction
-    //? if <=1.16.5 {
-    /*@Override
+    //? if <1.18.3 {
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel) {
             ServerLevel sl = (ServerLevel) level;
@@ -105,15 +105,25 @@ public class ItemChunkometer extends ItemHasTooltip {
                 Iterator<UUID> iterator = cdm.getOwners().iterator();
                 while (iterator.hasNext()) {
                     UUID u = iterator.next();
-                    GameProfile profile = sl.getServer().getProfileCache().get(u);
+                    //? if <1.16.6 {
+                    /*GameProfile profile = sl.getServer().getProfileCache().get(u);
                     if (profile != null) {
                         csl.append(profile.getName());
-                    } else {
+                    }
+                    *///?}
+                    //? if >1.16.5 {
+                    Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
+                    if (profile.isPresent()) {
+                        csl.append(profile.get().getName());
+                    }
+                    //?}
+                    else {
                         csl.append(u.toString());
                     }
                     if (iterator.hasNext()) {
                         csl.append(", ");
                     }
+
                 }
                 response.append(new TranslatableComponent("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
                 if (cdm.onCooldown()) {
@@ -127,6 +137,6 @@ public class ItemChunkometer extends ItemHasTooltip {
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
     }
-    *///?}
+    //?}
 }
 

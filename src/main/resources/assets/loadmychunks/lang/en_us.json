@@ -1,5 +1,6 @@
 {
     "block.loadmychunks.chunk_loader": "Chunk Loader",
+    "block.loadmychunks.lagometer": "Lagometer",
     "block.loadmychunks.white_chunk_loader": "White Chunk Loader",
     "block.loadmychunks.orange_chunk_loader": "Orange Chunk Loader",
     "block.loadmychunks.magenta_chunk_loader": "Magenta Chunk Loader",
@@ -27,6 +28,7 @@
     "tooltip.loadmychunks.diamond_wire": "Coarse and rough, doesn't get everywhere if you're careful. The connector of chunk loader systems.",
     "tooltip.loadmychunks.dimensional_locator": "Ensures the chunk loader knows where it is, and where it isn't.",
     "tooltip.loadmychunks.chunk_loader": "Loads the chunk it is placed in. Chunk loading will enter the 'overticked' state and disable if the chunk is too laggy.",
+    "tooltip.loadmychunks.lagometer": "Emits a redstone signal based off the chunk's lag level.",
     "loadmychunks.chunkinfo.need_ownership": "You need to have a chunk loader in this chunk to use this feature.",
     "loadmychunks.chunkinfo.line1": "Chunk (%s,%s) Information",
     "loadmychunks.chunkinfo.line2.forced": "Force Loaded.",
@@ -36,6 +38,7 @@
     "loadmychunks.chunkinfo.line4": "Contains %s chunk loaders owned by (%s).",
     "loadmychunks.chunkinfo.line5": "Will forceload again in %s seconds.",
     "loadmychunks.creativetab.title": "Load My Chunks",
+    "itemGroup.loadmychunks.creative_tab": "Load My Chunks",
     "loadmychunks.command.forceload.set": "Now forceloading (%s,%s)",
     "loadmychunks.command.forceload.set.permanent": "Now permanently forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset": "No longer automatically forceloading (%s,%s)",

@@ -5,7 +5,8 @@ import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+//? if >1.18.2
+/*import net.minecraft.core.HolderLookup;*/
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -243,7 +244,7 @@ public class ChunkDataManager {
         *///?}
 
         //? if <=1.20.5
-        /*@Override*/
+        @Override
         public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
                 if(!v.shouldPersist()) {
@@ -305,10 +306,10 @@ public class ChunkDataManager {
         }
 
         //? if >1.20.5 {
-        @Override
+        /*@Override
         public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
             return save(compoundTag);
         }
-        //?}
+        *///?}
     }
 }

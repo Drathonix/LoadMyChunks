@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.common.registry;
 
+import dev.architectury.registry.registries.Registries;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 //? if <=1.16.5
@@ -7,18 +8,19 @@ import net.minecraft.resources.ResourceLocation;
 //? if >1.16.5 {
 import com.mojang.datafixers.util.Either;
 import dev.architectury.registry.registries.Registrar;
-import dev.architectury.registry.registries.RegistrarManager;
+//? if >1.18.2
+/*import dev.architectury.registry.registries.RegistrarManager;*/
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 //? if >1.20.3 {
-import net.minecraft.core.HolderOwner;
+/*import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-//?}
+*///?}
 
 //Used to instantiate registry suppliers in older versions. We can extend it perfectly fine, thanks.
 @SuppressWarnings("NonExtendableApiUsage")
@@ -49,12 +51,21 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
         return t;
     }
 
-    //? if >1.16.5 {
-    @Override
+    //? if >1.18.2 {
+    /*@Override
     public RegistrarManager getRegistrarManager() {
         return null;
     }
+    *///?}
 
+    //? if <1.18.3 && >1.16.5 {
+    @Override
+    public Registries getRegistries() {
+        return null;
+    }
+    //?}
+
+    //? if >1.16.5 {
     @Override
     public Registrar<T> getRegistrar() {
         return null;
@@ -62,7 +73,7 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     //?}
 
     //? if >1.20.3 {
-    @Override
+    /*@Override
     public T value() {
         return null;
     }
@@ -123,5 +134,5 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     public boolean canSerializeIn(HolderOwner<T> holderOwner) {
         return false;
     }
-    //?}
+    *///?}
 }

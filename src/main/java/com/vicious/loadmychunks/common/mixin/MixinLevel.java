@@ -43,7 +43,7 @@ public abstract class MixinLevel implements ILevelMixin {
     //TODO: investigate if this has significant mod conflicts.
     @Inject(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     public void tickChunkWise(CallbackInfo ci, ProfilerFiller profilerFiller){
-        //if(!this.isClientSide()) {
+        if(!this.isClientSide()) {
             //noinspection resource
             if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
@@ -58,7 +58,7 @@ public abstract class MixinLevel implements ILevelMixin {
             this.tickingBlockEntities = false;
             profilerFiller.pop();
             ci.cancel();
-        //}
+        }
     }
 
     @Override

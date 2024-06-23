@@ -1,8 +1,11 @@
 package com.vicious.loadmychunks.common.mixin;
 
+import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.network.LagReadingPacket;
 import dev.architectury.networking.NetworkManager;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,12 +15,12 @@ public class MixinServerPlayer implements IInformable {
     @Override
     public void informLagFrac(float frac) {
         //? if <=1.20.5 {
-        /*FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
+        FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
         newBuf.writeFloat(frac);
-        NetworkManager.sendToPlayer(plr, LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
-        *///?}
-        //? if >1.20.5 {
-        NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
+        NetworkManager.sendToPlayer(ServerPlayer.class.cast(this), LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
         //?}
+        //? if >1.20.5 {
+        /*NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
+        *///?}
     }
 }

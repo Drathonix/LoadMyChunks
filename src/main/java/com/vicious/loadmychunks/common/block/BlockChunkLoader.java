@@ -17,13 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockChunkLoader extends BaseEntityBlock {
     //? if >1.20.3 {
-    public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
+    /*public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    //?}
+    *///?}
 
     public BlockChunkLoader(Properties properties) {
         super(properties);
@@ -34,8 +34,9 @@ public class BlockChunkLoader extends BaseEntityBlock {
         super.setPlacedBy(level, blockPos, blockState, livingEntity, itemStack);
         if(livingEntity != null){
             BlockEntity entity = level.getBlockEntity(blockPos);
-            if(entity instanceof BlockEntityChunkLoader)
-            ((BlockEntityChunkLoader)entity).setOwner(livingEntity.getUUID());
+            if(entity instanceof BlockEntityChunkLoader) {
+                ((BlockEntityChunkLoader) entity).setOwner(livingEntity.getUUID());
+            }
         }
     }
 
