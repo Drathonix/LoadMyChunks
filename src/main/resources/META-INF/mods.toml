@@ -2,27 +2,31 @@ modLoader="javafml"
 loaderVersion="${loader_ver_range}"
 license="${license}"
 issueTrackerURL="${issue_tracker}"
-[[mods]] #mandatory
-modId="${id}" #mandatory
-version="${version}" #mandatory
-displayName="${name}" #mandatory
-logoFile="${icon}" #optional
-authors="${authors}" #optional
+[[mods]]
+modId="${id}"
+version="${version}"
+displayName="${name}"
+logoFile="${icon}"
+authors="${authors}"
 description='''
 ${description}
 '''
 
-[[dependencies.${id}]] #optional
-#NOTE: THIS IS HERE BECAUSE 1.20.4 NEO STILL USED mods.toml
-modId="${loader_id}" #mandatory
-mandatory=true #mandatory
-versionRange="${loader_ver}" #mandatory
+${neo_forge_1204_mixin_field}
+
+[[dependencies.${id}]]
+# NOTE: THIS IS HERE BECAUSE 1.20.4 NEO STILL USED mods.toml
+modId="${loader_id}"
+#NEO COMPAT
+${mandatory_indicator}=true
+versionRange="${loader_ver}"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.${id}]]
 modId="minecraft"
-mandatory=true
+#NEO COMPAT
+${mandatory_indicator}=true
 versionRange="(${mc_min},${mc_max}]"
 ordering="NONE"
 side="BOTH"
