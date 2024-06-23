@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "lmc_lag=0": {
+      "model": "loadmychunks:block/lagometer/s0"
+    },
+    "lmc_lag=1": {
+      "model": "loadmychunks:block/lagometer/s1"
+    },
+    "lmc_lag=2": {
+      "model": "loadmychunks:block/lagometer/s2"
+    },
+    "lmc_lag=3": {
+      "model": "loadmychunks:block/lagometer/s3"
+    },
+    "lmc_lag=4": {
+      "model": "loadmychunks:block/lagometer/s4"
+    },
+    "lmc_lag=5": {
+      "model": "loadmychunks:block/lagometer/s5"
+    },
+    "lmc_lag=6": {
+      "model": "loadmychunks:block/lagometer/s6"
+    },
+    "lmc_lag=7": {
+      "model": "loadmychunks:block/lagometer/s7"
+    },
+    "lmc_lag=8": {
+      "model": "loadmychunks:block/lagometer/s8"
+    },
+    "lmc_lag=9": {
+      "model": "loadmychunks:block/lagometer/s9"
+    },
+    "lmc_lag=10": {
+      "model": "loadmychunks:block/lagometer/s10"
+    },
+    "lmc_lag=11": {
+      "model": "loadmychunks:block/lagometer/s11"
+    },
+    "lmc_lag=12": {
+      "model": "loadmychunks:block/lagometer/s12"
+    },
+    "lmc_lag=13": {
+      "model": "loadmychunks:block/lagometer/s13"
+    },
+    "lmc_lag=14": {
+      "model": "loadmychunks:block/lagometer/s14"
+    },
+    "lmc_lag=15": {
+      "model": "loadmychunks:block/lagometer/s15"
+    }
+  }
+}

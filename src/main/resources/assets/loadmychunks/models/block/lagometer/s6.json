@@ -1,0 +1,7 @@
+{
+  "parent": "loadmychunks:block/multisided",
+  "textures": {
+    "side": "loadmychunks:block/lagometer/s6",
+    "top": "minecraft:block/furnace_top"
+  }
+}
