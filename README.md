@@ -28,5 +28,23 @@ There are currently no known mod conflicts.
 
 # Known Stonecutter IDE issues
 
-Versions 1.16.5-all, and 1.20.4-forge do not run in the IDE. These versions must be tested externally using a launcher.
+The Migration to stonecutter was massively helpful, but it did cause some issues with IDE stability. Running the client on the IDE may be impossible in some versions and will require testing externally.
+
+Versions 1.16.5-all, and 1.20.4-forge do not run client.
 Version 1.19.2-forge runs, but mixins are not loaded (I have no idea why)
+
+### IDE Stability Overview Chart
+✅= Works fine
+⛔= Game starts, but mod does not work
+❌= Game does not start at all.
+
+| MC_Version | Fabric | Forge | NeoForge |
+|------------|--------|-------|----------|
+| 1.21       | ✅      | NA    | ✅        |
+| 1.20.6     | ✅      | NA    | ✅        |
+| 1.20.4     | ✅      | ❌     | ✅        |
+| 1.20.1     | ✅      | ✅     | NA       |
+| 1.19.4     | ✅      | ✅     | NA       |
+| 1.19.2     | ✅      | ⛔     | NA       |
+| 1.18.2     | ✅      | ✅     | NA       |
+| 1.16.5     | ❌      | ❌     | NA       |

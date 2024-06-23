@@ -1,6 +1,9 @@
 package com.vicious.loadmychunks.common.registry;
 
-import dev.architectury.registry.registries.Registries;
+//? if <1.19.3
+/*import dev.architectury.registry.registries.Registries;*/
+//
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 //? if <=1.16.5
@@ -8,9 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 //? if >1.16.5 {
 import com.mojang.datafixers.util.Either;
 import dev.architectury.registry.registries.Registrar;
-//? if >1.19.4
-/*import dev.architectury.registry.registries.RegistrarManager;*/
-import dev.architectury.registry.registries.RegistrySupplier;
+//? if >1.19.3
+import dev.architectury.registry.registries.RegistrarManager;
+
+import java.util.function.Supplier;
 //?}
 //? if >1.20.3 {
 /*import net.minecraft.core.HolderOwner;
@@ -25,10 +29,14 @@ import java.util.stream.Stream;
 //Used to instantiate registry suppliers in older versions. We can extend it perfectly fine, thanks.
 @SuppressWarnings("NonExtendableApiUsage")
 public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
-    private final T t;
+    private final Supplier<T> supplier;
+    private T t;
 
     public FakeRegistrySupplier(T t) {
-        this.t=t;
+        this.supplier = () -> t;
+    }
+    public FakeRegistrySupplier(Supplier<T> supplier) {
+        this.supplier=supplier;
     }
 
     @Override
@@ -48,22 +56,25 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
 
     @Override
     public T get() {
+        if(t==null) {
+            t=supplier.get();
+        }
         return t;
     }
 
-    //? if >1.19.4 {
-    /*@Override
+    //? if >1.19.3 {
+    @Override
     public RegistrarManager getRegistrarManager() {
         return null;
     }
-    *///?}
+    //?}
 
-    //? if <1.19.5 && >1.16.5 {
-    @Override
+    //? if <1.19.3 && >1.16.5 {
+    /*@Override
     public Registries getRegistries() {
         return null;
     }
-    //?}
+    *///?}
 
     //? if >1.16.5 {
     @Override

@@ -36,6 +36,7 @@ import net.minecraft.core.Registry;
 //? if >1.19.4
 /*import net.minecraft.core.registries.Registries;*/
 //?}
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 //? if >1.16.5 {
@@ -58,16 +59,16 @@ public class LMCENTRY {
         EventBuses.registerModEventBus(LoadMyChunks.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         LoadMyChunks.init();
         MinecraftForge.EVENT_BUS.register(this);
-        //? if >1.18.2 && <1.19.5 {
-        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        //? if >1.18.2 && <=1.19.3 {
+        /*ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
-        //?}
-        //? if >1.19.4 {
-        /*ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        *///?}
+        //? if >1.19.3 {
+        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
-        *///?}
+        //?}
     }
 
     @SubscribeEvent

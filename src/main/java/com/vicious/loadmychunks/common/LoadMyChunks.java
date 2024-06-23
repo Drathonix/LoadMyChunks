@@ -143,7 +143,11 @@ public class LoadMyChunks {
 
 	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
-		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		//? if <=1.19.3 {
+		/*bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		*///?}
+		//? if >1.19.3 && <1.19.5
+		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
@@ -163,7 +167,11 @@ public class LoadMyChunks {
 
 	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
-		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		//? if <=1.19.3 {
+		/*bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		*///?}
+		//? if >1.19.3 && <1.19.5
+		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;

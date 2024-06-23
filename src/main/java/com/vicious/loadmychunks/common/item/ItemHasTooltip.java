@@ -1,9 +1,10 @@
 package com.vicious.loadmychunks.common.item;
 
 import net.minecraft.core.Registry;
-//? if >1.19.4
-/*import net.minecraft.core.registries.BuiltInRegistries;*/
+//? if >1.19.3
+import net.minecraft.core.registries.BuiltInRegistries;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 //? if <1.18.3
 /*import net.minecraft.network.chat.TranslatableComponent;*/
@@ -40,9 +41,9 @@ public class ItemHasTooltip extends Item {
     *///?}
 
     public String getTooltipTranslationKey(){
-        //? if <1.19.5
-        return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".");
-        //? if >1.19.4
-        /*return "tooltip." + BuiltInRegistries.ITEM.getKey(this).toString().replace(":",".");*/
+        //? if <=1.19.3
+        /*return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".");*/
+        //? if >1.19.3
+        return "tooltip." + BuiltInRegistries.ITEM.getKey(this).toString().replace(":",".");
     }
 }

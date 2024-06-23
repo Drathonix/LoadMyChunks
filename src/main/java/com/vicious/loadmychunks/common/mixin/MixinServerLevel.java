@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
-//? if >1.19.2
+//? if >1.19.4
 /*import net.minecraft.world.RandomSequences;*/
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
