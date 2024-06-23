@@ -12,7 +12,7 @@ public class LMCProperties extends Item.Properties {
         //? if >1.16.5 {
         if(this instanceof InjectedItemPropertiesExtension) {
             //noinspection UnstableApiUsage
-            ((InjectedItemPropertiesExtension) this).arch$tab(LMCContent.creativeTab.get());
+            ((InjectedItemPropertiesExtension) this).arch$tab(LMCContent.creativeTab);
         }
         //?}
     }

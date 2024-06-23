@@ -93,7 +93,7 @@ public class DebugLoadMyChunks {
     }
 
     //? if <=1.16.5 {
-    /^static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+    static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{
             ctx.getSource().sendSuccess(new TextComponent("Sleep time is " + laggerMsSleep),false);
             return 0;
@@ -103,6 +103,6 @@ public class DebugLoadMyChunks {
             return 0;
         })))));
     }
-    ^///?}
+    //?}
 }
 *///?}

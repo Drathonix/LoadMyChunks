@@ -122,7 +122,7 @@ public class LoadMyChunks {
 		})).then(Commands.literal("overticked").executes(ctx->{
 			ServerLevel level = ctx.getSource().getLevel();
 			ctx.getSource().sendSystemMessage(Component.literal("Overticked Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
-			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadState.OVERTICKED).forEach(cdm->{
+			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadState.OVERTICKED || cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED).forEach(cdm->{
 				ChunkPos pos = cdm.getPosition();
 				BlockPos dest = new BlockPos(pos.getMiddleBlockX(), 255, pos.getMiddleBlockZ());
 				if(cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED) {
