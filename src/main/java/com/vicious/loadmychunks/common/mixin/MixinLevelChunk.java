@@ -11,25 +11,26 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+//? if >1.16.5 {
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.levelgen.blending.BlendingData;
+import net.minecraft.world.ticks.LevelChunkTicks;
+//?}
 //? if <=1.16.5 {
 /*import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.chunk.ChunkBiomeContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 *///?}
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.UpgradeData;
-import net.minecraft.world.level.levelgen.blending.BlendingData;
-import net.minecraft.world.ticks.LevelChunkTicks;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -201,7 +202,6 @@ public abstract class MixinLevelChunk
             }
         }
         if(useTimings){
-            loadMyChunks$loadDataModule.timeRegardless=false;
             loadMyChunks$loadDataModule.getTickTimer().end();
             loadMyChunks$loadDataModule.inform();
             if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){

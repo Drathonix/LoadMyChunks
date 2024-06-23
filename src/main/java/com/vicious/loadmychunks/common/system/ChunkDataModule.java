@@ -237,9 +237,17 @@ public class ChunkDataModule {
             IInformable informable = iterator.next();
             informable.informLagFrac(frac);
             if(informable instanceof Entity){
+                //? if >1.16.5 {
                 if(((Entity) informable).chunkPosition().toLong() != chunk.loadMyChunks$posAsLong()){
                     iterator.remove();
                 }
+                //?}
+                //? if <=1.16.5 {
+                /*Entity e = (Entity) informable;
+                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != chunk.loadMyChunks$posAsLong()){
+                    iterator.remove();
+                }
+                *///?}
             }
         }
     }

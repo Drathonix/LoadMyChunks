@@ -244,7 +244,7 @@ public class ChunkDataManager {
         *///?}
 
         //? if <=1.20.5
-        @Override
+        /*@Override*/
         public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
                 if(!v.shouldPersist()) {
@@ -306,10 +306,10 @@ public class ChunkDataManager {
         }
 
         //? if >1.20.5 {
-        /*@Override
+        @Override
         public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
             return save(compoundTag);
         }
-        *///?}
+        //?}
     }
 }

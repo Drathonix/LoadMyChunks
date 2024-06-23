@@ -56,7 +56,7 @@ public class LoadMyChunks {
 	public static Level debugLevel = Level.DEBUG;
 
 	//? if <1.20.5
-	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
+	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -72,21 +72,21 @@ public class LoadMyChunks {
 		LMCContent.init();
 		logger.info("Chunk Loader Loading Complete.");
 		//? if <=1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			//? if <1.19.5
 			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
 			//? if >1.19.4
-			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());*/
+			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());^/
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.addRecipient((IInformable) plr);
 			}
 		}));
-		//?}
-		//? if >1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		*///?}
+		//? if >1.20.5 {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		//?}
 	}
 
 	public static void serverStarted(MinecraftServer server) {
@@ -103,7 +103,7 @@ public class LoadMyChunks {
 	}
 
 	//? if >1.18.2 && <1.19.5 {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),BlockPosArgument.getSpawnablePos(ctx,"pos"))))));
@@ -144,8 +144,8 @@ public class LoadMyChunks {
 	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
 		//? if <=1.19.3 {
-		/*bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
-		*///?}
+		/^bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		^///?}
 		//? if >1.19.3 && <1.19.5
 		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
@@ -168,8 +168,8 @@ public class LoadMyChunks {
 	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
 		//? if <=1.19.3 {
-		/*bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
-		*///?}
+		/^bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		^///?}
 		//? if >1.19.3 && <1.19.5
 		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
@@ -187,10 +187,10 @@ public class LoadMyChunks {
 		}).get(),true);
 		return 0;
 	}
-	//?}
+	*///?}
 
 	//? if >1.19.4 {
-	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent", Boolean.class),BlockPosArgument.getBlockPos(ctx,"pos"))))));
@@ -264,7 +264,7 @@ public class LoadMyChunks {
 		},true);
 		return 0;
 	}
-	*///?}
+	//?}
 
 	//? if <1.18.3 {
 	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {

@@ -106,17 +106,17 @@ public class ItemChunkometer extends ItemHasTooltip {
                 while (iterator.hasNext()) {
                     UUID u = iterator.next();
                     //? if <1.16.6 {
-                    /^GameProfile profile = sl.getServer().getProfileCache().get(u);
+                    GameProfile profile = sl.getServer().getProfileCache().get(u);
                     if (profile != null) {
                         csl.append(profile.getName());
                     }
-                    ^///?}
+                    //?}
                     //? if >1.16.5 {
-                    Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
+                    /^Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
                     if (profile.isPresent()) {
                         csl.append(profile.get().getName());
                     }
-                    //?}
+                    ^///?}
                     else {
                         csl.append(u.toString());
                     }

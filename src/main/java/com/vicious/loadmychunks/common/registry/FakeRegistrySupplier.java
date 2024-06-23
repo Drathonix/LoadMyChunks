@@ -1,30 +1,31 @@
 package com.vicious.loadmychunks.common.registry;
 
-//? if <1.19.3
-/*import dev.architectury.registry.registries.Registries;*/
-//
-import dev.architectury.registry.registries.RegistrySupplier;
+//? if >1.18.1
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 //? if <=1.16.5
 /*import me.shedaniel.architectury.registry.RegistrySupplier;*/
-//? if >1.16.5 {
-import com.mojang.datafixers.util.Either;
-import dev.architectury.registry.registries.Registrar;
-//? if >1.19.3
-import dev.architectury.registry.registries.RegistrarManager;
 
 import java.util.function.Supplier;
+
+//? if >1.16.5 {
+import com.mojang.datafixers.util.Either;
+import dev.architectury.registry.registries.RegistrySupplier;
+import dev.architectury.registry.registries.Registrar;
+//? if <1.19.3
+/*import dev.architectury.registry.registries.Registries;*/
+//? if >1.19.3
+import dev.architectury.registry.registries.RegistrarManager;
 //?}
 //? if >1.20.3 {
-/*import net.minecraft.core.HolderOwner;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-*///?}
+//?}
 
 //Used to instantiate registry suppliers in older versions. We can extend it perfectly fine, thanks.
 @SuppressWarnings("NonExtendableApiUsage")
@@ -84,7 +85,7 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     //?}
 
     //? if >1.20.3 {
-    /*@Override
+    @Override
     public T value() {
         return null;
     }
@@ -145,5 +146,5 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     public boolean canSerializeIn(HolderOwner<T> holderOwner) {
         return false;
     }
-    *///?}
+    //?}
 }

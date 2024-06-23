@@ -2,11 +2,11 @@ package com.vicious.loadmychunks.common.network;
 
 //TODO: unify across all vers.
 //? if <=1.20.5 {
-public class LagReadingPacket{}
-//?}
+/*public class LagReadingPacket{}
+*///?}
 
 //? if >1.20.5 {
-/*import com.vicious.loadmychunks.client.LoadMyChunksClient;
+import com.vicious.loadmychunks.client.LoadMyChunksClient;
 import com.vicious.loadmychunks.common.util.ModResource;
 import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
@@ -29,4 +29,4 @@ public record LagReadingPacket(float lag) implements CustomPacketPayload {
         LoadMyChunksClient.lagLevel=lag;
     }
 }
-*///?}
+//?}

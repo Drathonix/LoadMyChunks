@@ -2,7 +2,7 @@ package com.vicious.loadmychunks.common.debug;
 
 
 //? if >1.20.3
-/*import com.mojang.serialization.MapCodec;*/
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -52,11 +52,11 @@ class DebugBlockLagger extends BaseEntityBlock {
     //?}
 
     //? if >1.20.3 {
-    /*public static final MapCodec<DebugBlockLagger> CODEC = simpleCodec(DebugBlockLagger::new);
+    public static final MapCodec<DebugBlockLagger> CODEC = simpleCodec(DebugBlockLagger::new);
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    *///?}
+    //?}
 }
