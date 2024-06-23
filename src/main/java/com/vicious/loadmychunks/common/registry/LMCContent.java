@@ -17,6 +17,7 @@ import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 *///?}
 //? if >1.16.5 {
+import com.vicious.loadmychunks.common.debug.DebugLoadMyChunks;
 import com.vicious.loadmychunks.common.item.ItemChunkLoader;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -119,6 +120,10 @@ public class LMCContent {
                 return new LMCBEType<>(BlockEntityLagometer::new, set, null);
             });
         });
+
+        if(LoadMyChunks.allowUsingDebugFeatures()){
+            DebugLoadMyChunks.init();
+        }
 
         LMCRegistrar.init();
     }

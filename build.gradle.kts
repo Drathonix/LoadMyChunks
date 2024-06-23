@@ -160,6 +160,7 @@ tasks.processResources {
     inputs.property("fabric_api_id",mod.fabric_api_id)
     inputs.property("java_ver",mod.java_ver)
     inputs.property("loader_ver_range",if(env.isForge) deps["forge_ver_range"] else deps["neo_ver_range"])
+    inputs.property("neo_ver_range",deps["neo_ver_range"])
     inputs.property("loader_ver",env.split[1])
     inputs.property("license",mod.license)
     inputs.property("mandatory_indicator", if(env.isNeo) "required" else "mandatory")
@@ -190,7 +191,8 @@ tasks.processResources {
         "loader_id" to env.split[1],
         "license" to mod.license,
         "mandatory_indicator" to if(env.isNeo) "required" else "mandatory",
-        "neo_forge_1204_mixin_field" to if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else ""
+        "neo_forge_1204_mixin_field" to if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "",
+        "neo_ver_range" to deps["neo_ver_range"]
     )
 
     if(env.isForge) {

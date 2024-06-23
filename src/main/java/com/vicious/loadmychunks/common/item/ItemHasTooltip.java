@@ -20,14 +20,24 @@ public class ItemHasTooltip extends Item {
         super(properties);
     }
 
-    @Override
+    //? if <=1.20.5 {
+    /*@Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
         //? if <=1.16.5
-        /*list.add(new TranslatableComponent(getTooltipTranslationKey()));*/
+        /^list.add(new TranslatableComponent(getTooltipTranslationKey()));^/
         //? if >1.16.5
         list.add(Component.translatable(getTooltipTranslationKey()));
     }
+    *///?}
+
+    //? if >1.20.5 {
+    @Override
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
+        list.add(Component.translatable(getTooltipTranslationKey()));
+    }
+    //?}
 
     public String getTooltipTranslationKey(){
         //? if <=1.16.5

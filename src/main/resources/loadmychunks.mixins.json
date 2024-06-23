@@ -4,11 +4,12 @@
   "package": "com.vicious.loadmychunks.common.mixin",
   "compatibilityLevel": "JAVA_${java_ver}",
   "mixins": [
+    "MixinChunkAccess",
     "MixinChunkMap",
     "MixinLevel",
     "MixinLevelChunk",
     "MixinServerLevel",
-    "MixinChunkAccess"
+    "MixinServerPlayer"
   ],
   "client": [
   ],

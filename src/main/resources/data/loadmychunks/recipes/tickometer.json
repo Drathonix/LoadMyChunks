@@ -24,6 +24,7 @@
     "SNS"
   ],
   "result": {
+    "id": "loadmychunks:tickometer",
     "item": "loadmychunks:tickometer"
   },
   "show_notification": true

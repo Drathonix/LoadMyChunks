@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.common.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 //? if <=1.16.5
 /*import me.shedaniel.architectury.registry.RegistrySupplier;*/
@@ -90,6 +91,13 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     public boolean is(TagKey<T> tagKey) {
         return false;
     }
+
+    //? if >1.20.5 {
+    @Override
+    public boolean is(Holder<T> holder) {
+        return false;
+    }
+    //?}
 
     @Override
     public Stream<TagKey<T>> tags() {

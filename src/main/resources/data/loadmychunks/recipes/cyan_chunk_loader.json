@@ -11,6 +11,7 @@
     }
   ],
   "result": {
-    "item": "loadmychunks:cyan_chunk_loader"
+    "item": "loadmychunks:cyan_chunk_loader",
+    "id": "loadmychunks:cyan_chunk_loader"
   }
 }

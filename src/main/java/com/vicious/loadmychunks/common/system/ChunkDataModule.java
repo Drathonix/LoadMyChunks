@@ -2,17 +2,20 @@ package com.vicious.loadmychunks.common.system;
 
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
+import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.network.LagReadingPacket;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.control.Period;
 import com.vicious.loadmychunks.common.system.control.Timings;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
+import com.vicious.loadmychunks.common.util.ModResource;
+import io.netty.buffer.Unpooled;
 //? if >1.16.5 {
 import dev.architectury.networking.NetworkManager;
 //?}
-import io.netty.buffer.Unpooled;
 //? if <=1.16.5 {
 /*import me.shedaniel.architectury.networking.NetworkManager;
 *///?}
@@ -22,6 +25,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,8 +45,7 @@ public class ChunkDataModule {
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
     private ILevelChunkMixin chunk;
-    private final Set<ServerPlayer> recipients = new HashSet<>();
-    public boolean timeRegardless;
+    private final Set<IInformable> recipients = new HashSet<>();
 
     public ChunkDataModule(ChunkPos position){
         this.position=position;
@@ -66,7 +69,7 @@ public class ChunkDataModule {
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag){
                 CompoundTag ct = (CompoundTag) loader;
-                IChunkLoader inst = LoaderTypeRegistry.getFactory(new ResourceLocation(ct.getString("type_id"))).get();
+                IChunkLoader inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id"))).get();
                 inst.load(ct);
                 addLoader(inst);
             }
@@ -141,11 +144,9 @@ public class ChunkDataModule {
         }
         else{
             loadState=LoadState.OVERTICKED;
-            disabledPeriod=null;
-        }
-        if(shouldUseTimings()){
             gracePeriod=null;
         }
+
     }
 
     public @NotNull Timings getTickTimer(){
@@ -173,7 +174,15 @@ public class ChunkDataModule {
     }
 
     public boolean shouldUseTimings() {
-        return (!loadState.permanent() && loadState.shouldLoad()) && (gracePeriod == null || gracePeriod.hasEnded());
+        return !recipients.isEmpty() || shouldApplyTimings();
+    }
+
+    public boolean shouldApplyTimings(){
+        return loadState.shouldLoad() && !loadState.permanent() && !inGrace();
+    }
+
+    public boolean isPermaLoaded(){
+        return loadState.shouldLoad() && loadState.permanent();
     }
 
     public void startGrace(){
@@ -187,6 +196,10 @@ public class ChunkDataModule {
 
     public boolean onCooldown() {
         return disabledPeriod != null && !disabledPeriod.hasEnded();
+    }
+
+    public boolean inGrace() {
+        return gracePeriod != null && !gracePeriod.hasEnded();
     }
 
     public @NotNull ChunkPos getPosition(){
@@ -209,19 +222,25 @@ public class ChunkDataModule {
         return false;
     }
 
-    public void addRecipient(ServerPlayer plr) {
-        recipients.add(plr);
+    public void addRecipient(IInformable informable) {
+        recipients.add(informable);
+    }
+
+    public void removeRecipient(IInformable informable){
+        recipients.remove(informable);
     }
 
     public void inform(){
-        Iterator<ServerPlayer> iterator = recipients.iterator();
+        Iterator<IInformable> iterator = recipients.iterator();
         float frac = chunkTickTimer.getLagFraction();
-        while(iterator.hasNext()){
-            ServerPlayer plr = iterator.next();
-            FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
-            newBuf.writeFloat(frac);
-            NetworkManager.sendToPlayer(plr, LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
-            iterator.remove();
+        while(iterator.hasNext()) {
+            IInformable informable = iterator.next();
+            informable.informLagFrac(frac);
+            if(informable instanceof Entity){
+                if(((Entity) informable).chunkPosition().toLong() != chunk.loadMyChunks$posAsLong()){
+                    iterator.remove();
+                }
+            }
         }
     }
 
@@ -240,5 +259,9 @@ public class ChunkDataModule {
     public void clearCooldowns() {
         disabledPeriod=null;
         gracePeriod=null;
+    }
+
+    public boolean shouldPersist(){
+        return loadState.permanent() || !loaders.isEmpty();
     }
 }

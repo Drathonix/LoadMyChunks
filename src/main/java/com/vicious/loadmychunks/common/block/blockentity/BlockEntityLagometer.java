@@ -3,6 +3,8 @@ package com.vicious.loadmychunks.common.block.blockentity;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.block.BlockLagometer;
+import com.vicious.loadmychunks.common.bridge.IDestroyable;
+import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -13,10 +15,7 @@ import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockEntityLagometer extends BEBase
-    //? if <=1.16.5
-        /*implements TickableBlockEntity*/
-    {
+public class BlockEntityLagometer extends BEBase implements IInformable {
     private ChunkDataModule cdm;
 
         //? if <=1.16.5 {
@@ -30,6 +29,7 @@ public class BlockEntityLagometer extends BEBase
         super.validate(level);
         if(level instanceof ServerLevel) {
             cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) level, getBlockPos());
+            cdm.addRecipient(this);
         }
     }
 
@@ -39,22 +39,23 @@ public class BlockEntityLagometer extends BEBase
     }
     //?}
 
-
-    public void serverTick(BlockState blockState){
-        if(cdm != null){
-            cdm.timeRegardless=true;
+    @Override
+    public void informLagFrac(float frac) {
+        if(!isRemoved()) {
+            BlockState blockState = getBlockState();
             int prevLag = blockState.getValue(BlockLagometer.LAG);
-            int currLag = (int) (cdm.getTickTimer().getLagFraction()*15);
-            if(prevLag != currLag){
-                this.level.setBlock(this.worldPosition, blockState.setValue(BlockLagometer.LAG, currLag),3);
+            int currLag = (int) (cdm.getTickTimer().getLagFraction() * 15);
+            if (prevLag != currLag) {
+                this.level.setBlock(this.worldPosition, blockState.setValue(BlockLagometer.LAG, currLag), 3);
             }
         }
     }
 
-    //? if <=1.16.5 {
-    /*@Override
-    public void tick() {
-        serverTick(getBlockState());
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if(cdm != null){
+            cdm.removeRecipient(this);
+        }
     }
-    *///?}
 }

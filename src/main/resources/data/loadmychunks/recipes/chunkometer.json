@@ -21,7 +21,8 @@
     "GTG"
   ],
   "result": {
-    "item": "loadmychunks:chunkometer"
+    "item": "loadmychunks:chunkometer",
+    "id": "loadmychunks:chunkometer"
   },
   "show_notification": true
 }

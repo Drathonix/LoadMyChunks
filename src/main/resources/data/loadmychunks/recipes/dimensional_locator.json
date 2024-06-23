@@ -25,6 +25,7 @@
     "DLD"
   ],
   "result": {
+    "id": "loadmychunks:dimensional_locator",
     "item": "loadmychunks:dimensional_locator"
   },
   "show_notification": true

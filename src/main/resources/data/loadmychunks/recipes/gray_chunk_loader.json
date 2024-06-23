@@ -11,6 +11,7 @@
     }
   ],
   "result": {
+    "id": "loadmychunks:gray_chunk_loader",
     "item": "loadmychunks:gray_chunk_loader"
   }
 }

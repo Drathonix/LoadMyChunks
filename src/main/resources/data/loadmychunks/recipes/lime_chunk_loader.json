@@ -11,6 +11,7 @@
     }
   ],
   "result": {
+    "id": "loadmychunks:lime_chunk_loader",
     "item": "loadmychunks:lime_chunk_loader"
   }
 }

@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.debug.DebugLoadMyChunks;
+import com.vicious.loadmychunks.common.network.LagReadingRequest;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -48,7 +49,8 @@ public class LoadMyChunks {
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Level debugLevel = Level.DEBUG;
 
-	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
+	//? if <1.20.5
+	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -62,15 +64,12 @@ public class LoadMyChunks {
 		CommandRegistrationEvent.EVENT.register(LoadMyChunks::registerCommands);
 		LoadMyChunks.logger.info("Adding Chunk loader blocks");
 		LMCContent.init();
-		if(allowUsingDebugFeatures()){
-			DebugLoadMyChunks.init();
-		}
 		logger.info("Chunk Loader Loading Complete.");
-		//? if <1.20.6 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		//? if <=1.20.5 {
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			//? if <=1.16.5
-			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());*/
+			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());^/
 			//? if >1.16.5
 			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
 			//TODO: integrate permissions with LP
@@ -79,10 +78,10 @@ public class LoadMyChunks {
 				cdm.addRecipient((ServerPlayer) plr);
 			}
 		}));
-		//?}
-		//? if >=1.20.6 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		*///?}
+		//? if >1.20.5 {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		//?}
 	}
 
 	public static void serverStarted(MinecraftServer server) {
@@ -95,7 +94,7 @@ public class LoadMyChunks {
 	}
 
 	public static boolean allowUsingDebugFeatures() {
-		return false;
+		return true;
 	}
 
 	//? if >1.16.5 {

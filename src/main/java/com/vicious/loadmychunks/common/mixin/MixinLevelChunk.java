@@ -83,21 +83,19 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Unique
-    private static final ChunkPos check = new ChunkPos(62,124);
-
     @Override
     public void loadMyChunks$tick() {
-        boolean flag = loadMyChunks$loadDataModule.shouldUseTimings() && !level.isClientSide;
-        if(flag || loadMyChunks$loadDataModule.timeRegardless){
-            loadMyChunks$loadDataModule.getTickTimer().start();
-        }
+        boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings() && !level.isClientSide;
+        boolean useTimings = applyTimings || (!level.isClientSide && loadMyChunks$loadDataModule.shouldUseTimings());
         Iterator<TickingBlockEntity> iterator = loadMyChunks$queuedTickers.iterator();
         // 1.0.3 Conmod patch
         while(iterator.hasNext()){
             TickingBlockEntity tickingblockentity = iterator.next();
             loadMyChunks$tickers.add(tickingblockentity);
             iterator.remove();
+        }
+        if(useTimings){
+            loadMyChunks$loadDataModule.getTickTimer().start();
         }
         iterator = loadMyChunks$tickers.iterator();
         // patch end
@@ -110,14 +108,10 @@ public abstract class MixinLevelChunk
                 tickingblockentity.tick();
             }
         }
-        if(flag || loadMyChunks$loadDataModule.timeRegardless){
-            loadMyChunks$loadDataModule.timeRegardless=false;
+        if(useTimings){
             loadMyChunks$loadDataModule.getTickTimer().end();
             loadMyChunks$loadDataModule.inform();
-        }
-
-        if(flag){
-            if(loadMyChunks$loadDataModule.isOverticked()){
+            if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){
                 loadMyChunks$loadDataModule.startShutoff();
                 ChunkDataManager.markShutDown((ServerLevel)level,chunkPos);
             }
@@ -177,8 +171,9 @@ public abstract class MixinLevelChunk
             iterator.remove();
         }
 
-        boolean flag = loadMyChunks$loadDataModule.shouldUseTimings() && !level.isClientSide;
-        if(flag || loadMyChunks$loadDataModule.timeRegardless){
+        boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings() && !level.isClientSide;
+        boolean useTimings = applyTimings || (!level.isClientSide && loadMyChunks$getDataModule().shouldUseTimings());
+        if(useTimings){
             loadMyChunks$loadDataModule.getTickTimer().start();
         }
         iterator = loadMyChunks$tickers.iterator();
@@ -205,14 +200,11 @@ public abstract class MixinLevelChunk
                 }
             }
         }
-        if(flag || loadMyChunks$loadDataModule.timeRegardless){
+        if(useTimings){
             loadMyChunks$loadDataModule.timeRegardless=false;
             loadMyChunks$loadDataModule.getTickTimer().end();
             loadMyChunks$loadDataModule.inform();
-        }
-
-        if(flag){
-            if(loadMyChunks$loadDataModule.isOverticked()){
+            if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){
                 loadMyChunks$loadDataModule.startShutoff();
                 ChunkDataManager.markShutDown((ServerLevel)level,chunkPos);
             }

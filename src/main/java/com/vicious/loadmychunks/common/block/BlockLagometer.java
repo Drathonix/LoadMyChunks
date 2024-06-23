@@ -77,19 +77,4 @@ public class BlockLagometer extends BaseEntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> arg) {
         arg.add(LAG);
     }
-
-    //? if >1.16.5 {
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        if(blockEntityType == LMCContent.lagometerBlockEntity.get()){
-            return ((level1, blockPos, blockState1, blockEntity) -> {
-                if(blockEntity instanceof BlockEntityLagometer bel){
-                    bel.serverTick(blockState1);
-                }
-            });
-        }
-        return null;
-    }
-    //?}
 }
