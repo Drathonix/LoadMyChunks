@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.UUID;
 
@@ -15,9 +16,17 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
     private PlacedChunkLoader chunkLoader;
     private UUID owner;
 
-    public BlockEntityChunkLoader() {
+    //? if <=1.16.5 {
+    /*public BlockEntityChunkLoader() {
         super(LMCContent.chunkLoaderBlockEntity.get());
     }
+    *///?}
+
+    //? if >1.16.5 {
+    public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
+        super(LMCContent.chunkLoaderBlockEntity.get(), blockPos, blockState);
+    }
+    //?}
 
     public PlacedChunkLoader getChunkLoader() {
         return chunkLoader;

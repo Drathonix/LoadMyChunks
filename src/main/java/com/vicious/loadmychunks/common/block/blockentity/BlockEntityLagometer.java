@@ -15,15 +15,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityLagometer extends BEBase
     //? if <=1.16.5
-        implements TickableBlockEntity
+        /*implements TickableBlockEntity*/
     {
     private ChunkDataModule cdm;
 
-    //? if <=1.16.5 {
-    public BlockEntityLagometer() {
+        //? if <=1.16.5 {
+    /*public BlockEntityLagometer() {
         super(LMCContent.lagometerBlockEntity.get());
     }
-    //?}
+    *///?}
 
     @Override
     public void validate(Level level) {
@@ -34,13 +34,10 @@ public class BlockEntityLagometer extends BEBase
     }
 
     //? if >1.16.5 {
-    /*public BlockEntityLagometer(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(blockEntityType, blockPos, blockState);
-    }
     public BlockEntityLagometer(BlockPos blockPos, BlockState blockState) {
-        this(LMCContent.lagometerBlockEntity.get(), blockPos, blockState);
+        super(LMCContent.lagometerBlockEntity.get(), blockPos, blockState);
     }
-    *///?}
+    //?}
 
 
     public void serverTick(BlockState blockState){
@@ -55,9 +52,9 @@ public class BlockEntityLagometer extends BEBase
     }
 
     //? if <=1.16.5 {
-    @Override
+    /*@Override
     public void tick() {
         serverTick(getBlockState());
     }
-    //?}
+    *///?}
 }

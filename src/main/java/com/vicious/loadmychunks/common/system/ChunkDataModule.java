@@ -9,10 +9,13 @@ import com.vicious.loadmychunks.common.system.control.Period;
 import com.vicious.loadmychunks.common.system.control.Timings;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
+//? if >1.16.5 {
+import dev.architectury.networking.NetworkManager;
+//?}
 import io.netty.buffer.Unpooled;
 //? if <=1.16.5 {
-import me.shedaniel.architectury.networking.NetworkManager;
-//}
+/*import me.shedaniel.architectury.networking.NetworkManager;
+*///?}
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

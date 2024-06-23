@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockChunkLoader extends BaseEntityBlock {
-    //? if >=1.20.4 {
+    //? if >1.20.3 {
     /*public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
 
     @Override
@@ -44,9 +44,19 @@ public class BlockChunkLoader extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
+    //? if >1.16.5 {
     @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new BlockEntityChunkLoader(blockPos,blockState);
+    }
+    //?}
+
+    //? if <=1.16.5 {
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockGetter blockGetter) {
         return new BlockEntityChunkLoader();
     }
+    *///?}
 }

@@ -36,6 +36,7 @@ class ModData {
     val github_url = property("mod.github_url").toString()
     val fabric_api_id = if(stonecutter.compare(env.mc_ver,"1.16.5") <= 0) "fabric" else "fabric-api"
     val java_ver = if(stonecutter.compare(env.mc_ver,"1.16.5") <= 0) 8 else if(stonecutter.compare(env.mc_ver,"1.20.4") <= 0) 17 else 21
+
 }
 
 class ModDependencies {
@@ -67,19 +68,16 @@ loom {
     }
 }*/
 
-version = "${mod.version}+${env.mc_ver}"
+version = "${mod.version}+${env.mc_ver}+${env.split[1]}"
 group = mod.group
 base { archivesName.set(mod.id) }
 
 loom {
-    //splitEnvironmentSourceSets()
-
-    /*mods {
-        create("template") {
-            sourceSet(sourceSets["main"])
-            sourceSet(sourceSets["client"])
-        }
-    }*/
+    if (env.isForge) forge {
+        mixinConfigs(
+            "${mod.id}.mixins.json",
+        )
+    }
 }
 
 repositories {
@@ -161,6 +159,9 @@ tasks.processResources {
     inputs.property("issue_tracker", mod.issue_tracker)
     inputs.property("fabric_api_id",mod.fabric_api_id)
     inputs.property("java_ver",mod.java_ver)
+    inputs.property("loader_ver_range",if(env.isForge) deps["forge_ver_range"] else deps["neo_ver_range"])
+    inputs.property("loader_ver",env.split[1])
+    inputs.property("license",mod.license)
 
     val map = mapOf(
         "id" to mod.id,
@@ -179,10 +180,32 @@ tasks.processResources {
         "fabric_api" to deps["fabric_api"],
         "issue_tracker" to mod.issue_tracker,
         "fabric_api_id" to mod.fabric_api_id,
-        "java_ver" to mod.java_ver
+        "java_ver" to mod.java_ver,
+        "loader_ver_range" to if(env.isForge) deps["forge_ver_range"] else deps["neo_loader_ver_range"],
+        "loader_ver" to if(env.isForge) deps["forge_ver_range"] else deps["neo_ver_range"],
+        "loader_id" to env.split[1],
+        "license" to mod.license
     )
 
+    if(env.isForge) {
+        exclude("fabric.mod.json")
+        exclude("META-INF/neoforge.mods.toml")
+    }
+    if(env.isFabric){
+        exclude("META-INF/neoforge.mods.toml")
+    }
+    if(env.isNeo){
+        if(stonecutter.compare(env.mc_ver,"1.20.6") >= 0) {
+            exclude("META-INF/mods.toml")
+        }
+        else{
+            exclude("META-INF/neoforge.mods.toml")
+        }
+        exclude("fabric.mod.json")
+    }
     filesMatching("fabric.mod.json") { expand(map) }
+    filesMatching("META-INF/mods.toml") { expand(map) }
+    filesMatching("META-INF/neoforge.mods.toml") { expand(map) }
     filesMatching("loadmychunks.mixins.json") { expand(map) }
     filesMatching("loadmychunks.fabric.mixins.json") { expand(map) }
     filesMatching("loadmychunks.forge.mixins.json") { expand(map) }

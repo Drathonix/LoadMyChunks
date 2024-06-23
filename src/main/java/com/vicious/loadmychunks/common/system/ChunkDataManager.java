@@ -27,6 +27,21 @@ public class ChunkDataManager {
         return levelManagers.computeIfAbsent(((ServerLevelData)level.getLevelData()).getLevelName(), k->new LevelChunkLoaderManager(level));
     }
 
+    //? if >1.16.5 {
+    public static LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+        String levelName = ((ServerLevelData)level.getLevelData()).getLevelName();
+        if(levelManagers.containsKey(levelName)){
+            levelManagers.get(levelName).clear();
+            LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
+            levelManagers.replace(levelName,out);
+            return out;
+        }
+        else{
+            return levelManagers.put(levelName, new LevelChunkLoaderManager(level,tag));
+        }
+    }
+    //?}
+
     public static @NotNull Map<String,List<IChunkLoader>> getChunkLoadersOf(@Nullable UUID owner) {
         if(owner == null){
             return new HashMap<>();
@@ -135,10 +150,30 @@ public class ChunkDataManager {
         private final ServerLevel level;
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
-            super("loadmychunks_manager");
+            //? if <=1.16.5
+            /*super("loadmychunks_manager");*/
             this.level=level;
             level.getServer().addTickable(this::tick);
         }
+
+        //? if >1.16.5 {
+        public LevelChunkLoaderManager(@NotNull ServerLevel level, @NotNull CompoundTag tag){
+            this(level);
+            for (String key : tag.getAllKeys()) {
+                long index = Long.parseLong(key);
+                ChunkPos pos = new ChunkPos(index);
+                ChunkDataModule module = getOrCreateData(index);
+                module.load(tag.getCompound(key));
+                module.update();
+                if(module.onCooldown()){
+                    shutDown(pos);
+                }
+                else{
+                    module.getLoadState().apply(level,pos);
+                }
+            }
+        }
+        //?}
 
         public @Nullable ChunkDataModule getData(@NotNull ChunkPos pos){
             return getData(pos.toLong());
@@ -187,8 +222,8 @@ public class ChunkDataManager {
             setDirty();
             return cdm;
         }
-
-        @Override
+        //? if <=1.16.5 {
+        /*@Override
         public void load(CompoundTag tag) {
             for (String key : tag.getAllKeys()) {
                 long index = Long.parseLong(key);
@@ -204,6 +239,7 @@ public class ChunkDataManager {
                 }
             }
         }
+        *///?}
 
         @Override
         public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {

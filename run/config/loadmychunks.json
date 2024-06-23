@@ -1,0 +1,8 @@
+{
+  "msPerChunk": 5,
+  "delayBeforeReload": 300,
+  "reloadGracePeriod": 5,
+  "maxChunksPerPlayer": 49,
+  "lagometerNeedsChunkOwnership": false,
+  "useDebugLogging": false
+}

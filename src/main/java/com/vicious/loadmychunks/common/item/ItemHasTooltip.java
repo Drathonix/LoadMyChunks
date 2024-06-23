@@ -1,8 +1,12 @@
 package com.vicious.loadmychunks.common.item;
 
 import net.minecraft.core.Registry;
+//? if >1.16.5
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+//? if <=1.16.5
+/*import net.minecraft.network.chat.TranslatableComponent;*/
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,10 +23,16 @@ public class ItemHasTooltip extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
-        list.add(new TranslatableComponent(getTooltipTranslationKey()));
+        //? if <=1.16.5
+        /*list.add(new TranslatableComponent(getTooltipTranslationKey()));*/
+        //? if >1.16.5
+        list.add(Component.translatable(getTooltipTranslationKey()));
     }
 
     public String getTooltipTranslationKey(){
-        return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".");
+        //? if <=1.16.5
+        /*return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".");*/
+        //> if >1.16.5
+        return "tooltip." + BuiltInRegistries.ITEM.getKey(this).toString().replace(":",".");
     }
 }
