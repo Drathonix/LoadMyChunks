@@ -15,7 +15,7 @@ ${description}
 ${neo_forge_1204_mixin_field}
 
 [[dependencies.${id}]]
-# NOTE: THIS IS HERE BECAUSE 1.20.4 NEO STILL USED mods.toml
+# NOTE: THIS IS HERE BECAUSE 1.20.4 NEO STILL USED
 modId="${loader_id}"
 #NEO COMPAT
 ${mandatory_indicator}=true

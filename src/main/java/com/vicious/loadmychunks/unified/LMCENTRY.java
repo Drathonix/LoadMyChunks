@@ -7,21 +7,21 @@ import com.vicious.loadmychunks.common.util.BoolArgument;
 *///?}
 
 //? if >1.18.2
-/*import net.minecraft.commands.synchronization.ArgumentTypeInfos;*/
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 
 //? if fabric {
 /*import com.vicious.loadmychunks.common.util.ModResource;
 import net.fabricmc.api.ModInitializer;
 //? if >1.18.2
-/^import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;^/
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 public class LMCENTRY implements ModInitializer {
         @Override
         public void onInitialize() {
                 LoadMyChunks.init();
                 //? if >1.18.2 {
-                /^ArgumentTypeRegistry.registerArgumentType(ModResource.of("lmcenum"), BoolArgument.class,new BoolArgument.Info());
-                ^///?}
+                ArgumentTypeRegistry.registerArgumentType(ModResource.of("lmcenum"), BoolArgument.class,new BoolArgument.Info());
+                //?}
                 ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
                 ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         }
@@ -31,9 +31,11 @@ public class LMCENTRY implements ModInitializer {
 //? elif forge {
 import dev.architectury.platform.forge.EventBuses;
 //? if >1.18.2 {
-/*import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.core.registries.Registries;
-*///?}
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.core.Registry;
+//? if >1.19.4
+/*import net.minecraft.core.registries.Registries;*/
+//?}
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 //? if >1.16.5 {
@@ -56,7 +58,12 @@ public class LMCENTRY {
         EventBuses.registerModEventBus(LoadMyChunks.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         LoadMyChunks.init();
         MinecraftForge.EVENT_BUS.register(this);
-        //? if >1.18.2 {
+        //? if >1.18.2 && <1.19.5 {
+        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY,LoadMyChunks.MOD_ID);
+        args.register("lmcbool",()->info);
+        //?}
+        //? if >1.19.4 {
         /*ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);

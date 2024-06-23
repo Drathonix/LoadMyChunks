@@ -29,7 +29,7 @@ import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityLagometer;
 import com.vicious.loadmychunks.common.block.blockentity.LMCBEType;
 import com.vicious.loadmychunks.common.util.ModResource;
-//? if >1.18.2
+//? if >1.19.5
 /*import net.minecraft.core.registries.Registries;*/
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-//? if <1.18.3
+//? if <1.19.5
 import net.minecraft.world.level.material.Material;
 
 import java.util.HashSet;
@@ -77,27 +77,27 @@ public class LMCContent {
         LMCRegistrar.BLOCK.queue(reg->{
             RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
                 //TODO: find a better way to abstract this somehow.
-                //? if <1.18.3
+                //? if <1.19.5
                 BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
-                //? if >1.18.2
+                //? if >1.19.4
                 /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(50.0F, 1200.0F);*/
                 return new BlockChunkLoader(properties);
             });
             String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
             for (String color : colors) {
                 chunkLoaderBlocks.add(registerCLBlockWithItem(reg,color + "_chunk_loader", () -> {
-                    //? if <1.18.3
+                    //? if <1.19.5
                     BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
-                    //? if >1.18.2
+                    //? if >1.19.4
                     /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(50.0F, 1200.0F);*/
                     return new BlockChunkLoader(properties);
                 }));
             }
             chunkLoaderBlocks.add(chunkLoaderBlock);
             lagometerBlock = registerBlockWithItem(reg,"lagometer",()->{
-                //? if <1.18.3
+                //? if <1.19.5
                 BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.5F);
-                //? if >1.18.2
+                //? if >1.19.4
                 /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(3.5F);*/
                 return new BlockLagometer(properties);
             }, ItemLagometer::new);

@@ -5,7 +5,7 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 //?}
-//? if >1.18.2 {
+//? if >1.19.4 {
 /*import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 *///?}
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 //Controls Registry Load order.
 public class LMCRegistrar<T> {
-    //? if <1.18.3 {
+    //? if <1.19.5 {
     public static final LMCRegistrar<Item> ITEM = new LMCRegistrar<>(Registry.ITEM_REGISTRY);
     public static final LMCRegistrar<Block> BLOCK = new LMCRegistrar<>(Registry.BLOCK_REGISTRY);
     public static final LMCRegistrar<BlockEntityType<?>> BLOCK_ENTITY_TYPE = new LMCRegistrar<>(Registry.BLOCK_ENTITY_TYPE_REGISTRY);
@@ -65,9 +65,9 @@ public class LMCRegistrar<T> {
     //Doing things this way to be more version universal
     @SuppressWarnings("unchecked")
     public T get(ResourceLocation key) {
-        //? if <1.18.3
+        //? if <1.19.5
         return (T)Registry.REGISTRY.get(this.key.location()).get(key);
-        //? if >1.18.2
+        //? if >1.19.4
         /*return (T)BuiltInRegistries.REGISTRY.get(this.key.location()).get(key);*/
     }
 }

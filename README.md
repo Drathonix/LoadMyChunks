@@ -28,4 +28,5 @@ There are currently no known mod conflicts.
 
 # Known Stonecutter IDE issues
 
-Versions 1.16.5-all, and 1.20.4-forge do not run in the IDE. These versions must be tested externally using a launcher
+Versions 1.16.5-all, and 1.20.4-forge do not run in the IDE. These versions must be tested externally using a launcher.
+Version 1.19.2-forge runs, but mixins are not loaded (I have no idea why)

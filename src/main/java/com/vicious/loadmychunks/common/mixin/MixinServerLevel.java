@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
-//? if >1.18.2
+//? if >1.19.2
 /*import net.minecraft.world.RandomSequences;*/
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
@@ -30,7 +30,8 @@ import java.util.concurrent.Executor;
 
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel {
-    @Shadow public abstract DimensionDataStorage getDataStorage();
+    @Shadow
+    public abstract DimensionDataStorage getDataStorage();
 
     //? if >1.20.5 {
     /*@Inject(method = "<init>",at = @At("RETURN"))
@@ -55,10 +56,16 @@ public abstract class MixinServerLevel {
     }
     *///?}
 
-    //? if >1.18.1 && <1.19.2 {
+    //? if >1.18.1 && <1.18.3 {
+    /*@Inject(method = "<init>", at = @At("RETURN"))
+    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, Holder holder, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci) {
+        getDataStorage().computeIfAbsent((tag) -> ChunkDataManager.loadManager(ServerLevel.class.cast(this), tag), () -> ChunkDataManager.getManager(ServerLevel.class.cast(this)), "loadmychunks_manager");
+    }
+    *///?}
+    //? if <1.19.4 && >1.18.2 {
     @Inject(method = "<init>",at = @At("RETURN"))
-    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, Holder holder, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
-        getDataStorage().computeIfAbsent((tag)->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
+    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
+        getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
     }
     //?}
 

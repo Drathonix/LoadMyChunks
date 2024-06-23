@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 //? if >1.16.5 {
 import com.mojang.datafixers.util.Either;
 import dev.architectury.registry.registries.Registrar;
-//? if >1.18.2
+//? if >1.19.4
 /*import dev.architectury.registry.registries.RegistrarManager;*/
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
@@ -51,14 +51,14 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
         return t;
     }
 
-    //? if >1.18.2 {
+    //? if >1.19.4 {
     /*@Override
     public RegistrarManager getRegistrarManager() {
         return null;
     }
     *///?}
 
-    //? if <1.18.3 && >1.16.5 {
+    //? if <1.19.5 && >1.16.5 {
     @Override
     public Registries getRegistries() {
         return null;

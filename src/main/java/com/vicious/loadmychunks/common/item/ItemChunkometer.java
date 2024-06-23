@@ -9,9 +9,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 //? if <1.18.3 {
-import net.minecraft.network.chat.TextComponent;
+/*import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-//?}
+*///?}
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -30,7 +30,7 @@ public class ItemChunkometer extends ItemHasTooltip {
     }
 
     //? if >1.18.2 {
-    /*@Override
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel sl) {
             ChunkPos pos = new ChunkPos(player.blockPosition());
@@ -76,11 +76,11 @@ public class ItemChunkometer extends ItemHasTooltip {
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
     }
-    *///?}
+    //?}
 
     //TODO: Improve messaging abstraction
     //? if <1.18.3 {
-    @Override
+    /*@Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel) {
             ServerLevel sl = (ServerLevel) level;
@@ -106,11 +106,11 @@ public class ItemChunkometer extends ItemHasTooltip {
                 while (iterator.hasNext()) {
                     UUID u = iterator.next();
                     //? if <1.16.6 {
-                    /*GameProfile profile = sl.getServer().getProfileCache().get(u);
+                    /^GameProfile profile = sl.getServer().getProfileCache().get(u);
                     if (profile != null) {
                         csl.append(profile.getName());
                     }
-                    *///?}
+                    ^///?}
                     //? if >1.16.5 {
                     Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
                     if (profile.isPresent()) {
@@ -137,6 +137,6 @@ public class ItemChunkometer extends ItemHasTooltip {
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
     }
-    //?}
+    *///?}
 }
 

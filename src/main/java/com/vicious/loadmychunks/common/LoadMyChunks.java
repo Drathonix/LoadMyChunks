@@ -25,9 +25,9 @@ import dev.architectury.networking.NetworkManager;
 //?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
-/*import net.minecraft.commands.CommandBuildContext;*/
+import net.minecraft.commands.CommandBuildContext;
 //? if <1.18.3
-import net.minecraft.network.chat.TextComponent;
+/*import net.minecraft.network.chat.TextComponent;*/
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -74,9 +74,9 @@ public class LoadMyChunks {
 		//? if <=1.20.5 {
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
-			//? if <1.18.3
+			//? if <1.19.5
 			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
-			//? if >1.18.2
+			//? if >1.19.4
 			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());*/
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
@@ -102,7 +102,86 @@ public class LoadMyChunks {
 		return true;
 	}
 
-	//? if >1.18.2 {
+	//? if >1.18.2 && <1.19.5 {
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
+		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),BlockPosArgument.getSpawnablePos(ctx,"pos"))))));
+		root.then(Commands.literal("unforceload").executes(ctx-> handleCMDUnforceload(ctx,false,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
+				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDUnforceload(ctx,ctx.getArgument("permanent",Boolean.class),BlockPosArgument.getSpawnablePos(ctx,"pos"))))));
+		root.then(Commands.literal("list").then(Commands.literal("forced").executes(ctx->{
+			ServerLevel level = ctx.getSource().getLevel();
+			ctx.getSource().sendSystemMessage(Component.literal("Forceloaded Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
+			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState().shouldLoad()).forEach(cdm->{
+				ChunkPos pos = cdm.getPosition();
+				BlockPos dest = new BlockPos(pos.getMiddleBlockX(), 255, pos.getMiddleBlockZ());
+				if(cdm.getLoadState().permanent()) {
+					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ") permanent").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+				}
+				else{
+					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+				}
+			});
+			return 0;
+		})).then(Commands.literal("overticked").executes(ctx->{
+			ServerLevel level = ctx.getSource().getLevel();
+			ctx.getSource().sendSystemMessage(Component.literal("Overticked Chunks").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(true).withUnderlined(true)));
+			ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadState.OVERTICKED).forEach(cdm->{
+				ChunkPos pos = cdm.getPosition();
+				BlockPos dest = new BlockPos(pos.getMiddleBlockX(), 255, pos.getMiddleBlockZ());
+				if(cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED) {
+					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ") permanently disabled").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+				}
+				else{
+					ctx.getSource().sendSystemMessage(Component.literal("(" + pos.x + "," + pos.z + ")").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()))));
+				}
+			});
+			return 0;
+		})));
+		dispatcher.register(root);
+	}
+
+	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		ChunkPos pos = new ChunkPos(bp);
+		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
+		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
+		cdm.clearCooldowns();
+		cdm.update();
+		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
+			if(permanent) {
+				return Component.translatable("loadmychunks.command.forceload.set.permanent",pos.x,pos.z);
+			}
+			else{
+				return Component.translatable("loadmychunks.command.forceload.set",pos.x,pos.z);
+			}
+		}).get(),true);
+		return 0;
+	}
+
+	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
+		Vec3 v = ctx.getSource().getPosition();
+		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		ChunkPos pos = new ChunkPos(bp);
+		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
+		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;
+		cdm.update();
+		cdm.getLoadState().apply(ctx.getSource().getLevel(),pos);
+		ctx.getSource().sendSuccess(((Supplier<Component>)()->{
+			if(ban) {
+				return Component.translatable("loadmychunks.command.forceload.unset.permanent",pos.x,pos.z);
+			}
+			else{
+				return Component.translatable("loadmychunks.command.forceload.unset",pos.x,pos.z);
+			}
+		}).get(),true);
+		return 0;
+	}
+	//?}
+
+	//? if >1.19.4 {
 	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
@@ -180,7 +259,7 @@ public class LoadMyChunks {
 	*///?}
 
 	//? if <1.18.3 {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),getBlockPos(ctx,"pos"))))));
@@ -256,7 +335,7 @@ public class LoadMyChunks {
 		}).get(),true);
 		return 0;
 	}
-	//?}
+	*///?}
 
 	public static BlockPos getBlockPos(CommandContext<CommandSourceStack> ctx, String key){
 		//? if >1.18.1 {
