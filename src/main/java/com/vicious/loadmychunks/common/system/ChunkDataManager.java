@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.ServerLevelData;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,23 +24,22 @@ import java.util.function.Supplier;
  * Maintains the records of all chunk loaders and chunk load states handled by LoadMyChunks.
  */
 public class ChunkDataManager {
-    private static final Map<String,LevelChunkLoaderManager> levelManagers = new HashMap<>();
+    private static final Map<ServerLevel,LevelChunkLoaderManager> levelManagers = new IdentityHashMap<>();
 
     public static LevelChunkLoaderManager getManager(ServerLevel level){
-        return levelManagers.computeIfAbsent(((ServerLevelData)level.getLevelData()).getLevelName(), k->new LevelChunkLoaderManager(level));
+        return levelManagers.computeIfAbsent(level, k->new LevelChunkLoaderManager(level));
     }
 
     //? if >1.16.5 {
     public static LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
-        String levelName = ((ServerLevelData)level.getLevelData()).getLevelName();
-        if(levelManagers.containsKey(levelName)){
-            levelManagers.get(levelName).clear();
+        if(levelManagers.containsKey(level)){
+            levelManagers.get(level).clear();
             LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
-            levelManagers.replace(levelName,out);
+            levelManagers.replace(level,out);
             return out;
         }
         else{
-            return levelManagers.put(levelName, new LevelChunkLoaderManager(level,tag));
+            return levelManagers.put(level, new LevelChunkLoaderManager(level,tag));
         }
     }
     //?}
@@ -177,14 +177,6 @@ public class ChunkDataManager {
         }
         //?}
 
-        public @Nullable ChunkDataModule getData(@NotNull ChunkPos pos){
-            return getData(pos.toLong());
-        }
-
-        public @Nullable ChunkDataModule getData(long pos){
-            return data.get(pos);
-        }
-
         public @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
         }
@@ -209,10 +201,7 @@ public class ChunkDataManager {
         }
 
         public void removeChunkLoader(IChunkLoader loader, long pos){
-            ChunkDataModule cdm = getData(pos);
-            if(cdm == null){
-                return;
-            }
+            ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.removeLoader(loader)) {
                 cdm.getLoadState().apply(level, pos);
             }

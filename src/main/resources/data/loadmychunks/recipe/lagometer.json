@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "T": {
+      "item": "loadmychunks:tickometer"
+    },
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CTC",
+    "CRC"
+  ],
+  "result": {
+    "item": "loadmychunks:lagometer",
+    "id": "loadmychunks:lagometer"
+  },
+  "show_notification": true
+}

@@ -5,14 +5,15 @@ plugins {
     kotlin("jvm") version "1.9.22"
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j")
-    //id("me.modmuss50.mod-publish-plugin")
+    id("me.modmuss50.mod-publish-plugin")
 }
 
 class Env() {
     val split = stonecutter.current.version.split("-")
-    val isFabric = split[1].equals("fabric")
-    val isForge = split[1].equals("forge")
-    val isNeo = split[1].equals("neoforge")
+    val loader = split[1]
+    val isFabric = loader.equals("fabric")
+    val isForge = loader.equals("forge")
+    val isNeo = loader.equals("neoforge")
     val mc_ver = split[0]
 }
 val env = Env()
@@ -68,7 +69,7 @@ loom {
     }
 }*/
 
-version = "${mod.version}+${env.mc_ver}+${env.split[1]}"
+version = "${mod.version}+${env.mc_ver}+${env.loader}"
 group = mod.group
 base { archivesName.set(mod.id) }
 
@@ -159,9 +160,10 @@ tasks.processResources {
     inputs.property("issue_tracker", mod.issue_tracker)
     inputs.property("fabric_api_id",mod.fabric_api_id)
     inputs.property("java_ver",mod.java_ver)
+    inputs.property("arch_ver",deps["arch_ver"])
     inputs.property("loader_ver_range",if(env.isForge) deps["forge_ver_range"] else deps["neo_ver_range"])
     inputs.property("neo_ver_range",deps["neo_ver_range"])
-    inputs.property("loader_ver",env.split[1])
+    inputs.property("loader_ver",env.loader)
     inputs.property("license",mod.license)
     inputs.property("mandatory_indicator", if(env.isNeo) "required" else "mandatory")
     inputs.property("neo_forge_1204_mixin_field", if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "")
@@ -188,11 +190,12 @@ tasks.processResources {
         "java_ver" to mod.java_ver,
         "loader_ver_range" to if(env.isForge) deps["forge_ver_range"] else deps["neo_loader_ver_range"],
         "loader_ver" to if(env.isForge) deps["forge_ver_range"] else deps["neo_ver_range"],
-        "loader_id" to env.split[1],
+        "loader_id" to env.loader,
         "license" to mod.license,
         "mandatory_indicator" to if(env.isNeo) "required" else "mandatory",
         "neo_forge_1204_mixin_field" to if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "",
-        "neo_ver_range" to deps["neo_ver_range"]
+        "neo_ver_range" to deps["neo_ver_range"],
+        "arch_ver" to deps["arch_ver"]
     )
 
     if(env.isForge) {
@@ -227,25 +230,29 @@ tasks.register<Copy>("buildAndCollect") {
     dependsOn("build")
 }
 
-/*
+
 publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
-    displayName = "${mod.name} ${mod.version} for env.mc_ver"
+    displayName = "${mod.name} ${mod.version} for ${env.mc_ver}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
     type = STABLE
-    modLoaders.add("fabric")
+    modLoaders.add(env.loader)
 
-    dryRun = providers.environmentVariable("MODRINTH_TOKEN")
-        .getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
+    dryRun = false
 
     modrinth {
         projectId = property("publish.modrinth").toString()
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.add(env.mc_ver)
         requires {
-            slug = "fabric-api"
+            slug = "architectury-api"
+        }
+        if(env.isFabric){
+            requires{
+                slug="fabric-api"
+            }
         }
     }
 
@@ -254,11 +261,15 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.add(env.mc_ver)
         requires {
-            slug = "fabric-api"
+            slug = "architectury-api"
+        }
+        if(env.isFabric){
+            requires{
+                slug="fabric-api"
+            }
         }
     }
 }
-*/
 /*
 publishing {
     repositories {

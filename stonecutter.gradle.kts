@@ -4,7 +4,7 @@ plugins {
     id("dev.kikugie.stonecutter")
     id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
     id("dev.kikugie.j52j") version "1.0" apply false // Enables asset processing by writing json5 files
-    //id("me.modmuss50.mod-publish-plugin") version "0.5.+" apply false // Publishes builds to hosting websites
+    id("me.modmuss50.mod-publish-plugin") version "0.5.+" apply false // Publishes builds to hosting websites
 }
 stonecutter active "1.21-fabric" /* [SC] DO NOT EDIT */
 
@@ -18,6 +18,12 @@ stonecutter registerChiseled tasks.register("chiseledClean", stonecutter.chisele
     group = "project"
     ofTask("clean")
 }
+
+stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
+    group = "project"
+    ofTask("publishMods")
+}
+
 
 /*
 // Publishes every version

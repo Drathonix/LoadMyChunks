@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "D": {
+      "item": "loadmychunks:diamond_wire"
+    }
+  },
+  "pattern": [
+    "DDG",
+    "DED",
+    "GDD"
+  ],
+  "result": {
+    "id": "loadmychunks:player_spoofer",
+    "item": "loadmychunks:player_spoofer"
+  },
+  "show_notification": true
+}

@@ -30,3 +30,11 @@ ${mandatory_indicator}=true
 versionRange="(${mc_min},${mc_max}]"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.${id}]]
+modId="architectury"
+#NEO COMPAT
+${mandatory_indicator}=true
+versionRange="[${arch_ver},)"
+ordering="NONE"
+side="BOTH"

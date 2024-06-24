@@ -99,7 +99,7 @@ public class LoadMyChunks {
 	}
 
 	public static boolean allowUsingDebugFeatures() {
-		return true;
+		return false;
 	}
 
 	//? if >1.18.2 && <1.19.5 {

@@ -29,6 +29,7 @@
   "depends": {
     "fabricloader": ">=0.15",
     "minecraft": ">${mc_min} <=${mc_max}",
-    "${fabric_api_id}": ">=${fabric_api}"
+    "${fabric_api_id}": ">=${fabric_api}",
+    "architectury": ">=${arch_ver}"
   }
 }

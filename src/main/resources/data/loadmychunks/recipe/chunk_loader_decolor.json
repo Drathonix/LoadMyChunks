@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "loadmychunks:chunk_loaders"
+    }
+  ],
+  "result": {
+    "item": "loadmychunks:chunk_loader",
+    "id": "loadmychunks:chunk_loader"
+  }
+}

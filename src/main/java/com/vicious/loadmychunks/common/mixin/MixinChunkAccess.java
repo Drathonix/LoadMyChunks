@@ -11,7 +11,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Map;
 
 @Mixin(ChunkAccess.class)
-public class MixinChunkAccess {
+public
+//? if >1.16.5
+class
+//? if <=1.16.5
+/*interface*/
+MixinChunkAccess {
     //? if >1.16.5 {
     @Shadow @Final protected Map<BlockPos, BlockEntity> blockEntities;
     @Shadow @Final protected ChunkPos chunkPos;

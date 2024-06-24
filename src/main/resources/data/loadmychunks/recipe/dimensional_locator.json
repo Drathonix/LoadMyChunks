@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "D": {
+      "item": "loadmychunks:diamond_wire"
+    },
+    "L": {
+      "item": "minecraft:lodestone"
+    }
+
+  },
+  "pattern": [
+    "DED",
+    "ICI",
+    "DLD"
+  ],
+  "result": {
+    "id": "loadmychunks:dimensional_locator",
+    "item": "loadmychunks:dimensional_locator"
+  },
+  "show_notification": true
+}

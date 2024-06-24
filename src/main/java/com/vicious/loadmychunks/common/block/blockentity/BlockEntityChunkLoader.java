@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,6 +31,22 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
 
     public PlacedChunkLoader getChunkLoader() {
         return chunkLoader;
+    }
+
+    @Override
+    protected void read(CompoundTag tag) {
+        super.read(tag);
+        if(owner != null) {
+            tag.putUUID("owner", owner);
+        }
+    }
+
+    @Override
+    protected void write(CompoundTag tag) {
+        super.write(tag);
+        if(tag.contains("owner")) {
+            setOwner(tag.getUUID("owner"));
+        }
     }
 
     @Override

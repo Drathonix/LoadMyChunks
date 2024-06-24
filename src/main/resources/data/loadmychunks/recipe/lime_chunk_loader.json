@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "dyed_chunk_loader",
+  "ingredients": [
+    {
+      "tag": "loadmychunks:chunk_loaders"
+    },
+    {
+      "item": "minecraft:lime_dye"
+    }
+  ],
+  "result": {
+    "id": "loadmychunks:lime_chunk_loader",
+    "item": "loadmychunks:lime_chunk_loader"
+  }
+}

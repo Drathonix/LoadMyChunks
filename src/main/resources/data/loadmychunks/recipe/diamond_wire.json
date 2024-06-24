@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "III",
+    "R#R",
+    "III"
+  ],
+  "result": {
+    "item": "loadmychunks:diamond_wire",
+    "id": "loadmychunks:diamond_wire",
+    "count": 8
+  },
+  "show_notification": true
+}
