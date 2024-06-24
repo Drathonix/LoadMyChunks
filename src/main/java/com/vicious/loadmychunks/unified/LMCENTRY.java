@@ -8,7 +8,7 @@ import com.vicious.loadmychunks.common.util.BoolArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 
 //? if fabric {
-import com.vicious.loadmychunks.common.util.ModResource;
+/*import com.vicious.loadmychunks.common.util.ModResource;
 import net.fabricmc.api.ModInitializer;
 //? if >1.18.2
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
@@ -24,7 +24,7 @@ public class LMCENTRY implements ModInitializer {
                 ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         }
 }
-//?}
+*///?}
 
 //? elif forge {
 /*//? if <=1.16.5
@@ -98,7 +98,7 @@ public class LMCENTRY {
 *///?}
 
 //? elif neoforge {
-/*import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -131,5 +131,5 @@ public class LMCENTRY {
         LoadMyChunks.serverStopped(event.getServer());
     }
 }
-*///?}
+//?}
 

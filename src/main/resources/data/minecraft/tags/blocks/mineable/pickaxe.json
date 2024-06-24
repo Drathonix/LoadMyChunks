@@ -16,6 +16,7 @@
     "loadmychunks:green_chunk_loader",
     "loadmychunks:red_chunk_loader",
     "loadmychunks:black_chunk_loader",
-    "loadmychunks:white_chunk_loader"
+    "loadmychunks:white_chunk_loader",
+    "loadmychunks:lagometer"
   ]
 }

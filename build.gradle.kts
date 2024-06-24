@@ -15,6 +15,10 @@ class Env() {
     val isForge = loader.equals("forge")
     val isNeo = loader.equals("neoforge")
     val mc_ver = split[0]
+
+    fun atLeast(version: String) = stonecutter.compare(mc_ver, version) >= 0
+    fun atMost(version: String) = stonecutter.compare(mc_ver, version) <= 0
+    fun isNot(version: String) = stonecutter.compare(mc_ver, version) != 0
 }
 val env = Env()
 
@@ -35,13 +39,16 @@ class ModData {
     val issue_tracker = property("mod.issue_tracker").toString()
     val license = property("mod.license").toString()
     val github_url = property("mod.github_url").toString()
-    val fabric_api_id = if(stonecutter.compare(env.mc_ver,"1.16.5") <= 0) "fabric" else "fabric-api"
-    val java_ver = if(stonecutter.compare(env.mc_ver,"1.16.5") <= 0) 8 else if(stonecutter.compare(env.mc_ver,"1.20.4") <= 0) 17 else 21
+    val fabric_api_id = if(env.atMost("1.16.5")) "fabric" else "fabric-api"
+    val java_ver = if(env.atMost("1.16.5")) 8 else if(stonecutter.compare(env.mc_ver,"1.20.4") <= 0) 17 else 21
 
 }
 
 class ModDependencies {
     operator fun get(name: String) = property("deps.$name").toString()
+
+    val isCCTPresent = !get("mod.cct").equals("EXCLUDE")
+    val isMekanismPresent = !get("mod.mekanism").equals("EXCLUDE")
 }
 
 val mod = ModData()
@@ -51,23 +58,8 @@ val mcDep = property("mod.mc_max").toString()
 stonecutter.const("fabric", env.isFabric)
 stonecutter.const("forge", env.isForge)
 stonecutter.const("neoforge", env.isNeo)
-
-loom {
-    //silentMojangMappingsLicense()
-}
-
-/*architectury{
-    platformSetupLoomIde()
-    if(env.isFabric){
-        fabric()
-    }
-    if(env.isForge){
-        forge()
-    }
-    if(env.isNeo){
-        neoForge()
-    }
-}*/
+stonecutter.const("cct", deps.isCCTPresent)
+stonecutter.const("mekanism", deps.isMekanismPresent)
 
 version = "${mod.version}+${env.mc_ver}+${env.loader}"
 group = mod.group
@@ -93,6 +85,13 @@ repositories {
     }
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.architectury.dev/")
+    maven("https://modmaven.dev/")
+    maven ("https://squiddev.cc/maven/") {
+        content {
+            includeGroup("org.squiddev")
+            includeGroup("cc.tweaked")
+        }
+    }
 }
 
 dependencies {
@@ -102,7 +101,8 @@ dependencies {
 
     minecraft("com.mojang:minecraft:${env.mc_ver}")
     mappings(loom.officialMojangMappings())
-    val arch = if(stonecutter.compare(env.mc_ver, "1.16.5") > 0) "dev.architectury" else "me.shedaniel"
+    val arch = if(env.atLeast("1.18.0")) "dev.architectury" else "me.shedaniel"
+
     if(env.isFabric) {
         //mappings("net.fabricmc:yarn:${env.mc_ver}+build.${deps["yarn_build"]}:v2")
         modApi("${arch}:architectury-fabric:${deps["arch_ver"]}")
@@ -117,8 +117,32 @@ dependencies {
         "neoForge"("net.neoforged:neoforge:${deps["neoforge_ver"]}")
         modApi("${arch}:architectury-neoforge:${deps["arch_ver"]}")
     }
-    if(stonecutter.compare(env.mc_ver,"1.16.5") <= 0)
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
+
+    //TODO: Fix whatever issue there is with the loom 'mod' declarations that have been causing weird StackOverflows
+    if(deps.isMekanismPresent){
+        //We have mixins so we need everything
+        implementation("mekanism:Mekanism:${deps["mod.mekanism"]}")
+    }
+
+    if(deps.isCCTPresent) {
+        if(env.atMost("1.19.2")) {
+            compileOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}:api")
+            runtimeOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
+        }
+        else if(env.atLeast("1.19.4")){
+            compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-common-api:${deps["mod.cct"]}")
+            if(env.isForge || env.isNeo) {
+                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core-api:${deps["mod.cct"]}")
+                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
+                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
+            }
+            if(env.isFabric) {
+                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
+                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric:${deps["mod.cct"]}")
+            }
+        }
+    }
 }
 
 loom {
@@ -206,7 +230,7 @@ tasks.processResources {
         exclude("META-INF/neoforge.mods.toml")
     }
     if(env.isNeo){
-        if(stonecutter.compare(env.mc_ver,"1.20.6") >= 0) {
+        if(env.atLeast("1.20.6")) {
             exclude("META-INF/mods.toml")
         }
         else{
