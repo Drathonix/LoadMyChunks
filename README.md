@@ -16,6 +16,8 @@ Chunk loaders work with or without the player being online.
 ## Utility Items
 Advanced Information about a chunk's lag and load state can be obtained using the chunkometer.
 
+Chunk lag can also be measured in world using the lagometer block.
+
 ## Configurability
 For info on configurability see the [Wiki](https://github.com/Drathonix/LoadMyChunks/wiki).
 
