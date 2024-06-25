@@ -2,6 +2,7 @@ package com.vicious.loadmychunks.common.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.vicious.loadmychunks.common.LoadMyChunks;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -87,4 +88,16 @@ public class LMCConfig {
 
     @ConfigValue
     public boolean useDebugLogging = false;
+
+    @ConfigValue
+    @Range(value = 2,min = 0, max = 2)
+    public int lagometerComputerExposureLevel=2;
+
+    public static boolean isLagometerAllowedOnTurtle(){
+        return instance.lagometerComputerExposureLevel == 2;
+    }
+
+    public static boolean isLagometerAllowedOnComputer(){
+        return instance.lagometerComputerExposureLevel >= 1;
+    }
 }

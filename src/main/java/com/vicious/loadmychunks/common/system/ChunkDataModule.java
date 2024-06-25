@@ -24,6 +24,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -271,5 +272,17 @@ public class ChunkDataModule {
 
     public boolean shouldPersist(){
         return loadState.permanent() || !loaders.isEmpty();
+    }
+
+    @SuppressWarnings("all")
+    public long getCooldownTime(){
+        return onCooldown() ? getDisabledPeriod().getTimeRemaining() : 0;
+    }
+
+    public void updateChunkLoadState(ServerLevel level){
+        if(getLoadState().shouldLoad()){
+            startGrace();
+        }
+        getLoadState().apply(level, chunk.loadMyChunks$posAsLong());
     }
 }

@@ -44,7 +44,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Mixin(LevelChunk.class)
 
@@ -122,7 +121,7 @@ public abstract class MixinLevelChunk
     @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
     public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
         if(getBlockEntity(blockPos) instanceof IDestroyable destroyable){
-            destroyable.destroy();
+            destroyable.loadMyChunks$destroy();
         }
     }
 

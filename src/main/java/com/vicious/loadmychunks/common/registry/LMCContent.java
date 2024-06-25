@@ -44,12 +44,14 @@ public class LMCContent {
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
     public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
 
+
     public static RegistrySupplier<Item> itemTickometer;
     public static RegistrySupplier<Item> itemPlayerSpoofer;
     public static RegistrySupplier<Item> itemLocatingCore;
     public static RegistrySupplier<Item> itemDiamondWire;
-    public static RegistrySupplier<Block> lagometerBlock;
     public static RegistrySupplier<ItemChunkometer> itemChunkometer;
+    public static RegistrySupplier<Block> lagometerBlock;
+    public static RegistrySupplier<Block> chunkLoaderBlock;
 
     //? if <=1.19.3 || >1.19.4
     public static RegistrySupplier<CreativeModeTab> creativeTab;
@@ -68,7 +70,7 @@ public class LMCContent {
         TABS.register();
         //?}
         LMCRegistrar.BLOCK.queue(reg->{
-            RegistrySupplier<Block> chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
+            chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
                 //TODO: find a better way to abstract this somehow.
                 //? if <1.19.5
                 /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);*/

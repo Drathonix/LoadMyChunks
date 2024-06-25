@@ -146,6 +146,14 @@ public class ChunkDataManager {
         levelManagers.clear();
     }
 
+    public static void setDirty(ServerLevel level){
+        getManager(level).setDirty();
+    }
+
+    public static boolean isForced(ServerLevel level,ChunkPos pos) {
+        return getOrCreateChunkData(level,pos).getLoadState().shouldLoad();
+    }
+
     public static class LevelChunkLoaderManager extends SavedData{
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
@@ -188,10 +196,7 @@ public class ChunkDataManager {
         public void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.addLoader(loader)) {
-                if(cdm.getLoadState().shouldLoad()){
-                    cdm.startGrace();
-                }
-                cdm.getLoadState().apply(level, pos);
+                cdm.updateChunkLoadState(level);
             }
             setDirty();
         }
@@ -203,7 +208,7 @@ public class ChunkDataManager {
         public void removeChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.removeLoader(loader)) {
-                cdm.getLoadState().apply(level, pos);
+                cdm.updateChunkLoadState(level);
             }
             setDirty();
         }

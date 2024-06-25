@@ -2,6 +2,7 @@ package com.vicious.loadmychunks.common.system.control;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.system.ThreadSafetyHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
@@ -62,6 +63,10 @@ public enum LoadState {
     }
 
     public void apply(ServerLevel level, long pos){
+        apply(level,new ChunkPos(pos));
+    }
+
+    public void apply(ServerLevel level, BlockPos pos){
         apply(level,new ChunkPos(pos));
     }
 }

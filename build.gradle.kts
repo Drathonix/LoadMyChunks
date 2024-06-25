@@ -127,19 +127,23 @@ dependencies {
 
     if(deps.isCCTPresent) {
         if(env.atMost("1.19.2")) {
-            compileOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}:api")
-            runtimeOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
+            modApi("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
         }
         else if(env.atLeast("1.19.4")){
-            compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-common-api:${deps["mod.cct"]}")
+            /*if(env.atMost("1.19.4")) {
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-common-api:${deps["mod.cct"]}")
+            }
+            else if(env.atLeast("1.19.5")){
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-common:${deps["mod.cct"]}")
+            }*/
             if(env.isForge || env.isNeo) {
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core-api:${deps["mod.cct"]}")
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
-                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
+                //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core:${deps["mod.cct"]}")
+                //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
             }
             if(env.isFabric) {
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
-                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric:${deps["mod.cct"]}")
+               //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric:${deps["mod.cct"]}")
             }
         }
     }
@@ -261,7 +265,7 @@ publishMods {
     displayName = "${mod.name} ${mod.version} for ${env.mc_ver}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = STABLE
+    type = BETA
     modLoaders.add(env.loader)
 
     dryRun = false

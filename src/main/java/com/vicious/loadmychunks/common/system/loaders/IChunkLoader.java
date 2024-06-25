@@ -1,6 +1,7 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.system.control.LoadState;
+import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +11,11 @@ public interface IChunkLoader {
         return LoadState.TICKING;
     }
 
+    default void setLoadState(LoadState state){}
+
     @NotNull CompoundTag save(@NotNull CompoundTag tag);
     void load(@NotNull CompoundTag tag);
 
     ResourceLocation getTypeId();
+
 }
