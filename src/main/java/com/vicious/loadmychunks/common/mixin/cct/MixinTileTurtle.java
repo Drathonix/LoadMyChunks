@@ -5,6 +5,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -14,10 +15,12 @@ public class MixinTileTurtle implements IDestroyable {
 
     @Override
     public void loadMyChunks$destroy() {
-        for (TurtleSide value : TurtleSide.values()) {
-            IPeripheral p = brain.getPeripheral(value);
-            if(p instanceof IDestroyable){
-                ((IDestroyable)p).loadMyChunks$destroy();
+        if(!BlockEntity.class.cast(this).getLevel().isClientSide()) {
+            for (TurtleSide value : TurtleSide.values()) {
+                IPeripheral p = brain.getPeripheral(value);
+                if (p instanceof IDestroyable) {
+                    ((IDestroyable) p).loadMyChunks$destroy();
+                }
             }
         }
     }

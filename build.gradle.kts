@@ -60,6 +60,7 @@ stonecutter.const("forge", env.isForge)
 stonecutter.const("neoforge", env.isNeo)
 stonecutter.const("cct", deps.isCCTPresent)
 stonecutter.const("mekanism", deps.isMekanismPresent)
+stonecutter.dependency("minecraft",env.mc_ver)
 
 version = "${mod.version}+${env.mc_ver}+${env.loader}"
 group = mod.group
@@ -265,10 +266,10 @@ publishMods {
     displayName = "${mod.name} ${mod.version} for ${env.mc_ver}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = BETA
+    type = if(property("publish.alpha").toString() == "true") ALPHA else STABLE
     modLoaders.add(env.loader)
 
-    dryRun = false
+    dryRun = property("publish.alpha").toString() == "true" && env.mc_ver == property("vcs")
 
     modrinth {
         projectId = property("publish.modrinth").toString()

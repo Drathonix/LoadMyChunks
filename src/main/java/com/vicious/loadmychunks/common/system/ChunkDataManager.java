@@ -26,12 +26,12 @@ import java.util.function.Supplier;
 public class ChunkDataManager {
     private static final Map<ServerLevel,LevelChunkLoaderManager> levelManagers = new IdentityHashMap<>();
 
-    public static LevelChunkLoaderManager getManager(ServerLevel level){
+    public static synchronized LevelChunkLoaderManager getManager(ServerLevel level){
         return levelManagers.computeIfAbsent(level, k->new LevelChunkLoaderManager(level));
     }
 
     //? if >1.16.5 {
-    public static LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+    public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
         if(levelManagers.containsKey(level)){
             levelManagers.get(level).clear();
             LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
@@ -185,7 +185,7 @@ public class ChunkDataManager {
         }
         //?}
 
-        public @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
+        public synchronized @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
         }
 

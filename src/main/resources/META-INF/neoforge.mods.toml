@@ -42,10 +42,3 @@ versionRange="[${arch_ver},)"
 ordering="AFTER"
 side="BOTH"
 
-[[dependencies.${id}]]
-modId="computercraft"
-optional="TRUE"
-versionRange="[1,)"
-ordering="AFTER"
-side="BOTH"
-
