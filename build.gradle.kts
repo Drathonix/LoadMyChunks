@@ -120,10 +120,14 @@ dependencies {
     }
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 
-    //TODO: Fix whatever issue there is with the loom 'mod' declarations that have been causing weird StackOverflows
     if(deps.isMekanismPresent){
-        //We have mixins so we need everything
-        implementation("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        //TODO: fix forge specific StackOverflow with the mek modApi dependency
+        if(env.isForge) {
+            compileOnly("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        }
+        else {
+            modApi("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        }
     }
 
     if(deps.isCCTPresent) {
@@ -142,7 +146,7 @@ dependencies {
                 //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
                 modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
                 //Fixes inability to use runClient
-                "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.3")
+                "forgeRuntimeLibrary"("cc.tweaked:cobalt:0.9.3")
                 "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
                 "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
                 "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")
@@ -202,6 +206,7 @@ tasks.processResources {
     inputs.property("license",mod.license)
     inputs.property("mandatory_indicator", if(env.isNeo) "required" else "mandatory")
     inputs.property("neo_forge_1204_mixin_field", if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "")
+    inputs.property("temp", "hi")
 
 
 
@@ -230,7 +235,8 @@ tasks.processResources {
         "mandatory_indicator" to if(env.isNeo) "required" else "mandatory",
         "neo_forge_1204_mixin_field" to if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "",
         "neo_ver_range" to deps["neo_ver_range"],
-        "arch_ver" to deps["arch_ver"]
+        "arch_ver" to deps["arch_ver"],
+        "temp" to "hi"
     )
 
     if(env.isForge) {

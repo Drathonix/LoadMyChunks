@@ -4,8 +4,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
-import com.vicious.loadmychunks.common.network.LagReadingRequest;
+//? if >=1.20.6
+/*import com.vicious.loadmychunks.common.network.LagReadingRequest;*/
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -32,12 +34,17 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+//? if <=1.20.4
+import com.vicious.loadmychunks.common.util.ModResource;
+
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
@@ -46,7 +53,7 @@ public class LoadMyChunks {
 	public static Level debugLevel = Level.DEBUG;
 
 	//? if <1.20.5
-	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
+	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -61,21 +68,21 @@ public class LoadMyChunks {
 		LMCContent.init();
 		logger.info("Chunk Loader Loading Complete.");
 		//? if <=1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			//? if <1.19.5
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
+			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());*/
 			//? if >1.19.4
-			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());^/
+			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.addRecipient((IInformable) plr);
 			}
 		}));
-		*///?}
-		//? if >1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		//?}
+		//? if >1.20.5 {
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		*///?}
 	}
 
 	public static void serverStarted(MinecraftServer server) {

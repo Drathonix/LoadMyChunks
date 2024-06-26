@@ -35,12 +35,12 @@ public abstract class MixinServerLevel {
     public abstract DimensionDataStorage getDataStorage();
 
     //? if >1.20.5 {
-    @Inject(method = "<init>",at = @At("RETURN"))
+    /*@Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey<Level> resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List<CustomSpawner> list, boolean bl2, @Nullable RandomSequences randomSequences, CallbackInfo ci){
         SavedData.Factory<ChunkDataManager.LevelChunkLoaderManager> factory = new SavedData.Factory<>(()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),(tag,other)->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag), DataFixTypes.LEVEL);
         getDataStorage().computeIfAbsent(factory,"loadmychunks_manager");
     }
-    //?}
+    *///?}
 
     //? if >1.20.3 && <=1.20.5 {
     /*@Inject(method = "<init>",at = @At("RETURN"))

@@ -25,12 +25,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockLagometer extends BaseEntityBlock {
     //? if >1.20.3 {
-    public static final MapCodec<BlockLagometer> CODEC = simpleCodec(BlockLagometer::new);
+    /*public static final MapCodec<BlockLagometer> CODEC = simpleCodec(BlockLagometer::new);
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    //?}
+    *///?}
     public static final IntegerProperty LAG = IntegerProperty.create("lmc_lag",0,15);
 
 

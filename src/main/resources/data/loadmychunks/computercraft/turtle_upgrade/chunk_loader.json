@@ -1,5 +1,3 @@
 {
-  "type": "loadmychunks:chunk_loader",
-  "item": "loadmychunks:chunk_loader",
-  "adjective": "loadmychunks.turtle.adjective.loading"
+  "type": "loadmychunks:chunk_loader"
 }

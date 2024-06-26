@@ -85,10 +85,8 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
             if(!ownable.hasOwner()){
                 return null;
             }
-            if(getLevel() instanceof ServerLevel sl){
-                Optional<GameProfile> profile = sl.getServer().getProfileCache().get(ownable.getOwner());
-                return profile.map(GameProfile::getName).orElse(null);
-            }
+            Optional<GameProfile> profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
+            return profile.map(GameProfile::getName).orElse(null);
         }
         return null;
     }

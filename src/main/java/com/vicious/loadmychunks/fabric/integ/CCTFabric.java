@@ -6,26 +6,50 @@ import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.ChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.LagometerPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
+import com.vicious.loadmychunks.common.registry.FakeRegistrySupplier;
 import com.vicious.loadmychunks.common.registry.LMCContent;
-import com.vicious.loadmychunks.common.util.ModResource;
-import dan200.computercraft.api.ComputerCraftAPI;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.PeripheralLookup;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
-import dan200.computercraft.api.upgrades.UpgradeType;
+//? if <=1.20.4
+import dan200.computercraft.api.upgrades.UpgradeSerialiser;
+//? if >=1.20.6
+/^import dan200.computercraft.api.upgrades.UpgradeType;^/
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
 import net.minecraft.resources.ResourceLocation;
 
 public class CCTFabric {
-    public static void init(){
-        DeferredRegister<UpgradeType<? extends ITurtleUpgrade>> reg = DeferredRegister.create("loadmychunks", ITurtleUpgrade.typeRegistry());
-        CCTRegistryContent.type = reg.register(ModResource.of("chunk_loader"),()->UpgradeType.simple(new TurtleChunkLoaderUpgrade()));
-        reg.register();
+    //? if >=1.20.6 {
+    /^public static void init(){
+        DeferredRegister<UpgradeType<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create("loadmychunks", ITurtleUpgrade.typeRegistry());
+        LMCContent.chunkLoaderBlockMap.forEach((color,supplier)->{
+            TurtleChunkLoaderUpgrade tclu = new TurtleChunkLoaderUpgrade(supplier);
+            RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()->UpgradeType.simple(tclu));
+            tclu.setUpgradeType(reg);
+            CCTRegistryContent.registrySuppliers.add(reg);
+        });
+        turtleUpgrades.register();
         PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new LagometerPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel()), LMCContent.lagometerBlockEntity.get());
         PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
     }
+    ^///?}
+
+    //? if <=1.20.4 {
+    public static void init(){
+        DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,ITurtleUpgrade.serialiserRegistryKey());
+        LMCContent.chunkLoaderBlockMap.forEach((color,supplier)->{
+            TurtleChunkLoaderUpgrade tclu = new TurtleChunkLoaderUpgrade(supplier);
+            RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()->UpgradeSerialiser.simple((key)->tclu));
+            CCTRegistryContent.registrySuppliers.add(reg);
+        });
+        turtleUpgrades.register();
+        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new LagometerPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel()), LMCContent.lagometerBlockEntity.get());
+        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
+
+    }
+    //?}
 
     public static void clientInit(){
         CCTRegistryContent.registerClient();

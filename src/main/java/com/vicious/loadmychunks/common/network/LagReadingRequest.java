@@ -2,11 +2,11 @@ package com.vicious.loadmychunks.common.network;
 
 //TODO: unify across all vers.
 //? if <=1.20.5 {
-/*public class LagReadingRequest{}
-*///?}
+public class LagReadingRequest{}
+//?}
 
 //? if >1.20.5 {
-import com.vicious.loadmychunks.common.bridge.IInformable;
+/*import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -42,4 +42,4 @@ public record LagReadingRequest() implements CustomPacketPayload {
         }
     }
 }
-//?}
+*///?}

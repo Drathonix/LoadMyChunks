@@ -1,12 +1,6 @@
+//? if cct {
 package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
-//? if !cct {
-/*public class ChunkLoaderPeripheral {
-
-}
-*///?}
-
-//? if cct {
 import com.mojang.authlib.GameProfile;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;

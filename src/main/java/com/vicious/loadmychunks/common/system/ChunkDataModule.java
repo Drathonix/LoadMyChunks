@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
@@ -70,9 +71,12 @@ public class ChunkDataModule {
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag){
                 CompoundTag ct = (CompoundTag) loader;
-                IChunkLoader inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id"))).get();
-                inst.load(ct);
-                addLoader(inst);
+                Supplier<? extends IChunkLoader> inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id")));
+                if(inst != null) {
+                    IChunkLoader loaderInst = inst.get();
+                    loaderInst.load(ct);
+                    addLoader(loaderInst);
+                }
             }
         }
         if(loadState.shouldLoad()) {

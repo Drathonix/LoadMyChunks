@@ -18,12 +18,12 @@ public class MixinServerPlayer implements IInformable {
     @Override
     public void informLagFrac(float frac) {
         //? if <=1.20.5 {
-        /*FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
+        FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
         newBuf.writeFloat(frac);
         NetworkManager.sendToPlayer(ServerPlayer.class.cast(this), LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
-        *///?}
-        //? if >1.20.5 {
-        NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
         //?}
+        //? if >1.20.5 {
+        /*NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
+        *///?}
     }
 }

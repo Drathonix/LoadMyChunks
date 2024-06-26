@@ -32,7 +32,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -40,7 +42,7 @@ import java.util.function.Supplier;
 public class LMCContent {
     //? if >1.20.0
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
-    public static final Set<RegistrySupplier<Block>> chunkLoaderBlocks = new HashSet<>();
+    public static final Map<String,RegistrySupplier<Block>> chunkLoaderBlockMap = new HashMap<>();
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
     public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
 
@@ -80,15 +82,16 @@ public class LMCContent {
             });
             String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
             for (String color : colors) {
-                chunkLoaderBlocks.add(registerCLBlockWithItem(reg,color + "_chunk_loader", () -> {
+                RegistrySupplier<Block> block = registerCLBlockWithItem(reg,color + "_chunk_loader", () -> {
                     //? if <1.19.5
                     /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(50.0F, 1200.0F);*/
                     //? if >1.19.4
                     BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(50.0F, 1200.0F);
                     return new BlockChunkLoader(properties);
-                }));
+                });
+                chunkLoaderBlockMap.put(color, block);
             }
-            chunkLoaderBlocks.add(chunkLoaderBlock);
+            chunkLoaderBlockMap.put("",chunkLoaderBlock);
             lagometerBlock = registerBlockWithItem(reg,"lagometer",()->{
                 //? if <1.19.5
                 /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.5F);*/
@@ -108,7 +111,7 @@ public class LMCContent {
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{
             chunkLoaderBlockEntity = reg.register(ModResource.of("chunk_loader"), () -> {
                 Set<Block> blocks = new HashSet<>();
-                for (RegistrySupplier<Block> blk : chunkLoaderBlocks) {
+                for (RegistrySupplier<Block> blk : chunkLoaderBlockMap.values()) {
                     blocks.add(blk.get());
                 }
                 return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
