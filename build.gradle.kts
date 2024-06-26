@@ -141,6 +141,12 @@ dependencies {
                 //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core:${deps["mod.cct"]}")
                 //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
                 modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
+                //Fixes inability to use runClient
+                "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.3")
+                "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-handler-proxy:4.1.82.Final")
             }
             if(env.isFabric) {
                //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
@@ -266,10 +272,10 @@ publishMods {
     displayName = "${mod.name} ${mod.version} for ${env.mc_ver}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = ALPHA
+    type = STABLE
     modLoaders.add(env.loader)
 
-    dryRun = false
+    dryRun = true
 
     modrinth {
         projectId = property("publish.modrinth").toString()

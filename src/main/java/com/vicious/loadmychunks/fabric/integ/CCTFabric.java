@@ -1,5 +1,5 @@
 //? if fabric && cct {
-package com.vicious.loadmychunks.fabric.integ;
+/*package com.vicious.loadmychunks.fabric.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
@@ -8,6 +8,7 @@ import com.vicious.loadmychunks.common.integ.cct.peripheral.LagometerPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.util.ModResource;
+import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.PeripheralLookup;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -30,4 +31,4 @@ public class CCTFabric {
         CCTRegistryContent.registerClient();
     }
 }
-//?}
+*///?}

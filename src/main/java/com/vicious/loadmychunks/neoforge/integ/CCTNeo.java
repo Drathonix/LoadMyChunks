@@ -1,5 +1,5 @@
 //? if neoforge && cct {
-/*package com.vicious.loadmychunks.neoforge.integ;
+package com.vicious.loadmychunks.neoforge.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
@@ -61,4 +61,4 @@ public class CCTNeo {
         CCTRegistryContent.registerClient();
     }
 }
-*///?}
+//?}
