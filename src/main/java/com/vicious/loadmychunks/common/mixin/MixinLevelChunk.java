@@ -38,12 +38,15 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 @Mixin(LevelChunk.class)
 
@@ -131,9 +134,34 @@ public abstract class MixinLevelChunk
         loadMyChunks$tickers.clear();
     }
 
-    @Inject(method = "createTicker",at = @At("RETURN"))
-    public <T extends BlockEntity> void addToQueue(T blockEntity, BlockEntityTicker<T> blockEntityTicker, CallbackInfoReturnable<TickingBlockEntity> cir){
-        loadMyChunks$queuedTickers.add(cir.getReturnValue());
+    /**
+     *
+     * @param instance
+     * @param key
+     * @param remappingFunction
+     * @return
+     * @param <K>
+     * @param <V>
+     */
+
+    //Use lazy typing to avoid needing an AT
+    @Redirect(method = "updateBlockEntityTicker",at = @At(value = "INVOKE",target = "Ljava/util/Map;compute(Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"))
+    public <K,V> Object addToQueue(Map<K,V> instance, K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction){
+        //Ensure this will be the first instance
+        if(!instance.containsKey(key)){
+            Object current = instance.get(key);
+            TickingBlockEntity result = (TickingBlockEntity)instance.compute(key, remappingFunction);
+            if(result != null) {
+                loadMyChunks$queuedTickers.add(result);
+            }
+            //Account for the new ticker being invalidated (somehow)
+            else if(current != null){
+                loadMyChunks$tickers.remove(result);
+                loadMyChunks$queuedTickers.remove(result);
+            }
+            return result;
+        }
+        return remappingFunction.apply(key, instance.get(key));
     }
 
     //?}

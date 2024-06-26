@@ -2,6 +2,7 @@
 package com.vicious.loadmychunks.fabric;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
+import com.vicious.loadmychunks.common.integ.Integrations;
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.util.BoolArgument;
 import com.vicious.loadmychunks.common.util.ModResource;
@@ -19,12 +20,13 @@ public class LMCFabricInit {
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         //? if cct
+        Integrations.whenModLoaded("computercraft",CCTFabric::init);
         CCTFabric.init();
     }
 
     public static void clientInit(){
         //? if cct
-        CCTFabric.clientInit();
+        Integrations.whenModLoaded("computercraft",CCTFabric::clientInit);
     }
 }
 //?}
