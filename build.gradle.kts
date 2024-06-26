@@ -266,10 +266,10 @@ publishMods {
     displayName = "${mod.name} ${mod.version} for ${env.mc_ver}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = if(property("publish.alpha").toString() == "true") ALPHA else STABLE
+    type = ALPHA
     modLoaders.add(env.loader)
 
-    dryRun = property("publish.alpha").toString() == "true" && env.mc_ver == property("vcs")
+    dryRun = false
 
     modrinth {
         projectId = property("publish.modrinth").toString()

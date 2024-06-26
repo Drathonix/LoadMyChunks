@@ -3,14 +3,11 @@ package com.vicious.loadmychunks.fabric;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.Integrations;
-import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.util.BoolArgument;
 import com.vicious.loadmychunks.common.util.ModResource;
 //? if >1.18.2
-import com.vicious.loadmychunks.fabric.integ.CCTFabric;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.core.registries.Registries;
 
 public class LMCFabricInit {
     public static void init() {
@@ -20,13 +17,12 @@ public class LMCFabricInit {
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         //? if cct
-        Integrations.whenModLoaded("computercraft",CCTFabric::init);
-        CCTFabric.init();
+        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
     }
 
     public static void clientInit(){
         //? if cct
-        Integrations.whenModLoaded("computercraft",CCTFabric::clientInit);
+        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
     }
 }
 //?}
