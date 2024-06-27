@@ -2,7 +2,6 @@ package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.registry.LoaderTypes;
 import com.vicious.loadmychunks.common.system.control.LoadState;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

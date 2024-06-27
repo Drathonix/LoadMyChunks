@@ -12,31 +12,31 @@ import org.jetbrains.annotations.NotNull;
 
 public class BEBase extends BlockEntity {
     //? if >1.16.5 {
-    public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+    /*public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
-    //?}
+    *///?}
     //? if <=1.16.5 {
-    /*public BEBase(BlockEntityType<?> blockEntityType) {
+    public BEBase(BlockEntityType<?> blockEntityType) {
         super(blockEntityType);
     }
-    *///?}
+    //?}
 
     //? if <=1.16.5 {
-    /*@Override
+    @Override
     public void setLevelAndPosition(Level level, BlockPos blockPos) {
         super.setLevelAndPosition(level, blockPos);
         validate(level);
     }
-    *///?}
+    //?}
 
     //? if >1.16.5 {
-    @Override
+    /*@Override
     public void setLevel(Level level) {
         super.setLevel(level);
         validate(level);
     }
-    //?}
+    *///?}
 
 
     //? if >1.20.5 {
@@ -56,7 +56,7 @@ public class BEBase extends BlockEntity {
     protected void read(CompoundTag tag) {}
 
     //? if >1.16.5 && <1.20.5 {
-    @Override
+    /*@Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.write(compoundTag);
@@ -67,10 +67,10 @@ public class BEBase extends BlockEntity {
         super.saveAdditional(compoundTag);
         this.read(compoundTag);
     }
-    //?}
+    *///?}
 
     //? if <=1.16.5 {
-    /*@Override
+    @Override
     public CompoundTag save(CompoundTag compoundTag) {
         super.save(compoundTag);
         this.read(compoundTag);
@@ -82,7 +82,7 @@ public class BEBase extends BlockEntity {
         super.load(blockState, compoundTag);
         this.write(compoundTag);
     }
-    *///?}
+    //?}
 
     public void validate(Level level){
 

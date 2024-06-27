@@ -133,20 +133,26 @@ dependencies {
     if(deps.isCCTPresent) {
         if(env.atMost("1.19.2")) {
             modApi("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
+            /*if(env.isForge) {
+                "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.0")
+                "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-handler-proxy:4.1.82.Final")
+            }*/
         }
         else if(env.atLeast("1.19.4")){
-            /*if(env.atMost("1.19.4")) {
-                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-common-api:${deps["mod.cct"]}")
-            }
-            else if(env.atLeast("1.19.5")){
-                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-common:${deps["mod.cct"]}")
-            }*/
             if(env.isForge || env.isNeo) {
                 //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core:${deps["mod.cct"]}")
                 //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
                 modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
                 //Fixes inability to use runClient
-                "forgeRuntimeLibrary"("cc.tweaked:cobalt:0.9.3")
+                if(env.atLeast("1.20")) {
+                    "forgeRuntimeLibrary"("cc.tweaked:cobalt:0.9.3")
+                }
+                else{
+                    "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.0")
+                }
                 "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
                 "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
                 "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")

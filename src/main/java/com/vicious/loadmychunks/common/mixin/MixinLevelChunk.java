@@ -12,13 +12,13 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 //? if >1.16.5 {
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
+/*import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-//?}
+*///?}
 //? if <=1.16.5 {
-/*import net.minecraft.world.level.TickList;
+import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-*///?}
+//?}
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.UpgradeData;
@@ -47,12 +47,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk
     //? if >1.16.5
-        extends MixinChunkAccess
+        /*extends MixinChunkAccess*/
         implements ILevelChunkMixin {
     @Shadow @Final Level level;
 
@@ -67,7 +68,7 @@ public abstract class MixinLevelChunk
     }
 
     //? if >1.16.5 {
-    @Unique
+    /*@Unique
     private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
     @Unique
     private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
@@ -121,11 +122,21 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
-    public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
-        if(getBlockEntity(blockPos) instanceof IDestroyable destroyable){
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities1(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable destroyable && !level.isClientSide()){
             destroyable.loadMyChunks$destroy();
         }
+        return rem;
+    }
+    @Redirect(method = "removeBlockEntity",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities2(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable destroyable && !level.isClientSide()){
+            destroyable.loadMyChunks$destroy();
+        }
+        return rem;
     }
 
     @Inject(method = "clearAllBlockEntities",at = @At("RETURN"))
@@ -134,7 +145,7 @@ public abstract class MixinLevelChunk
         loadMyChunks$tickers.clear();
     }
 
-    /**
+    /^*
      *
      * @param instance
      * @param key
@@ -142,7 +153,7 @@ public abstract class MixinLevelChunk
      * @return
      * @param <K>
      * @param <V>
-     */
+     ^/
 
     //Use lazy typing to avoid needing an AT
     @Redirect(method = "updateBlockEntityTicker",at = @At(value = "INVOKE",target = "Ljava/util/Map;compute(Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"))
@@ -164,12 +175,12 @@ public abstract class MixinLevelChunk
         return remappingFunction.apply(key, instance.get(key));
     }
 
-    //?}
+    *///?}
 
     //TODO: Remove redundant code. For now I'm just assuming 1.16.5 is too complex to really integrate well (I'm definitely wrong)
     //? if <=1.16.5 {
 
-    /*@Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
     @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
@@ -238,21 +249,30 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
-    public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
-        BlockEntity blockEntity = getBlockEntity(blockPos);
-        if(blockEntity instanceof IDestroyable){
-            ((IDestroyable)blockEntity).destroy();
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities1(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable && !level.isClientSide()){
+            ((IDestroyable) rem).loadMyChunks$destroy();
         }
-        loadMyChunks$tickers.remove(blockEntity);
-        loadMyChunks$queued.remove(blockEntity);
+        return rem;
+    }
+    @Redirect(method = "removeBlockEntity",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities2(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable && !level.isClientSide()){
+            ((IDestroyable) rem).loadMyChunks$destroy();
+        }
+        return rem;
     }
 
     @Inject(method = "setBlockEntity",at = @At(value = "INVOKE",target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",shift = At.Shift.AFTER))
     public void addTicker(BlockPos blockPos, BlockEntity blockEntity, CallbackInfo ci){
         if(blockEntity instanceof TickableBlockEntity) {
-            loadMyChunks$queued.add(blockEntity);
+            if(!level.isClientSide()) {
+                loadMyChunks$queued.add(blockEntity);
+            }
         }
     }
-    *///?}
+    //?}
 }

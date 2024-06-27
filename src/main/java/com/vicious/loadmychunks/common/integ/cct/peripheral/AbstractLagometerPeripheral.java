@@ -73,8 +73,10 @@ public abstract class AbstractLagometerPeripheral implements IPeripheral {
         if(access instanceof ITurtleAccess){
             return LMCConfig.isLagometerAllowedOnTurtle();
         }
-        else if(access instanceof IPocketAccess pa){
-            if(pa.getEntity() instanceof Player plr){
+        else if(access instanceof IPocketAccess){
+            IPocketAccess pa = (IPocketAccess) access;
+            if(pa.getEntity() instanceof Player){
+                Player plr = (Player) pa.getEntity();
                 //TODO: integrate permissions with LP
                 return !LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || getChunkDataModule().containsOwnedLoader(plr.getUUID());
             }

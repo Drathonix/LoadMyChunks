@@ -19,10 +19,10 @@ public class BlockEntityLagometer extends BEBase implements IInformable {
     private ChunkDataModule cdm;
 
         //? if <=1.16.5 {
-    /*public BlockEntityLagometer() {
+    public BlockEntityLagometer() {
         super(LMCContent.lagometerBlockEntity.get());
     }
-    *///?}
+    //?}
 
     @Override
     public void validate(Level level) {
@@ -34,10 +34,10 @@ public class BlockEntityLagometer extends BEBase implements IInformable {
     }
 
     //? if >1.16.5 {
-    public BlockEntityLagometer(BlockPos blockPos, BlockState blockState) {
+    /*public BlockEntityLagometer(BlockPos blockPos, BlockState blockState) {
         super(LMCContent.lagometerBlockEntity.get(), blockPos, blockState);
     }
-    //?}
+    *///?}
 
     @Override
     public void informLagFrac(float frac) {

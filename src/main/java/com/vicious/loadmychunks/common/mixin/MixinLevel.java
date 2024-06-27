@@ -10,7 +10,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 //? if >1.16.5
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+/*import net.minecraft.world.level.block.entity.TickingBlockEntity;*/
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ import java.util.List;
 @Mixin(Level.class)
 public abstract class MixinLevel implements ILevelMixin {
     //? if >1.16.5 {
-    @Shadow private boolean tickingBlockEntities;
+    /*@Shadow private boolean tickingBlockEntities;
 
     @Shadow @Final protected List<TickingBlockEntity> blockEntityTickers;
 
@@ -38,9 +38,9 @@ public abstract class MixinLevel implements ILevelMixin {
 
     @Shadow public abstract boolean isClientSide();
 
-    /**
+    /^*
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
-     */
+     ^/
     //TODO: investigate if this has significant mod conflicts.
     @Inject(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     public void tickChunkWise(CallbackInfo ci, ProfilerFiller profilerFiller){
@@ -49,7 +49,7 @@ public abstract class MixinLevel implements ILevelMixin {
             if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    if (value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
+                    if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
                         if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
                             chunk.loadMyChunks$tick();
                         }
@@ -71,11 +71,11 @@ public abstract class MixinLevel implements ILevelMixin {
     public Level loadMyChunks$cast(){
         return Level.class.cast(this);
     }
-    //?}
+    *///?}
 
     //TODO: Remove redundancies
     //? if <=1.16.5 {
-    /*@Shadow public abstract LevelChunk getChunk(int i, int j);
+    @Shadow public abstract LevelChunk getChunk(int i, int j);
 
     @Unique private static final List<BlockEntity> loadmychunks$emptyList = new ArrayList<>();
 
@@ -87,11 +87,11 @@ public abstract class MixinLevel implements ILevelMixin {
 
     @Shadow public abstract ProfilerFiller getProfiler();
 
-    /^*
+    /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
      *
      * @return An empty list to spoof the original method
-     ^/
+     */
     //TODO: investigate if this has significant mod conflicts.
     @Redirect(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;"))
     public Iterator<BlockEntity> tickChunkWise(List<BlockEntity> instance){
@@ -101,10 +101,12 @@ public abstract class MixinLevel implements ILevelMixin {
                 ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    LevelChunk tickingChunk = value.getTickingChunk();
-                    if (tickingChunk instanceof ILevelChunkMixin) {
-                        if (scc.isTickingChunk(tickingChunk.getPos().getWorldPosition())) {
-                            ((ILevelChunkMixin)tickingChunk).loadMyChunks$tick(getProfiler());
+                    if(value != null) {
+                        LevelChunk tickingChunk = value.getTickingChunk();
+                        if (tickingChunk instanceof ILevelChunkMixin) {
+                            if (scc.isTickingChunk(tickingChunk.getPos().getWorldPosition())) {
+                                ((ILevelChunkMixin)tickingChunk).loadMyChunks$tick(getProfiler());
+                            }
                         }
                     }
                 }
@@ -126,5 +128,5 @@ public abstract class MixinLevel implements ILevelMixin {
     public Level loadMyChunks$cast(){
         return Level.class.cast(this);
     }
-    *///?}
+    //?}
 }

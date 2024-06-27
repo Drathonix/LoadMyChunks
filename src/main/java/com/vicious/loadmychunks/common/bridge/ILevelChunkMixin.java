@@ -5,9 +5,9 @@ import net.minecraft.util.profiling.ProfilerFiller;
 
 public interface ILevelChunkMixin {
     //? if <=1.16.5
-    /*void loadMyChunks$tick(ProfilerFiller profilerFiller);*/
+    void loadMyChunks$tick(ProfilerFiller profilerFiller);
     //? if >1.16.5
-    void loadMyChunks$tick();
+    /*void loadMyChunks$tick();*/
 
     ChunkDataModule loadMyChunks$getDataModule();
 

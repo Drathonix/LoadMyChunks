@@ -81,24 +81,38 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
 
     @LuaFunction
     public final String getOwnerName(ILuaContext context, IComputerAccess access, IArguments arguments) {
-        if(getChunkLoader() instanceof IOwnable ownable){
+        if(getChunkLoader() instanceof IOwnable){
+            IOwnable ownable = (IOwnable) getChunkLoader();
             if(!ownable.hasOwner()){
                 return null;
             }
-            Optional<GameProfile> profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
+            //? >1.16.5 {
+            /*Optional<GameProfile> profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
             return profile.map(GameProfile::getName).orElse(null);
+            *///?}
+            //? <=1.16.5 {
+            GameProfile profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
+            return profile == null ? null : profile.getName();
+            //?}
         }
         return null;
     }
 
     @LuaFunction
     public final UUID getOwnerUUID(ILuaContext context, IComputerAccess access, IArguments arguments) {
-        if(getChunkLoader() instanceof IOwnable ownable){
+        if(getChunkLoader() instanceof IOwnable){
+            IOwnable ownable = (IOwnable) getChunkLoader();
             if(!ownable.hasOwner()){
                 return null;
             }
-            Optional<GameProfile> profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
+            //? >1.16.5 {
+            /*Optional<GameProfile> profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
             return profile.map(GameProfile::getId).orElse(null);
+            *///?}
+            //? <=1.16.5 {
+            GameProfile profile = getLevel().getServer().getProfileCache().get(ownable.getOwner());
+            return profile == null ? null : profile.getId();
+            //?}
         }
         return null;
     }

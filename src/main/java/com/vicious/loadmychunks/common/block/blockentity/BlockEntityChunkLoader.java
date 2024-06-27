@@ -18,16 +18,16 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
     private UUID owner;
 
     //? if <=1.16.5 {
-    /*public BlockEntityChunkLoader() {
+    public BlockEntityChunkLoader() {
         super(LMCContent.chunkLoaderBlockEntity.get());
     }
-    *///?}
+    //?}
 
     //? if >1.16.5 {
-    public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
+    /*public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
         super(LMCContent.chunkLoaderBlockEntity.get(), blockPos, blockState);
     }
-    //?}
+    *///?}
 
     public PlacedChunkLoader getChunkLoader() {
         return chunkLoader;

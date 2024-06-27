@@ -4,10 +4,10 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.network.LagReadingPacket;
 //? if >1.16.5
-import dev.architectury.networking.NetworkManager;
+/*import dev.architectury.networking.NetworkManager;*/
 import io.netty.buffer.Unpooled;
 //? if <=1.16.5
-/*import me.shedaniel.architectury.networking.NetworkManager;*/
+import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

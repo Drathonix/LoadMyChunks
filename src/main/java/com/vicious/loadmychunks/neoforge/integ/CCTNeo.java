@@ -14,6 +14,7 @@ import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.neoforge.LMCNeoInit;
 import dan200.computercraft.api.peripheral.PeripheralCapability;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
+//? if <1.20.6
 import dan200.computercraft.api.upgrades.UpgradeSerialiser;
 //? if >=1.20.6
 /^import dan200.computercraft.api.upgrades.UpgradeType;^/
