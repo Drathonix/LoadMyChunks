@@ -1,9 +1,11 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.registry.LoaderTypes;
+import com.vicious.loadmychunks.common.system.control.LoadState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,8 +13,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class PlacedChunkLoader implements IChunkLoader,IOwnable{
-    private UUID owner;
-    private BlockPos position;
+    protected UUID owner;
+    protected BlockPos position;
+    protected LoadState loadState = LoadState.TICKING;
 
     public PlacedChunkLoader(){}
 
@@ -21,10 +24,11 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+    public @NotNull CompoundTag save(CompoundTag tag) {
         if(hasOwner()) {
             tag.putUUID("owner", owner);
         }
+        tag.putInt("state",loadState.ordinal());
         tag.putLong("pos",position.asLong());
         return tag;
     }
@@ -34,12 +38,25 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
         if(tag.contains("owner")){
             owner = tag.getUUID("owner");
         }
+        if(tag.contains("state")){
+            loadState = LoadState.values()[tag.getInt("state")];
+        }
         position = BlockPos.of(tag.getLong("pos"));
     }
 
     @Override
     public @Nullable UUID getOwner() {
         return owner;
+    }
+
+    @Override
+    public LoadState getLoadState() {
+        return loadState;
+    }
+
+    @Override
+    public void setLoadState(LoadState state) {
+        this.loadState =state;
     }
 
     @Override
@@ -67,5 +84,9 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable{
     @Override
     public int hashCode() {
         return Objects.hash(position);
+    }
+
+    public ChunkPos getChunkPosition() {
+        return new ChunkPos(getPosition());
     }
 }

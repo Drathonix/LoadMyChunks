@@ -24,14 +24,14 @@ config="${id}.mixins.json"
 modId="neoforge"
 type="required"
 versionRange="${neo_ver_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.${id}]]
 modId="minecraft"
 type="required"
 versionRange="(${mc_min},${mc_max}]"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.${id}]]
@@ -39,6 +39,6 @@ modId="architectury"
 #NEO COMPAT
 ${mandatory_indicator}=true
 versionRange="[${arch_ver},)"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 

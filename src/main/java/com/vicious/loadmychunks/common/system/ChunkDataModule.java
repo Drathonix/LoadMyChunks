@@ -24,6 +24,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
@@ -69,9 +71,12 @@ public class ChunkDataModule {
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag){
                 CompoundTag ct = (CompoundTag) loader;
-                IChunkLoader inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id"))).get();
-                inst.load(ct);
-                addLoader(inst);
+                Supplier<? extends IChunkLoader> inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id")));
+                if(inst != null) {
+                    IChunkLoader loaderInst = inst.get();
+                    loaderInst.load(ct);
+                    addLoader(loaderInst);
+                }
             }
         }
         if(loadState.shouldLoad()) {
@@ -271,5 +276,17 @@ public class ChunkDataModule {
 
     public boolean shouldPersist(){
         return loadState.permanent() || !loaders.isEmpty();
+    }
+
+    @SuppressWarnings("all")
+    public long getCooldownTime(){
+        return onCooldown() ? getDisabledPeriod().getTimeRemaining() : 0;
+    }
+
+    public void updateChunkLoadState(ServerLevel level){
+        if(getLoadState().shouldLoad()){
+            startGrace();
+        }
+        getLoadState().apply(level, chunk.loadMyChunks$posAsLong());
     }
 }

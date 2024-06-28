@@ -60,6 +60,7 @@ stonecutter.const("forge", env.isForge)
 stonecutter.const("neoforge", env.isNeo)
 stonecutter.const("cct", deps.isCCTPresent)
 stonecutter.const("mekanism", deps.isMekanismPresent)
+stonecutter.dependency("minecraft",env.mc_ver)
 
 version = "${mod.version}+${env.mc_ver}+${env.loader}"
 group = mod.group
@@ -119,27 +120,47 @@ dependencies {
     }
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 
-    //TODO: Fix whatever issue there is with the loom 'mod' declarations that have been causing weird StackOverflows
     if(deps.isMekanismPresent){
-        //We have mixins so we need everything
-        implementation("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        //TODO: fix forge specific StackOverflow with the mek modApi dependency
+        if(env.isForge) {
+            compileOnly("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        }
+        else {
+            modApi("mekanism:Mekanism:${deps["mod.mekanism"]}")
+        }
     }
 
     if(deps.isCCTPresent) {
         if(env.atMost("1.19.2")) {
-            compileOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}:api")
-            runtimeOnly("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
+            modApi("org.squiddev:cc-tweaked-${env.mc_ver}:${deps["mod.cct"]}")
+            /*if(env.isForge) {
+                "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.0")
+                "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-handler-proxy:4.1.82.Final")
+            }*/
         }
         else if(env.atLeast("1.19.4")){
-            compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-common-api:${deps["mod.cct"]}")
             if(env.isForge || env.isNeo) {
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core-api:${deps["mod.cct"]}")
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
-                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
+                //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-core:${deps["mod.cct"]}")
+                //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-forge-api:${deps["mod.cct"]}")
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-forge:${deps["mod.cct"]}")
+                //Fixes inability to use runClient
+                if(env.atLeast("1.20")) {
+                    "forgeRuntimeLibrary"("cc.tweaked:cobalt:0.9.3")
+                }
+                else{
+                    "forgeRuntimeLibrary"("org.squiddev:Cobalt:0.7.0")
+                }
+                "forgeRuntimeLibrary"("com.jcraft:jzlib:1.1.3")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-http:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-codec-socks:4.1.82.Final")
+                "forgeRuntimeLibrary"("io.netty:netty-handler-proxy:4.1.82.Final")
             }
             if(env.isFabric) {
-                compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
-                runtimeOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric:${deps["mod.cct"]}")
+               //compileOnly("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric-api:${deps["mod.cct"]}")
+                modApi("cc.tweaked:cc-tweaked-${env.mc_ver}-fabric:${deps["mod.cct"]}")
             }
         }
     }
@@ -191,6 +212,7 @@ tasks.processResources {
     inputs.property("license",mod.license)
     inputs.property("mandatory_indicator", if(env.isNeo) "required" else "mandatory")
     inputs.property("neo_forge_1204_mixin_field", if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "")
+    inputs.property("temp", "hi")
 
 
 
@@ -219,7 +241,8 @@ tasks.processResources {
         "mandatory_indicator" to if(env.isNeo) "required" else "mandatory",
         "neo_forge_1204_mixin_field" to if(env.isNeo) "[[mixins]]\nconfig=\"${mod.id}.mixins.json\"" else "",
         "neo_ver_range" to deps["neo_ver_range"],
-        "arch_ver" to deps["arch_ver"]
+        "arch_ver" to deps["arch_ver"],
+        "temp" to "hi"
     )
 
     if(env.isForge) {
@@ -264,7 +287,7 @@ publishMods {
     type = STABLE
     modLoaders.add(env.loader)
 
-    dryRun = false
+    dryRun = true
 
     modrinth {
         projectId = property("publish.modrinth").toString()

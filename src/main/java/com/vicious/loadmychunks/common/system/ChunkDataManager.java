@@ -26,12 +26,12 @@ import java.util.function.Supplier;
 public class ChunkDataManager {
     private static final Map<ServerLevel,LevelChunkLoaderManager> levelManagers = new IdentityHashMap<>();
 
-    public static LevelChunkLoaderManager getManager(ServerLevel level){
+    public static synchronized LevelChunkLoaderManager getManager(ServerLevel level){
         return levelManagers.computeIfAbsent(level, k->new LevelChunkLoaderManager(level));
     }
 
     //? if >1.16.5 {
-    public static LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+    public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
         if(levelManagers.containsKey(level)){
             levelManagers.get(level).clear();
             LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
@@ -146,6 +146,14 @@ public class ChunkDataManager {
         levelManagers.clear();
     }
 
+    public static void setDirty(ServerLevel level){
+        getManager(level).setDirty();
+    }
+
+    public static boolean isForced(ServerLevel level,ChunkPos pos) {
+        return getOrCreateChunkData(level,pos).getLoadState().shouldLoad();
+    }
+
     public static class LevelChunkLoaderManager extends SavedData{
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
@@ -177,7 +185,7 @@ public class ChunkDataManager {
         }
         //?}
 
-        public @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
+        public synchronized @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
         }
 
@@ -188,10 +196,7 @@ public class ChunkDataManager {
         public void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.addLoader(loader)) {
-                if(cdm.getLoadState().shouldLoad()){
-                    cdm.startGrace();
-                }
-                cdm.getLoadState().apply(level, pos);
+                cdm.updateChunkLoadState(level);
             }
             setDirty();
         }
@@ -203,7 +208,7 @@ public class ChunkDataManager {
         public void removeChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.removeLoader(loader)) {
-                cdm.getLoadState().apply(level, pos);
+                cdm.updateChunkLoadState(level);
             }
             setDirty();
         }
@@ -236,7 +241,7 @@ public class ChunkDataManager {
         /*@Override*/
         public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
-                if(!v.shouldPersist()) {
+                if(v.shouldPersist()) {
                     compoundTag.put(String.valueOf(k), v.save());
                 }
             });

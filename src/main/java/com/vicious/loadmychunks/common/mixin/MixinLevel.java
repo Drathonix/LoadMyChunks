@@ -49,7 +49,7 @@ public abstract class MixinLevel implements ILevelMixin {
             if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    if (value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
+                    if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
                         if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
                             chunk.loadMyChunks$tick();
                         }
@@ -101,10 +101,12 @@ public abstract class MixinLevel implements ILevelMixin {
                 ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).loadMyChunks$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    LevelChunk tickingChunk = value.getTickingChunk();
-                    if (tickingChunk instanceof ILevelChunkMixin) {
-                        if (scc.isTickingChunk(tickingChunk.getPos().getWorldPosition())) {
-                            ((ILevelChunkMixin)tickingChunk).loadMyChunks$tick(getProfiler());
+                    if(value != null) {
+                        LevelChunk tickingChunk = value.getTickingChunk();
+                        if (tickingChunk instanceof ILevelChunkMixin) {
+                            if (scc.isTickingChunk(tickingChunk.getPos().getWorldPosition())) {
+                                ((ILevelChunkMixin)tickingChunk).loadMyChunks$tick(getProfiler());
+                            }
                         }
                     }
                 }

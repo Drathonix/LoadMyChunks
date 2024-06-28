@@ -50,7 +50,7 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
     }
 
     @Override
-    public void destroy() {
+    public void loadMyChunks$destroy() {
         if(level instanceof ServerLevel) {
             ChunkDataManager.removeChunkLoader((ServerLevel) level,getBlockPos(),chunkLoader);
         }

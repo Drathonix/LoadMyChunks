@@ -9,7 +9,10 @@
     "MixinLevel",
     "MixinLevelChunk",
     "MixinServerLevel",
-    "MixinServerPlayer"
+    "MixinServerPlayer",
+    "cct.MixinTileTurtle",
+    "cct.MixinTurtleBrain",
+    "cct.MixinTurtleMoveCommand"
   ],
   "client": [
   ],

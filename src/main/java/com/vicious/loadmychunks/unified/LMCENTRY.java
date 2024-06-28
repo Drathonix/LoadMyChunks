@@ -1,135 +1,46 @@
 package com.vicious.loadmychunks.unified;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
+
+
+//? if >1.18.2
 import com.vicious.loadmychunks.common.util.BoolArgument;
 
 
-//? if >1.18.2
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-
 //? if fabric {
-/*import com.vicious.loadmychunks.common.util.ModResource;
+import com.vicious.loadmychunks.fabric.LMCFabricInit;
 import net.fabricmc.api.ModInitializer;
-//? if >1.18.2
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 public class LMCENTRY implements ModInitializer {
         @Override
         public void onInitialize() {
                 LoadMyChunks.init();
-                //? if >1.18.2 {
-                ArgumentTypeRegistry.registerArgumentType(ModResource.of("lmcenum"), BoolArgument.class,new BoolArgument.Info());
-                //?}
-                ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
-                ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
+                LMCFabricInit.init();
         }
 }
-*///?}
+//?}
 
 //? elif forge {
-/*//? if <=1.16.5
-import me.shedaniel.architectury.platform.forge.EventBuses;
-
-//? if >1.18.2 {
-/^import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.core.Registry;
-//? if >1.19.3
-import net.minecraft.core.registries.Registries;
-^///?}
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-//? if >1.16.5 {
-/^import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import dev.architectury.platform.forge.EventBuses;
-^///?}
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+/*import com.vicious.loadmychunks.forge.LMCForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-//? if <=1.16.5 {
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-//?}
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+
 @Mod(LoadMyChunks.MOD_ID)
 public class LMCENTRY {
     public LMCENTRY() {
-        EventBuses.registerModEventBus(LoadMyChunks.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-        LoadMyChunks.init();
-        MinecraftForge.EVENT_BUS.register(this);
-        //? if >1.18.2 && <=1.19.3 {
-        /^ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
-        DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY,LoadMyChunks.MOD_ID);
-        args.register("lmcbool",()->info);
-        ^///?}
-        //? if >1.19.3 {
-        /^ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
-        DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
-        args.register("lmcbool",()->info);
-        ^///?}
+        LMCForge.init();
     }
-
-    //? if <=1.16.5 {
-    @SubscribeEvent
-    public void serverStarted(FMLServerStartedEvent event){
-        LoadMyChunks.serverStarted(event.getServer());
-    }
-
-    @SubscribeEvent
-    public void serverStopped(FMLServerStoppedEvent event){
-        LoadMyChunks.serverStopped(event.getServer());
-    }
-    //?}
-
-    //? if >1.16.5 {
-    /^@SubscribeEvent
-    public void serverStarted(ServerStartedEvent event){
-        LoadMyChunks.serverStarted(event.getServer());
-    }
-
-    @SubscribeEvent
-    public void serverStopped(ServerStoppedEvent event){
-        LoadMyChunks.serverStopped(event.getServer());
-    }
-    ^///?}
 }
 *///?}
 
 //? elif neoforge {
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.core.registries.Registries;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
+/*import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
-
-
+import com.vicious.loadmychunks.neoforge.LMCNeoInit;
 @Mod(LoadMyChunks.MOD_ID)
 public class LMCENTRY {
-    public LMCENTRY(IEventBus modBus) {
+    public LMCENTRY(IEventBus meb) {
         LoadMyChunks.init();
-        NeoForge.EVENT_BUS.register(this);
-        //TODO: WATCH NEO FOR CHANGES REGARDING THIS FEATURE.
-        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
-        DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
-        args.register("lmcbool",()->info);
-        args.register(modBus);
-    }
-
-    @SubscribeEvent
-    public void serverStarted(ServerStartedEvent event){
-        LoadMyChunks.serverStarted(event.getServer());
-    }
-
-    @SubscribeEvent
-    public void serverStopped(ServerStoppedEvent event){
-        LoadMyChunks.serverStopped(event.getServer());
+        LMCNeoInit.init(meb);
     }
 }
-//?}
+*///?}
 

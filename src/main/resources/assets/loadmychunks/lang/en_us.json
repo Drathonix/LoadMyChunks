@@ -43,6 +43,7 @@
     "loadmychunks.command.forceload.set.permanent": "Now permanently forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset": "No longer automatically forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset.permanent": "Forceloading (%s,%s) permanently disabled.",
-    "commands.loadmychunks.arguments.bool.invalid": "Invalid boolean %s, valid options: %s"
+    "commands.loadmychunks.arguments.bool.invalid": "Invalid boolean %s, valid options: %s",
+    "loadmychunks.turtle.adjective.loading": "Loading"
 }
 

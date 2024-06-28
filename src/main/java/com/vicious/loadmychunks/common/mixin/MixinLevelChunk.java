@@ -38,12 +38,15 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 @Mixin(LevelChunk.class)
@@ -119,11 +122,21 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
-    public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
-        if(getBlockEntity(blockPos) instanceof IDestroyable destroyable){
-            destroyable.destroy();
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities1(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable destroyable && !level.isClientSide()){
+            destroyable.loadMyChunks$destroy();
         }
+        return rem;
+    }
+    @Redirect(method = "removeBlockEntity",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities2(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable destroyable && !level.isClientSide()){
+            destroyable.loadMyChunks$destroy();
+        }
+        return rem;
     }
 
     @Inject(method = "clearAllBlockEntities",at = @At("RETURN"))
@@ -132,9 +145,34 @@ public abstract class MixinLevelChunk
         loadMyChunks$tickers.clear();
     }
 
-    @Inject(method = "createTicker",at = @At("RETURN"))
-    public <T extends BlockEntity> void addToQueue(T blockEntity, BlockEntityTicker<T> blockEntityTicker, CallbackInfoReturnable<TickingBlockEntity> cir){
-        loadMyChunks$queuedTickers.add(cir.getReturnValue());
+    /**
+     *
+     * @param instance
+     * @param key
+     * @param remappingFunction
+     * @return
+     * @param <K>
+     * @param <V>
+     */
+
+    //Use lazy typing to avoid needing an AT
+    @Redirect(method = "updateBlockEntityTicker",at = @At(value = "INVOKE",target = "Ljava/util/Map;compute(Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"))
+    public <K,V> Object addToQueue(Map<K,V> instance, K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction){
+        //Ensure this will be the first instance
+        if(!instance.containsKey(key)){
+            Object current = instance.get(key);
+            TickingBlockEntity result = (TickingBlockEntity)instance.compute(key, remappingFunction);
+            if(result != null) {
+                loadMyChunks$queuedTickers.add(result);
+            }
+            //Account for the new ticker being invalidated (somehow)
+            else if(current != null){
+                loadMyChunks$tickers.remove(result);
+                loadMyChunks$queuedTickers.remove(result);
+            }
+            return result;
+        }
+        return remappingFunction.apply(key, instance.get(key));
     }
 
     //?}
@@ -211,20 +249,29 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Inject(method = "removeBlockEntity",at = @At(value = "HEAD"))
-    public void properlyDestroyTileEntities(BlockPos blockPos, CallbackInfo ci){
-        BlockEntity blockEntity = getBlockEntity(blockPos);
-        if(blockEntity instanceof IDestroyable){
-            ((IDestroyable)blockEntity).destroy();
+    @Redirect(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities1(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable && !level.isClientSide()){
+            ((IDestroyable) rem).loadMyChunks$destroy();
         }
-        loadMyChunks$tickers.remove(blockEntity);
-        loadMyChunks$queued.remove(blockEntity);
+        return rem;
+    }
+    @Redirect(method = "removeBlockEntity",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public Object properlyDestroyTileEntities2(Map<?,?> instance, Object o){
+        Object rem = instance.remove(o);
+        if(rem instanceof IDestroyable && !level.isClientSide()){
+            ((IDestroyable) rem).loadMyChunks$destroy();
+        }
+        return rem;
     }
 
     @Inject(method = "setBlockEntity",at = @At(value = "INVOKE",target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",shift = At.Shift.AFTER))
     public void addTicker(BlockPos blockPos, BlockEntity blockEntity, CallbackInfo ci){
         if(blockEntity instanceof TickableBlockEntity) {
-            loadMyChunks$queued.add(blockEntity);
+            if(!level.isClientSide()) {
+                loadMyChunks$queued.add(blockEntity);
+            }
         }
     }
     *///?}

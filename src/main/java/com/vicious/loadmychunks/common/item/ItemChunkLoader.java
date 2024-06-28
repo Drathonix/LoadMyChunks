@@ -22,9 +22,9 @@ public class ItemChunkLoader extends BlockItem {
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
         //? if <1.18.3
-        list.add(new TranslatableComponent(getTooltipTranslationKey()));
+        /^list.add(new TranslatableComponent(getTooltipTranslationKey()));^/
         //? if >1.18.2
-        /^list.add(Component.translatable(getTooltipTranslationKey()));^/
+        list.add(Component.translatable(getTooltipTranslationKey()));
     }
     *///?}
 
