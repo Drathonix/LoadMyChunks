@@ -18,13 +18,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockChunkLoader extends BaseEntityBlock {
     //? if >1.20.3 {
-    /*public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
+    public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    *///?}
+    //?}
 
     public BlockChunkLoader(Properties properties) {
         super(properties);
@@ -47,18 +47,18 @@ public class BlockChunkLoader extends BaseEntityBlock {
     }
 
     //? if >1.16.5 {
-    /*@Nullable
+    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BlockEntityChunkLoader(blockPos,blockState);
     }
-    *///?}
+    //?}
 
     //? if <=1.16.5 {
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockGetter blockGetter) {
         return new BlockEntityChunkLoader();
     }
-    //?}
+    *///?}
 }

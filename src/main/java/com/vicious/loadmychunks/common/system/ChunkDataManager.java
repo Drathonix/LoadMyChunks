@@ -6,7 +6,7 @@ import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.core.BlockPos;
 //? if >1.18.2
-/*import net.minecraft.core.HolderLookup;*/
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -31,7 +31,7 @@ public class ChunkDataManager {
     }
 
     //? if >1.16.5 {
-    /*public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+    public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
         if(levelManagers.containsKey(level)){
             levelManagers.get(level).clear();
             LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
@@ -42,7 +42,7 @@ public class ChunkDataManager {
             return levelManagers.put(level, new LevelChunkLoaderManager(level,tag));
         }
     }
-    *///?}
+    //?}
 
     public static @NotNull Map<String,List<IChunkLoader>> getChunkLoadersOf(@Nullable UUID owner) {
         if(owner == null){
@@ -161,13 +161,13 @@ public class ChunkDataManager {
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
             //? if <=1.16.5
-            super("loadmychunks_manager");
+            /*super("loadmychunks_manager");*/
             this.level=level;
             level.getServer().addTickable(this::tick);
         }
 
         //? if >1.16.5 {
-        /*public LevelChunkLoaderManager(@NotNull ServerLevel level, @NotNull CompoundTag tag){
+        public LevelChunkLoaderManager(@NotNull ServerLevel level, @NotNull CompoundTag tag){
             this(level);
             for (String key : tag.getAllKeys()) {
                 long index = Long.parseLong(key);
@@ -183,7 +183,7 @@ public class ChunkDataManager {
                 }
             }
         }
-        *///?}
+        //?}
 
         public synchronized @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
@@ -219,7 +219,7 @@ public class ChunkDataManager {
             return cdm;
         }
         //? if <=1.16.5 {
-        @Override
+        /*@Override
         public void load(CompoundTag tag) {
             for (String key : tag.getAllKeys()) {
                 long index = Long.parseLong(key);
@@ -235,10 +235,10 @@ public class ChunkDataManager {
                 }
             }
         }
-        //?}
+        *///?}
 
         //? if <=1.20.5
-        @Override
+        /*@Override*/
         public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
                 if(v.shouldPersist()) {
@@ -300,10 +300,10 @@ public class ChunkDataManager {
         }
 
         //? if >1.20.5 {
-        /*@Override
+        @Override
         public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
             return save(compoundTag);
         }
-        *///?}
+        //?}
     }
 }

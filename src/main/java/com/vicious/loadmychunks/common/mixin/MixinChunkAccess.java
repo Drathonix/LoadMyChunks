@@ -13,12 +13,12 @@ import java.util.Map;
 @Mixin(ChunkAccess.class)
 public
 //? if >1.16.5
-/*class*/
+class
 //? if <=1.16.5
-interface
+/*interface*/
 MixinChunkAccess {
     //? if >1.16.5 {
-    /*@Shadow @Final protected Map<BlockPos, BlockEntity> blockEntities;
+    @Shadow @Final protected Map<BlockPos, BlockEntity> blockEntities;
     @Shadow @Final protected ChunkPos chunkPos;
-    *///?}
+    //?}
 }

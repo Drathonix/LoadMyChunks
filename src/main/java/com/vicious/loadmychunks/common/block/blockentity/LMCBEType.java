@@ -26,7 +26,7 @@ public class LMCBEType<T extends BlockEntity> extends BlockEntityType<T> {
     }
 
     //? if <=1.16.5 {
-    @Nullable
+    /*@Nullable
     public T create() {
         return this.supp.create();
     }
@@ -34,10 +34,10 @@ public class LMCBEType<T extends BlockEntity> extends BlockEntityType<T> {
     public interface Factory<T extends BlockEntity> {
         T create();
     }
-    //?}
+    *///?}
 
     //? if >1.16.5 {
-    /*@Nullable
+    @Nullable
     public T create(BlockPos blockPos, BlockState blockState) {
         return this.supp.create(blockPos, blockState);
     }
@@ -46,5 +46,5 @@ public class LMCBEType<T extends BlockEntity> extends BlockEntityType<T> {
     public interface Factory<T extends BlockEntity> {
         T create(BlockPos blockPos, BlockState blockState);
     }
-    *///?}
+    //?}
 }

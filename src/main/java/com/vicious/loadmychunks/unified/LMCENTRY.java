@@ -4,11 +4,11 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 
 
 //? if >1.18.2
-/*import com.vicious.loadmychunks.common.util.BoolArgument;*/
+import com.vicious.loadmychunks.common.util.BoolArgument;
 
 
 //? if fabric {
-/*import com.vicious.loadmychunks.fabric.LMCFabricInit;
+import com.vicious.loadmychunks.fabric.LMCFabricInit;
 import net.fabricmc.api.ModInitializer;
 public class LMCENTRY implements ModInitializer {
         @Override
@@ -17,10 +17,10 @@ public class LMCENTRY implements ModInitializer {
                 LMCFabricInit.init();
         }
 }
-*///?}
+//?}
 
 //? elif forge {
-import com.vicious.loadmychunks.forge.LMCForge;
+/*import com.vicious.loadmychunks.forge.LMCForge;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod(LoadMyChunks.MOD_ID)
@@ -29,7 +29,7 @@ public class LMCENTRY {
         LMCForge.init();
     }
 }
-//?}
+*///?}
 
 //? elif neoforge {
 /*import net.neoforged.bus.api.IEventBus;

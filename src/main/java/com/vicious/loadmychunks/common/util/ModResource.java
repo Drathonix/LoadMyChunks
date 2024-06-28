@@ -6,15 +6,15 @@ import net.minecraft.resources.ResourceLocation;
 public class ModResource {
     public static ResourceLocation of(String string){
         //? if <1.20.7
-        return new ResourceLocation(LoadMyChunks.MOD_ID,string);
+        /*return new ResourceLocation(LoadMyChunks.MOD_ID,string);*/
         //? if >1.20.6
-        /*return ResourceLocation.fromNamespaceAndPath(LoadMyChunks.MOD_ID,string);*/
+        return ResourceLocation.fromNamespaceAndPath(LoadMyChunks.MOD_ID,string);
     }
 
     public static ResourceLocation parse(String string) {
         //? if <1.20.7
-        return new ResourceLocation(string);
+        /*return new ResourceLocation(string);*/
         //? if >1.20.6
-        /*return ResourceLocation.tryParse(string);*/
+        return ResourceLocation.tryParse(string);
     }
 }

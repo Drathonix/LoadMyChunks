@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 //? if >=1.20.6
-/*import com.vicious.loadmychunks.common.network.LagReadingRequest;*/
+import com.vicious.loadmychunks.common.network.LagReadingRequest;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -15,22 +15,22 @@ import com.vicious.loadmychunks.common.system.TickDelayer;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.util.BoolArgument;
 //? if <=1.16.5 {
-import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
-//?}
-//? if >1.16.5 {
-/*import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.networking.NetworkManager;
 *///?}
+//? if >1.16.5 {
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.networking.NetworkManager;
+//?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
-/*import net.minecraft.commands.CommandBuildContext;*/
+import net.minecraft.commands.CommandBuildContext;
 //? if <1.18.3
-import net.minecraft.network.chat.TextComponent;
+/*import net.minecraft.network.chat.TextComponent;*/
 //? if <1.20 {
-import net.minecraft.world.phys.Vec3;
+/*import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
-//?}
+*///?}
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -47,7 +47,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 //? if <=1.20.4
-import com.vicious.loadmychunks.common.util.ModResource;
+/*import com.vicious.loadmychunks.common.util.ModResource;*/
 
 public class LoadMyChunks {
 	public static MinecraftServer server;
@@ -56,7 +56,7 @@ public class LoadMyChunks {
 	public static Level debugLevel = Level.DEBUG;
 
 	//? if <1.20.5
-	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
+	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
@@ -71,21 +71,21 @@ public class LoadMyChunks {
 		LMCContent.init();
 		logger.info("Chunk Loader Loading Complete.");
 		//? if <=1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			//? if <1.19.5
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
+			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());^/
 			//? if >1.19.4
-			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());*/
+			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.addRecipient((IInformable) plr);
 			}
 		}));
-		//?}
-		//? if >1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		*///?}
+		//? if >1.20.5 {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		//?}
 	}
 
 	public static void serverStarted(MinecraftServer server) {
@@ -189,7 +189,7 @@ public class LoadMyChunks {
 	*///?}
 
 	//? if >1.19.4 {
-	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent", Boolean.class),BlockPosArgument.getBlockPos(ctx,"pos"))))));
@@ -263,10 +263,10 @@ public class LoadMyChunks {
 		},true);
 		return 0;
 	}
-	*///?}
+	//?}
 
 	//? if <1.18.3 {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
 		LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("loadmychunks").requires(ctx-> ctx.hasPermission(2));
 		root.then(Commands.literal("forceload").executes(ctx-> handleCMDForceload(ctx,true,null)).then(Commands.argument("permanent", BoolArgument.boolArgument()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),null))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(ctx-> handleCMDForceload(ctx,ctx.getArgument("permanent",Boolean.class),getBlockPos(ctx,"pos"))))));
@@ -342,22 +342,22 @@ public class LoadMyChunks {
 		}).get(),true);
 		return 0;
 	}
-	//?}
+	*///?}
 
 	public static BlockPos getBlockPos(CommandContext<CommandSourceStack> ctx, String key){
 		//? if >1.18.1 {
-        /*try {
+        try {
             return BlockPosArgument.getLoadedBlockPos(ctx,key);
         } catch (CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
-		*///?}
+		//?}
 		//? if <=1.18.1 {
-		try {
+		/*try {
 			return BlockPosArgument.getOrLoadBlockPos(ctx,key);
 		} catch (CommandSyntaxException e) {
 			throw new RuntimeException(e);
 		}
-		//?}
+		*///?}
     }
 }

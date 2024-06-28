@@ -1,9 +1,9 @@
 package com.vicious.loadmychunks.common.integ;
 
 //? if >1.16.5
-/*import dev.architectury.platform.Platform;*/
+import dev.architectury.platform.Platform;
 //? if <=1.16.5
-import me.shedaniel.architectury.platform.Platform;
+/*import me.shedaniel.architectury.platform.Platform;*/
 
 import java.lang.reflect.InvocationTargetException;
 

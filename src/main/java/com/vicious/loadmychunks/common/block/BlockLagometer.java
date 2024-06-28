@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 //? if >1.16.5
-/*import net.minecraft.world.level.block.entity.BlockEntityTicker;*/
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -25,12 +25,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockLagometer extends BaseEntityBlock {
     //? if >1.20.3 {
-    /*public static final MapCodec<BlockLagometer> CODEC = simpleCodec(BlockLagometer::new);
+    public static final MapCodec<BlockLagometer> CODEC = simpleCodec(BlockLagometer::new);
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    *///?}
+    //?}
     public static final IntegerProperty LAG = IntegerProperty.create("lmc_lag",0,15);
 
 
@@ -47,20 +47,20 @@ public class BlockLagometer extends BaseEntityBlock {
     }
 
     //? if <=1.16.5 {
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockGetter blockGetter) {
         return new BlockEntityLagometer();
     }
-    //?}
+    *///?}
 
     //? if >1.16.5 {
-    /*@Nullable
+    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BlockEntityLagometer(blockPos,blockState);
     }
-    *///?}
+    //?}
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState blockState) {

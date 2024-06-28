@@ -23,19 +23,19 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
 
     public TurtleChunkLoaderPeripheral(ITurtleAccess turtle, TurtleSide side) {
         //? if >1.16.5
-        /*if(turtle.getLevel() instanceof ServerLevel) {*/
+        if(turtle.getLevel() instanceof ServerLevel) {
         //? if <=1.16.5
-        if(turtle.getWorld() instanceof ServerLevel) {
+        /*if(turtle.getWorld() instanceof ServerLevel) {*/
             this.turtle = turtle;
             this.side = side;
             //? if >1.16.5 {
-            /*this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getLevel(),turtle.getPosition());
+            this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getLevel(),turtle.getPosition());
             this.chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getLevel(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition()));
-            *///?}
-            //? if <=1.16.5 {
-            this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getWorld(),turtle.getPosition());
-            this.chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getWorld(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition()));
             //?}
+            //? if <=1.16.5 {
+            /*this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getWorld(),turtle.getPosition());
+            this.chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getWorld(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition()));
+            *///?}
         }
         else{
             throw new IllegalStateException("Turtle chunk loader code cannot be accessed on the clientside.");
@@ -55,9 +55,9 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     @Override
     protected ServerLevel getLevel() {
         //? if >1.16.5
-        /*return (ServerLevel) turtle.getLevel();*/
+        return (ServerLevel) turtle.getLevel();
         //? if <=1.16.5
-        return (ServerLevel) turtle.getWorld();
+        /*return (ServerLevel) turtle.getWorld();*/
     }
 
     @Override
