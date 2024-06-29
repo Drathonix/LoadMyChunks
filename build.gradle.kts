@@ -287,7 +287,7 @@ publishMods {
     type = STABLE
     modLoaders.add(env.loader)
 
-    dryRun = true
+    dryRun = false
 
     modrinth {
         projectId = property("publish.modrinth").toString()

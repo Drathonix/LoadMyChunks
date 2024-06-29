@@ -39,7 +39,7 @@ public class CCTFabric {
     //?}
 
     //? if <=1.20.4 {
-    /*public static void init(){
+    /*/^public static void init(){
         //? if >1.20.1
         /^DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,ITurtleUpgrade.serialiserRegistryKey());^/
         //? if <=1.20.1
@@ -64,4 +64,4 @@ public class CCTFabric {
         CCTRegistryContent.registerClient();
     }
 }
-//?}
+*///?}

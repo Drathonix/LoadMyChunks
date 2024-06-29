@@ -60,11 +60,11 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     /*@Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2
-        return BuiltInRegistries.BLOCK.getKey(block.get());
+        /^return BuiltInRegistries.BLOCK.getKey(block.get());^/
         //? if <=1.19.2 && >1.16.5
         /^return Registry.BLOCK.getKey(block.get());^/
         //? if <=1.16.5
-        /^return key;^/
+        return key;
     }
     @Override
     public TurtleUpgradeType getType() {

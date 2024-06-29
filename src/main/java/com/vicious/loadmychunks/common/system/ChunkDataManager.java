@@ -248,7 +248,15 @@ public class ChunkDataManager {
             return compoundTag;
         }
 
+        private int tickCounter = 0;
+        private static final int purgeTimer = 20*100;
+
         public void tick(){
+            if(tickCounter >= purgeTimer){
+                data.values().removeIf(module -> !module.shouldPersist() && !level.hasChunk(module.getPosition().x, module.getPosition().z));
+                tickCounter = 0;
+            }
+
             Iterator<ChunkDataModule> iterator = shutoffLoaders.iterator();
             while (iterator.hasNext()){
                 ChunkDataModule module = iterator.next();
@@ -263,6 +271,7 @@ public class ChunkDataManager {
 
             }
             setDirty();
+            tickCounter++;
         }
 
         public void shutDown(@NotNull ChunkPos chunkPos) {
