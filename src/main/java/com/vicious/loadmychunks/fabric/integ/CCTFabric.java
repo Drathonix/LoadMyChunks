@@ -1,5 +1,5 @@
 //? if fabric && cct {
-/*package com.vicious.loadmychunks.fabric.integ;
+package com.vicious.loadmychunks.fabric.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
@@ -11,9 +11,9 @@ import com.vicious.loadmychunks.common.registry.LMCContent;
 import dan200.computercraft.api.peripheral.PeripheralLookup;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 //? if <1.20.4
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;
+/*import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;*/
 //? if <1.20.6
-import dan200.computercraft.api.upgrades.UpgradeSerialiser;
+/*import dan200.computercraft.api.upgrades.UpgradeSerialiser;*/
 //? if >=1.20.6
 import dan200.computercraft.api.upgrades.UpgradeType;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -39,7 +39,7 @@ public class CCTFabric {
     //?}
 
     //? if <=1.20.4 {
-    public static void init(){
+    /*public static void init(){
         //? if >1.20.1
         DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,ITurtleUpgrade.serialiserRegistryKey());
         //? if <=1.20.1
@@ -58,10 +58,10 @@ public class CCTFabric {
         PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
 
     }
-    //?}
+    *///?}
 
     public static void clientInit(){
         CCTRegistryContent.registerClient();
     }
 }
-*///?}
+//?}
