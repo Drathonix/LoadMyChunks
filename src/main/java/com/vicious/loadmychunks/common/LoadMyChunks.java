@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 //? if >=1.20.6
+import com.vicious.loadmychunks.common.integ.Integrations;
 import com.vicious.loadmychunks.common.network.LagReadingPacket;
 import com.vicious.loadmychunks.common.network.LagReadingRequest;
 import com.vicious.loadmychunks.common.registry.LMCContent;
@@ -86,7 +87,9 @@ public class LoadMyChunks {
 		*///?}
 		//? if >1.20.5 {
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
-		NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
+		Integrations.invokeServer(()->{
+			NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
+		});
 		//?}
 	}
 

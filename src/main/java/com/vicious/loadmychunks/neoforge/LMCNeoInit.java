@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.vicious.loadmychunks.neoforge;
+package com.vicious.loadmychunks.neoforge;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.Integrations;
@@ -44,4 +44,4 @@ public class LMCNeoInit {
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
     }
 }
-*///?}
+//?}

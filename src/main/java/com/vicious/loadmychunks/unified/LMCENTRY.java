@@ -8,7 +8,7 @@ import com.vicious.loadmychunks.common.util.BoolArgument;
 
 
 //? if fabric {
-import com.vicious.loadmychunks.fabric.LMCFabricInit;
+/*import com.vicious.loadmychunks.fabric.LMCFabricInit;
 import net.fabricmc.api.ModInitializer;
 public class LMCENTRY implements ModInitializer {
         @Override
@@ -17,7 +17,7 @@ public class LMCENTRY implements ModInitializer {
                 LMCFabricInit.init();
         }
 }
-//?}
+*///?}
 
 //? elif forge {
 /*import com.vicious.loadmychunks.forge.LMCForge;
@@ -32,7 +32,7 @@ public class LMCENTRY {
 *///?}
 
 //? elif neoforge {
-/*import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import com.vicious.loadmychunks.neoforge.LMCNeoInit;
 @Mod(LoadMyChunks.MOD_ID)
@@ -42,5 +42,5 @@ public class LMCENTRY {
         LMCNeoInit.init(meb);
     }
 }
-*///?}
+//?}
 

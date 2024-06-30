@@ -23,4 +23,11 @@ public class Integrations {
             }
         });
     }
+
+    //TODO: make less scuffed.
+    public static void invokeServer(Runnable runnable) {
+        if(Platform.getEnv().isDedicatedServer()){
+            runnable.run();
+        }
+    }
 }
