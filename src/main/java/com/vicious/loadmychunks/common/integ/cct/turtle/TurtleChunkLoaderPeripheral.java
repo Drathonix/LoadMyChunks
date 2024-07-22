@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.bridge.IContextDestroyable;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.AbstractChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
+import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
@@ -40,6 +41,11 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
         else{
             throw new IllegalStateException("Turtle chunk loader code cannot be accessed on the clientside.");
         }
+    }
+
+    @Override
+    public void detach(IComputerAccess computer) {
+        super.detach(computer);
     }
 
     @Override

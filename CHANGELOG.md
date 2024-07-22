@@ -1,4 +1,4 @@
-# Load My Chunks Version 1.0.5-hf2
+# Load My Chunks Version 1.0.6
 
-Fixes serverside crash in MC-VER version 1.20.6 and 1.21
-Fixes the clientside crash induced by this. See issue #17
+Fixes a rare NPE in the CDM likely caused by Multithreaded chunk loading (C^2ME as an example).
+This also resulted in an elimination of some extraneous code.

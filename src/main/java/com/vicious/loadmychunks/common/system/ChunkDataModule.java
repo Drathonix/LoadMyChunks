@@ -13,12 +13,6 @@ import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.util.ModResource;
 import io.netty.buffer.Unpooled;
-//? if >1.16.5 {
-import dev.architectury.networking.NetworkManager;
-//?}
-//? if <=1.16.5 {
-/*import me.shedaniel.architectury.networking.NetworkManager;
-*///?}
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -47,7 +41,7 @@ public class ChunkDataModule {
     private LoadState loadState = defaultLoadState;
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
-    private ILevelChunkMixin chunk;
+    //private ILevelChunkMixin chunk;
     private final Set<IInformable> recipients = new HashSet<>();
 
     public ChunkDataModule(ChunkPos position){
@@ -213,10 +207,7 @@ public class ChunkDataModule {
     }
 
     public void assignChunk(ILevelChunkMixin chunk) {
-        this.chunk = chunk;
-    }
-    public boolean isAssigned(){
-        return chunk != null;
+        //this.chunk = chunk;
     }
 
     public boolean containsOwnedLoader(@NotNull UUID uuid) {
@@ -244,13 +235,13 @@ public class ChunkDataModule {
             informable.informLagFrac(frac);
             if(informable instanceof Entity){
                 //? if >1.16.5 {
-                if(((Entity) informable).chunkPosition().toLong() != chunk.loadMyChunks$posAsLong()){
+                if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
                     iterator.remove();
                 }
                 //?}
                 //? if <=1.16.5 {
                 /*Entity e = (Entity) informable;
-                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != chunk.loadMyChunks$posAsLong()){
+                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
                     iterator.remove();
                 }
                 *///?}
@@ -288,6 +279,6 @@ public class ChunkDataModule {
         if(getLoadState().shouldLoad()){
             startGrace();
         }
-        getLoadState().apply(level, chunk.loadMyChunks$posAsLong());
+        getLoadState().apply(level, position.toLong());
     }
 }

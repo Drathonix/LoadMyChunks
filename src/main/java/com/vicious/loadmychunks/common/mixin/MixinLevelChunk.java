@@ -83,7 +83,7 @@ public abstract class MixinLevelChunk
     public void setup(Level arg, ChunkPos arg2, UpgradeData arg3, LevelChunkTicks arg4, LevelChunkTicks arg5, long l, LevelChunkSection[] args, LevelChunk.PostLoadProcessor arg6, BlendingData arg7, CallbackInfo ci){
         if(level instanceof ServerLevel sl) {
             this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData(sl,chunkPos);
-            this.loadMyChunks$loadDataModule.assignChunk(this);
+            //this.loadMyChunks$loadDataModule.assignChunk(this);
         }
     }
 
