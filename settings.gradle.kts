@@ -7,6 +7,7 @@ pluginManagement {
         maven("https://maven.minecraftforge.net/")
         maven("https://maven.neoforged.net/releases/")
         maven("https://maven.kikugie.dev/releases/")
+        maven("https://repo.spongepowered.org/maven")
         mavenCentral()
         gradlePluginPortal()
     }

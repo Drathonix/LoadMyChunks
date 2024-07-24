@@ -1,3 +1,4 @@
+
 plugins {
     `maven-publish`
     //id("fabric-loom")
@@ -6,6 +7,7 @@ plugins {
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j")
     id("me.modmuss50.mod-publish-plugin")
+    //id("org.spongepowered.mixin") version("0.7")
 }
 
 class Env() {
@@ -72,6 +74,8 @@ loom {
             "${mod.id}.mixins.json",
         )
     }
+    //mixin.useLegacyMixinAp = true
+    //mixin.defaultRefmapName = "loadmychunks.mixins.refmap.json"
 }
 
 repositories {
@@ -276,7 +280,6 @@ tasks.register<Copy>("buildAndCollect") {
     into(rootProject.layout.buildDirectory.file("libs/${mod.version}"))
     dependsOn("build")
 }
-
 
 publishMods {
     file = tasks.remapJar.get().archiveFile

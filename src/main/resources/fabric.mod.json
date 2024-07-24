@@ -23,8 +23,7 @@
     ]
   },
   "mixins": [
-    "${main_mixin}",
-    "${fabric_mixin}"
+    "${main_mixin}"
   ],
   "depends": {
     "fabricloader": ">=0.15",
