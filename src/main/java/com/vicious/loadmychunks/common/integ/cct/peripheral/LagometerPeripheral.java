@@ -1,5 +1,5 @@
 //? if cct {
-package com.vicious.loadmychunks.common.integ.cct.peripheral;
+/*package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
@@ -55,4 +55,4 @@ public class LagometerPeripheral extends AbstractLagometerPeripheral {
         return pos;
     }
 }
-//?}
+*///?}

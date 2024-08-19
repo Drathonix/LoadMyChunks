@@ -43,6 +43,7 @@ Version 1.19.2-forge runs, but mixins are not loaded (I have no idea why)
 
 | MC_Version | Fabric | Forge | NeoForge |
 |------------|--------|-------|----------|
+| 1.21.1     | ✅      | NA    | ✅        |
 | 1.21       | ✅      | NA    | ✅        |
 | 1.20.6     | ✅      | NA    | ✅        |
 | 1.20.4     | ✅      | ✅     | ✅        |

@@ -185,7 +185,7 @@ public class ChunkDataManager {
         }
         //?}
 
-        public synchronized @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
+        public @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
         }
 
@@ -193,7 +193,7 @@ public class ChunkDataManager {
             addChunkLoader(loader,pos.toLong());
         }
 
-        public void addChunkLoader(IChunkLoader loader, long pos){
+        public synchronized void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.addLoader(loader)) {
                 cdm.updateChunkLoadState(level);
@@ -205,7 +205,7 @@ public class ChunkDataManager {
             removeChunkLoader(loader,pos.toLong());
         }
 
-        public void removeChunkLoader(IChunkLoader loader, long pos){
+        public synchronized void removeChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
             if(cdm.removeLoader(loader)) {
                 cdm.updateChunkLoadState(level);
@@ -213,7 +213,7 @@ public class ChunkDataManager {
             setDirty();
         }
 
-        public @NotNull ChunkDataModule getOrCreateData(long pos){
+        public synchronized @NotNull ChunkDataModule getOrCreateData(long pos){
             ChunkDataModule cdm = data.computeIfAbsent(pos, ChunkDataModule::new);
             setDirty();
             return cdm;
@@ -239,7 +239,7 @@ public class ChunkDataManager {
 
         //? if <=1.20.5
         /*@Override*/
-        public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
+        public synchronized @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
                 if(v.shouldPersist()) {
                     compoundTag.put(String.valueOf(k), v.save());
@@ -274,7 +274,7 @@ public class ChunkDataManager {
             tickCounter++;
         }
 
-        public void shutDown(@NotNull ChunkPos chunkPos) {
+        public synchronized void shutDown(@NotNull ChunkPos chunkPos) {
             ChunkDataModule module = data.get(chunkPos.toLong());
             shutoffLoaders.add(module);
             module.getLoadState().apply(level,chunkPos);
@@ -290,7 +290,7 @@ public class ChunkDataManager {
         }
 
         @SuppressWarnings("all")
-        public <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
             ChunkDataModule cdm = getOrCreateData(new ChunkPos(blockPos));
             for (IChunkLoader loader : cdm.getLoaders()) {
                 if(loader.getClass() == type){
@@ -304,7 +304,7 @@ public class ChunkDataManager {
             return out;
         }
 
-        public void clear() {
+        public synchronized void clear() {
             data.clear();
         }
 

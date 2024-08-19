@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.vicious.loadmychunks.neoforge;
+package com.vicious.loadmychunks.neoforge;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.Integrations;
@@ -26,7 +26,7 @@ public class LMCNeoInit {
         args.register("lmcbool",()->info);
         args.register(meb);
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);
+        /*Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);*/
     }
 
     @SubscribeEvent
@@ -41,7 +41,7 @@ public class LMCNeoInit {
 
     public static void clientInit() {
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
+        /*Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);*/
     }
 }
-*///?}
+//?}

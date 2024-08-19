@@ -281,6 +281,10 @@ tasks.register<Copy>("buildAndCollect") {
     dependsOn("build")
 }
 
+
+val extras = project.findProperty("publish.extra_versions")
+val extraVersions = extras?.toString()?.split(",") ?: ArrayList<String>();
+
 publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
@@ -310,6 +314,7 @@ publishMods {
         projectId = property("publish.curseforge").toString()
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.add(env.mc_ver)
+        minecraftVersions.addAll(extraVersions);
         requires {
             slug = "architectury-api"
         }

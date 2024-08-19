@@ -1,5 +1,5 @@
 //? if cct {
-package com.vicious.loadmychunks.common.integ.cct.peripheral;
+/*package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
 import com.mojang.authlib.GameProfile;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
@@ -76,4 +76,4 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
         return false;
     }
 }
-//?}
+*///?}

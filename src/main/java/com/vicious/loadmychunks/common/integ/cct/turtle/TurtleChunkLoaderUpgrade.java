@@ -1,10 +1,10 @@
 //? if cct {
-package com.vicious.loadmychunks.common.integ.cct.turtle;
+/*package com.vicious.loadmychunks.common.integ.cct.turtle;
 
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 //? if <=1.18.2
-/*import dan200.computercraft.api.client.TransformedModel;*/
+/^import dan200.computercraft.api.client.TransformedModel;^/
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -15,12 +15,12 @@ import dan200.computercraft.api.upgrades.UpgradeType;
 //? if >1.16.5
 import dev.architectury.registry.registries.RegistrySupplier;
 //? if <=1.16.5
-/*import me.shedaniel.architectury.registry.RegistrySupplier;*/
+/^import me.shedaniel.architectury.registry.RegistrySupplier;^/
 
 //? if >1.19.2
 import net.minecraft.core.registries.BuiltInRegistries;
 //? if <=1.19.2
-/*import net.minecraft.core.Registry;*/
+/^import net.minecraft.core.Registry;^/
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -40,13 +40,13 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     //?}
 
     //? if <=1.16.5 {
-    /*private final ResourceLocation key;
+    /^private final ResourceLocation key;
     public TurtleChunkLoaderUpgrade(RegistrySupplier<Block> block, ResourceLocation key
     ){
         this.block = block;
         this.key = key;
     }
-    *///?}
+    ^///?}
 
     //? if >=1.20.6 {
     @Override
@@ -57,7 +57,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
 
 
     //? if <1.20.6 {
-    /*@Override
+    /^@Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2
         /^return BuiltInRegistries.BLOCK.getKey(block.get());^/
@@ -74,7 +74,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     public String getUnlocalisedAdjective() {
         return "loadmychunks.turtle.adjective.loading";
     }
-    *///?}
+    ^///?}
 
 
     @Override
@@ -89,12 +89,12 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     }
 
     //? if <=1.18.2 {
-    /*@NotNull
+    /^@NotNull
     @Override
     public TransformedModel getModel(@Nullable ITurtleAccess turtle, @NotNull TurtleSide side) {
         return TransformedModel.of(getCraftingItem(),side == TurtleSide.LEFT ? UpgradeModeller.leftTransform : UpgradeModeller.rightTransform);
     }
-    *///?}
+    ^///?}
 
 
     //? if >=1.20.6 {
@@ -112,4 +112,4 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     }
     //?}
 }
-//?}
+*///?}

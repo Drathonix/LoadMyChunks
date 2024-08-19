@@ -1,5 +1,5 @@
 //? if cct {
-package com.vicious.loadmychunks.common.integ.cct;
+/*package com.vicious.loadmychunks.common.integ.cct;
 
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
@@ -13,13 +13,13 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dev.architectury.registry.registries.RegistrySupplier;
 
 //? if >1.16.5 && <1.20.4
-/*import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;*/
+/^import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;^/
 //? if >1.16.5 && <1.20.6
-/*import dan200.computercraft.api.upgrades.UpgradeSerialiser;*/
+/^import dan200.computercraft.api.upgrades.UpgradeSerialiser;^/
 
 //? if <=1.16.5 {
-/*import me.shedaniel.architectury.registry.RegistrySupplier;
-*///?}
+/^import me.shedaniel.architectury.registry.RegistrySupplier;
+^///?}
 
 //? if >=1.19.2 {
 import dan200.computercraft.client.turtle.TurtleUpgradeModellers;
@@ -33,11 +33,11 @@ public class CCTRegistryContent {
     //? if >=1.20.6
     public static List<RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>>> registrySuppliers = new ArrayList<>();
     //? if <1.20.6 && >1.20.1
-    /*public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();*/
+    /^public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();^/
     //? if <=1.20.1 && >1.16.5
-    /*public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();*/
+    /^public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();^/
     //? if <=1.16.5
-    /*public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();*/
+    /^public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();^/
 
     public static void registerClient() {
         //? if >1.18.2 {
@@ -48,4 +48,4 @@ public class CCTRegistryContent {
         LoaderTypeRegistry.register(LoaderTypes.CCT_TURTLE_LOADER, TurtleChunkLoader::new);
     }
 }
-//?}
+*///?}

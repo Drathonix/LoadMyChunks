@@ -1,5 +1,5 @@
 //? if cct {
-package com.vicious.loadmychunks.common.integ.cct.peripheral;
+/*package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.config.LMCConfig;
@@ -89,4 +89,4 @@ public abstract class AbstractLagometerPeripheral implements IPeripheral {
         }
     }
 }
-//?}
+*///?}

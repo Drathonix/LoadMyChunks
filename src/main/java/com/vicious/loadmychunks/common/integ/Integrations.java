@@ -3,7 +3,7 @@ package com.vicious.loadmychunks.common.integ;
 //? if >1.16.5
 import dev.architectury.platform.Platform;
 //? if fabric
-import net.fabricmc.api.EnvType;
+/*import net.fabricmc.api.EnvType;*/
 //? if <=1.16.5
 /*import me.shedaniel.architectury.platform.Platform;*/
 
@@ -29,14 +29,14 @@ public class Integrations {
     //TODO: make less scuffed.
     public static void invokeServer(Runnable runnable) {
         //? if neoforge || forge {
-        /*if(Platform.getEnv().isDedicatedServer()){
-            runnable.run();
-        }
-        *///?}
-        //? if fabric {
-        if(Platform.getEnv() == EnvType.SERVER){
+        if(Platform.getEnv().isDedicatedServer()){
             runnable.run();
         }
         //?}
+        //? if fabric {
+        /*if(Platform.getEnv() == EnvType.SERVER){
+            runnable.run();
+        }
+        *///?}
     }
 }

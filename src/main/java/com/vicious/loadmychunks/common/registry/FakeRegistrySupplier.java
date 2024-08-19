@@ -147,4 +147,9 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
         return false;
     }
     //?}
+
+    //? if >1.21 && neoforge
+    public ResourceKey<T> getKey() {
+        return ResourceKey.create(getRegistryKey(), getId());
+    }
 }

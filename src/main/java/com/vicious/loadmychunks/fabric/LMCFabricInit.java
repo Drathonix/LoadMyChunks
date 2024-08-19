@@ -1,5 +1,5 @@
 //? if fabric {
-package com.vicious.loadmychunks.fabric;
+/*package com.vicious.loadmychunks.fabric;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.Integrations;
@@ -17,12 +17,12 @@ public class LMCFabricInit {
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
+        /^Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);^/
     }
 
     public static void clientInit(){
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
+        /^Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);^/
     }
 }
-//?}
+*///?}
