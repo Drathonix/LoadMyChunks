@@ -8,32 +8,24 @@ import me.shedaniel.architectury.registry.RegistrySupplier;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.vicious.loadmychunks.common.block.blockentity.LMCBEType;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.registry.LMCRegistrar;
 import com.vicious.loadmychunks.common.util.ModResource;
-//? if >1.16.5 {
+import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
-//?}
-//? if >1.18.3
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-//? if <1.18.3
-/*import net.minecraft.network.chat.TextComponent;*/
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+
+import java.util.List;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
-
-public class DebugLoadMyChunks {
+public class LoadMyChunksDebug {
     static int laggerMsSleep = 1;
 
     static RegistrySupplier<BlockEntityType<DebugBlockEntityLagger>> laggerBlockEntity;
@@ -43,14 +35,10 @@ public class DebugLoadMyChunks {
         LMCRegistrar.BLOCK.queue(reg->{
             RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of()));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
-                DebugLoadMyChunks.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> {
-                    Set<Block> blocks = new HashSet<>();
-                    blocks.add(laggerBlock.get());
-                    return new LMCBEType<>(DebugBlockEntityLagger::new, blocks, null);
-                });
+                LoadMyChunksDebug.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> BlockEntityTypeBuilder.build(DebugBlockEntityLagger::new,List.of(laggerBlock.get())));
             });
         });
-        CommandRegistrationEvent.EVENT.register(DebugLoadMyChunks::registerCommands);
+        CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
     //?}
 

@@ -1,14 +1,7 @@
-# Load My Chunks Version 1.0.6-hf2
+# Load My Chunks Version 1.0.6-pre2
 
-1.0.6
-Fixes a rare NPE in the CDM likely caused by Multithreaded chunk loading (C^2ME as an example).
-This also resulted in an elimination of some extraneous code.
+Fixes an issue with bad CCT datapack format crashing when CCT is present (CCT is not yet supported)
 
-1.0.6-hf1
-Fixes Missing refmap issue introduced in 1.0.6 for an unknown reason
+Adds support for MC 1.21.2 and 1.21.3
 
-1.0.6-hf2
-Marks many methods within the ChunkDataManager as synchronized to reduce the chance of a multithreading missync occuring and causing a crash.
-
-1.0.6+1.21.1
-Updated to a stable architectury version for 1.21.1. Load My Chunks is now available for 1.21.1 without cct integration.
+I repeat, CCT is still not supported! Do not upgrade worlds if you want to avoid breaking changes!

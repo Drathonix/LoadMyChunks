@@ -11,7 +11,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.api.turtle.TurtleUpgradeType;
 //? if >=1.20.6
-import dan200.computercraft.api.upgrades.UpgradeType;
+/^import dan200.computercraft.api.upgrades.UpgradeType;^/
 //? if >1.16.5
 import dev.architectury.registry.registries.RegistrySupplier;
 //? if <=1.16.5
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     private final RegistrySupplier<Block> block;
     //? if >=1.20.6
-    private RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>> upgradeType;
+    /^private RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>> upgradeType;^/
 
     //? if >1.16.5 {
     public TurtleChunkLoaderUpgrade(RegistrySupplier<Block> block){
@@ -49,22 +49,22 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     ^///?}
 
     //? if >=1.20.6 {
-    @Override
+    /^@Override
     public UpgradeType<? extends ITurtleUpgrade> getType() {
         return upgradeType.get();
     }
-    //?}
+    ^///?}
 
 
     //? if <1.20.6 {
-    /^@Override
+    @Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2
-        /^return BuiltInRegistries.BLOCK.getKey(block.get());^/
+        return BuiltInRegistries.BLOCK.getKey(block.get());
         //? if <=1.19.2 && >1.16.5
         /^return Registry.BLOCK.getKey(block.get());^/
         //? if <=1.16.5
-        return key;
+        /^return key;^/
     }
     @Override
     public TurtleUpgradeType getType() {
@@ -74,7 +74,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     public String getUnlocalisedAdjective() {
         return "loadmychunks.turtle.adjective.loading";
     }
-    ^///?}
+    //?}
 
 
     @Override
@@ -98,7 +98,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
 
 
     //? if >=1.20.6 {
-    @Override
+    /^@Override
     public TurtleUpgradeType getUpgradeType() {
         return TurtleUpgradeType.PERIPHERAL;
     }
@@ -110,6 +110,6 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     public Component getAdjective() {
         return Component.translatable("loadmychunks.turtle.adjective.loading");
     }
-    //?}
+    ^///?}
 }
 *///?}

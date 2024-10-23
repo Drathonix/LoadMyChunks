@@ -5,7 +5,6 @@ package com.vicious.loadmychunks.common.debug;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,7 +38,7 @@ class DebugBlockLagger extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
         if (!level.isClientSide()) {
-            return createTickerHelper(blockEntityType, DebugLoadMyChunks.laggerBlockEntity.get(), (level1, blockPos, blockState1, blockEntity) -> {
+            return createTickerHelper(blockEntityType, LoadMyChunksDebug.laggerBlockEntity.get(), (level1, blockPos, blockState1, blockEntity) -> {
                 try {
                     blockEntity.serverTick();
                 } catch (Exception e){

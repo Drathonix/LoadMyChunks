@@ -27,6 +27,8 @@
             <option value="$PROJECT_DIR$/versions/1.21-neoforge" />
             <option value="$PROJECT_DIR$/versions/1.21.1-fabric" />
             <option value="$PROJECT_DIR$/versions/1.21.1-neoforge" />
+            <option value="$PROJECT_DIR$/versions/1.21.3-fabric" />
+            <option value="$PROJECT_DIR$/versions/1.21.3-neoforge" />
           </set>
         </option>
       </GradleProjectSettings>

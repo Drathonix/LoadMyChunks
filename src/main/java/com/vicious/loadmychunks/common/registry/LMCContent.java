@@ -4,9 +4,8 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.block.BlockChunkLoader;
 import com.vicious.loadmychunks.common.block.BlockLagometer;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityLagometer;
-import com.vicious.loadmychunks.common.block.blockentity.LMCBEType;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
-import com.vicious.loadmychunks.common.debug.DebugLoadMyChunks;
+import com.vicious.loadmychunks.common.debug.LoadMyChunksDebug;
 import com.vicious.loadmychunks.common.item.*;
 import com.vicious.loadmychunks.common.util.ModResource;
 //? if <=1.16.5 {
@@ -15,6 +14,7 @@ import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 *///?}
 //? if >1.16.5 {
+import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -33,9 +33,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 /*import net.minecraft.world.level.material.Material;*/
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -109,22 +107,12 @@ public class LMCContent {
         });
 
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{
-            chunkLoaderBlockEntity = reg.register(ModResource.of("chunk_loader"), () -> {
-                Set<Block> blocks = new HashSet<>();
-                for (RegistrySupplier<Block> blk : chunkLoaderBlockMap.values()) {
-                    blocks.add(blk.get());
-                }
-                return new LMCBEType<>(BlockEntityChunkLoader::new, blocks, null);
-            });
-            lagometerBlockEntity = reg.register(ModResource.of("lagometer"), ()->{
-                Set<Block> set = new HashSet<>();
-                set.add(lagometerBlock.get());
-                return new LMCBEType<>(BlockEntityLagometer::new, set, null);
-            });
+            chunkLoaderBlockEntity = reg.register(ModResource.of("chunk_loader"), () -> BlockEntityTypeBuilder.make(BlockEntityChunkLoader::new,chunkLoaderBlockMap.values()));
+            lagometerBlockEntity = reg.register(ModResource.of("lagometer"), ()-> BlockEntityTypeBuilder.make(BlockEntityLagometer::new, lagometerBlock));
         });
 
         if(LoadMyChunks.allowUsingDebugFeatures()){
-            DebugLoadMyChunks.init();
+            LoadMyChunksDebug.init();
         }
 
         LMCRegistrar.init();

@@ -67,7 +67,9 @@ public class LMCRegistrar<T> {
     public T get(ResourceLocation key) {
         //? if <=1.19.3
         /*return (T)Registry.REGISTRY.get(this.key.location()).get(key);*/
-        //? if >1.19.3
-        return (T) BuiltInRegistries.REGISTRY.get(this.key.location()).get(key);
+        //? if >1.19.3 && <1.21.2
+        /*return (T) BuiltInRegistries.REGISTRY.get(this.key.location()).get(key);*/
+        //? if >1.21.1
+        return (T) BuiltInRegistries.REGISTRY.get(this.key.location()).get().value().get(key).get().value();
     }
 }

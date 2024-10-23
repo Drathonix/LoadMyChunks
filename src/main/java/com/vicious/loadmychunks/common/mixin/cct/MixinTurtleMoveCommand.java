@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @SuppressWarnings("all")
 @Mixin(value = TurtleMoveCommand.class
 //? if forge && <=1.20.1
-/^, remap=false^/
+, remap=false
 )
 public class MixinTurtleMoveCommand {
 
