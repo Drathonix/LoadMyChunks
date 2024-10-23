@@ -5,5 +5,3 @@ Fixes an issue with bad CCT datapack format crashing when CCT is present (CCT is
 Adds support for MC 1.21.2 and 1.21.3
 
 I repeat, CCT is still not supported! Do not upgrade worlds if you want to avoid breaking changes!
-
-t
