@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 //? if <1.21.2
-/*import net.minecraft.world.InteractionResultHolder;*/
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -34,7 +34,7 @@ public class ItemChunkometer extends ItemHasTooltip {
     }
 
     //? if >1.21.1 {
-    @Override
+    /*@Override
     public InteractionResult useOn(UseOnContext useOnContext) {
         if(useOnContext.getLevel() instanceof ServerLevel sl && useOnContext.getPlayer() instanceof ServerPlayer player) {
             ChunkPos pos = new ChunkPos(player.blockPosition());
@@ -82,10 +82,10 @@ public class ItemChunkometer extends ItemHasTooltip {
     }
 
 
-    //?}
+    *///?}
 
     //? if >1.18.2 && <1.21.2 {
-    /*@Override
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel sl) {
             ChunkPos pos = new ChunkPos(player.blockPosition());
@@ -131,7 +131,7 @@ public class ItemChunkometer extends ItemHasTooltip {
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
     }
-    *///?}
+    //?}
 
     //TODO: Improve messaging abstraction
     //? if <1.18.3 {

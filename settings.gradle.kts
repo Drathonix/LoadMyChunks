@@ -22,8 +22,9 @@ extensions.configure<StonecutterSettings> {
     centralScript = "build.gradle.kts"
 
     shared {
+        //Temporarily Disabled these versions. reenable them when relevant
         versions(
-            "1.16.5-forge",
+            /*"1.16.5-forge",
             "1.16.5-fabric",
             "1.18.2-fabric",
             "1.18.2-forge",
@@ -39,12 +40,12 @@ extensions.configure<StonecutterSettings> {
             "1.20.6-fabric",
             "1.20.6-neoforge",
             "1.21-fabric",
-            "1.21-neoforge",
+            "1.21-neoforge",*/
             "1.21.1-fabric",
-            "1.21.1-neoforge",
-            "1.21.3-fabric",
-            "1.21.3-neoforge")
-        vcsVersion="1.21.3-fabric"
+            "1.21.1-neoforge",)
+            //"1.21.3-fabric",
+            //"1.21.3-neoforge")
+        vcsVersion="1.21.1-fabric"
     }
     create(rootProject)
 }
