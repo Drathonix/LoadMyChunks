@@ -3,6 +3,7 @@ package com.vicious.loadmychunks.common.block.blockentity;
 import com.vicious.loadmychunks.common.bridge.IDestroyable;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.system.loaders.IHasChunkloader;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,10 +11,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
+public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHasChunkloader {
     private PlacedChunkLoader chunkLoader;
     private UUID owner;
 
@@ -29,7 +31,8 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable {
     }
     //?}
 
-    public PlacedChunkLoader getChunkLoader() {
+    @Override
+    public PlacedChunkLoader loadMyChunks$getChunkLoader() {
         return chunkLoader;
     }
 

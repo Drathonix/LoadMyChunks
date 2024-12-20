@@ -138,6 +138,9 @@ public class ChunkDataManager {
     public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
         return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,predicate,supplier);
     }
+    public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, ChunkPos chunkPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
+        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,predicate,supplier);
+    }
 
     public static void clear() {
         for (LevelChunkLoaderManager value : levelManagers.values()) {
@@ -173,7 +176,7 @@ public class ChunkDataManager {
                 long index = Long.parseLong(key);
                 ChunkPos pos = new ChunkPos(index);
                 ChunkDataModule module = getOrCreateData(index);
-                module.load(tag.getCompound(key));
+                module.load(tag.getCompound(key),level);
                 module.update();
                 if(module.onCooldown()){
                     shutDown(pos);
@@ -288,10 +291,12 @@ public class ChunkDataManager {
         public String getLevelName() {
             return ((ServerLevelData)level.getLevelData()).getLevelName();
         }
-
-        @SuppressWarnings("all")
         public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-            ChunkDataModule cdm = getOrCreateData(new ChunkPos(blockPos));
+            return computeChunkLoaderIfAbsent(new ChunkPos(blockPos),type,predicate,supplier);
+        }
+        @SuppressWarnings("all")
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ChunkPos pos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
+            ChunkDataModule cdm = getOrCreateData(pos);
             for (IChunkLoader loader : cdm.getLoaders()) {
                 if(loader.getClass() == type){
                     if(predicate.test((T) loader)){
@@ -300,7 +305,7 @@ public class ChunkDataManager {
                 }
             }
             T out = supplier.get();
-            addChunkLoader(out,new ChunkPos(blockPos));
+            addChunkLoader(out,pos);
             return out;
         }
 

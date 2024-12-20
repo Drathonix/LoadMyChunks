@@ -72,7 +72,8 @@ public class MixinTurtleMoveCommand {
             IPeripheral peripheral = turtle.getPeripheral(side);
             if (peripheral instanceof TurtleChunkLoaderPeripheral) {
                 stable = true;
-                ChunkDataManager.addChunkLoader(oldWorld, newPosition, ((TurtleChunkLoaderPeripheral) peripheral).getChunkLoader().move(newPosition));
+                TurtleChunkLoaderPeripheral tclp = ((TurtleChunkLoaderPeripheral) peripheral);
+                ChunkDataManager.addChunkLoader(oldWorld, newPosition, tclp.getChunkLoader().move(tclp,newPosition));
             }
         }
         if(!stable){

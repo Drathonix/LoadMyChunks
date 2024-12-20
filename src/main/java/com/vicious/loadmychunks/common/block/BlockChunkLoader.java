@@ -3,15 +3,18 @@ package com.vicious.loadmychunks.common.block;
 
 import com.mojang.serialization.MapCodec;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
+import com.vicious.loadmychunks.common.registry.LMCContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +42,15 @@ public class BlockChunkLoader extends BaseEntityBlock {
                 ((BlockEntityChunkLoader) entity).setOwner(livingEntity.getUUID());
             }
         }
+    }
+
+    @Override
+    public @NotNull ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+        ItemStack itemStack = super.getCloneItemStack(levelReader, blockPos, blockState);
+        levelReader.getBlockEntity(blockPos, LMCContent.chunkLoaderBlockEntity.get()).ifPresent((loader) -> {
+            loader.saveToItem(itemStack, levelReader.registryAccess());
+        });
+        return itemStack;
     }
 
     @Override

@@ -93,6 +93,10 @@ public class LMCConfig {
     @Range(value = 2,min = 0, max = 2)
     public int lagometerComputerExposureLevel=2;
 
+    @ConfigValue
+    @Range(value=0,min=0,max=10)
+    public int maximumRangeExtensions=1;
+
     public static boolean isLagometerAllowedOnTurtle(){
         return instance.lagometerComputerExposureLevel == 2;
     }

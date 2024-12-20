@@ -4,12 +4,14 @@
   "package": "com.vicious.loadmychunks.common.mixin",
   "compatibilityLevel": "JAVA_${java_ver}",
   "mixins": [
+    "MixinBlockEntity",
     "MixinChunkAccess",
     "MixinChunkMap",
     "MixinLevel",
     "MixinLevelChunk",
     "MixinServerLevel",
     "MixinServerPlayer",
+    "cct.MixinAbstractComputerBlockEntity",
     "cct.MixinTileTurtle",
     "cct.MixinTurtleBrain",
     "cct.MixinTurtleMoveCommand"

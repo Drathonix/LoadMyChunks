@@ -5,14 +5,18 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.vicious.loadmychunks.common.network.LagReadingPacket;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.control.Period;
 import com.vicious.loadmychunks.common.system.control.Timings;
+import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
+import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.vicious.loadmychunks.common.util.ModResource;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -52,7 +56,7 @@ public class ChunkDataModule {
         this.position=new ChunkPos(position);
     }
 
-    public void load(CompoundTag tag){
+    public void load(CompoundTag tag, ServerLevel level){
         chunkTickTimer.load(tag.getCompound("timings"));
         if(tag.contains("grace")){
             gracePeriod = new Period(tag.getLong("grace"));
@@ -69,8 +73,11 @@ public class ChunkDataModule {
                 Supplier<? extends IChunkLoader> inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id")));
                 if(inst != null) {
                     IChunkLoader loaderInst = inst.get();
-                    loaderInst.load(ct);
-                    addLoader(loaderInst);
+                    try {
+                        loaderInst.load(ct, level);
+                        addLoader(loaderInst);
+                    //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
+                    } catch (DoNotAddException ignored){}
                 }
             }
         }
@@ -90,10 +97,12 @@ public class ChunkDataModule {
         }
         ListTag loaders = new ListTag();
         for (IChunkLoader loader : this.loaders) {
-            CompoundTag data = new CompoundTag();
-            data.putString("type_id",loader.getTypeId().toString());
-            data = loader.save(data);
-            loaders.add(data);
+            if(loader.shouldPersist()) {
+                CompoundTag data = new CompoundTag();
+                data.putString("type_id", loader.getTypeId().toString());
+                data = loader.save(data);
+                loaders.add(data);
+            }
         }
         tag.put("loaders",loaders);
         tag.putInt("default",defaultLoadState.ordinal());
@@ -280,5 +289,14 @@ public class ChunkDataModule {
             startGrace();
         }
         getLoadState().apply(level, position.toLong());
+    }
+
+    public @Nullable PlacedChunkLoader getChunkLoaderAt(BlockPos blockPos) {
+        for (IChunkLoader loader : loaders) {
+            if(loader instanceof PlacedChunkLoader && ((PlacedChunkLoader)loader).getPosition().equals(blockPos)){
+                return (PlacedChunkLoader) loader;
+            }
+        }
+        return null;
     }
 }

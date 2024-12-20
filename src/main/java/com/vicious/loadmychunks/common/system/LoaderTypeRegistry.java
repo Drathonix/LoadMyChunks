@@ -4,6 +4,7 @@ import com.vicious.loadmychunks.common.registry.LoaderTypes;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.PhantomChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
+import com.vicious.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class LoaderTypeRegistry {
 
     static {
         register(LoaderTypes.PLACED_LOADER, PlacedChunkLoader::new);
+        register(LoaderTypes.PLACED_EXTENSION_LOADER, PlacedExtensionChunkLoader::new);
         register(LoaderTypes.PHANTOM_LOADER, PhantomChunkLoader::new);
     }
 }

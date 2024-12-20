@@ -1,12 +1,10 @@
 //? if fabric && cct {
 package com.vicious.loadmychunks.fabric.integ;
 
-import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.ChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.LagometerPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
-import com.vicious.loadmychunks.common.registry.FakeRegistrySupplier;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import dan200.computercraft.api.peripheral.PeripheralLookup;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -18,9 +16,6 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dan200.computercraft.api.upgrades.UpgradeType;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
-import net.minecraft.resources.ResourceLocation;
 
 public class CCTFabric {
     //? if >=1.20.6 {
@@ -34,7 +29,7 @@ public class CCTFabric {
         });
         turtleUpgrades.register();
         PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new LagometerPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel()), LMCContent.lagometerBlockEntity.get());
-        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
+        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.loadMyChunks$getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
     }
     //?}
 

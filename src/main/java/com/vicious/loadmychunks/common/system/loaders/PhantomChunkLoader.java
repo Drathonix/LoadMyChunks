@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.registry.LoaderTypes;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ public class PhantomChunkLoader implements IChunkLoader{
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException {
         position = new ChunkPos(tag.getLong("chunkpos"));
     }
 
@@ -53,5 +54,10 @@ public class PhantomChunkLoader implements IChunkLoader{
     @Override
     public LoadState getLoadState() {
         return state;
+    }
+
+    @Override
+    public ChunkPos getChunkPos() {
+        return null;
     }
 }
