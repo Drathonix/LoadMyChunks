@@ -37,7 +37,7 @@ public record LagReadingRequest() implements CustomPacketPayload {
         Player plr = context.getPlayer();
         ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
         //TODO: integrate permissions with LP
-        if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
+        if (!LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
             cdm.addRecipient((IInformable) plr);
         }
     }

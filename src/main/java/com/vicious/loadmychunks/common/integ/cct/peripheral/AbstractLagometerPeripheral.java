@@ -36,13 +36,13 @@ public abstract class AbstractLagometerPeripheral implements IPeripheral {
 
     @LuaFunction
     public final long getChunkTickDurationLimit(ILuaContext context, IComputerAccess access, IArguments arguments){
-        return LMCConfig.instance.msPerChunk;
+        return LMCConfig.msPerChunk;
     }
 
     @LuaFunction
     public final long getChunkLastTickRatio(ILuaContext context, IComputerAccess access, IArguments arguments) throws LuaException {
         checkPerm(access);
-        return getChunkLastTickDuration(context, access, arguments) / LMCConfig.instance.msPerChunk;
+        return getChunkLastTickDuration(context, access, arguments) / LMCConfig.msPerChunk;
     }
 
     @LuaFunction
@@ -78,7 +78,7 @@ public abstract class AbstractLagometerPeripheral implements IPeripheral {
             if(pa.getEntity() instanceof Player){
                 Player plr = (Player) pa.getEntity();
                 //TODO: integrate permissions with LP
-                return !LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || getChunkDataModule().containsOwnedLoader(plr.getUUID());
+                return !LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || getChunkDataModule().containsOwnedLoader(plr.getUUID());
             }
             else{
                 return LMCConfig.isLagometerAllowedOnTurtle();

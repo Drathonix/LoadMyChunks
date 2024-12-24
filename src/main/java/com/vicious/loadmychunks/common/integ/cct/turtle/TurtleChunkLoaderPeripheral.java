@@ -37,7 +37,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
             //?}
             //? if <=1.16.5 {
             /*this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getWorld(),turtle.getPosition());
-            this.chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getWorld(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition()));
+            this.chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getWorld(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition())));
             *///?}
         }
         else{
@@ -99,7 +99,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     public void loadMyChunks$destroy(Object context) {
         IPeripheral opposite = turtle.getPeripheral(side == TurtleSide.LEFT ? TurtleSide.RIGHT : TurtleSide.LEFT);
         if (context instanceof BlockEntity || !(opposite instanceof AbstractChunkLoaderPeripheral)) {
-            cdm.removeLoader(chunkLoader.get());
+            cdm.removeLoader(getLevel(),chunkLoader.get());
             cdm.updateChunkLoadState(getLevel());
             ChunkDataManager.setDirty(getLevel());
         }

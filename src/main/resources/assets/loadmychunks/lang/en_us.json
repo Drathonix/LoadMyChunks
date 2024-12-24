@@ -22,6 +22,7 @@
     "item.loadmychunks.dimensional_locator": "Dimensional Locator",
     "item.loadmychunks.player_spoofer": "Player Spoofer",
     "item.loadmychunks.chunkometer": "Chunkometer",
+    "item.loadmychunks.chunk_loader_extension": "Chunk Loader Extension",
     "tooltip.loadmychunks.chunkometer": "Use to show information about the chunk you are currently standing in.",
     "tooltip.loadmychunks.tickometer": "Shows the current lag in the chunk compared to the serverside maximum lag setting.",
     "tooltip.loadmychunks.player_spoofer": "The core of the chunk loader, simple but effective. Tricks the world into thinking a player is present",
@@ -29,7 +30,7 @@
     "tooltip.loadmychunks.dimensional_locator": "Ensures the chunk loader knows where it is, and where it isn't.",
     "tooltip.loadmychunks.chunk_loader": "Loads the chunk it is placed in. Chunk loading will enter the 'overticked' state and disable if the chunk is too laggy.",
     "tooltip.loadmychunks.lagometer": "Emits a comparable signal based off the chunk's lag level.",
-    "tooltip.loadmychunks.chunk_loader_extension": "Use on a chunk loader to extend its range by 1.",
+    "tooltip.loadmychunks.chunk_loader_extension": "Use on a chunk loader to extend its radius by 1. As an example (1x1) becomes (3x3)",
     "loadmychunks.chunk_loader_extension.extended_range": "Extended loader range by %s, it is now %s.",
     "loadmychunks.chunk_loader_extension.max_extensions_reached": "You cannot extend this chunk loader's range anymore.",
     "loadmychunks.chunk_loader_extension.cannot_be_extended": "This block cannot be extended.",
@@ -47,6 +48,7 @@
     "loadmychunks.command.forceload.set.permanent": "Now permanently forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset": "No longer automatically forceloading (%s,%s)",
     "loadmychunks.command.forceload.unset.permanent": "Forceloading (%s,%s) permanently disabled.",
+    "loadmychunks.message.too_many_loaded_chunks": "You have exceeded the server-side chunk limit of %s. You have %s chunks forced, your loaders will not work. Please unload some chunks.",
     "commands.loadmychunks.arguments.bool.invalid": "Invalid boolean %s, valid options: %s",
     "loadmychunks.turtle.adjective.loading": "Loading"
 }

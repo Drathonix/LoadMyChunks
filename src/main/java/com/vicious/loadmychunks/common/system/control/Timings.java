@@ -40,7 +40,7 @@ public class Timings {
     }
 
     public float getLagFraction() {
-        return (float)Math.max(0,Math.min(1.0, (double) getDuration()/(double) LMCConfig.instance.msPerChunk));
+        return (float)Math.max(0,Math.min(1.0, (double) getDuration()/(double) LMCConfig.msPerChunk));
     }
 
     public long getStart() {

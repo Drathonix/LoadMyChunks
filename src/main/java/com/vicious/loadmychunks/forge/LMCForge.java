@@ -53,12 +53,12 @@ public class LMCForge {
         args.register("lmcbool",()->info);
         //?}
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","init",new Class[]{IEventBus.class}, FMLJavaModLoadingContext.get().getModEventBus());
+        /^Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","init",new Class[]{IEventBus.class}, FMLJavaModLoadingContext.get().getModEventBus());^/
     }
 
     public static void clientInit() {
         //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);
+        /^Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);^/
     }
 
 

@@ -3,18 +3,27 @@ package com.vicious.loadmychunks.common.block;
 
 import com.mojang.serialization.MapCodec;
 import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
+import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.LMCContent;
+import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.util.Message;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,22 +45,40 @@ public class BlockChunkLoader extends BaseEntityBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
         super.setPlacedBy(level, blockPos, blockState, livingEntity, itemStack);
-        if(livingEntity != null){
+        if(livingEntity instanceof ServerPlayer){
             BlockEntity entity = level.getBlockEntity(blockPos);
             if(entity instanceof BlockEntityChunkLoader) {
                 ((BlockEntityChunkLoader) entity).setOwner(livingEntity.getUUID());
+                if(ChunkDataManager.hasExceededOwnershipCap(livingEntity.getUUID(),1)){
+                    Message.send((ServerPlayer) livingEntity,Message.translatable("loadmychunks.message.too_many_loaded_chunks", LMCConfig.limitSettings.limit,ChunkDataManager.getCountLoadedChunksOf(livingEntity.getUUID())));
+                }
             }
         }
     }
 
-    @Override
+    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+        BlockEntityChunkLoader blockEntity = (BlockEntityChunkLoader) level.getBlockEntity(blockPos);
+        if(blockEntity.loadMyChunks$hasChunkLoader()){
+            int k = blockEntity.loadMyChunks$getChunkLoader().getExtensionRange();
+            NonNullList<ItemStack> out = NonNullList.create();
+            while(k > 0){
+                int j = Math.min(64,k);
+                k-=j;
+                out.add(new ItemStack(LMCContent.itemExtension.get(),j));
+            }
+            Containers.dropContents(level,blockPos, out);
+        }
+        super.onRemove(blockState, level, blockPos, blockState2, bl);
+    }
+
+    /*@Override
     public @NotNull ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         ItemStack itemStack = super.getCloneItemStack(levelReader, blockPos, blockState);
         levelReader.getBlockEntity(blockPos, LMCContent.chunkLoaderBlockEntity.get()).ifPresent((loader) -> {
             loader.saveToItem(itemStack, levelReader.registryAccess());
         });
         return itemStack;
-    }
+    }*/
 
     @Override
     public @NotNull RenderShape getRenderShape(BlockState blockState) {

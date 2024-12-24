@@ -8,13 +8,13 @@ import com.vicious.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
 import com.vicious.loadmychunks.common.debug.LoadMyChunksDebug;
 import com.vicious.loadmychunks.common.item.*;
 import com.vicious.loadmychunks.common.util.ModResource;
+import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 //? if <=1.16.5 {
 /*import me.shedaniel.architectury.registry.CreativeTabs;
 import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 *///?}
 //? if >1.16.5 {
-import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -49,6 +49,7 @@ public class LMCContent {
     public static RegistrySupplier<Item> itemPlayerSpoofer;
     public static RegistrySupplier<Item> itemLocatingCore;
     public static RegistrySupplier<Item> itemDiamondWire;
+    public static RegistrySupplier<ItemChunkLoaderExtension> itemExtension;
     public static RegistrySupplier<ItemChunkometer> itemChunkometer;
     public static RegistrySupplier<Block> lagometerBlock;
     public static RegistrySupplier<Block> chunkLoaderBlock;
@@ -104,6 +105,7 @@ public class LMCContent {
             itemLocatingCore = reg.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
             itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
             itemChunkometer = reg.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
+            itemExtension = reg.register(ModResource.of("chunk_loader_extension"), () -> new ItemChunkLoaderExtension(new LMCProperties()));
         });
 
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{

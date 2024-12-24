@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 //? if <=1.18.2
 /*import dan200.computercraft.api.client.TransformedModel;*/
+import dan200.computercraft.api.client.TransformedModel;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -62,9 +63,9 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
         //? if >1.19.2
         return BuiltInRegistries.BLOCK.getKey(block.get());
         //? if <=1.19.2 && >1.16.5
-        /^return Registry.BLOCK.getKey(block.get());^/
+        return Registry.BLOCK.getKey(block.get());
         //? if <=1.16.5
-        /^return key;^/
+        return key;
     }
     @Override
     public TurtleUpgradeType getType() {

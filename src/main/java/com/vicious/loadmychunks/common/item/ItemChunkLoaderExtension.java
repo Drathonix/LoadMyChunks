@@ -17,7 +17,7 @@ public class ItemChunkLoaderExtension extends ItemHasTooltip {
 
     @Override
     public InteractionResult useOn(UseOnContext useOnContext) {
-        if(useOnContext.getLevel() instanceof ServerLevel){
+        if(useOnContext.getPlayer() instanceof ServerPlayer){
             BlockPos pos = useOnContext.getClickedPos();
             BlockEntity be = useOnContext.getLevel().getBlockEntity(pos);
             if(be instanceof IHasChunkloader && ((IHasChunkloader)be).supportsExtension()){
@@ -35,6 +35,7 @@ public class ItemChunkLoaderExtension extends ItemHasTooltip {
                 }
                 ItemStack stack = useOnContext.getItemInHand();
                 stack.shrink(1);
+                useOnContext.getPlayer().setItemInHand(useOnContext.getHand(),stack);
             }
             else{
                 Message.send((ServerPlayer)useOnContext.getPlayer(),Message.translatable("loadmychunks.chunk_loader_extension.cannot_be_extended"));

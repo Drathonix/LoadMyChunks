@@ -12,21 +12,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class PhantomChunkLoader implements IChunkLoader{
-    private ChunkPos position;
-    private LoadState state = LoadState.TICKING;
+    protected ChunkPos chunkPos;
+    protected LoadState loadState = LoadState.TICKING;
 
     public PhantomChunkLoader(){}
-    public PhantomChunkLoader(ChunkPos pos){}
+    public PhantomChunkLoader(ChunkPos pos){
+        this.chunkPos = pos;
+    }
 
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
-        tag.putLong("l",position.toLong());
+        tag.putLong("l", chunkPos.toLong());
         return tag;
     }
 
     @Override
     public void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException {
-        position = new ChunkPos(tag.getLong("chunkpos"));
+        chunkPos = new ChunkPos(tag.getLong("chunkpos"));
     }
 
     @Override
@@ -39,25 +41,25 @@ public class PhantomChunkLoader implements IChunkLoader{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PhantomChunkLoader that = (PhantomChunkLoader) o;
-        return Objects.equals(position, that.position);
+        return Objects.equals(chunkPos, that.chunkPos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position);
+        return Objects.hash(chunkPos);
     }
 
     public void setLoadState(LoadState state){
-        this.state = state;
+        this.loadState = state;
     }
 
     @Override
     public LoadState getLoadState() {
-        return state;
+        return loadState;
     }
 
     @Override
     public ChunkPos getChunkPos() {
-        return null;
+        return chunkPos;
     }
 }

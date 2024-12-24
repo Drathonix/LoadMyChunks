@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "loadmychunks:dimensional_locator"
+    },
+    "C": {
+      "tag": "loadmychunks:chunk_loaders"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "S": {
+      "item": "minecraft:netherite_scrap"
+    }
+  },
+  "pattern": [
+    "SDS",
+    "NCN",
+    "SDS"
+  ],
+  "result": {
+    "item": "loadmychunks:chunk_loader_extension",
+    "id": "loadmychunks:chunk_loader_extension"
+  },
+  "show_notification": true
+}

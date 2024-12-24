@@ -9,9 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -34,6 +32,14 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     @Override
     public PlacedChunkLoader loadMyChunks$getChunkLoader() {
         return chunkLoader;
+    }
+
+    @Override
+    public boolean loadMyChunks$extendRange(int amount) {
+        if(level instanceof ServerLevel) {
+            return chunkLoader.tryExtendBy((ServerLevel) level, amount);
+        }
+        return false;
     }
 
     @Override
@@ -62,10 +68,7 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     @Override
     public void validate(Level level) {
         if(level instanceof ServerLevel && chunkLoader == null) {
-            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel)level,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos()));
-            if(owner != null){
-                chunkLoader.setOwner(owner);
-            }
+            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel)level,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos(),owner));
         }
     }
 

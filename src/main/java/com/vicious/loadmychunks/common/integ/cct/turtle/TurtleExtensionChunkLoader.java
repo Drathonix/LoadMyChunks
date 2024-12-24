@@ -1,5 +1,7 @@
+//? if cct {
 package com.vicious.loadmychunks.common.integ.cct.turtle;
 
+import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.loaders.extension.AtomicExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
@@ -33,4 +35,13 @@ public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<Turtl
     public void load(@NotNull CompoundTag tag, ServerLevel level) {
 
     }
+
+    @Override
+    public LoadState getLoadState() {
+        if(!isUnhosted() && getPrimaryHostLoader() != null) {
+            return getPrimaryHostLoader().getExtensionLoadState();
+        }
+        return loadState;
+    }
 }
+//?}

@@ -5,23 +5,30 @@ package com.vicious.loadmychunks.common.debug;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 
 *///?}
+import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.registry.LMCRegistrar;
 import com.vicious.loadmychunks.common.util.ModResource;
-import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
+//? if >1.16.5 {
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
+//?}
+//? if >1.18.3
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+//? if <1.18.3
+/*import net.minecraft.network.chat.TextComponent;*/
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 
@@ -60,14 +67,14 @@ public class LoadMyChunksDebug {
         LMCRegistrar.BLOCK.queue(reg->{
             Supplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of(Material.STONE)));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
-                DebugLoadMyChunks.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> {
+                LoadMyChunksDebug.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> {
                     Set<Block> blocks = new HashSet<>();
                     blocks.add(laggerBlock.get());
-                    return new LMCBEType<>(DebugBlockEntityLagger::new, blocks, null);
+                    return BlockEntityTypeBuilder.build(DebugBlockEntityLagger::new, blocks);
                 });
             });
         });
-        CommandRegistrationEvent.EVENT.register(DebugLoadMyChunks::registerCommands);
+        CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
     *///?}
     //? if <1.18.3 {

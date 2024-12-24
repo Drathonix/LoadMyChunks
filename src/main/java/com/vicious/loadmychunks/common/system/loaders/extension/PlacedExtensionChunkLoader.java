@@ -1,8 +1,10 @@
 package com.vicious.loadmychunks.common.system.loaders.extension;
 
+import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.system.ChunkDataModule;
+import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
-import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import net.minecraft.core.BlockPos;
@@ -17,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunkLoader> implements IOwnable {
+    protected long activityEnd = -1;
+
     public PlacedExtensionChunkLoader(){}
     public PlacedExtensionChunkLoader(ChunkPos loadedChunk, PlacedChunkLoader host){
         super(host,loadedChunk);
@@ -30,6 +34,7 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
             hostsTag.add(LongTag.valueOf(getHost(i).getPosition().asLong()));
         }
         tag.put("hosts",hostsTag);
+        tag.putLong("duration",activityEnd);
         return tag;
     }
 
@@ -44,6 +49,9 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
             BlockPos p = BlockPos.of(hostPoses[i]);
             hosts[i] = ChunkDataManager.computeChunkLoaderIfAbsent(level,p, PlacedChunkLoader.class,loader->loader.getPosition().equals(p),()->new PlacedChunkLoader(p));
         }
+        if(tag.contains("duration")){
+            activityEnd = tag.getLong("duration");
+        }
         super.load(tag, level);
     }
 
@@ -55,6 +63,32 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     @Override
     public void setOwner(@NotNull UUID owner) {
 
+    }
+
+    @Override
+    public LoadState getLoadState() {
+        if(hasExceededChunkLimit() || LMCConfig.cost.enabled && activityEnd == -1){
+            return LoadState.DISABLED;
+        }
+        if(!isUnhosted() && getPrimaryHostLoader() != null && !getPrimaryHostLoader().getLoadState().shouldLoad()){
+            return LoadState.DISABLED;
+        }
+        return loadState;
+    }
+
+    @Override
+    public void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
+        long timeRemaining = activityEnd-gameTime;
+        if(LMCConfig.cost.timeSecondsGained/10L >= timeRemaining){
+            if(!isUnhosted() && LMCConfig.consumeFuel(level, getHost(0).getPosition().above())){
+                activityEnd=gameTime+LMCConfig.cost.timeSecondsGained*20;
+                chunkDataModule.updateCheckTime(activityEnd);
+            }
+        }
+        timeRemaining = activityEnd-gameTime;
+        if(timeRemaining <= 0){
+            activityEnd = -1;
+        }
     }
 
 }

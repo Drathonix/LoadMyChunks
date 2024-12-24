@@ -57,7 +57,7 @@ public class CCTForge {
             event.addCapability(PERIPHERAL, new ICapabilityProvider() {
                 @Override
                 public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction arg) {
-                    return Capabilities.CAPABILITY_PERIPHERAL.orEmpty(capability,LazyOptional.of(()->new ChunkLoaderPeripheral(becl.getBlockPos(),becl.getLevel(), becl.getChunkLoader())));
+                    return Capabilities.CAPABILITY_PERIPHERAL.orEmpty(capability,LazyOptional.of(()->new ChunkLoaderPeripheral(becl.getBlockPos(),becl.getLevel(), becl.loadMyChunks$getChunkLoader())));
                 }
             });
         }

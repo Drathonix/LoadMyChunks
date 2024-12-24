@@ -63,7 +63,7 @@ public class LoadMyChunks {
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
 		LMCConfig.init();
-		if(LMCConfig.instance.useDebugLogging){
+		if(LMCConfig.useDebugLogging){
 			logger.info("Changing to debug logging");
 			debugLevel = Level.INFO;
 			logger.info("Using Debug Logging");
@@ -80,7 +80,7 @@ public class LoadMyChunks {
 			//? if >1.19.4
 			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
 			//TODO: integrate permissions with LP
-			if (!LMCConfig.instance.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
+			if (!LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.addRecipient((IInformable) plr);
 			}
 		}));
@@ -148,10 +148,10 @@ public class LoadMyChunks {
 	private static int handleCMDForceload(CommandContext<CommandSourceStack> ctx, boolean permanent, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
 		//? if <=1.19.3 {
-		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
-		//?}
+		/^bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		^///?}
 		//? if >1.19.3 && <1.19.5
-		/^bp = bp == null ? BlockPos.containing(v) : bp;^/
+		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
@@ -172,10 +172,10 @@ public class LoadMyChunks {
 	private static int handleCMDUnforceload(CommandContext<CommandSourceStack> ctx, boolean ban, BlockPos bp){
 		Vec3 v = ctx.getSource().getPosition();
 		//? if <=1.19.3 {
-		bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
-		//?}
+		/^bp = bp == null ? new BlockPos(v.x,v.y,v.z) : bp;
+		^///?}
 		//? if >1.19.3 && <1.19.5
-		/^bp = bp == null ? BlockPos.containing(v) : bp;^/
+		bp = bp == null ? BlockPos.containing(v) : bp;
 		ChunkPos pos = new ChunkPos(bp);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(ctx.getSource().getLevel(),pos);
 		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;

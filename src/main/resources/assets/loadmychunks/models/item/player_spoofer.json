@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "loadmychunks:item/chunk_loader_extension"
+    "layer0": "loadmychunks:item/player_spoofer"
   }
 }

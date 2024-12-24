@@ -24,8 +24,9 @@ public class ExtensionChunkLoaders extends Long2ObjectOpenHashMap<IExtensionChun
         this.host = host;
     }
 
+    //TODO: improve move efficiency.
     public synchronized <T extends IExtensionChunkLoader<?>> void recompute(Class<T> extensionType, int range, Factory<T> factory){
-        if(range <= 0){
+        /*if(range <= 0){
             for(IExtensionChunkLoader<?> extensionChunkLoader : this.values()){
                 extensionChunkLoader.removeHostAndUnload(level,host);
             }
@@ -36,6 +37,13 @@ public class ExtensionChunkLoaders extends Long2ObjectOpenHashMap<IExtensionChun
             if(extensionChunkLoader.getExtensionDistance() > range){
                 remove(extensionChunkLoader.getChunkPos().toLong());
             }
+        }*/
+        for(IExtensionChunkLoader<?> extensionChunkLoader : this.values()){
+            extensionChunkLoader.removeHostAndUnload(level,host);
+        }
+        this.clear();
+        if(range < 1){
+            return;
         }
         ChunkPos hostPos = ReferenceHelper.get(IChunkLoader.class,host).getChunkPos();
         for (int x = -range; x <= range; x++) {
@@ -45,12 +53,12 @@ public class ExtensionChunkLoaders extends Long2ObjectOpenHashMap<IExtensionChun
                 }
                 ChunkPos pos = new ChunkPos(x, z);
                 long gridPos = pos.toLong();
-                if(!containsKey(gridPos)){
+                //if(!containsKey(gridPos)){
                     ChunkPos cp = new ChunkPos(hostPos.x+x,hostPos.z+z);
                     T loader = ChunkDataManager.computeChunkLoaderIfAbsent(level,cp,extensionType,present->true,()->factory.create(cp));
-                    loader.addHost(this);
+                    loader.addHost(this.host);
                     put(gridPos,loader);
-                }
+               // }
             }
         }
     }

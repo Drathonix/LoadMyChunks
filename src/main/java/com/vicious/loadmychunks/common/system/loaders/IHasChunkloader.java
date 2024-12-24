@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface IHasChunkloader {

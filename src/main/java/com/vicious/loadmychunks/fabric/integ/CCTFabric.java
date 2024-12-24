@@ -1,6 +1,7 @@
 //? if fabric && cct {
 package com.vicious.loadmychunks.fabric.integ;
 
+import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.ChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.integ.cct.peripheral.LagometerPeripheral;
@@ -44,13 +45,13 @@ public class CCTFabric {
             //? if >=1.20.4
             RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()->UpgradeSerialiser.simple((key)->tclu));
             //? if <=1.20.1
-            RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()-> TurtleUpgradeSerialiser.simple((key)->tclu));
+            /^RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()-> TurtleUpgradeSerialiser.simple((key)->tclu));
             CCTRegistryContent.registrySuppliers.add(reg);
         });
         turtleUpgrades.register();
 
         PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new LagometerPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel()), LMCContent.lagometerBlockEntity.get());
-        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
+        PeripheralLookup.get().registerForBlockEntity((blockEntity, direction) -> new ChunkLoaderPeripheral(blockEntity.getBlockPos(),blockEntity.getLevel(), blockEntity.loadMyChunks$getChunkLoader()), LMCContent.chunkLoaderBlockEntity.get());
 
     }
     *///?}

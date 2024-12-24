@@ -2,10 +2,8 @@ package com.vicious.loadmychunks.common.system.loaders.extension;
 
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.PhantomChunkLoader;
-import net.minecraft.util.parsing.packrat.Atom;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,7 +22,10 @@ public abstract class AtomicExtensionChunkLoader<T extends IChunkLoader> extends
     @Override
     @SuppressWarnings("unchecked")
     public void removeHost(Object loader){
+        //? if >1.16.5
         hosts = ArrayUtils.removeAllOccurrences(hosts,(AtomicReference<T>) loader);
+        //? if <1.16.6
+        /*hosts = ArrayUtils.removeAllOccurences(hosts,(AtomicReference<T>) loader);*/
     }
 
     public boolean isUnhosted(){

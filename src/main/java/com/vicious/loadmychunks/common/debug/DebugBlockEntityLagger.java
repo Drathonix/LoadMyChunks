@@ -17,7 +17,7 @@ class DebugBlockEntityLagger extends BlockEntity
     //?}
     //? if <=1.16.5 {
     /*DebugBlockEntityLagger() {
-        super(DebugLoadMyChunks.laggerBlockEntity.get());
+        super(LoadMyChunksDebug.laggerBlockEntity.get());
     }
     *///?}
 

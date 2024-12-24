@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoader {
-    default @Nullable IChunkLoader getPrimaryHostLoader(){
+    default @Nullable T getPrimaryHostLoader(){
         return getHost(0);
     }
 

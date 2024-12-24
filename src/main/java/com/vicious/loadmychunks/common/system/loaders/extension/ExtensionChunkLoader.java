@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends PhantomChunkLoader implements IExtensionChunkLoader<T> {
     protected IChunkLoader[] hosts;
@@ -27,7 +28,10 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
 
     @Override
     public void removeHost(Object host){
+        //? if >1.16.5
         hosts = ArrayUtils.removeAllOccurrences(hosts,ReferenceHelper.get(IChunkLoader.class,host));
+        //? if <1.16.6
+        /*hosts = ArrayUtils.removeAllOccurences(hosts, ReferenceHelper.get(IChunkLoader.class,host));*/
     }
 
     public boolean isUnhosted(){

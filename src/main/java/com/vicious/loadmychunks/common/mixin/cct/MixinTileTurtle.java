@@ -42,8 +42,6 @@ public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity i
     @Shadow
     private TurtleBrain brain;
 
-    @Shadow @Final private NonNullList<ItemStack> inventory;
-
     @Override
     public void loadMyChunks$destroy() {
         if(getLevel() instanceof ServerLevel) {
@@ -65,19 +63,7 @@ public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity i
     }
 
     @Override
-    public boolean loadMyChunks$extendRange(int amount) {
-        if(level instanceof ServerLevel) {
-            for (TurtleSide value : TurtleSide.values()) {
-                IPeripheral p = brain.getPeripheral(value);
-                if (p instanceof TurtleChunkLoaderPeripheral) {
-                    TurtleChunkLoader tcl = ((TurtleChunkLoaderPeripheral) p).getChunkLoader();
-                    //Only extend one attached loader.
-                    if(tcl.tryExtendBy((ServerLevel) level, amount)){
-                        return true;
-                    }
-                }
-            }
-        }
+    public boolean supportsExtension() {
         return false;
     }
 }

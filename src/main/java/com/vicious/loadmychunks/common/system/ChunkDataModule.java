@@ -1,12 +1,9 @@
 package com.vicious.loadmychunks.common.system;
 
 
-import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.common.config.LMCConfig;
-import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
-import com.vicious.loadmychunks.common.network.LagReadingPacket;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.control.Period;
 import com.vicious.loadmychunks.common.system.control.Timings;
@@ -15,18 +12,13 @@ import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.vicious.loadmychunks.common.util.ModResource;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +39,7 @@ public class ChunkDataModule {
     private final ChunkPos position;
     //private ILevelChunkMixin chunk;
     private final Set<IInformable> recipients = new HashSet<>();
+    private long nextGameTimeCheckTick = -1;
 
     public ChunkDataModule(ChunkPos position){
         this.position=position;
@@ -64,6 +57,9 @@ public class ChunkDataModule {
         if(tag.contains("disabled")){
             disabledPeriod = new Period(tag.getLong("disabled"));
         }
+        if(tag.contains("nextCheck")){
+            nextGameTimeCheckTick = tag.getLong("nextCheck");
+        }
         defaultLoadState = LoadState.values()[tag.getInt("default")];
         loadState=defaultLoadState;
         ListTag loaders = tag.getList("loaders", 10);
@@ -75,7 +71,7 @@ public class ChunkDataModule {
                     IChunkLoader loaderInst = inst.get();
                     try {
                         loaderInst.load(ct, level);
-                        addLoader(loaderInst);
+                        addLoader(level,loaderInst);
                     //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
                     } catch (DoNotAddException ignored){}
                 }
@@ -95,6 +91,7 @@ public class ChunkDataModule {
         if(disabledPeriod != null){
             tag.putLong("disabled",disabledPeriod.getEnd());
         }
+        tag.putLong("nextCheck",nextGameTimeCheckTick);
         ListTag loaders = new ListTag();
         for (IChunkLoader loader : this.loaders) {
             if(loader.shouldPersist()) {
@@ -114,7 +111,7 @@ public class ChunkDataModule {
      * @param loader the loader to be added
      * @return whether the chunk's loadstate has changed.
      */
-    public boolean addLoader(@NotNull IChunkLoader loader){
+    public boolean addLoader(ServerLevel level, @NotNull IChunkLoader loader){
         loaders.add(loader);
         LoadState previous = loadState;
         if(onCooldown()){
@@ -123,18 +120,31 @@ public class ChunkDataModule {
         else{
             loadState = loader.getLoadState().getSuperiorLoadState(loadState);
         }
+        nextGameTimeCheckTick=-1;
+        if(loader instanceof IOwnable) {
+            ChunkDataManager.markChunkOwnedBy(level,position.toLong(), ((IOwnable)loader).getOwner());
+        }
         return previous != loadState;
     }
 
     /**
      * Remove a loader from the chunk data module if it is present.
-     * @param loader the loader to be remove
+     * @param loader the loader to be removed
      * @return whether the chunk's loadstate has changed.
      */
-    public boolean removeLoader(@NotNull IChunkLoader loader){
+    public boolean removeLoader(ServerLevel level, @NotNull IChunkLoader loader){
         loaders.remove(loader);
         LoadState previous = loadState;
         update();
+        nextGameTimeCheckTick=-1;
+        if(loader.hasExtensions()){
+            loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
+        }
+        if(loader instanceof IOwnable){
+            if(!getAllOwners().contains(((IOwnable)loader).getOwner())){
+                ChunkDataManager.markChunkNotOwnedBy(level,position.toLong(),((IOwnable) loader).getOwner());
+            }
+        }
         return previous != loadState;
     }
 
@@ -163,7 +173,7 @@ public class ChunkDataModule {
     }
 
     public boolean isOverticked(){
-        return chunkTickTimer.durationExceeds(LMCConfig.instance.msPerChunk);
+        return chunkTickTimer.durationExceeds(LMCConfig.msPerChunk);
     }
 
     public @Nullable Period getGracePeriod(){
@@ -195,12 +205,12 @@ public class ChunkDataModule {
     }
 
     public void startGrace(){
-        gracePeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.instance.reloadGracePeriod));
+        gracePeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.reloadGracePeriod));
     }
 
     public void startShutoff(){
         loadState = LoadState.OVERTICKED;
-        disabledPeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.instance.delayBeforeReload));
+        disabledPeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.delayBeforeReload));
     }
 
     public boolean onCooldown() {
@@ -213,10 +223,6 @@ public class ChunkDataModule {
 
     public @NotNull ChunkPos getPosition(){
         return position;
-    }
-
-    public void assignChunk(ILevelChunkMixin chunk) {
-        //this.chunk = chunk;
     }
 
     public boolean containsOwnedLoader(@NotNull UUID uuid) {
@@ -258,13 +264,23 @@ public class ChunkDataModule {
         }
     }
 
-    public Set<UUID> getOwners() {
+    public Set<@NotNull UUID> getPlayerOwners() {
         HashSet<UUID> owners = new HashSet<>();
         for (IChunkLoader loader : loaders) {
             if(loader instanceof IOwnable){
                 if(((IOwnable) loader).hasOwner()){
                     owners.add(((IOwnable) loader).getOwner());
                 }
+            }
+        }
+        return owners;
+    }
+
+    public Set<@Nullable UUID> getAllOwners() {
+        HashSet<UUID> owners = new HashSet<>();
+        for (IChunkLoader loader : loaders) {
+            if(loader instanceof IOwnable){
+                owners.add(((IOwnable) loader).getOwner());
             }
         }
         return owners;
@@ -298,5 +314,29 @@ public class ChunkDataModule {
             }
         }
         return null;
+    }
+
+    public void preTick(ServerLevel level) {
+        if(level.getGameTime() >= nextGameTimeCheckTick){
+            boolean doStateUpdateCheck = false;
+            for (IChunkLoader loader : loaders) {
+                LoadState pre = loader.getLoadState();
+                loader.timingsCheck(level,this,level.getGameTime());
+                if(pre != loader.getLoadState()){
+                    doStateUpdateCheck=true;
+                }
+            }
+            if(doStateUpdateCheck) {
+                LoadState pre = loadState;
+                update();
+                if(pre != loadState){
+                    updateChunkLoadState(level);
+                }
+            }
+        }
+    }
+
+    public void updateCheckTime(long time) {
+        this.nextGameTimeCheckTick = time;
     }
 }

@@ -1,8 +1,9 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
+import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.LoaderTypes;
+import com.vicious.loadmychunks.common.system.ChunkDataModule;
 import com.vicious.loadmychunks.common.system.control.LoadState;
-import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
@@ -20,14 +21,23 @@ import java.util.UUID;
 public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     @Nullable protected ExtensionChunkLoaders extensions = null;
     protected int extensionRange = 0;
-    protected UUID owner;
+    @Nullable protected UUID owner;
     protected BlockPos position;
     protected LoadState loadState = LoadState.TICKING;
+    protected long activityEnd = -1;
 
     public PlacedChunkLoader(){}
 
     public PlacedChunkLoader(BlockPos pos){
         this.position = pos;
+    }
+    public PlacedChunkLoader(BlockPos pos, long activityEnd){
+        this.position = pos;
+        this.activityEnd=activityEnd;
+    }
+    public PlacedChunkLoader(BlockPos pos, @Nullable UUID owner){
+        this.position = pos;
+        this.owner = owner;
     }
 
     @Override
@@ -38,6 +48,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
         if(hasExtensions()){
             tag.putInt("extensions",extensionRange);
         }
+        tag.putLong("duration", activityEnd);
         tag.putInt("state",loadState.ordinal());
         tag.putLong("pos",position.asLong());
         return tag;
@@ -48,6 +59,9 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
         if(tag.contains("owner")){
             owner = tag.getUUID("owner");
         }
+        if(tag.contains("duration")){
+            activityEnd = tag.getLong("duration");
+        }
         if(tag.contains("state")){
             loadState = LoadState.values()[tag.getInt("state")];
         }
@@ -56,11 +70,19 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
             extensions = new ExtensionChunkLoaders(level,this);
             extensions.recompute(PlacedExtensionChunkLoader.class,extensionRange,this::createExtension);
         }
-        position = BlockPos.of(tag.getLong("pos"));
+        if(tag.contains("pos")) {
+            position = BlockPos.of(tag.getLong("pos"));
+        }
     }
 
-    public boolean hasExtensions(){
-        return extensions != null;
+    @Override
+    public void setExtensionRange(int extensionRange) {
+        this.extensionRange = extensionRange;
+    }
+
+    @Override
+    public void setExtensionsMap(ExtensionChunkLoaders extensions) {
+        this.extensions=extensions;
     }
 
     public int getExtensionRange(){
@@ -83,6 +105,11 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
+    public @Nullable ExtensionChunkLoaders getExtensionChunkLoaders() {
+        return extensions;
+    }
+
+    @Override
     public ExtensionChunkLoaders.Factory<?> getExtensionFactory() {
         return this::createExtension;
     }
@@ -94,6 +121,9 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public LoadState getLoadState() {
+        if(hasExceededChunkLimit() || LMCConfig.cost.enabled && activityEnd == -1){
+            return LoadState.DISABLED;
+        }
         return loadState;
     }
 
@@ -132,5 +162,23 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     @Override
     public ChunkPos getChunkPos() {
         return new ChunkPos(getPosition());
+    }
+
+    @Override
+    public void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
+        if(!loadState.shouldLoad()){
+            return;
+        }
+        long timeRemaining = activityEnd-gameTime;
+        if(LMCConfig.cost.timeSecondsGained/10L >= timeRemaining){
+            if(LMCConfig.consumeFuel(level,position.above())){
+                activityEnd=gameTime+Math.max(0,timeRemaining)+LMCConfig.cost.timeSecondsGained*20;
+                chunkDataModule.updateCheckTime(activityEnd-LMCConfig.cost.timeSecondsGained/10L);
+            }
+        }
+        timeRemaining = activityEnd-gameTime;
+        if(timeRemaining <= 0){
+            activityEnd = -1;
+        }
     }
 }

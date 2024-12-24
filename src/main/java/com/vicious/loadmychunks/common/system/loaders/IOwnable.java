@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
+import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,4 +12,7 @@ public interface IOwnable {
         return getOwner() != null;
     }
     void setOwner(@NotNull UUID owner);
+    default boolean hasExceededChunkLimit(){
+        return ChunkDataManager.hasExceededOwnershipCap(getOwner());
+    }
 }

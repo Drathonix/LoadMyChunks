@@ -105,6 +105,14 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
+    maven {
+        url = uri("https://maven.pkg.github.com/Drathonix/Persist")
+        name = "GitHubPackages"
+        credentials {
+            username = System.getenv("GPR_USER")
+            password = System.getenv("GPR_API_KEY")
+        }
+    }
 }
 
 dependencies {
@@ -116,11 +124,17 @@ dependencies {
     mappings(loom.officialMojangMappings())
     val arch = if(env.atLeast("1.18.0")) "dev.architectury" else "me.shedaniel"
 
+    val persistVer = "1.2.3"
+
+    compileOnly("com.vicious:persist:${mod.java_ver}-${persistVer}")
+    include("com.vicious:persist:${mod.java_ver}-${persistVer}")
+
     if(env.isFabric) {
         //mappings("net.fabricmc:yarn:${env.mc_ver}+build.${deps["yarn_build"]}:v2")
         modApi("${arch}:architectury-fabric:${deps["arch_ver"]}")
         modImplementation("net.fabricmc:fabric-loader:${deps["fabric_loader"]}")
         modApi("net.fabricmc.fabric-api:fabric-api:${deps["fabric_api"]}")
+        modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
     }
     if(env.isForge){
         "forge"("net.minecraftforge:forge:${deps["forge_ver"]}")

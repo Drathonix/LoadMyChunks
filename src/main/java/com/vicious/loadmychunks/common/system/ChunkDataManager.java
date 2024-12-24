@@ -1,9 +1,12 @@
 package com.vicious.loadmychunks.common.system;
 
 
+import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 //? if >1.18.2
 import net.minecraft.core.HolderLookup;
@@ -12,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.ServerLevelData;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +27,28 @@ import java.util.function.Supplier;
  */
 public class ChunkDataManager {
     private static final Map<ServerLevel,LevelChunkLoaderManager> levelManagers = new IdentityHashMap<>();
+
+    public static synchronized boolean hasExceededOwnershipCap(UUID uuid) {
+        return hasExceededOwnershipCap(uuid,0);
+    }
+
+    public static synchronized boolean hasExceededOwnershipCap(UUID uuid, int added){
+        if(uuid == null) uuid = Util.NIL_UUID;
+        if(LMCConfig.limitSettings.enabledForEnvironment && uuid == Util.NIL_UUID){
+            return getCountLoadedChunksOf(uuid)+added > LMCConfig.limitSettings.limit;
+        }
+        else if(LMCConfig.limitSettings.enabledForPlayers){
+            return getCountLoadedChunksOf(uuid)+added > LMCConfig.limitSettings.limit;
+        }
+        return false;
+    }
+
+    public synchronized static void markChunkOwnedBy(ServerLevel level, long longChunkPos, @Nullable UUID uuid){
+        getManager(level).markChunkOwnedBy(longChunkPos,uuid);
+    }
+    public synchronized static void markChunkNotOwnedBy(ServerLevel level, long longChunkPos, @Nullable UUID uuid){
+        getManager(level).markChunkNotOwnedBy(longChunkPos,uuid);
+    }
 
     public static synchronized LevelChunkLoaderManager getManager(ServerLevel level){
         return levelManagers.computeIfAbsent(level, k->new LevelChunkLoaderManager(level));
@@ -77,21 +101,10 @@ public class ChunkDataManager {
         }
         return count;
     }
-    public static int getCountLoadedChunksOf(@Nullable UUID owner) {
+    public synchronized static int getCountLoadedChunksOf(@Nullable UUID owner) {
         int count = 0;
-        if(owner == null){
-            return 0;
-        }
         for (LevelChunkLoaderManager value : levelManagers.values()) {
-            l1:
-            for (ChunkDataModule dataModule : value.getChunkDataModules()) {
-                for (IChunkLoader loader : dataModule.getLoaders()) {
-                    if(loader instanceof IOwnable && owner.equals(((IOwnable)loader).getOwner())){
-                        count++;
-                        continue l1;
-                    }
-                }
-            }
+            count = value.getCountLoadedChunksOf(owner);
         }
         return count;
     }
@@ -160,7 +173,27 @@ public class ChunkDataManager {
     public static class LevelChunkLoaderManager extends SavedData{
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
+        private final Map<UUID, LongOpenHashSet> forcedChunksByUUID = new HashMap<>();
         private final ServerLevel level;
+
+        public synchronized void markChunkOwnedBy(long longChunkPos, @Nullable UUID uuid){
+            if(uuid == null) uuid = Util.NIL_UUID;
+            forcedChunksByUUID.computeIfAbsent(uuid, k -> new LongOpenHashSet()).add(longChunkPos);
+        }
+        public synchronized void markChunkNotOwnedBy(long longChunkPos, @Nullable UUID uuid){
+            if(uuid == null) uuid = Util.NIL_UUID;
+            if(forcedChunksByUUID.containsKey(uuid)){
+                LongOpenHashSet set = forcedChunksByUUID.get(uuid);
+                set.remove(longChunkPos);
+                if(set.isEmpty()){
+                    forcedChunksByUUID.remove(uuid);
+                }
+            }
+        }
+
+        public synchronized int getCountLoadedChunksOf(@Nullable UUID owner) {
+            return forcedChunksByUUID.getOrDefault(owner,new LongOpenHashSet()).size();
+        }
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
             //? if <=1.16.5
@@ -198,7 +231,7 @@ public class ChunkDataManager {
 
         public synchronized void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
-            if(cdm.addLoader(loader)) {
+            if(cdm.addLoader(level,loader)) {
                 cdm.updateChunkLoadState(level);
             }
             setDirty();
@@ -210,7 +243,7 @@ public class ChunkDataManager {
 
         public synchronized void removeChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
-            if(cdm.removeLoader(loader)) {
+            if(cdm.removeLoader(level,loader)) {
                 cdm.updateChunkLoadState(level);
             }
             setDirty();
@@ -228,7 +261,7 @@ public class ChunkDataManager {
                 long index = Long.parseLong(key);
                 ChunkPos pos = new ChunkPos(index);
                 ChunkDataModule module = getOrCreateData(index);
-                module.load(tag.getCompound(key));
+                module.load(tag.getCompound(key),level);
                 module.update();
                 if(module.onCooldown()){
                     shutDown(pos);
@@ -254,7 +287,7 @@ public class ChunkDataManager {
         private int tickCounter = 0;
         private static final int purgeTimer = 20*100;
 
-        public void tick(){
+        public synchronized void tick(){
             if(tickCounter >= purgeTimer){
                 data.values().removeIf(module -> !module.shouldPersist() && !level.hasChunk(module.getPosition().x, module.getPosition().z));
                 tickCounter = 0;

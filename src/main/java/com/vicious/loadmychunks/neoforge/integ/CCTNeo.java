@@ -61,7 +61,7 @@ public class CCTNeo {
         }
         event.registerBlock(PeripheralCapability.get(), (level, pos, state, be, side) -> {
             if (be instanceof BlockEntityChunkLoader becl) {
-                return new ChunkLoaderPeripheral(becl.getBlockPos(),becl.getLevel(), becl.getChunkLoader());
+                return new ChunkLoaderPeripheral(becl.getBlockPos(),becl.getLevel(), becl.loadMyChunks$getChunkLoader());
             }
             return null;
         },blocks);

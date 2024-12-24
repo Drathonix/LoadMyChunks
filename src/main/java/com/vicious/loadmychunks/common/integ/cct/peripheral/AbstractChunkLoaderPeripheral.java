@@ -40,14 +40,14 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
     public void setActive(boolean active){
         if(active){
             getChunkLoader().setLoadState(LoadState.TICKING);
-            if(getChunkDataModule().addLoader(getChunkLoader())){
+            if(getChunkDataModule().addLoader(getLevel(),getChunkLoader())){
                 getChunkDataModule().updateChunkLoadState(getLevel());
             }
             ChunkDataManager.setDirty(getLevel());
         }
         else{
             getChunkLoader().setLoadState(LoadState.DISABLED);
-            if(getChunkDataModule().removeLoader(getChunkLoader())){
+            if(getChunkDataModule().removeLoader(getLevel(),getChunkLoader())){
                 getChunkDataModule().updateChunkLoadState(getLevel());
             }
             ChunkDataManager.setDirty(getLevel());

@@ -1,14 +1,13 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.system.ChunkDataModule;
 import com.vicious.loadmychunks.common.system.control.LoadState;
-import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +46,7 @@ public interface IChunkLoader extends IChunkPositioned {
 
     default boolean tryExtendBy(ServerLevel serverLevel, int amount){
         int r = getExtensionRange();
-        if(LMCConfig.instance.maximumRangeExtensions < r+amount) return false;
+        if(LMCConfig.maximumRangeExtensions < r+amount) return false;
         extend(serverLevel,amount+r);
         return true;
     }
@@ -59,6 +58,7 @@ public interface IChunkLoader extends IChunkPositioned {
             if (range > 0) {
                 if (extensions == null) {
                     extensions = new ExtensionChunkLoaders(serverLevel,this);
+                    setExtensionsMap(extensions);
                 }
                 extensions.recompute(getExtensionClass(),range, getExtensionFactory());
             } else {
@@ -68,6 +68,8 @@ public interface IChunkLoader extends IChunkPositioned {
             }
         }
     }
+
+    default void setExtensionsMap(ExtensionChunkLoaders extensions){}
 
     default ExtensionChunkLoaders.Factory<?> getExtensionFactory(){
         throw new UnsupportedOperationException("Must be implemented by child class.");
@@ -82,4 +84,9 @@ public interface IChunkLoader extends IChunkPositioned {
 
     ResourceLocation getTypeId();
 
+    default void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime){}
+
+    default int getExtensionCount() {
+        return getExtensionChunkLoaders() != null ? getExtensionChunkLoaders().size() : 0;
+    }
 }

@@ -89,6 +89,9 @@ public abstract class MixinLevelChunk
 
     @Override
     public void loadMyChunks$tick() {
+        if(level instanceof ServerLevel) {
+            loadMyChunks$loadDataModule.preTick((ServerLevel) level);
+        }
         boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings() && !level.isClientSide;
         boolean useTimings = applyTimings || (!level.isClientSide && loadMyChunks$loadDataModule.shouldUseTimings());
         Iterator<TickingBlockEntity> iterator = loadMyChunks$queuedTickers.iterator();
@@ -204,6 +207,9 @@ public abstract class MixinLevelChunk
 
     @Override
     public void loadMyChunks$tick(ProfilerFiller profilerFiller) {
+        if(level instanceof ServerLevel) {
+            loadMyChunks$loadDataModule.preTick((ServerLevel) level);
+        }
         Iterator<BlockEntity> iterator = loadMyChunks$queued.iterator();
         while(iterator.hasNext()){
             loadMyChunks$tickers.add(iterator.next());
