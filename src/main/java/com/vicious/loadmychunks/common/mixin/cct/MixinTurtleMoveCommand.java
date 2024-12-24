@@ -55,12 +55,12 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @SuppressWarnings("all")
 @Mixin(value = TurtleMoveCommand.class
 //? if forge && <=1.20.1
-, remap=false
+/*, remap=false*/
 )
 public class MixinTurtleMoveCommand {
 
     //? if <=1.19.2 {
-    @Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
+    /*@Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
             //? if forge && <=1.16.5
             ,remap = true
     )
@@ -81,7 +81,7 @@ public class MixinTurtleMoveCommand {
         }
         return stable;
     }
-    //?}
+    *///?}
 
     //? >1.19.2 {
     @Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
@@ -120,9 +120,9 @@ public class MixinTurtleMoveCommand {
     @Overwrite
     private static TurtleCommandResult canEnter(TurtlePlayer turtlePlayer,
                                                 //? if >1.19.2
-                                                /^ServerLevel world,^/
+                                                ServerLevel world,
                                                 //? if <=1.19.2
-                                                /*/^Level world,^/*/
+                                                /*Level world,*/
                                                 BlockPos position) {
         if (world.isOutsideBuildHeight(position)) {
             return TurtleCommandResult.failure(position.getY() < 0 ? "Too low to move" : "Too high to move");
@@ -131,7 +131,7 @@ public class MixinTurtleMoveCommand {
 
         // Check spawn protection
         //? if <=1.19.2
-        if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {
+        /*if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {*/
         //? if >1.19.2
         if (turtlePlayer.isBlockProtected(world, position)) {
             return TurtleCommandResult.failure("Cannot enter protected area");
