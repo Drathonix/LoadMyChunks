@@ -83,7 +83,6 @@ public abstract class MixinLevelChunk
     public void setup(Level arg, ChunkPos arg2, UpgradeData arg3, LevelChunkTicks arg4, LevelChunkTicks arg5, long l, LevelChunkSection[] args, LevelChunk.PostLoadProcessor arg6, BlendingData arg7, CallbackInfo ci){
         if(level instanceof ServerLevel sl) {
             this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData(sl,chunkPos);
-            //this.loadMyChunks$loadDataModule.assignChunk(this);
         }
     }
 
@@ -201,7 +200,6 @@ public abstract class MixinLevelChunk
     public void setup(Level level, ChunkPos chunkPos, ChunkBiomeContainer chunkBiomeContainer, UpgradeData upgradeData, TickList tickList, TickList tickList2, long l, LevelChunkSection[] levelChunkSections, Consumer consumer, CallbackInfo ci){
         if(level instanceof ServerLevel) {
             this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData((ServerLevel)level,chunkPos);
-            this.loadMyChunks$loadDataModule.assignChunk(this);
         }
     }
 

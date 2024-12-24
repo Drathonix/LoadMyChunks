@@ -60,9 +60,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class MixinTurtleMoveCommand {
 
     //? if <=1.19.2 {
-    /*@Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
+    /*/^/^@Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
             //? if forge && <=1.16.5
-            ,remap = true
+            /^,remap = true^/
     )
     public boolean checkCanTP(ITurtleAccess turtle, Level oldWorld, BlockPos newPosition){
         BlockPos oldPosition = turtle.getPosition();
@@ -84,7 +84,7 @@ public class MixinTurtleMoveCommand {
     *///?}
 
     //? >1.19.2 {
-    @Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    /^@Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void changeLogic(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir, Direction direction, ServerLevel oldWorld, BlockPos oldPosition, BlockPos newPosition) {
         boolean stable = oldWorld.isLoaded(newPosition);
         for (TurtleSide side : TurtleSide.values()) {
@@ -99,7 +99,7 @@ public class MixinTurtleMoveCommand {
             cir.setReturnValue(TurtleCommandResult.failure("Cannot enter unloaded area"));
         }
     }
-    //?}
+    ^///?}
 
     @Inject(method = "execute",at = @At(value = "RETURN"),remap = false)
     public void postMove(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir){
@@ -113,16 +113,16 @@ public class MixinTurtleMoveCommand {
         }
     }
 
-    /**
+    /^*
      * @author Drathonix
      * @reason If anyone else touches the original method, I will be very unhappy.
-     */
+     ^/
     @Overwrite
     private static TurtleCommandResult canEnter(TurtlePlayer turtlePlayer,
                                                 //? if >1.19.2
-                                                ServerLevel world,
+                                                /^ServerLevel world,^/
                                                 //? if <=1.19.2
-                                                /*Level world,*/
+                                                /*/^Level world,^/*/
                                                 BlockPos position) {
         if (world.isOutsideBuildHeight(position)) {
             return TurtleCommandResult.failure(position.getY() < 0 ? "Too low to move" : "Too high to move");
@@ -131,9 +131,9 @@ public class MixinTurtleMoveCommand {
 
         // Check spawn protection
         //? if <=1.19.2
-        /*if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {*/
+        /*/^if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {^/*/
         //? if >1.19.2
-        if (turtlePlayer.isBlockProtected(world, position)) {
+        /^if (turtlePlayer.isBlockProtected(world, position)) {^/
             return TurtleCommandResult.failure("Cannot enter protected area");
         }
 
@@ -144,4 +144,5 @@ public class MixinTurtleMoveCommand {
         return TurtleCommandResult.success();
     }
 }
-//?}
+*///?}
+*/
