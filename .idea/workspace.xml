@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/integ/cct/turtle/TurtleChunkLoaderUpgrade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/integ/cct/turtle/TurtleChunkLoaderUpgrade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/MixinLevelChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/MixinLevelChunk.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/cct/MixinTurtleMoveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/cct/MixinTurtleMoveCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/fabric/integ/CCTFabric.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/fabric/integ/CCTFabric.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stonecutter.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/stonecutter.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,8 +244,8 @@
       <recent name="com.vicious.loadmychunks.fabric" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks [&quot;Set active project to 1.21.1-fabric&quot;]">
-    <configuration name="LoadMyChunks [&quot;Set active project to 1.20.6-neoforge&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.LoadMyChunks [&quot;Refresh active project&quot;]">
+    <configuration name="LoadMyChunks [&quot;Refresh active project&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -260,29 +256,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="&quot;Set active project to 1.20.6-neoforge&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="LoadMyChunks [&quot;Set active project to 1.21-fabric&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="&quot;Set active project to 1.21-fabric&quot;" />
+            <option value="&quot;Refresh active project&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -359,6 +333,28 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="LoadMyChunks [chiseledBuild]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="chiseledBuild" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="LoadMyChunks build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="LoadMyChunks build" />
@@ -405,11 +401,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.LoadMyChunks [&quot;Refresh active project&quot;]" />
+        <item itemvalue="Gradle.LoadMyChunks [chiseledBuild]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.21.1-fabric&quot;]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.21.1-neoforge&quot;]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.21-neoforge&quot;]" />
-        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.21-fabric&quot;]" />
-        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.20.6-neoforge&quot;]" />
       </list>
     </recent_temporary>
   </component>
@@ -445,7 +441,7 @@
       <workItem from="1734902723394" duration="6485000" />
       <workItem from="1734977098393" duration="49000" />
       <workItem from="1735009251468" duration="5120000" />
-      <workItem from="1735056854002" duration="5410000" />
+      <workItem from="1735056854002" duration="5793000" />
     </task>
     <servers />
   </component>
