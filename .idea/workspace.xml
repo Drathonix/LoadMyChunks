@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Test_Procedures.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/registry/LMCContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/registry/LMCContent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/util/Other.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/util/Other.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/LoadMyChunks.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,6 +123,12 @@
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="project" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="stonecutter" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -481,7 +486,7 @@
       <workItem from="1734977098393" duration="49000" />
       <workItem from="1735009251468" duration="5120000" />
       <workItem from="1735056854002" duration="23584000" />
-      <workItem from="1735096091758" duration="975000" />
+      <workItem from="1735096091758" duration="4914000" />
     </task>
     <servers />
   </component>

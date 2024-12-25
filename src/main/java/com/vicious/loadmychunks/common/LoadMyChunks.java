@@ -6,6 +6,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.persist.shortcuts.PersistShortcuts;
+
 //? if >=1.20.6
 import com.vicious.loadmychunks.common.integ.Integrations;
 import com.vicious.loadmychunks.common.network.LagReadingPacket;
@@ -64,6 +66,7 @@ public class LoadMyChunks {
 	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
 	public static void init() {
+		logger.info("Running with persist! " + PersistShortcuts.class);
 		logger.info("Preparing to load your chunks...");
 		LMCConfig.init();
 		if(LMCConfig.useDebugLogging){

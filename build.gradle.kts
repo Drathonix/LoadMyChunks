@@ -1,3 +1,5 @@
+import kotlinx.coroutines.processNextEventInCurrentThread
+import kotlinx.serialization.json.Json.Default.configuration
 
 plugins {
     `maven-publish`
@@ -7,6 +9,7 @@ plugins {
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j")
     id("me.modmuss50.mod-publish-plugin")
+    //id("com.github.johnrengelman.shadow") version "8.1.1"
     //id("org.spongepowered.mixin") version("0.7")
 }
 
@@ -23,6 +26,7 @@ class Env() {
     fun isNot(version: String) = stonecutter.compare(mc_ver, version) != 0
 }
 val env = Env()
+
 
 class ModData {
     val id = property("mod.id").toString()
@@ -115,6 +119,9 @@ repositories {
     }
 }
 
+//val embed: Configuration = configurations.create("embed")
+//configurations["implementation"].extendsFrom(embed)
+
 dependencies {
     fun fapi(vararg modules: String) {
         modules.forEach { fabricApi.module(it, deps["fapi"]) }
@@ -126,19 +133,21 @@ dependencies {
 
     val persistVer = "1.2.3"
 
-    compileOnly("com.vicious:persist:${mod.java_ver}-${persistVer}")
-    include("com.vicious:persist:${mod.java_ver}-${persistVer}")
+    //compileOnly("com.vicious:persist:${mod.java_ver}-${persistVer}")
+    //Persist is not a mod, so it needs to be shadowed. This will be fixed in the release of finallib
+   // embed("com.vicious:persist:${mod.java_ver}-${persistVer}")
 
     if(env.isFabric) {
         //mappings("net.fabricmc:yarn:${env.mc_ver}+build.${deps["yarn_build"]}:v2")
         modApi("${arch}:architectury-fabric:${deps["arch_ver"]}")
         modImplementation("net.fabricmc:fabric-loader:${deps["fabric_loader"]}")
         modApi("net.fabricmc.fabric-api:fabric-api:${deps["fabric_api"]}")
-        modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
+        //modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
     }
     if(env.isForge){
         "forge"("net.minecraftforge:forge:${deps["forge_ver"]}")
         modApi("${arch}:architectury-forge:${deps["arch_ver"]}")
+        //modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
     }
     if(env.isNeo){
         "neoForge"("net.neoforged:neoforge:${deps["neoforge_ver"]}")
