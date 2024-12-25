@@ -2,43 +2,25 @@ package com.vicious.loadmychunks.common.mixin.cct;
 
 //? if !cct {
 /*import com.vicious.loadmychunks.common.LoadMyChunks;
-import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
-import com.vicious.loadmychunks.common.system.ChunkDataManager;
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.turtle.ITurtleAccess;
-import dan200.computercraft.api.turtle.TurtleCommandResult;
-import dan200.computercraft.api.turtle.TurtleSide;
-import dan200.computercraft.shared.turtle.core.TurtleMoveCommand;
-import dan200.computercraft.shared.turtle.core.TurtlePlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LoadMyChunks.class)
 public class MixinTurtleMoveCommand {
 
 }
-*///?}
-//? if cct {
-
+*///?} else {
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
-//? if <=1.19.2
-/*import dan200.computercraft.ComputerCraft;*/
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.api.turtle.TurtleSide;
-//? if <=1.19.2
-/*import dan200.computercraft.shared.TurtlePermissions;*/
+//? if <=1.19.2 {
+/*import dan200.computercraft.shared.TurtlePermissions;
+import dan200.computercraft.ComputerCraft;
+*///?}
 import dan200.computercraft.shared.turtle.core.TurtleMoveCommand;
 import dan200.computercraft.shared.turtle.core.TurtlePlayer;
 import net.minecraft.core.BlockPos;

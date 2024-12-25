@@ -5,6 +5,7 @@ package com.vicious.loadmychunks.common.debug;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 
 *///?}
+import com.vicious.loadmychunks.common.util.Other;
 import com.vicious.loadmychunks.unified.BlockEntityTypeBuilder;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -40,7 +41,7 @@ public class LoadMyChunksDebug {
     //? if >1.19.4 {
     public static void init(){
         LMCRegistrar.BLOCK.queue(reg->{
-            RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of()));
+            RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(Other.properties()));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
                 LoadMyChunksDebug.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> BlockEntityTypeBuilder.build(DebugBlockEntityLagger::new,List.of(laggerBlock.get())));
             });

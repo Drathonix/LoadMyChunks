@@ -50,6 +50,9 @@
     "loadmychunks.command.forceload.unset.permanent": "Forceloading (%s,%s) permanently disabled.",
     "loadmychunks.message.too_many_loaded_chunks": "You have exceeded the server-side chunk limit of %s. You have %s chunks forced, your loaders will not work. Please unload some chunks.",
     "commands.loadmychunks.arguments.bool.invalid": "Invalid boolean %s, valid options: %s",
+    "commands.loadmychunks.list.forceloaded.header": "Forceloaded Chunks",
+    "commands.loadmychunks.list.forceloaded.entry": "(%s,%s)",
+    "commands.loadmychunks.list.forceloaded.entry.permanent": "(%s,%s) permanent",
     "loadmychunks.turtle.adjective.loading": "Loading"
 }
 

@@ -54,10 +54,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     public UpgradeType<? extends ITurtleUpgrade> getType() {
         return upgradeType.get();
     }
-    //?}
-
-
-    //? if <1.20.6 {
+    //?} else {
     /*@Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2

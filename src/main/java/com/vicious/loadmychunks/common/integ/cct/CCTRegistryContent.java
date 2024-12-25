@@ -30,14 +30,15 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import java.util.*;
 
 public class CCTRegistryContent {
-    //? if >=1.20.6
+    //? if >=1.20.6 {
     public static List<RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>>> registrySuppliers = new ArrayList<>();
-    //? if <1.20.6 && >1.20.1
-    /*public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();*/
-    //? if <=1.20.1 && >1.16.5
-    /*public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();*/
-    //? if <=1.16.5
+    //?} else if <1.20.6 && >1.20.1 {
+    /*public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
+    *///?} else if <=1.20.1 && >1.16.5 {
+    /*public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
+    *///?} else {
     /*public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();*/
+    //?}
 
     public static void registerClient() {
         //? if >1.18.2 {
