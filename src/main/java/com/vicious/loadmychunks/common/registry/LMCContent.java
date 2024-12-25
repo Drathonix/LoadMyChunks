@@ -21,7 +21,6 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 //? if >1.19.5
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +41,7 @@ import java.util.function.Supplier;
 public class LMCContent {
     //? if =1.20.1 && forge {
     /*private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.field_44688);
-    *///?} else {
+    *///?} else if >1.19.4 {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
     //?}
     public static final Map<String,RegistrySupplier<Block>> chunkLoaderBlockMap = new HashMap<>();
