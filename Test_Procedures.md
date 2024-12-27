@@ -37,7 +37,13 @@ After each command, run /loadmychunks list (forced/overticked) to view.
 ### CCT Tests
 Tests are executed on a turtle using this script:
 ```lua
+turtle.refuel()
 
+k = 64
+while k >= 0 do
+    turtle.forward(1)
+    k=k-1
+end
 ```
 /loadmychunks list forced to verify.
 
@@ -53,8 +59,8 @@ Tests are executed on a turtle using this script:
 |----------------------|-------|---------------------|----------------------|--------------------------------|-------------------------------|-------------------------------|------------------------|---------------------------|
 | 1.16.5-Forge         | 1     | 1                   | 1                    | 1                              | 1                             | 1                             | 1                      | 1                         |
 | 1.16.5-Fabric        | 1     | 1                   | 1                    | 1                              | 1                             | 1                             | 1                      | 2                         |
-| 1.18.2-Forge         |       |                     |                      |                                |                               |                               |                        |                           |
-| 1.18.2-Fabric        |       |                     |                      |                                |                               |                               |                        | 2                         |
+| 1.18.2-Forge         | 1     | 1                   | 1                    | 1                              | 1                             | 1                             | 1                      | 1                         |
+| 1.18.2-Fabric        | 1     | 1                   | 1                    | 1                              | 1                             | 1                             | 1                      | 2                         |
 | 1.19.2-Forge         |       |                     |                      |                                |                               |                               |                        |                           |
 | 1.19.2-Fabric        |       |                     |                      |                                |                               |                               |                        | 2                         |
 | 1.19.4-Forge         |       |                     |                      |                                |                               |                               |                        |                           |
