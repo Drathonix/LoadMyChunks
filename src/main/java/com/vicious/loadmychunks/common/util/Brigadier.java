@@ -92,7 +92,7 @@ public class Brigadier {
     }
 
     public static BlockPos centralized(ChunkPos pos, int y) {
-        return new BlockPos(pos.x+8,y,pos.z+8);
+        return new BlockPos(pos.x*16+8,y,pos.z*16+8);
     }
 
     @FunctionalInterface
