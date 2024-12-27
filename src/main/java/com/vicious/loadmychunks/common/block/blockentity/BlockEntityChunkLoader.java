@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.loaders.IHasChunkloader;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHasChunkloader {
     private PlacedChunkLoader chunkLoader;
-    private UUID owner;
+    private UUID owner = Util.NIL_UUID;
 
     //? if <=1.16.5 {
     /*public BlockEntityChunkLoader() {
@@ -73,9 +74,10 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     }
 
     public void setOwner(UUID uuid) {
-        this.owner=uuid;
+        this.owner=uuid == null ? Util.NIL_UUID : uuid;
         if(chunkLoader != null){
             this.chunkLoader.setOwner(uuid);
+            ChunkDataManager.markChunkOwnedBy((ServerLevel) level,chunkLoader.getChunkPos().toLong(), chunkLoader.getOwner());
         }
     }
 }

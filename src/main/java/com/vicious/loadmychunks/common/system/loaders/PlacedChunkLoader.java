@@ -2,6 +2,7 @@ package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.LoaderTypes;
+import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
 import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
@@ -55,7 +56,13 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag, ServerLevel level) {
+    public void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException {
+        if(tag.contains("pos")) {
+            position = BlockPos.of(tag.getLong("pos"));
+            if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
+                throw new DoNotAddException();
+            }
+        }
         if(tag.contains("owner")){
             owner = tag.getUUID("owner");
         }
@@ -69,9 +76,6 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
             extensionRange = tag.getInt("extensions");
             extensions = new ExtensionChunkLoaders(level,this);
             extensions.recompute(PlacedExtensionChunkLoader.class,extensionRange,this::createExtension);
-        }
-        if(tag.contains("pos")) {
-            position = BlockPos.of(tag.getLong("pos"));
         }
     }
 

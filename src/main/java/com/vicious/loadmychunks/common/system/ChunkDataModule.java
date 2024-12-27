@@ -121,9 +121,7 @@ public class ChunkDataModule {
             loadState = loader.getLoadState().getSuperiorLoadState(loadState);
         }
         nextGameTimeCheckTick=-1;
-        if(loader instanceof IOwnable) {
-            ChunkDataManager.markChunkOwnedBy(level,position.toLong(), ((IOwnable)loader).getOwner());
-        }
+        if(loader instanceof IOwnable) {}
         return previous != loadState;
     }
 

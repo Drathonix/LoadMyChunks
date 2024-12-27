@@ -45,9 +45,26 @@ public class ChunkDataManager {
 
     public synchronized static void markChunkOwnedBy(ServerLevel level, long longChunkPos, @Nullable UUID uuid){
         getManager(level).markChunkOwnedBy(longChunkPos,uuid);
+        if(hasExceededOwnershipCap(uuid)){
+            updateCDMSofUUID(uuid);
+        }
     }
     public synchronized static void markChunkNotOwnedBy(ServerLevel level, long longChunkPos, @Nullable UUID uuid){
         getManager(level).markChunkNotOwnedBy(longChunkPos,uuid);
+        if(!hasExceededOwnershipCap(uuid)){
+            updateCDMSofUUID(uuid);
+        }
+    }
+
+    public static void updateCDMSofUUID(UUID uuid){
+        for (ServerLevel serverLevel : levelManagers.keySet()) {
+            LevelChunkLoaderManager value = levelManagers.get(serverLevel);
+            for (long l : value.forcedChunksByUUID.getOrDefault(uuid, new LongOpenHashSet())) {
+                ChunkDataModule cdm =  value.getOrCreateData(l);
+                cdm.update();
+                cdm.updateChunkLoadState(serverLevel);
+            }
+        }
     }
 
     public static synchronized LevelChunkLoaderManager getManager(ServerLevel level){
@@ -85,7 +102,7 @@ public class ChunkDataManager {
         }
         return results;
     }
-    public static int getCountChunkLoadersOf(@Nullable UUID owner) {
+    public static int getCountChunkLoadersOf(@NotNull UUID owner) {
         if(owner == null){
             return 0;
         }
@@ -101,10 +118,10 @@ public class ChunkDataManager {
         }
         return count;
     }
-    public synchronized static int getCountLoadedChunksOf(@Nullable UUID owner) {
+    public synchronized static int getCountLoadedChunksOf(@NotNull UUID owner) {
         int count = 0;
         for (LevelChunkLoaderManager value : levelManagers.values()) {
-            count = value.getCountLoadedChunksOf(owner);
+            count += value.getCountLoadedChunksOf(owner);
         }
         return count;
     }
@@ -199,7 +216,7 @@ public class ChunkDataManager {
             }
         }
 
-        public synchronized int getCountLoadedChunksOf(@Nullable UUID owner) {
+        public synchronized int getCountLoadedChunksOf(@NotNull UUID owner) {
             return forcedChunksByUUID.getOrDefault(owner,new LongOpenHashSet()).size();
         }
 

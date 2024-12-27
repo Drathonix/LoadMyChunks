@@ -7,6 +7,7 @@ import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.util.Message;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -49,8 +50,8 @@ public class BlockChunkLoader extends BaseEntityBlock {
             BlockEntity entity = level.getBlockEntity(blockPos);
             if(entity instanceof BlockEntityChunkLoader) {
                 ((BlockEntityChunkLoader) entity).setOwner(livingEntity.getUUID());
-                if(ChunkDataManager.hasExceededOwnershipCap(livingEntity.getUUID(),1)){
-                    Message.send((ServerPlayer) livingEntity,Message.translatable("loadmychunks.message.too_many_loaded_chunks", LMCConfig.limitSettings.limit,ChunkDataManager.getCountLoadedChunksOf(livingEntity.getUUID())));
+                if(ChunkDataManager.hasExceededOwnershipCap(livingEntity.getUUID())){
+                    Message.send((ServerPlayer) livingEntity,Message.styled(Message.translatable("loadmychunks.message.too_many_loaded_chunks", LMCConfig.limitSettings.limit,ChunkDataManager.getCountLoadedChunksOf(livingEntity.getUUID())), ChatFormatting.RED,true,true));
                 }
             }
         }

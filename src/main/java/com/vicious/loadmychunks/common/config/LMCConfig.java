@@ -104,6 +104,24 @@ public class LMCConfig {
         @Range(minimum = 0)
         @Save(description = "Maximum number of concurrently loaded chunks a player/the environment can have")
         public int limit = 63;
+
+        @Save.Setter("enabledForPlayers")
+        public void setEnabledForPlayers(boolean val){
+            this.enabledForPlayers=val;
+            ChunkDataManager.handleConfigReload();
+        }
+
+        @Save.Setter("enabledForEnvironment")
+        public void setEnabledForEnvironment(boolean val){
+            this.enabledForEnvironment=val;
+            ChunkDataManager.handleConfigReload();
+        }
+
+        @Save.Setter("limit")
+        public void setLimit(int val){
+            this.limit=val;
+            ChunkDataManager.handleConfigReload();
+        }
     }
 
     public static boolean consumeFuel(ServerLevel level, BlockPos invPos) {

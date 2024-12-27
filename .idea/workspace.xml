@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test_Procedures.md" beforeDir="false" afterPath="$PROJECT_DIR$/Test_Procedures.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/MixinServerLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/mixin/MixinServerLevel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/block/BlockChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/block/BlockChunkLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/block/blockentity/BlockEntityChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/block/blockentity/BlockEntityChunkLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/config/LMCConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/config/LMCConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/ChunkDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/ChunkDataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/ChunkDataModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/ChunkDataModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/loaders/PlacedChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/vicious/loadmychunks/common/system/loaders/PlacedChunkLoader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,20 +138,20 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.21.1-neoforge" type="2d1252cf:ModuleNode" />
+                <item name="1.21.1-fabric" type="2d1252cf:ModuleNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.21.1-neoforge" type="2d1252cf:ModuleNode" />
+                <item name="1.21.1-fabric" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.21.1-neoforge" type="2d1252cf:ModuleNode" />
+                <item name="1.21.1-fabric" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
+                <item name="loom" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -292,7 +296,7 @@
       <recent name="com.vicious.loadmychunks.fabric" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks [chiseledBuild]">
+  <component name="RunManager" selected="Gradle.LoadMyChunks:versions:1.21.1-fabric [runClient]">
     <configuration name="LoadMyChunks [&quot;Refresh active project&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -327,28 +331,6 @@
         <option name="taskNames">
           <list>
             <option value="&quot;Set active project to 1.20.1-fabric&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="LoadMyChunks [&quot;Set active project to 1.20.1-forge&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="&quot;Set active project to 1.20.1-forge&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -425,6 +407,28 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="LoadMyChunks:versions:1.21.1-fabric [runClient]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/versions/1.21.1-fabric" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runClient" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="neoforge build" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" value="neoforge build" />
@@ -449,11 +453,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.LoadMyChunks [chiseledBuild]" />
+        <item itemvalue="Gradle.LoadMyChunks:versions:1.21.1-fabric [runClient]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.21.1-fabric&quot;]" />
+        <item itemvalue="Gradle.LoadMyChunks [chiseledBuild]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.20.1-fabric&quot;]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Refresh active project&quot;]" />
-        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.20.1-forge&quot;]" />
       </list>
     </recent_temporary>
   </component>
@@ -494,7 +498,7 @@
       <workItem from="1735148766393" duration="10866000" />
       <workItem from="1735247364328" duration="7488000" />
       <workItem from="1735315273019" duration="3870000" />
-      <workItem from="1735324944607" duration="4366000" />
+      <workItem from="1735324944607" duration="8705000" />
     </task>
     <servers />
   </component>
