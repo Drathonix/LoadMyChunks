@@ -3,7 +3,7 @@ Available for Fabric on 1.16.5,1.18.2,1.19.2,1.19.4,1.20.1,1.20.4,1.20.6,1.21, a
 Available for Forge on 1.16.5,1.18.2,1.19.2,1.19.4,1.20.1,1.20.4
 Available for Neoforge on 1.20.4,1.20.6,1.21,and 1.21.1
 
-First major update behind the CCT support update!
+Second major update behind the CCT support update!
 
 ## Chunk Loader Extensions
 Chunk Loaders can now have their range increased using a chunk loader extension item. Just click the loader block with the extension item. Range increases in a square shape meaning one upgrade increases coverage from 1x1 chunks to 3x3 chunks with the chunk loader at the center.  Chunks covered by the extension will be considered individually when considering if they exceed the lag threshold. This means that if one chunk in the 3x3 area is laggy it will temporarily disable but the other 8 chunks will continue to be loaded.  The default maximum expansions is 1 but can be increased to 10 via the config file.
@@ -18,6 +18,9 @@ This is disabled by default and can be enabled via the config. You can configure
 **Costs are per chunk** so extended loaders will consume more items to maintain the additional chunks. 
 
 Items will be consumed before the time is up to ensure the chunk remains loaded.
+
+## Player Chunk Limits
+By default each player can load 63 chunks consecutively. You can change this via the config.
 
 ## Other changes
 

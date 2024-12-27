@@ -1,19 +1,21 @@
 package com.vicious.loadmychunks.common.mixin;
 
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
-//? if >1.18.1
+//? if >1.18.1 {
 import net.minecraft.core.Holder;
+//?}
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
 //? if >=1.20.1 {
-//? if !forge {
+//? if !forge || >1.20.1 {
 import net.minecraft.world.RandomSequences;
 //?} else {
 /*import net.minecraft.class_8565;
 *///?}
+//?}
 
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
