@@ -133,21 +133,21 @@ dependencies {
 
     val persistVer = "1.2.3"
 
-    //compileOnly("com.vicious:persist:${mod.java_ver}-${persistVer}")
+    //compileOnly("com.vicious:com.vicious.persist:${mod.java_ver}-${persistVer}")
     //Persist is not a mod, so it needs to be shadowed. This will be fixed in the release of finallib
-   // embed("com.vicious:persist:${mod.java_ver}-${persistVer}")
+   // embed("com.vicious:com.vicious.persist:${mod.java_ver}-${persistVer}")
 
     if(env.isFabric) {
         //mappings("net.fabricmc:yarn:${env.mc_ver}+build.${deps["yarn_build"]}:v2")
         modApi("${arch}:architectury-fabric:${deps["arch_ver"]}")
         modImplementation("net.fabricmc:fabric-loader:${deps["fabric_loader"]}")
         modApi("net.fabricmc.fabric-api:fabric-api:${deps["fabric_api"]}")
-        //modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
+        //modImplementation("com.vicious:com.vicious.persist:${mod.java_ver}-${persistVer}")
     }
     if(env.isForge){
         "forge"("net.minecraftforge:forge:${deps["forge_ver"]}")
         modApi("${arch}:architectury-forge:${deps["arch_ver"]}")
-        //modImplementation("com.vicious:persist:${mod.java_ver}-${persistVer}")
+        //modImplementation("com.vicious:com.vicious.persist:${mod.java_ver}-${persistVer}")
     }
     if(env.isNeo){
         "neoForge"("net.neoforged:neoforge:${deps["neoforge_ver"]}")

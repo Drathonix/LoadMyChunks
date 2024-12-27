@@ -51,8 +51,13 @@
     "loadmychunks.message.too_many_loaded_chunks": "You have exceeded the server-side chunk limit of %s. You have %s chunks forced, your loaders will not work. Please unload some chunks.",
     "commands.loadmychunks.arguments.bool.invalid": "Invalid boolean %s, valid options: %s",
     "commands.loadmychunks.list.forceloaded.header": "Forceloaded Chunks",
+    "commands.loadmychunks.list.overticked.header": "Overticked Chunks",
     "commands.loadmychunks.list.forceloaded.entry": "(%s,%s)",
     "commands.loadmychunks.list.forceloaded.entry.permanent": "(%s,%s) permanent",
+    "commands.loadmychunks.config.bad_path_not_found": "Invalid path object not found at: %s",
+    "commands.loadmychunks.config.invalid_integer": "Invalid integer: %s",
+    "commands.loadmychunks.config.invalid_value": "Invalid value: %s",
+    "commands.loadmychunks.config.value_set": "%s set to %s",
     "loadmychunks.turtle.adjective.loading": "Loading"
 }
 

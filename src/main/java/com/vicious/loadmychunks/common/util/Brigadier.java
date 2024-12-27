@@ -2,7 +2,10 @@ package com.vicious.loadmychunks.common.util;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,33 +17,53 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class Brigadier {
-    public static LiteralArgumentBuilder<CommandSourceStack> literal(String name){
-        return Commands.literal(name);
+    public static LiteralArgumentBuilder<CommandSourceStack> literal(String name, InternalBuilder<CommandSourceStack> inner){
+        LiteralArgumentBuilder<CommandSourceStack> out = Commands.literal(name);
+        for (ArgumentBuilder<CommandSourceStack, ?> builder : inner.make()) {
+            out.then(builder);
+        }
+        return out;
     }
 
-    public static LiteralArgumentBuilder<CommandSourceStack> argument(LiteralArgumentBuilder<CommandSourceStack> argumentBuilder, String name, ArgumentType<?> type){
-        return argumentBuilder.then(Commands.argument(name,type));
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> RequiredArgumentBuilder<CommandSourceStack,?> argument(String name, ArgumentType<?> type, InternalBuilder<CommandSourceStack> inner){
+        RequiredArgumentBuilder<CommandSourceStack,?> out = Commands.argument(name,type);
+        for (ArgumentBuilder<CommandSourceStack, ?> builder : inner.make()) {
+            out.then(builder);
+        }
+        return out;
     }
-    public static LiteralArgumentBuilder<CommandSourceStack> admin(LiteralArgumentBuilder<CommandSourceStack> argumentBuilder){
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> T admin(ArgumentBuilder<CommandSourceStack,T> argumentBuilder){
         return argumentBuilder.requires(ctx->ctx.hasPermission(2));
     }
 
-    public static LiteralArgumentBuilder<CommandSourceStack> literal(LiteralArgumentBuilder<CommandSourceStack> argumentBuilder, String name){
-        return argumentBuilder.then(literal(name));
-    }
-
-    public static <S> LiteralArgumentBuilder<S> requires(LiteralArgumentBuilder<S> argumentBuilder, Predicate<S> predicate){
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> ArgumentBuilder<CommandSourceStack,?> requires(ArgumentBuilder<CommandSourceStack,T> argumentBuilder, Predicate<CommandSourceStack> predicate){
         return argumentBuilder.requires(predicate);
     }
 
-    public static LiteralArgumentBuilder<CommandSourceStack> blockPos(LiteralArgumentBuilder<CommandSourceStack> argumentBuilder, String name){
-        return argument(argumentBuilder,name, BlockPosArgument.blockPos());
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> RequiredArgumentBuilder<CommandSourceStack,?> blockPos(String name, InternalBuilder<CommandSourceStack> inner){
+        return argument(name, BlockPosArgument.blockPos(),inner);
     }
 
-    public static <S> LiteralArgumentBuilder<S> executes(LiteralArgumentBuilder<S> argumentBuilder, Command<S> executor){
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> RequiredArgumentBuilder<CommandSourceStack,?> string(String name, InternalBuilder<CommandSourceStack> inner){
+        return argument(name, StringArgumentType.string(),inner);
+    }
+
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> RequiredArgumentBuilder<CommandSourceStack,?> stringRemaining(String name, InternalBuilder<CommandSourceStack> inner){
+        return argument(name, StringArgumentType.greedyString(),inner);
+    }
+
+    public static <T extends ArgumentBuilder<CommandSourceStack,T>> RequiredArgumentBuilder<CommandSourceStack,?> bool(String name, InternalBuilder<CommandSourceStack> inner){
+        return argument(name, BoolArgument.boolArgument(),inner);
+    }
+
+    public static <S,T extends ArgumentBuilder<S,T>> T executes(ArgumentBuilder<S,T> argumentBuilder, Command<S> executor){
         return argumentBuilder.executes(executor);
     }
 
@@ -70,5 +93,14 @@ public class Brigadier {
 
     public static BlockPos centralized(ChunkPos pos, int y) {
         return new BlockPos(pos.x+8,y,pos.z+8);
+    }
+
+    @FunctionalInterface
+    public interface InternalBuilder<S> extends Consumer<List<ArgumentBuilder<S,?>>> {
+        default List<ArgumentBuilder<S,?>> make(){
+            List<ArgumentBuilder<S,?>> out = new ArrayList<>();
+            accept(out);
+            return out;
+        }
     }
 }

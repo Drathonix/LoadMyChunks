@@ -57,7 +57,13 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
 
     @Override
     public @Nullable UUID getOwner() {
-        return getHost(0).getOwner();
+        PlacedChunkLoader pcl = getPrimaryHostLoader();
+        if(pcl != null) {
+            return pcl.getOwner();
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

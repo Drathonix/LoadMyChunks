@@ -34,17 +34,28 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
         /*hosts = ArrayUtils.removeAllOccurences(hosts, ReferenceHelper.get(IChunkLoader.class,host));*/
     }
 
-    public boolean isUnhosted(){
-        return hosts.length == 0;
+    @Override
+    public int getNumberOfHosts() {
+        return hosts.length;
     }
 
     @Override
     public void addHost(Object host){
-        hosts = ArrayUtils.add(hosts, ReferenceHelper.get(IChunkLoader.class,host));
+        if(!ArrayUtils.contains(hosts,ReferenceHelper.get(IChunkLoader.class,host))) {
+            hosts = ArrayUtils.add(hosts, ReferenceHelper.get(IChunkLoader.class, host));
+        }
     }
 
     @SuppressWarnings("unchecked")
     public T getHost(int i) {
+        if(hosts.length <= i || i < 0){
+            return null;
+        }
         return (T)hosts[i];
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + Arrays.toString(hosts);
     }
 }

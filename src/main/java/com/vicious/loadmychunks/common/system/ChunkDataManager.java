@@ -170,11 +170,19 @@ public class ChunkDataManager {
         return getOrCreateChunkData(level,pos).getLoadState().shouldLoad();
     }
 
+    public synchronized static void handleConfigReload() {
+        for (ServerLevel level : levelManagers.keySet()) {
+            LevelChunkLoaderManager value = levelManagers.get(level);
+            value.configReloaded=true;
+        }
+    }
+
     public static class LevelChunkLoaderManager extends SavedData{
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
         private final Map<UUID, LongOpenHashSet> forcedChunksByUUID = new HashMap<>();
         private final ServerLevel level;
+        protected boolean configReloaded = false;
 
         public synchronized void markChunkOwnedBy(long longChunkPos, @Nullable UUID uuid){
             if(uuid == null) uuid = Util.NIL_UUID;
@@ -288,6 +296,12 @@ public class ChunkDataManager {
         private static final int purgeTimer = 20*100;
 
         public synchronized void tick(){
+            if(configReloaded){
+                for (ChunkDataModule chunkDataModule : getChunkDataModules()) {
+                    chunkDataModule.update();
+                    chunkDataModule.updateChunkLoadState(level);
+                }
+            }
             if(tickCounter >= purgeTimer){
                 data.values().removeIf(module -> !module.shouldPersist() && !level.hasChunk(module.getPosition().x, module.getPosition().z));
                 tickCounter = 0;

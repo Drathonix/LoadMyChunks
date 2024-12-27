@@ -33,6 +33,9 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         this.extensionRange=r;
         this.extensions = extensions;
         this.peripheral=peripheral;
+        if(LMCConfig.cost.enabled && peripheral != null) {
+            timingsCheck(peripheral.getLevel(), peripheral.getChunkDataModule(), peripheral.getLevel().getGameTime());
+        }
     }
 
     public TurtleChunkLoader(BlockPos pos) {

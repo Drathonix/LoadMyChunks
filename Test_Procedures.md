@@ -51,7 +51,7 @@ Tests are executed on a turtle using this script:
 
 | Version \| Procedure | Boots | Placed Chunk Loader | Removed Chunk Loader | Placed & Extended Chunk Loader | Removed Extended Chunk Loader | Chunk Loader Item Consumption | Test forceload command | CCT: Repeat tasks 2,3 & 5 |
 |----------------------|-------|---------------------|----------------------|--------------------------------|-------------------------------|-------------------------------|------------------------|---------------------------|
-| 1.16.5-Forge         |       |                     |                      |                                |                               |                               |                        |                           |
+| 1.16.5-Forge         | 1     | 1                   | 1                    | 1                              | 1                             | 1                             | 1                      | 1                         |
 | 1.16.5-Fabric        |       |                     |                      |                                |                               |                               |                        | 2                         |
 | 1.18.2-Forge         |       |                     |                      |                                |                               |                               |                        |                           |
 | 1.18.2-Fabric        |       |                     |                      |                                |                               |                               |                        | 2                         |

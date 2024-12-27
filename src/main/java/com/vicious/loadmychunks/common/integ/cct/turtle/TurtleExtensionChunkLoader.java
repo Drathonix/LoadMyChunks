@@ -20,7 +20,7 @@ public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<Turtl
         super(host,loadedChunk);
     }
 
-    //Turtle chunk loader extensions need to be recreated often and will not persist.
+    //Turtle chunk loader extensions need to be recreated often and will not com.vicious.persist.
     @Override
     public boolean shouldPersist() {
         return false;

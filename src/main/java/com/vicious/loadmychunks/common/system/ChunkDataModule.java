@@ -133,13 +133,13 @@ public class ChunkDataModule {
      * @return whether the chunk's loadstate has changed.
      */
     public boolean removeLoader(ServerLevel level, @NotNull IChunkLoader loader){
+        if(loader.hasExtensions()){
+            loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
+        }
         loaders.remove(loader);
         LoadState previous = loadState;
         update();
         nextGameTimeCheckTick=-1;
-        if(loader.hasExtensions()){
-            loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
-        }
         if(loader instanceof IOwnable){
             if(!getAllOwners().contains(((IOwnable)loader).getOwner())){
                 ChunkDataManager.markChunkNotOwnedBy(level,position.toLong(),((IOwnable) loader).getOwner());
@@ -317,7 +317,7 @@ public class ChunkDataModule {
     }
 
     public void preTick(ServerLevel level) {
-        if(level.getGameTime() >= nextGameTimeCheckTick){
+        if(LMCConfig.cost.enabled && level.getGameTime() >= nextGameTimeCheckTick){
             boolean doStateUpdateCheck = false;
             for (IChunkLoader loader : loaders) {
                 LoadState pre = loader.getLoadState();
@@ -339,4 +339,10 @@ public class ChunkDataModule {
     public void updateCheckTime(long time) {
         this.nextGameTimeCheckTick = time;
     }
+
+    public void configReloaded(ServerLevel level) {
+
+    }
+
+
 }

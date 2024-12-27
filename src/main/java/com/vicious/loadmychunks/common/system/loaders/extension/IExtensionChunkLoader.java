@@ -5,8 +5,10 @@ import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoader {
@@ -29,7 +31,9 @@ public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoa
      */
     void removeHost(Object host);
 
-    boolean isUnhosted();
+    default boolean isUnhosted(){
+        return getNumberOfHosts() <= 0;
+    }
 
     /**
      * Accepts only AtomicReference of IChunkLoader and IChunkLoaders
@@ -38,10 +42,22 @@ public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoa
 
     T getHost(int i);
 
-    default void removeHostAndUnload(ServerLevel level, Object host) {
-        removeHost(host);
-        if(isUnhosted()){
+    int getNumberOfHosts();
+
+    default boolean willRemoveHost(@NotNull Object host){
+        for (int i = 0; i < getNumberOfHosts(); i++) {
+            if(getHost(i) == host){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    default void removeHostAndUnload(ServerLevel level, @NotNull Object host) {
+        //Remove from the world first to ensure the host loader instance is not lost.
+        if(willRemoveHost(host) && getNumberOfHosts() <= 1){
             ChunkDataManager.removeChunkLoader(level, this.getChunkPos(), this);
         }
+        removeHost(host);
     }
 }

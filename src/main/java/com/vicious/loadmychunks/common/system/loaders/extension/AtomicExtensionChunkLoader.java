@@ -2,6 +2,7 @@ package com.vicious.loadmychunks.common.system.loaders.extension;
 
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.PhantomChunkLoader;
+import com.vicious.loadmychunks.common.util.ReferenceHelper;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -28,17 +29,23 @@ public abstract class AtomicExtensionChunkLoader<T extends IChunkLoader> extends
         /*hosts = ArrayUtils.removeAllOccurences(hosts,(AtomicReference<T>) loader);*/
     }
 
-    public boolean isUnhosted(){
-        return hosts.length == 0;
+    @Override
+    public int getNumberOfHosts() {
+        return hosts.length;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void addHost(Object host){
-        hosts = ArrayUtils.add(hosts,(AtomicReference<T>) host);
+        if(!ArrayUtils.contains(hosts,host)) {
+            hosts = ArrayUtils.add(hosts,(AtomicReference<T>) host);
+        }
     }
 
     public T getHost(int i) {
+        if(hosts.length <= i || i < 0){
+            return null;
+        }
         return hosts[i].get();
     }
 }

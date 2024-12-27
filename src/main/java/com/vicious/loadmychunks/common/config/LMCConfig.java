@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.config.regis.ItemStackRetriever;
+import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.persist.annotations.PersistentPath;
 import com.vicious.persist.annotations.Save;
 import com.vicious.persist.annotations.Range;
@@ -84,6 +85,12 @@ public class LMCConfig {
 
         @Save(description = "Change this to set the itemstack consumed.")
         public ItemStackRetriever itemStack = new ItemStackRetriever(Items.ENDER_PEARL.getDefaultInstance());
+
+        @Save.Setter("enabled")
+        public void setEnabled(boolean enabled){
+            this.enabled=enabled;
+            ChunkDataManager.handleConfigReload();
+        }
 
       //  @Save(description = "When true, the cost is per loader rather than per chunk loaded. This applies only to extended loaders which load more chunks per loader.")
       //  public boolean useCostPerLoaderMode = false;
