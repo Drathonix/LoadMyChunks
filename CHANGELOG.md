@@ -20,11 +20,11 @@ This is disabled by default and can be enabled via the config. You can configure
 Items will be consumed before the time is up to ensure the chunk remains loaded.
 
 ## Player Chunk Limits
-By default each player can load 63 chunks consecutively. You can change this via the config.
+By default, each player can load 63 chunks consecutively. You can change this via the config.
 
 ## Other changes
 
-Swapped to Persist V-1.2.2 for configuration and switched to a JSON5 file. Your old config file will automatically be converted to json5 so do not worry about copying it over yourself if you made changes.
+Swapped to Persist V-1.2.3 for configuration and switched to a JSON5 file. Your old config file will automatically be converted to json5 so do not worry about copying it over yourself if you made changes.
 Fixed an unreported breaking issue with MixinServerLevel in MC 1.20.1
 
 Drastically improved multi-versioning utilities and cleaned up a lot of stonecutter logic statements. Some of this multiversioned code will be moved to a library eventually.
