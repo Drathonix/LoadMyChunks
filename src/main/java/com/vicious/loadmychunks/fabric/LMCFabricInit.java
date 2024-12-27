@@ -1,5 +1,5 @@
 //? if fabric {
-/*package com.vicious.loadmychunks.fabric;
+package com.vicious.loadmychunks.fabric;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.integ.Integrations;
@@ -25,4 +25,4 @@ public class LMCFabricInit {
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
     }
 }
-*///?}
+//?}

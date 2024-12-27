@@ -9,8 +9,8 @@ public class Other {
         //? if =1.20.1 && forge {
         /*return BlockBehaviour.Properties.method_9637().requiresCorrectToolForDrops();
         *///?} else if <1.19.5 {
-        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();*/
-        //?} else if >1.19.4 {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
+        *///?} else if >1.19.4 {
         return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
         //?}
     }
@@ -19,8 +19,8 @@ public class Other {
         //? if =1.20.1 && forge {
         /*return BlockBehaviour.Properties.method_9637().requiresCorrectToolForDrops().strength(strength, blastResistance);
         *///?} else if <1.19.5 {
-        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);*/
-        //?} else if >1.19.4 {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
+        *///?} else if >1.19.4 {
         return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
         //?}
     }

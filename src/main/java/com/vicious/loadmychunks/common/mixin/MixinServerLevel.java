@@ -8,8 +8,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
-//? if >1.20.1
+//? if >=1.20.1 {
+//? if !forge {
 import net.minecraft.world.RandomSequences;
+//?} else {
+/*import net.minecraft.class_8565;
+*///?}
+
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -52,12 +57,21 @@ public abstract class MixinServerLevel {
 
     //? if >1.19.4 && <=1.20.1 {
     /*@Inject(method = "<init>",at = @At("RETURN"))
-    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess arg, ServerLevelData arg2, ResourceKey arg3, LevelStem arg4, ChunkProgressListener arg5, boolean bl, long l, List list, boolean bl2, Holder arg6, CallbackInfo ci){
+    public void injectCustomSaveData(
+            MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess arg, ServerLevelData arg2, ResourceKey arg3, LevelStem arg4, ChunkProgressListener arg5, boolean bl, long l, List list, boolean bl2,
+            //? if !forge {
+            RandomSequences arg6,
+            //?} else {
+            /^class_8565 arg6,
+            ^///?}
+            CallbackInfo ci){
         getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
     }
     *///?}
 
-    //? if <1.19.4 && >1.18.2 {
+
+
+    //? if >1.18.2 && <=1.19.4 {
     /*@Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
         getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");

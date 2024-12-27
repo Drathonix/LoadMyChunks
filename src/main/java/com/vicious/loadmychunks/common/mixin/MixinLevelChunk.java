@@ -147,16 +147,6 @@ public abstract class MixinLevelChunk
         loadMyChunks$tickers.clear();
     }
 
-    /**
-     *
-     * @param instance
-     * @param key
-     * @param remappingFunction
-     * @return
-     * @param <K>
-     * @param <V>
-     */
-
     //Use lazy typing to avoid needing an AT
     @Redirect(method = "updateBlockEntityTicker",at = @At(value = "INVOKE",target = "Ljava/util/Map;compute(Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;"))
     public <K,V> Object addToQueue(Map<K,V> instance, K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction){

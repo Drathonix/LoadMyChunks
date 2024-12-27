@@ -94,8 +94,8 @@ public class LoadMyChunks {
 			//? if =1.20.1 && forge {
 			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.getLevel(), plr.blockPosition());
 			^///?} else if <1.19.5 {
-			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());^/
-			//?} else {
+			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
+			^///?} else {
 			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
 			//?}
 			//TODO: integrate permissions with LP
