@@ -24,14 +24,10 @@ stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.c
     ofTask("publishMods")
 }
 
-
-/*
-// Publishes every version
-stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
+stonecutter registerChiseled tasks.register("chiseledPublishModrinth", stonecutter.chiseled) {
     group = "project"
-    ofTask("publishMods")
+    ofTask("publishModrinth")
 }
-*/
 
 stonecutter configureEach{
     /*
