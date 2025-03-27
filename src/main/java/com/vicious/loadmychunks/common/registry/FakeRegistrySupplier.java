@@ -27,7 +27,9 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 //?}
 
-//Used to instantiate registry suppliers in older versions. We can extend it perfectly fine, thanks.
+/**
+ * Used to instantiate architectury registry suppliers in older versions. Merely used for versioning simplification
+ */
 @SuppressWarnings("NonExtendableApiUsage")
 public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     private final Supplier<T> supplier;

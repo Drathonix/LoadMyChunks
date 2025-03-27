@@ -2,8 +2,8 @@ package com.vicious.loadmychunks.common.system.loaders;
 
 
 import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
-import com.vicious.loadmychunks.common.system.control.LoadStates;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -50,12 +50,12 @@ public class PhantomChunkLoader implements IChunkLoader{
         return Objects.hash(chunkPos);
     }
 
-    public void setActiveState(LoadStates.ILoadState state){
+    public void setActiveState(ILoadState state){
         this.loadState = state;
     }
 
     @Override
-    public LoadStates.ILoadState getActiveState() {
+    public ILoadState getActiveState() {
         return loadState;
     }
 

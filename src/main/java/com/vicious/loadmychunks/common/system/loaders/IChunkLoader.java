@@ -1,8 +1,9 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadStates;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +23,7 @@ public interface IChunkLoader extends IChunkPositioned {
      * Override this method for control over the loader's active state.
      * @return the loader's current state
      */
-    default LoadStates.ILoadState getActiveState() {
+    default ILoadState getActiveState() {
         return getDefaultState();
     }
 
@@ -30,15 +31,15 @@ public interface IChunkLoader extends IChunkPositioned {
      * When a loader reactivates it uses this state as its active state. Override this to change.
      * @return the current default state.
      */
-    default LoadStates.ILoadState getDefaultState(){
-        return LoadStates.TICKING;
+    default ILoadState getDefaultState(){
+        return LoadStateRegistry.TICKING;
     }
 
     /**
      * Allows changing the chunk loader's loader state.
      * @param state the state to change to
      */
-    default void setActiveState(LoadStates.ILoadState state){}
+    default void setActiveState(ILoadState state){}
 
     /**
      * Determines if the chunk loader instance should be saved to world data. Persistent chunk loaders will be initialized on world start.

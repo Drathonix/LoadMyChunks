@@ -20,8 +20,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
         transformerVersion = 1)
 public class LMCConfig {
     public static LMCConfig instance;
+
     @PersistentPath(NotationFormat.JSON5)
-    private static String path = "config/loadmychunks.json5";
+    private static final String path = "config/loadmychunks.json5";
     public static void init(){
         PersistShortcuts.init(LMCConfig.class);
     }

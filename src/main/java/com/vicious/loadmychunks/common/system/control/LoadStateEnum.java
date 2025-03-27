@@ -1,8 +1,10 @@
 package com.vicious.loadmychunks.common.system.control;
 
+import com.vicious.loadmychunks.common.util.ModResource;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-public enum LoadStateEnum implements LoadStates.ILoadState {
+public enum LoadStateEnum implements ILoadState {
     DISABLED{
         @Override
         public boolean shouldLoad() {
@@ -23,8 +25,8 @@ public enum LoadStateEnum implements LoadStates.ILoadState {
         }
 
         @Override
-        public LoadStates.Power entityForcingPower() {
-            return LoadStates.Power.FORCED;
+        public LoaderPower entityForcingPower() {
+            return LoaderPower.FORCED;
         }
     },
     PERMANENTLY_DISABLED{
@@ -44,13 +46,13 @@ public enum LoadStateEnum implements LoadStates.ILoadState {
     }
 
     @Override
-    public LoadStates.Power blockEntityTickingPower() {
-        return shouldLoad() ? (permanent() ? LoadStates.Power.FORCED : LoadStates.Power.FORCED_MANAGED) : LoadStates.Power.DISABLED;
+    public LoaderPower blockEntityTickingPower() {
+        return shouldLoad() ? (permanent() ? LoaderPower.FORCED : LoaderPower.FORCED_MANAGED) : LoaderPower.DISABLED;
     }
 
     @Override
-    public LoadStates.Power entityForcingPower() {
-        return LoadStates.Power.DISABLED;
+    public LoaderPower entityForcingPower() {
+        return LoaderPower.DISABLED;
     }
 
     public boolean shouldLoad(){
@@ -62,15 +64,15 @@ public enum LoadStateEnum implements LoadStates.ILoadState {
     }
 
     @Override
-    public boolean overrides(LoadStates.ILoadState state) {
+    public boolean overrides(ILoadState state) {
         if(getSuperiorLoadState(state) == this){
             return true;
         }
-        return LoadStates.ILoadState.super.overrides(state);
+        return ILoadState.super.overrides(state);
     }
 
     @Override
-    public LoadStates.ILoadState getSuperiorLoadState(LoadStates.ILoadState loadState) {
+    public ILoadState getSuperiorLoadState(ILoadState loadState) {
         if(loadState instanceof LoadStateEnum) {
             if (this.ordinal() > ((LoadStateEnum)loadState).ordinal()) {
                 return this;
@@ -78,7 +80,11 @@ public enum LoadStateEnum implements LoadStates.ILoadState {
                 return loadState;
             }
         }
-        return LoadStates.ILoadState.super.getSuperiorLoadState(loadState);
+        return ILoadState.super.getSuperiorLoadState(loadState);
+    }
+
+    public ResourceLocation getResourceLocation(){
+        return ModResource.of(name().toLowerCase());
     }
 
     @Override

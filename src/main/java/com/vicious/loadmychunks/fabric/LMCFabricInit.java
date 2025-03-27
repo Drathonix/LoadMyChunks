@@ -6,10 +6,10 @@ import com.vicious.loadmychunks.common.integ.Integrations;
 import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 import com.vicious.loadmychunks.common.util.BoolArgument;
 import com.vicious.loadmychunks.common.util.ModResource;
-//? if >1.18.2
 import net.fabricmc.api.ModInitializer;
+//? if >1.18.2 {
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
+//?}
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
@@ -23,7 +23,6 @@ public class LMCFabricInit implements ModInitializer {
         //? if cct
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
         FabricRegistryBuilder.from(LoaderTypeRegistry.INSTANCE).buildAndRegister();
-        ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD
     }
 
     @Override

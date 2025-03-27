@@ -1,7 +1,7 @@
 //? if cct {
 package com.vicious.loadmychunks.common.integ.cct.turtle;
 
-import com.vicious.loadmychunks.common.system.control.LoadStates;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.loaders.extension.AtomicExtensionChunkLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +33,7 @@ public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<Turtl
     }
 
     @Override
-    public LoadStates.ILoadState getActiveState() {
+    public ILoadState getActiveState() {
         if(!isUnhosted() && getPrimaryHostLoader() != null) {
             return getPrimaryHostLoader().getExtensionLoadState();
         }

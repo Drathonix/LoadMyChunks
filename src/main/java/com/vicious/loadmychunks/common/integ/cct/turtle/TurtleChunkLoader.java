@@ -4,8 +4,8 @@ package com.vicious.loadmychunks.common.integ.cct.turtle;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
-import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
@@ -82,18 +82,18 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
     }
 
     @Override
-    public LoadStates.ILoadState getActiveState() {
+    public ILoadState getActiveState() {
         if(!LMCConfig.cct.enableTurtleChunkLoading){
             return LoadStateEnum.DISABLED;
         }
-        LoadStates.ILoadState loadState = super.getActiveState();
+        ILoadState loadState = super.getActiveState();
         if(LMCConfig.cct.ignoreTickChecks && loadState.shouldLoad()){
             return LoadStateEnum.PERMANENT;
         }
         return loadState;
     }
 
-    public LoadStates.ILoadState getExtensionLoadState() {
+    public ILoadState getExtensionLoadState() {
         return loadExtensions ? loadState : LoadStateEnum.DISABLED;
     }
 

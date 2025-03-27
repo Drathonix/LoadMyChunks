@@ -4,10 +4,7 @@ package com.vicious.loadmychunks.common.system;
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
-import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
-import com.vicious.loadmychunks.common.system.control.LoadStates;
-import com.vicious.loadmychunks.common.system.control.Period;
-import com.vicious.loadmychunks.common.system.control.Timings;
+import com.vicious.loadmychunks.common.system.control.*;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
@@ -31,7 +28,7 @@ public class ChunkDataModule {
     private Period gracePeriod;
     private Period disabledPeriod;
     public LoadStateEnum defaultLoadState = LoadStateEnum.DISABLED;
-    private LoadStates.ILoadState loadState = defaultLoadState;
+    private ILoadState loadState = defaultLoadState;
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
     //private ILevelChunkMixin chunk;
@@ -110,7 +107,7 @@ public class ChunkDataModule {
      */
     public boolean addLoader(ServerLevel level, @NotNull IChunkLoader loader){
         loaders.add(loader);
-        LoadStates.ILoadState previous = loadState;
+        ILoadState previous = loadState;
         if(onCooldown()){
             loadState = LoadStateEnum.OVERTICKED;
         }
@@ -132,7 +129,7 @@ public class ChunkDataModule {
             loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
         }
         loaders.remove(loader);
-        LoadStates.ILoadState previous = loadState;
+        ILoadState previous = loadState;
         update();
         nextGameTimeCheckTick=-1;
         if(loader instanceof IOwnable){
@@ -151,7 +148,7 @@ public class ChunkDataModule {
         if(!onCooldown()) {
             for (IChunkLoader loader : loaders) {
                 loadState = loader.getActiveState().getSuperiorLoadState(loadState);
-                if(loadState.blockEntityTickingPower() == LoadStates.Power.FORCED){
+                if(loadState.blockEntityTickingPower() == LoaderPower.FORCED){
                     break;
                 }
             }
@@ -179,7 +176,7 @@ public class ChunkDataModule {
         return disabledPeriod;
     }
 
-    public @NotNull LoadStates.ILoadState getLoadState(){
+    public @NotNull ILoadState getLoadState(){
         return loadState;
     }
 
@@ -315,7 +312,7 @@ public class ChunkDataModule {
         if(LMCConfig.cost.enabled && level.getGameTime() >= nextGameTimeCheckTick){
             boolean doStateUpdateCheck = false;
             for (IChunkLoader loader : loaders) {
-                LoadStates.ILoadState pre = loader.getActiveState();
+                ILoadState pre = loader.getActiveState();
                 loader.timingsCheck(level,this,level.getGameTime());
                 if(pre != loader.getActiveState()){
                     doStateUpdateCheck=true;
@@ -328,7 +325,7 @@ public class ChunkDataModule {
     }
 
     public void update(Runnable onChange){
-        LoadStates.ILoadState pre = loadState;
+        ILoadState pre = loadState;
         update();
         if(pre != loadState){
             onChange.run();

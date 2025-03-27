@@ -53,6 +53,9 @@ import java.util.Map;
 //? if <=1.20.4
 /*import com.vicious.loadmychunks.common.util.ModResource;*/
 
+/**
+ * The main entry point class for the mod.
+ */
 public class LoadMyChunks {
 	public static MinecraftServer server;
 	public static final String MOD_ID = "loadmychunks";
@@ -62,8 +65,10 @@ public class LoadMyChunks {
 	//? if <1.20.5
 	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
+	/**
+	 * Initializes the mod. Should not be called more than once.
+	 */
 	public static void init() {
-		logger.info("Running with com.vicious.persist! " + PersistShortcuts.class);
 		logger.info("Preparing to load your chunks...");
 		LMCConfig.init();
 		if(LMCConfig.useDebugLogging){
@@ -99,19 +104,34 @@ public class LoadMyChunks {
 		//?}
 	}
 
+	/**
+	 * Called when the server instance is created.
+	 * @param server the server instance
+	 */
 	public static void serverStarted(MinecraftServer server) {
 		LoadMyChunks.server = server;
 		server.addTickable(TickDelayer::tick);
 	}
 
+	/**
+	 * Called when the server stops.
+	 * @param server the server instance
+	 */
 	public static void serverStopped(MinecraftServer server) {
 		ChunkDataManager.clear();
 	}
 
+	/**
+	 * Controls whether debug features are enabled. Do not enable outside of dev.
+	 * @return false
+	 */
 	public static boolean allowUsingDebugFeatures() {
 		return false;
 	}
 
+	/**
+	 * Command registration entry point
+	 */
 	//? <1.19 {
 	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
 	*///?} else {

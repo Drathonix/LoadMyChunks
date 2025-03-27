@@ -4,9 +4,11 @@ package com.vicious.loadmychunks.common.integ.cct;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
 import com.vicious.loadmychunks.common.integ.cct.turtle.UpgradeModeller;
+import com.vicious.loadmychunks.common.registry.LoaderType;
 import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
 import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 //? if >=1.20.6
+import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import dan200.computercraft.api.upgrades.UpgradeType;
 //? if >1.16.5
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -43,7 +45,7 @@ public class CCTRegistryContent {
             TurtleUpgradeModellers.register(v.get(), new UpgradeModeller<>());
         });
         //?}
-        LoaderTypeRegistry.register(LoaderTypeKeys.CCT_TURTLE_LOADER, TurtleChunkLoader::new);
+        LoaderTypeRegistry.register(LoaderTypeKeys.CCT_TURTLE_LOADER, new LoaderType<>(TurtleChunkLoader::new));
     }
 }
 //?}

@@ -3,8 +3,8 @@ package com.vicious.loadmychunks.common.system.loaders.extension;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
-import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
@@ -73,7 +73,7 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     }
 
     @Override
-    public LoadStates.ILoadState getActiveState() {
+    public ILoadState getActiveState() {
         if(hasExceededChunkLimit() || (LMCConfig.cost.enabled && activityEnd == -1)){
             return LoadStateEnum.DISABLED;
         }

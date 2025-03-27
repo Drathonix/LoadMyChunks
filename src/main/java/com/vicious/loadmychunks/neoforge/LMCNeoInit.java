@@ -47,13 +47,9 @@ public class LMCNeoInit {
         LoadMyChunks.serverStopped(event.getServer());
     }
 
-    public static void clientInit() {
-        //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
-    }
-
     public static void newRegistry(NewRegistryEvent event){
         event.register(LoaderTypeRegistry.INSTANCE);
+        event.register(LoadStateRegistry.INSTANCE);
     }
 }
 *///?}

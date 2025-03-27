@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * Needed to support using multiple different types of IChunkLoader.
+ * Registration location for all chunk loader types.
  */
 public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
     public static final ResourceKey<Registry<LoaderType<?>>> KEY = ResourceKey.createRegistryKey(ModResource.of("loader_type"));
