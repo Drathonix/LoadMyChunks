@@ -1,4 +1,3 @@
-import org.gradle.internal.extensions.stdlib.toDefaultLowerCase
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -34,7 +33,7 @@ repositories {
 }
 
 fun bool(str: String) : Boolean {
-    return str.toDefaultLowerCase().startsWith("t")
+    return str.lowercase().startsWith("t")
 }
 
 fun boolProperty(key: String) : Boolean {
@@ -217,6 +216,9 @@ class APISource(val type: DepType, val mavenLocation: String, val versionRange: 
  * APIs with hardcoded support for convenience. These are optional.
  */
 //TODO add any hardcoded apis here. Hardcoded APIs should be used in most if not all your versions.
+val cctApiSource = APISource(DepType.API_OPTIONAL,"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}:cc-tweaked-${env.mcVersion.min}",optionalVersionProperty("deps.api.cct"),"cc-tweaked"){
+        src -> src.versionRange.isPresent
+}
 val apis = arrayListOf(
     APISource(DepType.API,"net.fabricmc.fabric-api:fabric-api",optionalVersionProperty("deps.api.fabric"),if(env.atMost("1.16.5")) "fabric" else "fabric-api") { src ->
         src.versionRange.isPresent && env.isFabric
@@ -227,25 +229,23 @@ val apis = arrayListOf(
         src.versionRange.isPresent
     },
     //2
-    APISource(DepType.API_OPTIONAL,"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}${if(atMost("1.19.2")) "" else "-${if(env.fabric) "fabric" else "forge"}"}:cc-tweaked-${env.mcVersion.min}", optionalVersionProperty("deps.api.cct")){
-            src -> src.versionRange.isPresent
+    cctApiSource,
+    APISource(DepType.FRL,"com.jcraft:jslib",Optional.of(VersionRange("1.1.3","")),null){
+            src -> env.atLeast("1.19.4") && cctApiSource.versionRange.isPresent
     },
-    APISource(DepType.FRL,"com.jcraft:jslib",VersionRange("1.1.3",""),null){
-            src -> env.atLeast("1.19.4") && apis.get(2).versionRange.isPresent
+    APISource(DepType.FRL,"io.netty:netty-codec-http",Optional.of(VersionRange("4.1.82.Final","")),null){
+            src -> env.atLeast("1.19.4") && cctApiSource.versionRange.isPresent
     },
-    APISource(DepType.FRL,"io.netty:netty-codec-http",VersionRange("4.1.82.Final",""),null){
-            src -> env.atLeast("1.19.4") && apis.get(2).versionRange.isPresent
+    APISource(DepType.FRL,"io.netty.netty-codec-sock",Optional.of(VersionRange("4.1.82.Final","")),null){
+            src -> env.atLeast("1.19.4") && cctApiSource.versionRange.isPresent
     },
-    APISource(DepType.FRL,"io.netty.netty-codec-sock",VersionRange("4.1.82.Final",""),null){
-            src -> env.atLeast("1.19.4") && apis.get(2).versionRange.isPresent
+    APISource(DepType.FRL,"io.netty.netty-handler-proxy",Optional.of(VersionRange("4.1.82.Final","")),null){
+            src -> env.atLeast("1.19.4") && cctApiSource.versionRange.isPresent
     },
-    APISource(DepType.FRL,"io.netty.netty-handler-proxy",VersionRange("4.1.82.Final",""),null){
-            src -> env.atLeast("1.19.4") && apis.get(2).versionRange.isPresent
+    // FLR for Cobalt
+    APISource(DepType.FRL,if(env.atLeast("1.20")) "cc.tweaked:cobalt" else "org.squiddev:Cobalt",Optional.of(VersionRange(if(env.atLeast("1.20")) "0.9.3" else "0.7.0","")),null){
+        src -> env.atLeast("1.19.4") && cctApiSource.versionRange.isPresent
     }
-            // FLR for Cobalt
-            APISource(DepType.FRL,if(env.atLeast("1.20")) "cc.tweaked:cobalt" else "org.squiddev:Cobalt",VersionRange(if(env.atLeast("1.20")) "0.9.3" else "0.7.0",""),null){
-        src -> env.atLeast("1.19.4") && apis.get(2).versionRange.isPresent
-}
 )
 
 // Stores information about the mod itself.
@@ -665,7 +665,7 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.addAll(modPublish.mcTargets)
         requires {
-            if(!apis.architecturyApi.isEmpty) {
+            if(!apis.isEmpty) {
                 slug = "architectury-api"
             }
         }
@@ -698,4 +698,4 @@ publishing {
             from(components["java"])
         }
     }
-}*/
+}
