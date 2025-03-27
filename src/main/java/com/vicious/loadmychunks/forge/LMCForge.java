@@ -36,8 +36,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraftforge.fml.common.Mod;
 
+@Mod(LoadMyChunks.MOD_ID)
 public class LMCForge {
+    public LMCForge() {
+        LMCForge.init()
+    }
     public static void init() {
         EventBuses.registerModEventBus(LoadMyChunks.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         LoadMyChunks.init();
@@ -54,11 +59,6 @@ public class LMCForge {
         //?}
         //? if cct
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","init",new Class[]{IEventBus.class}, FMLJavaModLoadingContext.get().getModEventBus());
-    }
-
-    public static void clientInit() {
-        //? if cct
-        Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);
     }
 
 

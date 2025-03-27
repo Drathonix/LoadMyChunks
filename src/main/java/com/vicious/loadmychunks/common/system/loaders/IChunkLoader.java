@@ -2,7 +2,7 @@ package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import net.minecraft.nbt.CompoundTag;
@@ -11,21 +11,48 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Any object that implements this interface can be stored in the ChunkDataManager and can load chunks.
+ * @since 1.0.0
+ * @author Jack Andersen
+ */
 public interface IChunkLoader extends IChunkPositioned {
-    default LoadState getLoadState() {
-        return LoadState.TICKING;
+    /**
+     * Each loader should have an "active" and a "default" state. The active state is what is currently applied to the chunk.
+     * Override this method for control over the loader's active state.
+     * @return the loader's current state
+     */
+    default LoadStates.ILoadState getActiveState() {
+        return getDefaultState();
     }
 
-    default void setLoadState(LoadState state){}
+    /**
+     * When a loader reactivates it uses this state as its active state. Override this to change.
+     * @return the current default state.
+     */
+    default LoadStates.ILoadState getDefaultState(){
+        return LoadStates.TICKING;
+    }
+
+    /**
+     * Allows changing the chunk loader's loader state.
+     * @param state the state to change to
+     */
+    default void setActiveState(LoadStates.ILoadState state){}
 
     /**
      * Determines if the chunk loader instance should be saved to world data. Persistent chunk loaders will be initialized on world start.
      * This is intended for extension loaders that need to be recomputed on load
+     * @return whether the chunkloader should be saved to world data.
      */
     default boolean shouldPersist(){
         return true;
     }
 
+    /**
+     * This will be checked when a player tries extending a chunk loader. Override to enable extensions.
+     * @return whether extensions are supported.
+     */
     default boolean supportsExtensions(){
         return false;
     }
@@ -88,5 +115,9 @@ public interface IChunkLoader extends IChunkPositioned {
 
     default int getExtensionCount() {
         return getExtensionChunkLoaders() != null ? getExtensionChunkLoaders().size() : 0;
+    }
+
+    default boolean supportsEntityTicking(){
+        return true;
     }
 }

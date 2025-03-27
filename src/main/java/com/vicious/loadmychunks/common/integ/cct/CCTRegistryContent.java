@@ -4,11 +4,10 @@ package com.vicious.loadmychunks.common.integ.cct;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderUpgrade;
 import com.vicious.loadmychunks.common.integ.cct.turtle.UpgradeModeller;
-import com.vicious.loadmychunks.common.registry.LoaderTypes;
-import com.vicious.loadmychunks.common.system.LoaderTypeRegistry;
+import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
+import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 //? if >=1.20.6
 import dan200.computercraft.api.upgrades.UpgradeType;
-import dan200.computercraft.api.turtle.ITurtleUpgrade;
 //? if >1.16.5
 import dev.architectury.registry.registries.RegistrySupplier;
 
@@ -23,8 +22,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 
 //? if >=1.19.2 {
 import dan200.computercraft.client.turtle.TurtleUpgradeModellers;
-import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
-import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 
 import java.util.*;
@@ -46,7 +43,7 @@ public class CCTRegistryContent {
             TurtleUpgradeModellers.register(v.get(), new UpgradeModeller<>());
         });
         //?}
-        LoaderTypeRegistry.register(LoaderTypes.CCT_TURTLE_LOADER, TurtleChunkLoader::new);
+        LoaderTypeRegistry.register(LoaderTypeKeys.CCT_TURTLE_LOADER, TurtleChunkLoader::new);
     }
 }
 //?}

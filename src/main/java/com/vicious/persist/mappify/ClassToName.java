@@ -37,7 +37,7 @@ public class ClassToName {
         }
         else{
             if(forceC_NAME) {
-                throw new RuntimeException("Missing @C_NAME eu.infomas.annotation on class " + cls.getName());
+                throw new RuntimeException("Missing @C_NAME annotation on class " + cls.getName());
             }
             else{
                 return Stringify.stringify(cls);

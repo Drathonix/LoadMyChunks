@@ -1,16 +1,9 @@
 package com.vicious.loadmychunks.common;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.realmsclient.client.Request;
-import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.persist.io.writer.wrapped.WrappedObject;
-import com.vicious.persist.io.writer.wrapped.WrappedObjectList;
-import com.vicious.persist.io.writer.wrapped.WrappedObjectMap;
 import com.vicious.persist.mappify.Mappifier;
 import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.PersistShortcuts;
@@ -23,8 +16,7 @@ import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
 import com.vicious.loadmychunks.common.system.TickDelayer;
-import com.vicious.loadmychunks.common.system.control.LoadState;
-import com.vicious.loadmychunks.common.util.BoolArgument;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.util.Brigadier;
 import com.vicious.loadmychunks.common.util.Message;
 //? if <=1.16.5 {
@@ -47,14 +39,9 @@ import java.util.function.Supplier;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.*;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -219,10 +206,10 @@ public class LoadMyChunks {
 				list.add(Brigadier.executes(Brigadier.literal("overticked",empty->{}),ctx->{
 					ServerLevel level = Brigadier.getLevel(ctx);
 					Message.sendSystem(ctx,Message.styled(Message.translatable("commands.loadmychunks.list.overticked.header"),ChatFormatting.AQUA,true,true));
-					ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadState.OVERTICKED || cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED).forEach(cdm->{
+					ChunkDataManager.getManager(level).getChunkDataModules().stream().filter(cdm-> cdm.getLoadState() == LoadStateEnum.OVERTICKED || cdm.getLoadState() == LoadStateEnum.PERMANENTLY_DISABLED).forEach(cdm->{
 						ChunkPos pos = cdm.getPosition();
 						BlockPos dest = Brigadier.centralized(pos,255);
-						if(cdm.getLoadState() == LoadState.PERMANENTLY_DISABLED) {
+						if(cdm.getLoadState() == LoadStateEnum.PERMANENTLY_DISABLED) {
 							Message.sendSystem(ctx,Message.clickCommand(Message.translatable("commands.loadmychunks.list.forceloaded.entry.permanent",pos.x,pos.z),"/tp " + dest.getX() + " " + dest.getY() + " " + dest.getZ()));
 						}
 						else{
@@ -240,7 +227,7 @@ public class LoadMyChunks {
 		ChunkPos pos = new ChunkPos(bp);
 		ServerLevel level = Brigadier.getLevel(ctx);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(level,pos);
-		cdm.defaultLoadState=permanent ? LoadState.PERMANENT : LoadState.TICKING;
+		cdm.defaultLoadState=permanent ? LoadStateEnum.PERMANENT : LoadStateEnum.TICKING;
 		cdm.clearCooldowns();
 		cdm.update();
 		cdm.getLoadState().apply(level,pos);
@@ -257,7 +244,7 @@ public class LoadMyChunks {
 		ChunkPos pos = new ChunkPos(bp);
 		ServerLevel level = Brigadier.getLevel(ctx);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(level,pos);
-		cdm.defaultLoadState=ban ? LoadState.PERMANENTLY_DISABLED : LoadState.DISABLED;
+		cdm.defaultLoadState=ban ? LoadStateEnum.PERMANENTLY_DISABLED : LoadStateEnum.DISABLED;
 		cdm.update();
 		cdm.getLoadState().apply(level,pos);
 		if(ban) {

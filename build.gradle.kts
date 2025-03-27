@@ -13,7 +13,7 @@ plugins {
     //id("org.spongepowered.mixin") version("0.7")
 }
 
-class Env() {
+class Env {
     val split = stonecutter.current.version.split("-")
     val loader = split[1]
     val isFabric = loader.equals("fabric")
@@ -109,24 +109,13 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
-    maven {
-        url = uri("https://maven.pkg.github.com/Drathonix/Persist")
-        name = "GitHubPackages"
-        credentials {
-            username = System.getenv("GPR_USER")
-            password = System.getenv("GPR_API_KEY")
-        }
-    }
+    maven("https://panel.ryuutech.com/nexus/repository/maven-releases/")
 }
 
 //val embed: Configuration = configurations.create("embed")
 //configurations["implementation"].extendsFrom(embed)
 
 dependencies {
-    fun fapi(vararg modules: String) {
-        modules.forEach { fabricApi.module(it, deps["fapi"]) }
-    }
-
     minecraft("com.mojang:minecraft:${env.mc_ver}")
     mappings(loom.officialMojangMappings())
     val arch = if(env.atLeast("1.18.0")) "dev.architectury" else "me.shedaniel"

@@ -17,9 +17,17 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.neoforged.fml.common.Mod;
+
+@Mod(LoadMyChunks.MOD_ID)
 public class LMCNeoInit {
+    public LMCNeoInit(IEventBus meb) {
+        LoadMyChunks.init();
+        LMCNeoInit.init(meb);
+    }
     public static void init(IEventBus meb) {
         NeoForge.EVENT_BUS.register(LMCNeoInit.class);
+        meb.addListener(MMDNeo::newRegistry);
         //TODO: WATCH NEO FOR CHANGES REGARDING THIS FEATURE.
         ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, LoadMyChunks.MOD_ID);
@@ -42,6 +50,10 @@ public class LMCNeoInit {
     public static void clientInit() {
         //? if cct
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
+    }
+
+    public static void newRegistry(NewRegistryEvent event){
+        event.register(LoaderTypeRegistry.INSTANCE);
     }
 }
 *///?}

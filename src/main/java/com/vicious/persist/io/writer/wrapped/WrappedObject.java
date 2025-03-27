@@ -1,15 +1,24 @@
 package com.vicious.persist.io.writer.wrapped;
 
-public class WrappedObject {
-    public final Object object;
-    public final String comment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public WrappedObject(Object object) {
+/**
+ * A holder object that stores an Object-String object-comment pair.
+ *
+ * @author Jack Andersen
+ * @since 1.0
+ */
+public class WrappedObject {
+    public final @Nullable Object object;
+    public final @NotNull String comment;
+
+    public WrappedObject(@Nullable Object object) {
         this.object = object;
         comment = "";
     }
 
-    public WrappedObject(Object object, String comment) {
+    public WrappedObject(@Nullable Object object, @Nullable String comment) {
         this.object = object;
         if(comment == null){
             comment = "";
@@ -17,15 +26,15 @@ public class WrappedObject {
         this.comment = comment;
     }
 
-    public static WrappedObject of(Object object) {
+    public static WrappedObject of(@Nullable Object object) {
         return new WrappedObject(object);
     }
 
-    public static WrappedObject of(Object object, String comment) {
+    public static WrappedObject of(@Nullable Object object, @Nullable String comment) {
         return new WrappedObject(object, comment);
     }
 
-    public static Object unwrap(Object o){
+    public static Object unwrap(@Nullable Object o){
         if(o instanceof WrappedObject){
             return ((WrappedObject) o).object;
         }
@@ -34,7 +43,7 @@ public class WrappedObject {
         }
     }
 
-    public static String unwrapComment(Object o){
+    public static @NotNull String unwrapComment(@Nullable Object o){
         if(o instanceof WrappedObject){
             return ((WrappedObject) o).comment;
         }

@@ -12,9 +12,28 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+//TODO: change this to a registry-type system.
+/**
+ * An enum representing an arbitrary notation format with a predetermined writer and parser configuration.
+ * @author Jack Andersen
+ */
 public enum NotationFormat {
+    /**
+     * A format I made for fun. It probably already exists in a different name.
+     * GON stands for Generic Object Notation and represents data extremely similar to JSON.
+     * Conveniently the GON parser can distinguish both formats.
+     * I had added GON before JSON and JSON5 so unfortunately there are some projects of mine that use .txt and .gon interchangeably.
+     */
     GON(GONWriter.DEFAULT, GONParser.DEFAULT,".txt",".gon"),
+    /**
+     * JSON standard.
+     * does not support comments.
+     */
     JSON(GONWriter.UGLY, GONParser.DEFAULT,"json"),
+    /**
+     * JSON5 standard.
+     * supports comments.
+     */
     JSON5(GONWriter.JSON5, GONParser.DEFAULT,"json5");
 
     public final IWriter writer;
@@ -27,6 +46,11 @@ public enum NotationFormat {
         this.validExtensions.addAll(Arrays.asList(validExtensions));
     }
 
+    /**
+     * Checks if a file's extension is supported by the format.
+     * @param file the file's name.
+     * @return whether the file extension is supported.
+     */
     public boolean isValidFile(String file){
         for (String validExtension : validExtensions) {
             if(file.endsWith(validExtension)){

@@ -1,5 +1,10 @@
 package com.vicious.persist.except;
 
+/**
+ * Indicates that an annotation is invalid for an arbitrary reason.
+ * @author Jack Andersen
+ * @since 1.0
+ */
 public class InvalidAnnotationException extends RuntimeException {
     public InvalidAnnotationException() {
     }

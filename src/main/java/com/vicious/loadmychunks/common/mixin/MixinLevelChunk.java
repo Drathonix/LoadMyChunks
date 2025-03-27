@@ -39,6 +39,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -123,15 +124,23 @@ public abstract class MixinLevelChunk
             }
         }
     }
-
-    @Redirect(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
-    public Object properlyDestroyTileEntities1(Map<?,?> instance, Object o){
-        Object rem = instance.remove(o);
-        if(rem instanceof IDestroyable destroyable && !level.isClientSide()){
-            destroyable.loadMyChunks$destroy();
+    // Use inject instead due to conflict with fabric mixins
+    @Inject(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;"),
+            slice = @Slice(
+            from = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/entity/BlockEntity;isRemoved()Z"
+            )
+    ))
+    public void properlyDestroyTileEntities1(BlockPos blockPos, LevelChunk.EntityCreationType entityCreationType, CallbackInfoReturnable<BlockEntity> cir){
+        if(!level.isClientSide){
+            Object rem = blockEntities.get(blockPos);
+            if(rem instanceof IDestroyable destroyable){
+                destroyable.loadMyChunks$destroy();
+            }
         }
-        return rem;
     }
+
     @Redirect(method = "removeBlockEntity",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
     public Object properlyDestroyTileEntities2(Map<?,?> instance, Object o){
         Object rem = instance.remove(o);

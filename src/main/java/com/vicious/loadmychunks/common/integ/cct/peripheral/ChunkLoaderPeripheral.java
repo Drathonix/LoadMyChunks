@@ -1,17 +1,9 @@
 //? if cct {
 package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
-import com.mojang.authlib.GameProfile;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadState;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.IOwnable;
-import dan200.computercraft.api.lua.IArguments;
-import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.lua.LuaException;
-import dan200.computercraft.api.lua.LuaFunction;
-import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -19,9 +11,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     private final BlockPos pos;

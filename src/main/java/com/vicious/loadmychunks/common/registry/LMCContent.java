@@ -51,6 +51,7 @@ public class LMCContent {
 
     public static RegistrySupplier<Item> itemTickometer;
     public static RegistrySupplier<Item> itemPlayerSpoofer;
+    public static RegistrySupplier<Item> itemPerfectedPlayerSpoofer;
     public static RegistrySupplier<Item> itemLocatingCore;
     public static RegistrySupplier<Item> itemDiamondWire;
     public static RegistrySupplier<ItemChunkLoaderExtension> itemExtension;
@@ -97,6 +98,7 @@ public class LMCContent {
             itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
             itemChunkometer = reg.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
             itemExtension = reg.register(ModResource.of("chunk_loader_extension"), () -> new ItemChunkLoaderExtension(new LMCProperties()));
+            itemPlayerSpoofer = reg.register(ModResource.of("perfected_player_spoofer"), () -> new ItemPerfectedPlayerSpoofer(new LMCProperties()));
         });
 
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{

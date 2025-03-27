@@ -1,6 +1,11 @@
 package com.vicious.persist.except;
 
-public class InvalidSavableElementException extends RuntimeException {
+/**
+ * Indicates that an element marked with {@link com.vicious.persist.annotations.Save} is invalid for some reason.
+ * @author Jack Andersen
+ * @since 1.0
+ */
+public class InvalidSavableElementException extends InvalidAnnotationException {
     public InvalidSavableElementException() {
     }
 

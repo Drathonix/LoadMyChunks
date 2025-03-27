@@ -1,11 +1,9 @@
 package com.vicious.loadmychunks.common.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.config.regis.ItemStackRetriever;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.persist.annotations.PersistentPath;
+import com.vicious.persist.annotations.ReplaceKeys;
 import com.vicious.persist.annotations.Save;
 import com.vicious.persist.annotations.Range;
 import com.vicious.persist.shortcuts.NotationFormat;
@@ -17,16 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+@ReplaceKeys(staticReplacements =
+@ReplaceKeys.Pair(target = "lagometerComputerExposureLevel",replacement = "cct/lagometerComputerExposureLevel"),
+        transformerVersion = 1)
 public class LMCConfig {
     public static LMCConfig instance;
     @PersistentPath(NotationFormat.JSON5)
@@ -50,15 +41,16 @@ public class LMCConfig {
     @Save(description = "Allows limiting number of loaded chunks.")
     public static Limit limitSettings = new Limit();
 
+    @Save(description = "Integration settings for CC:Tweaked")
+    public static CCTIntegration cct  = new CCTIntegration();
     @Save(description = "The lagometer effectively allows xraying chunks to find bases on chunk lag. On pvp servers I highly recommend setting this to true. On pve servers the lagometer is relatively harmless to player base security. Keep this false.")
     public static boolean lagometerNeedsChunkOwnership = false;
 
     @Save
     public static boolean useDebugLogging = false;
 
-    @Save(description = "When 2: Usage allowed in all computers. When 1: Usage banned in turtles and pocket computers. When 0: Usage banned in all computers")
-    @Range(minimum = 0, maximum = 2)
-    public static int lagometerComputerExposureLevel=2;
+    @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine")
+    public static boolean pluginMode = false
 
     @Save(description = "Maximum number of times a chunk loader's range can be extended.")
     @Range(minimum=0,maximum=10)
@@ -68,11 +60,38 @@ public class LMCConfig {
     public static Cost cost = new Cost();
 
     public static boolean isLagometerAllowedOnTurtle(){
-        return lagometerComputerExposureLevel == 2;
+        return cct.lagometerComputerExposureLevel == 2;
     }
 
     public static boolean isLagometerAllowedOnComputer(){
-        return lagometerComputerExposureLevel >= 1;
+        return cct.lagometerComputerExposureLevel >= 1;
+    }
+
+    public static class CCTIntegration {
+        @Save(description = "Enables turtle chunk loading.")
+        public boolean enableTurtleChunkLoading = true;
+        @Save(description = "Makes turtles consume items to remain loaded (only applies if cost/enabled is true)")
+        public boolean turtlesConsumeItems = true;
+        @Save(description = "Makes all turtles act as chunk loaders without needing a peripheral. Chunk Loader Peripheral LUA features will  be unavailable without a chunk loader peripheral present.")
+        public boolean turtlesChunkLoadWithoutPeripheral = true;
+        @Save(description = "Makes turtle chunk loaders ignore LMC's lag limit system. Not recommended for public servers.")
+        public boolean ignoreTickChecks = false;
+        @Save(description = "When 2: Usage allowed in all computers. When 1: Usage banned in turtles and pocket computers. When 0: Usage banned in all computers")
+        @Range(minimum = 0, maximum = 2)
+        public int lagometerComputerExposureLevel=2;
+        @Save(description = "When enabled turtles can force random ticks -- note that this also requires that random ticking be set to ON as turtles cannot be upgraded.")
+        public boolean turtlesCanForceRandomTicking = false;
+    }
+
+    public enum SettingLevel {
+        ON,
+        ITEM,
+        OFF;
+    }
+
+    public static class Ticking {
+        @Save(description = "By default forced chunks only tick block entities, this allows entities and random ticks to occur as well. When ON this feature is always enabled. When ITEM this feature only activates if the loader has been upgraded with an Improved Player Spoofer. When OFF this feature is disabled.")
+        public SettingLevel forceEntityAndRandomTicking = SettingLevel.ITEM;
     }
 
     public static class Cost {
@@ -82,6 +101,10 @@ public class LMCConfig {
         @Save(description = "The time in seconds each item grants per chunk loader.")
         @Range(minimum = 1)
         public long timeSecondsGained = 60*60*4;
+
+        @Save(description = "Essentially makes loading more expensive if the loader is entity ticking as well when this value is >0 and <1.")
+        @Range(minimum = 0.0000000000001,maximum = 1)
+        public float entityTickingCostFactor = 1F;
 
         @Save(description = "Change this to set the itemstack consumed.")
         public ItemStackRetriever itemStack = new ItemStackRetriever(Items.ENDER_PEARL.getDefaultInstance());

@@ -1,17 +1,13 @@
 //? if cct {
 package com.vicious.loadmychunks.common.integ.cct.turtle;
 
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.extension.AtomicExtensionChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<TurtleChunkLoader> {
@@ -37,7 +33,7 @@ public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<Turtl
     }
 
     @Override
-    public LoadState getLoadState() {
+    public LoadStates.ILoadState getActiveState() {
         if(!isUnhosted() && getPrimaryHostLoader() != null) {
             return getPrimaryHostLoader().getExtensionLoadState();
         }

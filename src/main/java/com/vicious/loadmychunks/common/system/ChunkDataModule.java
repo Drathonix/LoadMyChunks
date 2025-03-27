@@ -2,9 +2,10 @@ package com.vicious.loadmychunks.common.system;
 
 
 import com.vicious.loadmychunks.common.bridge.IInformable;
-import com.vicious.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.vicious.loadmychunks.common.config.LMCConfig;
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.control.Period;
 import com.vicious.loadmychunks.common.system.control.Timings;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
@@ -22,19 +23,15 @@ import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
     private Period gracePeriod;
     private Period disabledPeriod;
-    public LoadState defaultLoadState = LoadState.DISABLED;
-    private LoadState loadState = defaultLoadState;
+    public LoadStateEnum defaultLoadState = LoadStateEnum.DISABLED;
+    private LoadStates.ILoadState loadState = defaultLoadState;
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
     //private ILevelChunkMixin chunk;
@@ -60,21 +57,21 @@ public class ChunkDataModule {
         if(tag.contains("nextCheck")){
             nextGameTimeCheckTick = tag.getLong("nextCheck");
         }
-        defaultLoadState = LoadState.values()[tag.getInt("default")];
+        defaultLoadState = LoadStateEnum.values()[tag.getInt("default")];
         loadState=defaultLoadState;
         ListTag loaders = tag.getList("loaders", 10);
         for (Tag loader : loaders) {
             if(loader instanceof CompoundTag){
                 CompoundTag ct = (CompoundTag) loader;
-                Supplier<? extends IChunkLoader> inst = LoaderTypeRegistry.getFactory(ModResource.parse(ct.getString("type_id")));
-                if(inst != null) {
-                    IChunkLoader loaderInst = inst.get();
+                LoaderTypeRegistry.INSTANCE.getOptional(ModResource.parse(ct.getString("type_id")))
+                .ifPresent(obj->{
+                    IChunkLoader loaderInst = obj.create();
                     try {
                         loaderInst.load(ct, level);
                         addLoader(level,loaderInst);
-                    //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
+                        //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
                     } catch (DoNotAddException ignored){}
-                }
+                });
             }
         }
         if(loadState.shouldLoad()) {
@@ -113,12 +110,12 @@ public class ChunkDataModule {
      */
     public boolean addLoader(ServerLevel level, @NotNull IChunkLoader loader){
         loaders.add(loader);
-        LoadState previous = loadState;
+        LoadStates.ILoadState previous = loadState;
         if(onCooldown()){
-            loadState = LoadState.OVERTICKED;
+            loadState = LoadStateEnum.OVERTICKED;
         }
         else{
-            loadState = loader.getLoadState().getSuperiorLoadState(loadState);
+            loadState = loader.getActiveState().getSuperiorLoadState(loadState);
         }
         nextGameTimeCheckTick=-1;
         if(loader instanceof IOwnable) {}
@@ -135,7 +132,7 @@ public class ChunkDataModule {
             loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
         }
         loaders.remove(loader);
-        LoadState previous = loadState;
+        LoadStates.ILoadState previous = loadState;
         update();
         nextGameTimeCheckTick=-1;
         if(loader instanceof IOwnable){
@@ -153,14 +150,14 @@ public class ChunkDataModule {
         loadState = defaultLoadState;
         if(!onCooldown()) {
             for (IChunkLoader loader : loaders) {
-                loadState = loader.getLoadState().getSuperiorLoadState(loadState);
-                if (loadState == LoadState.PERMANENT) {
+                loadState = loader.getActiveState().getSuperiorLoadState(loadState);
+                if(loadState.blockEntityTickingPower() == LoadStates.Power.FORCED){
                     break;
                 }
             }
         }
         else{
-            loadState=LoadState.OVERTICKED;
+            loadState= LoadStateEnum.OVERTICKED;
             gracePeriod=null;
         }
 
@@ -182,7 +179,7 @@ public class ChunkDataModule {
         return disabledPeriod;
     }
 
-    public @NotNull LoadState getLoadState(){
+    public @NotNull LoadStates.ILoadState getLoadState(){
         return loadState;
     }
 
@@ -207,7 +204,7 @@ public class ChunkDataModule {
     }
 
     public void startShutoff(){
-        loadState = LoadState.OVERTICKED;
+        loadState = LoadStateEnum.OVERTICKED;
         disabledPeriod = Period.after(TimeUnit.SECONDS.toMillis(LMCConfig.delayBeforeReload));
     }
 
@@ -318,19 +315,23 @@ public class ChunkDataModule {
         if(LMCConfig.cost.enabled && level.getGameTime() >= nextGameTimeCheckTick){
             boolean doStateUpdateCheck = false;
             for (IChunkLoader loader : loaders) {
-                LoadState pre = loader.getLoadState();
+                LoadStates.ILoadState pre = loader.getActiveState();
                 loader.timingsCheck(level,this,level.getGameTime());
-                if(pre != loader.getLoadState()){
+                if(pre != loader.getActiveState()){
                     doStateUpdateCheck=true;
                 }
             }
             if(doStateUpdateCheck) {
-                LoadState pre = loadState;
-                update();
-                if(pre != loadState){
-                    updateChunkLoadState(level);
-                }
+                update(()->updateChunkLoadState(level));
             }
+        }
+    }
+
+    public void update(Runnable onChange){
+        LoadStates.ILoadState pre = loadState;
+        update();
+        if(pre != loadState){
+            onChange.run();
         }
     }
 
@@ -341,6 +342,4 @@ public class ChunkDataModule {
     public void configReloaded(ServerLevel level) {
 
     }
-
-
 }

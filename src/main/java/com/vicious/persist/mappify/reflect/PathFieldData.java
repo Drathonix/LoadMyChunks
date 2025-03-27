@@ -2,10 +2,21 @@ package com.vicious.persist.mappify.reflect;
 
 import com.vicious.persist.annotations.PersistentPath;
 import com.vicious.persist.mappify.Context;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 
+/**
+ * Stores a Field or Method marked with {@link PersistentPath}
+ *
+ * @since 1.0
+ * @author Jack Andersen
+ * @param <T> the getter element type.
+ */
 public class PathFieldData<T extends AccessibleObject & Member> {
+    /**
+     * A method or field returning a String.
+     */
     public final T getterElement;
     public final PersistentPath path;
 
@@ -19,7 +30,13 @@ public class PathFieldData<T extends AccessibleObject & Member> {
         return (isStatic && Modifier.isStatic(getterElement.getModifiers())) || (!isStatic && !Modifier.isStatic(getterElement.getModifiers()));
     }
 
-    public Object get(Context context) {
+    /**
+     * Returns the relative path String.
+     *
+     * @param context the context.
+     * @return The relative path String.
+     */
+    public @Nullable Object get(Context context) {
         try {
             if(getterElement instanceof Field) {
                 return ((Field) getterElement).get(context.source);

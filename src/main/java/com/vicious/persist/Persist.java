@@ -9,9 +9,16 @@ import java.lang.annotation.Annotation;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+/**
+ * @author Jack Andersen
+ */
 public class Persist {
     public static final Logger logger = LogManager.getLogManager().getLogger("persist");
 
+    /**
+     * Searches the classpath for classes marked with {@link C_NAME}
+     * Found classes will have their name registered to the class-name map.
+     */
     public static void doC_NAMEScan(){
         AnnotationDetector.TypeReporter reporter = new AnnotationDetector.TypeReporter(){
             @Override

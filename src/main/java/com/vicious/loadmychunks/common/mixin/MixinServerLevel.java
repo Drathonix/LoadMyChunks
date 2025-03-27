@@ -1,5 +1,6 @@
 package com.vicious.loadmychunks.common.mixin;
 
+import com.vicious.loadmychunks.common.bridge.IServerLevelMixin;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 //? if >1.18.1 {
 import net.minecraft.core.Holder;
@@ -17,16 +18,19 @@ import net.minecraft.world.RandomSequences;
 *///?}
 //?}
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,9 +41,16 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 @Mixin(ServerLevel.class)
-public abstract class MixinServerLevel {
+public abstract class MixinServerLevel implements IServerLevelMixin {
+    @Override
+    public PersistentEntitySectionManager<Entity> lmc$getEntityManager() {
+        return this.entityManager;
+    }
+
     @Shadow
     public abstract DimensionDataStorage getDataStorage();
+
+    @Shadow @Final private PersistentEntitySectionManager<Entity> entityManager;
 
     //? if >1.20.5 {
     @Inject(method = "<init>",at = @At("RETURN"))

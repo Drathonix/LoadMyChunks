@@ -1,10 +1,10 @@
 package com.vicious.loadmychunks.common.system.loaders;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
-import com.vicious.loadmychunks.common.registry.LoaderTypes;
-import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
@@ -24,7 +24,8 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     protected int extensionRange = 0;
     @Nullable protected UUID owner;
     protected BlockPos position;
-    protected LoadState loadState = LoadState.TICKING;
+    protected LoadStates.ILoadState defaultState = LoadStates.TICKING
+    protected LoadStates.ILoadState loadState = defaultState;
     protected long activityEnd = -1;
 
     public PlacedChunkLoader(){}
@@ -50,7 +51,8 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
             tag.putInt("extensions",extensionRange);
         }
         tag.putLong("duration", activityEnd);
-        tag.putInt("state",loadState.ordinal());
+        LoadStates.putCompound("state",tag,loadState);
+        LoadStates.putCompound("default",tag,defaultState);
         tag.putLong("pos",position.asLong());
         return tag;
     }
@@ -69,9 +71,8 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
         if(tag.contains("duration")){
             activityEnd = tag.getLong("duration");
         }
-        if(tag.contains("state")){
-            loadState = LoadState.values()[tag.getInt("state")];
-        }
+        defaultState = LoadStates.fromCompound("default",tag,LoadStates.TICKING);
+        loadState = LoadStates.fromCompound("state",tag,defaultState);
         if(tag.contains("extensions")){
             extensionRange = tag.getInt("extensions");
             extensions = new ExtensionChunkLoaders(level,this);
@@ -123,16 +124,25 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
         return owner;
     }
 
+    protected boolean outOfTime(){
+        return LMCConfig.cost.enabled && activityEnd == -1;
+    }
+
     @Override
-    public LoadState getLoadState() {
-        if(hasExceededChunkLimit() || LMCConfig.cost.enabled && activityEnd == -1){
-            return LoadState.DISABLED;
+    public LoadStates.ILoadState getActiveState() {
+        if(hasExceededChunkLimit() || outOfTime()){
+            return LoadStateEnum.DISABLED;
         }
         return loadState;
     }
 
     @Override
-    public void setLoadState(LoadState state) {
+    public LoadStates.ILoadState getDefaultState() {
+        return defaultState;
+    }
+
+    @Override
+    public void setActiveState(LoadStates.ILoadState state) {
         this.loadState =state;
     }
 
@@ -147,7 +157,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public ResourceLocation getTypeId() {
-        return LoaderTypes.PLACED_LOADER;
+        return LoaderTypeKeys.PLACED_LOADER;
     }
 
     @Override

@@ -2,9 +2,8 @@
 package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
 import com.mojang.authlib.GameProfile;
-import com.vicious.loadmychunks.common.bridge.IDestroyable;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import dan200.computercraft.api.lua.IArguments;
@@ -12,7 +11,6 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;
-import net.minecraft.server.level.ServerLevel;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -39,14 +37,14 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
 
     public void setActive(boolean active){
         if(active){
-            getChunkLoader().setLoadState(LoadState.TICKING);
+            getChunkLoader().setActiveState(getChunkLoader().getDefaultState());
             if(getChunkDataModule().addLoader(getLevel(),getChunkLoader())){
                 getChunkDataModule().updateChunkLoadState(getLevel());
             }
             ChunkDataManager.setDirty(getLevel());
         }
         else{
-            getChunkLoader().setLoadState(LoadState.DISABLED);
+            getChunkLoader().setActiveState(LoadStateEnum.DISABLED);
             if(getChunkDataModule().removeLoader(getLevel(),getChunkLoader())){
                 getChunkDataModule().updateChunkLoadState(getLevel());
             }
@@ -56,7 +54,7 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
 
     @LuaFunction
     public final boolean isActive(ILuaContext context, IComputerAccess access, IArguments arguments) {
-        return getChunkLoader().getLoadState().shouldLoad();
+        return getChunkLoader().getActiveState().shouldLoad();
     }
 
     @LuaFunction
@@ -117,8 +115,13 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
         return null;
     }
 
+    @LuaFunction
     public boolean shouldLoad(){
-        return getChunkLoader().getLoadState().shouldLoad();
+        return getChunkLoader().getActiveState().shouldLoad();
+    }
+    @LuaFunction
+    public boolean shouldEntityTick(){
+        return getChunkLoader().getActiveState().shouldForceEntities();
     }
 }
 //?}

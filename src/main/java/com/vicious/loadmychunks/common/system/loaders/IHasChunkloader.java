@@ -14,4 +14,10 @@ public interface IHasChunkloader {
     default boolean supportsExtension(){
         return loadMyChunks$hasChunkLoader() && loadMyChunks$getChunkLoader().supportsExtensions();
     }
+
+    default boolean supportsEntityTicking(){
+        return loadMyChunks$hasChunkLoader() && loadMyChunks$getChunkLoader().supportsEntityTicking();
+    }
+
+    boolean enableEntityTicking();
 }

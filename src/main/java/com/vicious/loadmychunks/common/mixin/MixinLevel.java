@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin(Level.class)
+@Mixin(value = Level.class,priority = 0)
 public abstract class MixinLevel implements ILevelMixin {
     //? if >1.16.5 {
     @Shadow private boolean tickingBlockEntities;
@@ -34,7 +34,6 @@ public abstract class MixinLevel implements ILevelMixin {
     @Shadow @Final protected List<TickingBlockEntity> blockEntityTickers;
 
     @Shadow public abstract LevelChunk getChunk(int i, int j);
-
 
     @Shadow public abstract boolean isClientSide();
 

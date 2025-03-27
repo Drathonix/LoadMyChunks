@@ -1,9 +1,6 @@
 package com.vicious.persist.io.parser;
 
 import com.vicious.persist.except.ParserException;
-import com.vicious.persist.io.parser.AssumedType;
-import com.vicious.persist.io.parser.IParser;
-import com.vicious.persist.io.parser.TokenView;
 import com.vicious.persist.io.parser.enums.CommentType;
 
 import java.io.IOException;

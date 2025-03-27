@@ -1,7 +1,6 @@
 package com.vicious.persist.io.parser;
 
 import com.vicious.persist.except.ParserException;
-import com.vicious.persist.io.parser.TokenView;
 import com.vicious.persist.io.parser.enums.CommentType;
 
 import java.io.IOException;
@@ -11,14 +10,14 @@ import java.util.Map;
 
 public interface IParser {
     default Map<String,Object> mappify(InputStream inputStream){
-        return mappify(new com.vicious.persist.io.parser.TokenView(inputStream));
+        return mappify(new TokenView(inputStream));
     }
     default List<Object> listify(InputStream inputStream){
-        return listify(new com.vicious.persist.io.parser.TokenView(inputStream));
+        return listify(new TokenView(inputStream));
     }
 
-    Map<String,Object> mappify(com.vicious.persist.io.parser.TokenView tokenView);
-    List<Object> listify(com.vicious.persist.io.parser.TokenView tokenView);
+    Map<String,Object> mappify(TokenView tokenView);
+    List<Object> listify(TokenView tokenView);
 
     TokenView getTokenView();
 

@@ -2,27 +2,18 @@
 package com.vicious.loadmychunks.common.integ.cct.turtle;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
-import com.vicious.loadmychunks.common.registry.LoaderTypes;
+import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadState;
-import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.IChunkPositioned;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
-import com.vicious.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class TurtleChunkLoader extends PlacedChunkLoader {
     @Nullable protected TurtleChunkLoaderPeripheral peripheral;
@@ -44,7 +35,7 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
 
     @Override
     public ResourceLocation getTypeId() {
-        return LoaderTypes.CCT_TURTLE_LOADER;
+        return LoaderTypeKeys.CCT_TURTLE_LOADER;
     }
 
     public TurtleChunkLoader move(TurtleChunkLoaderPeripheral peripheral, BlockPos newPosition) {
@@ -68,6 +59,14 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
     }
 
     @Override
+    protected boolean outOfTime() {
+        if(!LMCConfig.cct.turtlesConsumeItems){
+            return false;
+        }
+        return super.outOfTime();
+    }
+
+    @Override
     public ExtensionChunkLoaders.Factory<?> getExtensionFactory() {
         return this::createTurtleExtension;
     }
@@ -82,8 +81,20 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         this.peripheral = peripheral;
     }
 
-    public LoadState getExtensionLoadState() {
-        return loadExtensions ? loadState : LoadState.DISABLED;
+    @Override
+    public LoadStates.ILoadState getActiveState() {
+        if(!LMCConfig.cct.enableTurtleChunkLoading){
+            return LoadStateEnum.DISABLED;
+        }
+        LoadStates.ILoadState loadState = super.getActiveState();
+        if(LMCConfig.cct.ignoreTickChecks && loadState.shouldLoad()){
+            return LoadStateEnum.PERMANENT;
+        }
+        return loadState;
+    }
+
+    public LoadStates.ILoadState getExtensionLoadState() {
+        return loadExtensions ? loadState : LoadStateEnum.DISABLED;
     }
 
     @Override

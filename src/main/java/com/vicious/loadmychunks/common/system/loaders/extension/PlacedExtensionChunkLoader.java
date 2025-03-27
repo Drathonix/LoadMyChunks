@@ -3,7 +3,8 @@ package com.vicious.loadmychunks.common.system.loaders.extension;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.control.LoadState;
+import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
+import com.vicious.loadmychunks.common.system.control.LoadStates;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
@@ -72,12 +73,12 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     }
 
     @Override
-    public LoadState getLoadState() {
-        if(hasExceededChunkLimit() || LMCConfig.cost.enabled && activityEnd == -1){
-            return LoadState.DISABLED;
+    public LoadStates.ILoadState getActiveState() {
+        if(hasExceededChunkLimit() || (LMCConfig.cost.enabled && activityEnd == -1)){
+            return LoadStateEnum.DISABLED;
         }
-        if(!isUnhosted() && getPrimaryHostLoader() != null && !getPrimaryHostLoader().getLoadState().shouldLoad()){
-            return LoadState.DISABLED;
+        if(!isUnhosted() && getPrimaryHostLoader() != null && !getPrimaryHostLoader().getActiveState().shouldLoad()){
+            return LoadStateEnum.DISABLED;
         }
         return loadState;
     }

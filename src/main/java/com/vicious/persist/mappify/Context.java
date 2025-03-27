@@ -1,19 +1,51 @@
 package com.vicious.persist.mappify;
 
+import com.vicious.persist.annotations.ReplaceKeys;
 import com.vicious.persist.mappify.reflect.ClassData;
 import com.vicious.persist.mappify.reflect.FieldData;
+import com.vicious.persist.mappify.registry.Reserved;
+import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.NotationFormat;
 import com.vicious.persist.util.ClassMap;
+import com.vicious.persist.util.StringTree;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * Represents the current state of a {@link Mappifier}
+ *
+ * Every class has 2 possible Contexts.
+ * The static Context applies to only elements with the static modifier.
+ * The non-static Context applies to only elements without the static modifier.
+ *
+ * @author Jack Andersen
+ * @since 1.0
+ */
 public class Context {
     private static final ClassMap<ClassData> classData = new ClassMap<>();
-
-    public final Class<?> type;
+    /**
+     * True if the source is a {@link Class} instance.
+     */
     public final boolean isStatic;
+
+    /**
+     * The type of the context's source.
+     */
+    public final Class<?> type;
+    /**
+     * Whether the source object is an enum instance.
+     */
     public final boolean isEnum;
+    /**
+     * The source object that the context applies to.
+     */
     public final Object source;
+    /**
+     * The {@link ClassData} of the source object.
+     */
     public final ClassData data;
 
     protected Context(Object source){
@@ -62,5 +94,48 @@ public class Context {
 
     public boolean getPersistentPathMigrateMode() {
         return data.getPersistentPathMigrateMode(this);
+    }
+
+    public boolean hasTransformations() {
+        return data.hasTransformations(isStatic);
+    }
+
+    /**
+     * Applies key transformations from {@link ReplaceKeys}
+     * @param map the map to transform.
+     * @return untransformed key.
+     */
+    public void transform(Map<Object, Object> map) {
+        if(map.containsKey(Reserved.TRANSFORMER_VER) && map.get(Reserved.TRANSFORMER_VER) instanceof Number){
+            if(data.getTransformerVer() == ((Number)map.get(Reserved.TRANSFORMER_VER)).intValue()){
+                return;
+            }
+        }
+        transform(map,map,data.getTransformations(isStatic),0,"");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void transform(Map<Object,Object> rootMap, Map<Object, Object> map, StringTree<String> tree, int depth, String path) {
+        int treeDepth = tree.depth();
+        for (Object o : new ArrayList<>(map.keySet())) {
+            String str = Stringify.stringify(o);
+            String pth = path+str;
+            String replacement = tree.get(pth);
+            if (replacement != null) {
+                Object val = map.remove(str);
+                String[] dest = replacement.split("/");
+                Map<Object,Object> sub = rootMap;
+                for (int i = 0; i < dest.length-1; i++) {
+                    sub = (Map<Object,Object>)sub.computeIfAbsent(dest,k->new HashMap<>());
+                }
+                sub.put(dest[dest.length-1],val);
+            } else if (depth+1 < treeDepth && map.get(str) instanceof Map && tree.containsNode(pth)) {
+                transform(rootMap,(Map<Object,Object>) map.get(str), tree, depth + 1, pth + "/");
+            }
+        }
+    }
+
+    public int getTransformerVer() {
+        return data.getTransformerVer();
     }
 }

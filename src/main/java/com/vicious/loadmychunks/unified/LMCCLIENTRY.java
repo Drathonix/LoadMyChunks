@@ -14,17 +14,6 @@ import com.vicious.loadmychunks.fabric.LMCFabricInit;
 import net.fabricmc.api.ClientModInitializer;
 //?}
 
-
-//? if fabric {
-public class LMCCLIENTRY implements ClientModInitializer {
-        @Override
-        public void onInitializeClient() {
-                LoadMyChunksClient.init();
-                LMCFabricInit.clientInit();
-        }
-}
-//?}
-
 //? elif forge {
 /*@Mod.EventBusSubscriber(modid= LoadMyChunks.MOD_ID,bus= Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)
 public class LMCCLIENTRY {

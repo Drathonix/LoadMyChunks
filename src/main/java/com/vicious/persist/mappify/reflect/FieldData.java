@@ -5,18 +5,48 @@ import com.vicious.persist.annotations.Save;
 import com.vicious.persist.annotations.Typing;
 import com.vicious.persist.except.InvalidSavableElementException;
 import com.vicious.persist.mappify.Context;
-import com.vicious.persist.mappify.reflect.TypeInfo;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 
+/**
+ * Represents a savable element's annotations and its getter and setter functions.
+ * Savable elements can consist of Methods and Fields, what matters is that there is a way to get an element's value and set its value.
+ * Possible scenarios:
+ * Field = setter and getter
+ * Field = getter, Method = setter
+ * Method = getter, Field = setter
+ * Method = getter, Method = setter
+ *
+ * @author Jack Andersen
+ * @since 1.0
+ * @param <T> the getter element type.
+ */
 public class FieldData<T extends AccessibleObject & Member> implements TypeInfo {
+    /**
+     * A Field or Method that returns an Object for the FieldData.
+     */
     public final T getterElement;
+    /**
+     * The required {@link Save} Field annotation instance.
+     */
+    @NotNull
     public final Save saveData;
+    /**
+     * The optional {@link Range} Field annotation instance.
+     */
     @Nullable
     public final Range rangeData;
+    /**
+     * The optional {@link Typing} Field annotation instance.
+     */
     @Nullable
     public final Typing typing;
+    /**
+     * The optional setter method for the Field. Marked with {@link Save.Setter}
+     */
+    @Nullable
     public final Method setter;
 
     public FieldData(T element, @Nullable Method setter) {
@@ -38,7 +68,12 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
         return (isStatic && Modifier.isStatic(getterElement.getModifiers())) || (!isStatic && !Modifier.isStatic(getterElement.getModifiers()));
     }
 
-    public Object get(Context context) {
+    /**
+     * Returns the field's current value.
+     * @param context the context to execute in.
+     * @return the current value.
+     */
+    public @Nullable Object get(Context context) {
         try {
             if(getterElement instanceof Field) {
                 return ((Field) getterElement).get(context.source);
@@ -54,7 +89,12 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
         }
     }
 
-    public void set(Context context, Object value) {
+    /**
+     * Set's the field's value
+     * @param context the execution context
+     * @param value the new value
+     */
+    public void set(Context context, @Nullable Object value) {
         try {
             if(rangeData != null && value instanceof Number){
                 double v = ((Number)value).doubleValue();
@@ -120,7 +160,7 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
 
     public Class<?>[] getTyping(){
         if(typing == null){
-            throw new InvalidSavableElementException("missing @Typing eu.infomas.annotation!");
+            throw new InvalidSavableElementException("missing @Typing annotation!");
         }
         return typing.value();
     }
