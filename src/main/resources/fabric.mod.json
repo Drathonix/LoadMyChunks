@@ -8,10 +8,11 @@
     "${authors}"
   ],
   "contact": {
-    "homepage": "${github_url}",
-    "sources": "${github_url}"
+    "homepage": "${website}",
+    "sources": "${source_url}",
+    "issues": "${issue_tracker}"
   },
-  "license": "CC0-1.0",
+  "license": "${license}",
   "icon": "${icon}",
   "environment": "*",
   "entrypoints": {
@@ -22,13 +23,6 @@
       "${fabric_client_entry}"
     ]
   },
-  "mixins": [
-    "${main_mixin}"
-  ],
-  "depends": {
-    "fabricloader": ">=0.15",
-    "minecraft": ">${mc_min} <=${mc_max}",
-    "${fabric_api_id}": ">=${fabric_api}",
-    "architectury": ">=${arch_ver}"
-  }
+${mixin_field}
+${dependencies_field}
 }

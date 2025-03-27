@@ -1,7 +1,8 @@
 modLoader="javafml"
-loaderVersion="${loader_ver_range}"
+loaderVersion="${forgelike_loader_ver}"
 license="${license}"
 issueTrackerURL="${issue_tracker}"
+
 [[mods]]
 modId="${id}"
 version="${version}"
@@ -12,29 +13,6 @@ description='''
 ${description}
 '''
 
-${neo_forge_1204_mixin_field}
+${mixin_field}
 
-[[dependencies.${id}]]
-# NOTE: THIS IS HERE BECAUSE 1.20.4 NEO STILL USED
-modId="${loader_id}"
-#NEO COMPAT
-${mandatory_indicator}=true
-versionRange="${loader_ver}"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.${id}]]
-modId="minecraft"
-#NEO COMPAT
-${mandatory_indicator}=true
-versionRange="(${mc_min},${mc_max}]"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.${id}]]
-modId="architectury"
-#NEO COMPAT
-${mandatory_indicator}=true
-versionRange="[${arch_ver},)"
-ordering="NONE"
-side="BOTH"
+${dependencies_field}

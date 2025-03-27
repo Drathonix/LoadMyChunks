@@ -3,7 +3,7 @@
 # The coremods config file path is not configurable and is always loaded from META-INF/coremods.json
 
 modLoader="javafml"
-loaderVersion="${loader_ver_range}"
+loaderVersion="${forgelike_loader_ver}"
 license="${license}"
 issueTrackerURL="${issue_tracker}"
 
@@ -17,28 +17,7 @@ description='''
 ${description}
 '''
 
-[[mixins]]
-config="${id}.mixins.json"
+${mixin_field}
 
-[[dependencies.${id}]]
-modId="neoforge"
-type="required"
-versionRange="${neo_ver_range}"
-ordering="AFTER"
-side="BOTH"
-
-[[dependencies.${id}]]
-modId="minecraft"
-type="required"
-versionRange="(${mc_min},${mc_max}]"
-ordering="AFTER"
-side="BOTH"
-
-[[dependencies.${id}]]
-modId="architectury"
-#NEO COMPAT
-${mandatory_indicator}=true
-versionRange="[${arch_ver},)"
-ordering="AFTER"
-side="BOTH"
+${dependencies_field}
 
