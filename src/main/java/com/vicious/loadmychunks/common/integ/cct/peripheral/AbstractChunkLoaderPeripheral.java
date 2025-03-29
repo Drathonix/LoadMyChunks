@@ -1,4 +1,4 @@
-//? if cct {
+//? if cc-tweaked {
 package com.vicious.loadmychunks.common.integ.cct.peripheral;
 
 import com.mojang.authlib.GameProfile;

@@ -4,18 +4,18 @@ import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.mixin.MixinBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 
-//? if cct {
+//? if cc-tweaked {
 //? if >1.19.2
 import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity;
 //? if <1.19.3
 /*import dan200.computercraft.shared.computer.blocks.TileComputerBase;*/
 //?}
 
-//? if !cct {
+//? if !cc-tweaked {
 /*@Mixin(LoadMyChunks.class)
 public abstract class MixinAbstractComputerBlockEntity {
-}*/
-//?} else {
+}
+*///?} else {
 //? if >1.19.2
 @Mixin(AbstractComputerBlockEntity.class)
 //? if <1.19.3

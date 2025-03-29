@@ -6,6 +6,7 @@ import com.vicious.loadmychunks.common.bridge.ILevelMixin;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
 
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -120,8 +121,9 @@ public abstract class MixinLevelChunk
             loadMyChunks$loadDataModule.getTickTimer().end();
             loadMyChunks$loadDataModule.inform();
             if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){
+                ILoadState prev = loadMyChunks$loadDataModule.getLoadState();
                 loadMyChunks$loadDataModule.startShutoff();
-                ChunkDataManager.markShutDown((ServerLevel)level,chunkPos);
+                ChunkDataManager.markShutDown((ServerLevel)level,chunkPos,prev);
             }
         }
     }

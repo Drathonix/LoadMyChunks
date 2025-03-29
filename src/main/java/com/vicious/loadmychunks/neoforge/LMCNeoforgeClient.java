@@ -21,7 +21,7 @@ public class LMCNeoforgeClient {
                 clientInit();
         }
         public static void clientInit() {
-            //? if cct
+            //? if cc-tweaked
             Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
         }
 }*/

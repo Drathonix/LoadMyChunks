@@ -2,19 +2,38 @@ package com.vicious.loadmychunks.common.util;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * Convenience class for making resource locations easily.
+ */
 public class ModResource {
-    public static ResourceLocation of(String string){
+    /**
+     * Makes a resource location "modid:string"
+     * @param string the key
+     * @return a resource location.
+     */
+    public static @NotNull ResourceLocation of(@NotNull String string){
         //? if <1.20.7
         /*return new ResourceLocation(LoadMyChunks.MOD_ID,string);*/
         //? if >1.20.6
         return ResourceLocation.fromNamespaceAndPath(LoadMyChunks.MOD_ID,string);
     }
 
-    public static ResourceLocation parse(String string) {
-        //? if <1.20.7
-        /*return new ResourceLocation(string);*/
-        //? if >1.20.6
+    /**
+     * Parses a resource location.
+     * @param string the resource location string
+     * @return a parsed resource location.
+     */
+    public static @Nullable ResourceLocation parse(@NotNull String string) {
+        //? if <1.20.7 {
+        /*try {
+            return new ResourceLocation(string);
+        catch(Throwable t){
+            return null;
+        }*///?} else {
         return ResourceLocation.tryParse(string);
+        //?}
     }
 }

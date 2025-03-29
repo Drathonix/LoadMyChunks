@@ -1,6 +1,6 @@
 package com.vicious.loadmychunks.common.mixin.cct;
 
-//? if !cct {
+//? if !cc-tweaked {
 /*import com.vicious.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 @Mixin(LoadMyChunks.class)
@@ -8,7 +8,7 @@ public class MixinTurtleBrain {
 
 }
 *///?}
-//? if cct {
+//? if cc-tweaked {
 
 import com.vicious.loadmychunks.common.bridge.IContextDestroyable;
 import dan200.computercraft.api.peripheral.IPeripheral;

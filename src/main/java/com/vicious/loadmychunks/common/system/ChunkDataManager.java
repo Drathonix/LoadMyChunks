@@ -2,6 +2,8 @@ package com.vicious.loadmychunks.common.system;
 
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
@@ -126,8 +128,8 @@ public class ChunkDataManager {
         return count;
     }
 
-    public static void markShutDown(ServerLevel level, ChunkPos chunkPos) {
-        getManager(level).shutDown(chunkPos);
+    public static void markShutDown(ServerLevel level, ChunkPos chunkPos, ILoadState previous) {
+        getManager(level).shutDown(chunkPos,previous);
     }
 
     public static void removeChunkLoader(ServerLevel level, BlockPos pos, IChunkLoader loader){
@@ -240,7 +242,7 @@ public class ChunkDataManager {
                     shutDown(pos);
                 }
                 else{
-                    module.getLoadState().apply(level,pos);
+                    module.getLoadState().apply(level,pos, LoadStateRegistry.DISABLED);
                 }
             }
         }
@@ -256,8 +258,9 @@ public class ChunkDataManager {
 
         public synchronized void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
+            ILoadState previous = cdm.getLoadState();
             if(cdm.addLoader(level,loader)) {
-                cdm.updateChunkLoadState(level);
+                cdm.updateChunkLoadState(level,previous);
             }
             setDirty();
         }
@@ -329,11 +332,12 @@ public class ChunkDataManager {
                 ChunkDataModule module = iterator.next();
                 if(!module.onCooldown()) {
                     iterator.remove();
+                    ILoadState previous = module.getLoadState();
                     module.update();
                     if(module.getLoadState().shouldLoad()){
                         module.startGrace();
                     }
-                    module.getLoadState().apply(level, module.getPosition());
+                    module.getLoadState().apply(level, module.getPosition(),previous);
                 }
 
             }
@@ -341,10 +345,10 @@ public class ChunkDataManager {
             tickCounter++;
         }
 
-        public synchronized void shutDown(@NotNull ChunkPos chunkPos) {
+        public synchronized void shutDown(@NotNull ChunkPos chunkPos, @NotNull ILoadState previous) {
             ChunkDataModule module = data.get(chunkPos.toLong());
             shutoffLoaders.add(module);
-            module.getLoadState().apply(level,chunkPos);
+            module.getLoadState().apply(level,chunkPos,previous);
             setDirty();
         }
 

@@ -5,6 +5,7 @@ import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.system.control.LoaderPower;
 import com.vicious.loadmychunks.common.util.ModResource;
+import dev.architectury.platform.Mod;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -77,12 +79,8 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
             return statesByIndex.get(k);
         }
         if(tag.contains(key, Tag.TAG_STRING)){
-            try {
-                ResourceLocation k = ResourceLocation.parse(tag.getString(key));
-                return INSTANCE.getOptional(k).orElse(defaultState);
-            } catch (Throwable t){
-                return defaultState;
-            }
+            Optional<ResourceLocation> k = Optional.ofNullable(ModResource.parse(tag.getString(key)));
+            return k.map(l->INSTANCE.getOptional(l).orElse(defaultState)).orElse(defaultState);
         }
         return defaultState;
     }

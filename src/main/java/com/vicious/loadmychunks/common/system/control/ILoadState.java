@@ -1,11 +1,14 @@
 package com.vicious.loadmychunks.common.system.control;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.ThreadSafetyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ILoadState {
     /**
@@ -51,27 +54,26 @@ public interface ILoadState {
         return blockEntityTickingPower() == LoaderPower.FORCED;
     }
 
-    default void apply(ServerLevel level, long pos) {
-        apply(level, new ChunkPos(pos));
+    default void apply(@NotNull ServerLevel level, long pos, @Nullable ILoadState previous) {
+        apply(level, new ChunkPos(pos), previous);
     }
 
-    default void apply(ServerLevel level, BlockPos pos) {
-        apply(level, new ChunkPos(pos));
+    default void apply(@NotNull ServerLevel level, @NotNull BlockPos pos, @Nullable ILoadState previous) {
+        apply(level, new ChunkPos(pos), previous);
     }
 
-    //TODO: make sure this is thread safe.
-    default void apply(ServerLevel level, ChunkPos pos) {
+    default void apply(@NotNull ServerLevel level, @NotNull ChunkPos pos, @Nullable ILoadState previous) {
+        if(previous == null) previous = LoadStateRegistry.DISABLED;
         if (shouldLoad()) {
             if (!shouldForceEntities()) {
                 LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Forceloading Chunk at: (" + pos.x + "," + pos.z + ") with level " + blockEntityTickingPower().name());
-                ThreadSafetyHelper.forceChunk(level, pos);
             } else {
                 LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Entity Ticking Chunk at: (" + pos.x + "," + pos.z + ") with level " + entityForcingPower().name());
-                ThreadSafetyHelper.forceChunk(level, pos, true);
             }
+            ChunkForcer.forceChunk(level, pos, shouldForceEntities());
         } else {
             LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Unforceloading Chunk at: (" + pos.x + "," + pos.z + ")");
-            ThreadSafetyHelper.unforceChunk(level, pos);
+            ChunkForcer.unforceChunk(level, pos, previous.shouldForceEntities());
         }
     }
 

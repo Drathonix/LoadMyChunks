@@ -1,4 +1,4 @@
-//? if cct && forge {
+//? if cc-tweaked && forge {
 /*package com.vicious.loadmychunks.forge.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;

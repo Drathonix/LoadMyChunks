@@ -1,4 +1,4 @@
-//? if cct {
+//? if cc-tweaked {
 package com.vicious.loadmychunks.common.integ.cct.turtle;
 
 import com.vicious.loadmychunks.common.integ.cct.CCTRegistryContent;
@@ -55,7 +55,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
         return upgradeType.get();
     }
     //?} else {
-    /*@Override
+    /*/^@Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2
         return BuiltInRegistries.BLOCK.getKey(block.get());
@@ -87,12 +87,12 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     }
 
     //? if <=1.18.2 {
-    /*@NotNull
+    /^@NotNull
     @Override
     public TransformedModel getModel(@Nullable ITurtleAccess turtle, @NotNull TurtleSide side) {
         return TransformedModel.of(getCraftingItem(),side == TurtleSide.LEFT ? UpgradeModeller.leftTransform : UpgradeModeller.rightTransform);
     }
-    *///?}
+    ^///?}
 
 
     //? if >=1.20.6 {
@@ -110,4 +110,4 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     }
     //?}
 }
-//?}
+*///?}

@@ -29,6 +29,18 @@ repositories {
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.architectury.dev/")
     maven("https://modmaven.dev/")
+    maven ("https://squiddev.cc/maven/") {
+        content {
+            includeGroup("org.squiddev")
+            includeGroup("cc.tweaked")
+        }
+    }
+    maven ("https://maven.squiddev.cc") {
+        content {
+            includeGroup("org.squiddev")
+            includeGroup("cc.tweaked")
+        }
+    }
     maven("https://panel.ryuutech.com/nexus/repository/maven-releases/")
 }
 
@@ -112,10 +124,10 @@ fun versionProperty(key: String) : VersionRange {
  * Creates a VersionRange unless the value is UNSET
  */
 fun optionalVersionProperty(key: String) : Optional<VersionRange>{
-    val str = optionalStrProperty(key)
     if(!hasProperty(key)){
         return Optional.empty()
     }
+    val str = optionalStrProperty(key)
     if(!str.isPresent){
         return Optional.empty()
     }
@@ -219,7 +231,7 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
 }
 
 val cctAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}:cc-tweaked-${env.mcVersion.min}", optionalVersionProperty("deps.api.cctweaked")){
+    APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
         src -> src.versionRange.isPresent
 }
 /**
@@ -234,16 +246,17 @@ val apis = arrayListOf(
     { src ->
         src.versionRange.isPresent
     },
-    APISource(DepType.FRL,APIModInfo(),"com.jcraft:jslib",Optional.of(VersionRange("1.1.3",""))){
+    cctAPISource,
+    APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){
         _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
     APISource(DepType.FRL,APIModInfo(),"io.netty:netty-codec-http",Optional.of(VersionRange("4.1.82.Final",""))){
         _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
-    APISource(DepType.FRL,APIModInfo(),"io.netty.netty-codec-sock",Optional.of(VersionRange("4.1.82.Final",""))){
+    APISource(DepType.FRL,APIModInfo(),"io.netty:netty-codec-socks",Optional.of(VersionRange("4.1.82.Final",""))){
         _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
-    APISource(DepType.FRL,APIModInfo(),"io.netty.netty-handler-proxy",Optional.of(VersionRange("4.1.82.Final",""))){
+    APISource(DepType.FRL,APIModInfo(),"io.netty:netty-handler-proxy",Optional.of(VersionRange("4.1.82.Final",""))){
         _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
     // FLR for Cobalt
@@ -490,6 +503,15 @@ group = property("group").toString()
 dependencies.forEachAfter{mid, ver ->
     stonecutter.dependency(mid,ver.min)
 }
+apis.forEach{ src ->
+    src.modInfo.modid?.let {
+        stonecutter.const(it,src.enabled)
+        src.versionRange.ifPresent{ ver ->
+            stonecutter.dependency(it,ver.min)
+        }
+    }
+}
+
 //TODO: Add more stonecutter consts here.
 stonecutter.const("fabric",env.isFabric)
 stonecutter.const("forge",env.isForge)

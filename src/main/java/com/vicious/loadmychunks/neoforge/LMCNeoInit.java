@@ -33,7 +33,7 @@ public class LMCNeoInit {
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
         args.register(meb);
-        //? if cct
+        //? if cc-tweaked
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);
     }
 

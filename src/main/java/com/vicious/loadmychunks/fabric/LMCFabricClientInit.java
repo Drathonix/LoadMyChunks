@@ -13,7 +13,7 @@ public class LMCFabricClientInit implements ClientModInitializer {
     }
 
     public static void clientInit(){
-        //? if cct
+        //? if cc-tweaked
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
     }
 }

@@ -20,7 +20,7 @@ public class LMCFabricInit implements ModInitializer {
         //?}
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
-        //? if cct
+        //? if cc-tweaked
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
         FabricRegistryBuilder.from(LoaderTypeRegistry.INSTANCE).buildAndRegister();
     }

@@ -13,7 +13,7 @@ public class LMCForgeClient {
             clientInit();
     }
     public static void clientInit() {
-        //? if cct
+        //? if cc-tweaked
         Integrations.invokeWhenLoaded("computercraft","com.vicious.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);
     }
 }

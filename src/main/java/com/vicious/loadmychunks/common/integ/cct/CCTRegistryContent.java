@@ -1,4 +1,4 @@
-//? if cct {
+//? if cc-tweaked {
 package com.vicious.loadmychunks.common.integ.cct;
 
 import com.vicious.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;

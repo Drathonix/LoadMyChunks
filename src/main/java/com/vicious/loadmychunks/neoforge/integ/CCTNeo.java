@@ -1,4 +1,4 @@
-//? if neoforge && cct {
+//? if neoforge && cc-tweaked {
 /*package com.vicious.loadmychunks.neoforge.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;

@@ -30,21 +30,6 @@ stonecutter registerChiseled tasks.register("chiseledPublishModrinth", stonecutt
 }
 
 stonecutter configureEach{
-    /*
-    See src/main/java/com/example/TemplateMod.java
-    and https://stonecutter.kikugie.dev/
-    */
-    // Swaps replace the scope with a predefined value
-    swap("mod_version", "\"${property("mod.version")}\";")
-    // Dependencies add targets to check versions against
-    // Using `project.property()` in this block gets the versioned property
-//    dependency("fapi", project.property("deps.fabric_api").toString())
-    /*val platform = property("loom.platform").toString()
-    println(platform)
-    stonecutter.const("fabric", platform == "fabric" )
-    stonecutter.const("forge", platform == "forge" )
-    stonecutter.const("neoforge", platform == "neoforge" )
 
-     */
 }
 

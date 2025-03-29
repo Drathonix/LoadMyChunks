@@ -3,6 +3,7 @@ package com.vicious.loadmychunks.common;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.persist.io.writer.wrapped.WrappedObject;
 import com.vicious.persist.mappify.Mappifier;
 import com.vicious.persist.mappify.registry.Stringify;
@@ -110,7 +111,6 @@ public class LoadMyChunks {
 	 */
 	public static void serverStarted(MinecraftServer server) {
 		LoadMyChunks.server = server;
-		server.addTickable(TickDelayer::tick);
 	}
 
 	/**
@@ -247,10 +247,11 @@ public class LoadMyChunks {
 		ChunkPos pos = new ChunkPos(bp);
 		ServerLevel level = Brigadier.getLevel(ctx);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(level,pos);
+		ILoadState prev = cdm.defaultLoadState;
 		cdm.defaultLoadState=permanent ? LoadStateEnum.PERMANENT : LoadStateEnum.TICKING;
 		cdm.clearCooldowns();
 		cdm.update();
-		cdm.getLoadState().apply(level,pos);
+		cdm.getLoadState().apply(level,pos,prev);
 		if(permanent) {
 			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.forceload.set.permanent", pos.x, pos.z));
 		} else {
@@ -264,9 +265,10 @@ public class LoadMyChunks {
 		ChunkPos pos = new ChunkPos(bp);
 		ServerLevel level = Brigadier.getLevel(ctx);
 		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(level,pos);
+		ILoadState prev = cdm.defaultLoadState;
 		cdm.defaultLoadState=ban ? LoadStateEnum.PERMANENTLY_DISABLED : LoadStateEnum.DISABLED;
 		cdm.update();
-		cdm.getLoadState().apply(level,pos);
+		cdm.getLoadState().apply(level,pos,prev);
 		if(ban) {
 			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.forceload.unset.permanent", pos.x, pos.z));
 		}

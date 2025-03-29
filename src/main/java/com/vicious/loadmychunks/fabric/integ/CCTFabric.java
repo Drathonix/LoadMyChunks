@@ -1,4 +1,4 @@
-//? if fabric && cct {
+//? if fabric && cc-tweaked {
 package com.vicious.loadmychunks.fabric.integ;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;

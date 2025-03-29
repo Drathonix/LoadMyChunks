@@ -1,6 +1,6 @@
 package com.vicious.loadmychunks.common.mixin.cct;
 
-//? if !cct {
+//? if !cc-tweaked {
 /*import com.vicious.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 

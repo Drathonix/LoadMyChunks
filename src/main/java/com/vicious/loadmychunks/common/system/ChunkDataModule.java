@@ -3,6 +3,7 @@ package com.vicious.loadmychunks.common.system;
 
 import com.vicious.loadmychunks.common.bridge.IInformable;
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 import com.vicious.loadmychunks.common.system.control.*;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
@@ -27,7 +28,7 @@ public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
     private Period gracePeriod;
     private Period disabledPeriod;
-    public LoadStateEnum defaultLoadState = LoadStateEnum.DISABLED;
+    public ILoadState defaultLoadState = LoadStateEnum.DISABLED;
     private ILoadState loadState = defaultLoadState;
     private final Set<IChunkLoader> loaders = new HashSet<>();
     private final ChunkPos position;
@@ -54,7 +55,7 @@ public class ChunkDataModule {
         if(tag.contains("nextCheck")){
             nextGameTimeCheckTick = tag.getLong("nextCheck");
         }
-        defaultLoadState = LoadStateEnum.values()[tag.getInt("default")];
+        defaultLoadState = LoadStateRegistry.fromCompound("default",tag,LoadStateRegistry.DISABLED);
         loadState=defaultLoadState;
         ListTag loaders = tag.getList("loaders", 10);
         for (Tag loader : loaders) {
@@ -96,7 +97,7 @@ public class ChunkDataModule {
             }
         }
         tag.put("loaders",loaders);
-        tag.putInt("default",defaultLoadState.ordinal());
+        defaultLoadState.putCompound("default",tag);
         return tag;
     }
 
@@ -292,11 +293,11 @@ public class ChunkDataModule {
         return onCooldown() ? getDisabledPeriod().getTimeRemaining() : 0;
     }
 
-    public void updateChunkLoadState(ServerLevel level){
+    public void updateChunkLoadState(@NotNull ServerLevel level, @NotNull ILoadState previous){
         if(getLoadState().shouldLoad()){
             startGrace();
         }
-        getLoadState().apply(level, position.toLong());
+        getLoadState().apply(level, position.toLong(),previous);
     }
 
     public @Nullable PlacedChunkLoader getChunkLoaderAt(BlockPos blockPos) {
