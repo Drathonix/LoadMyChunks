@@ -16,7 +16,6 @@ import com.vicious.loadmychunks.common.network.LagReadingRequest;
 import com.vicious.loadmychunks.common.registry.LMCContent;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
-import com.vicious.loadmychunks.common.system.TickDelayer;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.util.Brigadier;
 import com.vicious.loadmychunks.common.util.Message;

@@ -31,13 +31,5 @@ public class TurtleExtensionChunkLoader extends AtomicExtensionChunkLoader<Turtl
     public void load(@NotNull CompoundTag tag, ServerLevel level) {
 
     }
-
-    @Override
-    public ILoadState getActiveState() {
-        if(!isUnhosted() && getPrimaryHostLoader() != null) {
-            return getPrimaryHostLoader().getExtensionLoadState();
-        }
-        return loadState;
-    }
 }
 //?}

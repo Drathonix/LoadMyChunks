@@ -15,12 +15,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
-    private final BlockPos pos;
-    private final IChunkLoader loader;
-    private final ServerLevel level;
-    private final ChunkDataModule cdm;
+    private final @NotNull BlockPos pos;
+    private final @NotNull IChunkLoader loader;
+    private final @NotNull ServerLevel level;
+    private final @NotNull ChunkDataModule cdm;
 
-    public ChunkLoaderPeripheral(BlockPos pos, Level level, IChunkLoader loader){
+    public ChunkLoaderPeripheral(@NotNull BlockPos pos, @NotNull Level level, @NotNull IChunkLoader loader){
         this.pos = pos;
         this.loader = loader;
         this.level=(ServerLevel)level;
@@ -38,11 +38,6 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     }
 
     @Override
-    public String getType() {
-        return "lmc_chunk_loader";
-    }
-
-    @Override
     protected @NotNull ServerLevel getLevel() {
         return level;
     }
@@ -50,16 +45,6 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     @Override
     protected @NotNull BlockPos getPosition() {
         return pos;
-    }
-
-    private static final Set<String> additional = new HashSet<>();
-    static {
-        additional.add("lmc_lagometer");
-    }
-
-    @Override
-    public Set<String> getAdditionalTypes() {
-        return additional;
     }
 
     @Override

@@ -50,20 +50,6 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
         }
     }
 
-    @Override
-    public ILoadState getActiveState() {
-        if(!isUnhosted()){
-            ILoadState state = LoadStateRegistry.DISABLED;
-            for (IChunkLoader host : hosts) {
-                state = host.getActiveState().getSuperiorLoadState(state);
-            }
-            return state;
-        }
-        else{
-            return LoadStateRegistry.DISABLED;
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public T getHost(int i) {
         if(hosts.length <= i || i < 0){

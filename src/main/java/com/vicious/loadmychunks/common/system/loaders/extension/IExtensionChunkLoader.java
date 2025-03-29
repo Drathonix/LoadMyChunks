@@ -1,6 +1,8 @@
 package com.vicious.loadmychunks.common.system.loaders.extension;
 
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -59,5 +61,19 @@ public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoa
             ChunkDataManager.removeChunkLoader(level, this.getChunkPos(), this);
         }
         removeHost(host);
+    }
+
+    @Override
+    default ILoadState getActiveState() {
+        if(!isUnhosted()){
+            ILoadState state = LoadStateRegistry.DISABLED;
+            for (int i = 0; i < getNumberOfHosts(); i++) {
+                state = getHost(i).getActiveState().getSuperiorLoadState(state);
+            }
+            return state;
+        }
+        else{
+            return LoadStateRegistry.DISABLED;
+        }
     }
 }

@@ -61,10 +61,5 @@ public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity i
         }
         return null;
     }
-
-    @Override
-    public boolean supportsExtension() {
-        return false;
-    }
 }
 //?}

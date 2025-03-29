@@ -100,8 +100,10 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     public void loadMyChunks$destroy(Object context) {
         IPeripheral opposite = turtle.getPeripheral(side == TurtleSide.LEFT ? TurtleSide.RIGHT : TurtleSide.LEFT);
         if (context instanceof BlockEntity || !(opposite instanceof AbstractChunkLoaderPeripheral)) {
-            cdm.removeLoader(getLevel(),chunkLoader.get());
-            cdm.updateChunkLoadState(getLevel());
+            cdm.consumeLoadState(previous->{
+                cdm.removeLoader(getLevel(),chunkLoader.get());
+                cdm.updateChunkLoadState(getLevel(),previous);
+            });
             ChunkDataManager.setDirty(getLevel());
         }
     }
