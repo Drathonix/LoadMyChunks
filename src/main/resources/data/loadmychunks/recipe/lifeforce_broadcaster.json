@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "loadmychunks:ender_pearl"
+    },
+    "D": {
+      "tag": "loadmychunks:diamond_wire"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "N": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:clock"
+    }
+  },
+  "pattern": [
+    "EDN",
+    "DDI",
+    "IIC"
+  ],
+  "result": {
+    "item": "loadmychunks:lifeforce_broadcaster",
+    "id": "loadmychunks:lifeforce_broadcaster"
+  },
+  "show_notification": true
+}

@@ -1,11 +1,13 @@
 package com.vicious.loadmychunks.common.system.loaders.extension;
 
 import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
 import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import com.vicious.loadmychunks.common.system.loaders.DoNotAddException;
+import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IOwnable;
 import com.vicious.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import net.minecraft.core.BlockPos;
@@ -75,12 +77,9 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     @Override
     public ILoadState getActiveState() {
         if(hasExceededChunkLimit() || (LMCConfig.cost.enabled && activityEnd == -1)){
-            return LoadStateEnum.DISABLED;
+            return LoadStateRegistry.DISABLED;
         }
-        if(!isUnhosted() && getPrimaryHostLoader() != null && !getPrimaryHostLoader().getActiveState().shouldLoad()){
-            return LoadStateEnum.DISABLED;
-        }
-        return loadState;
+        return super.getActiveState();
     }
 
     @Override

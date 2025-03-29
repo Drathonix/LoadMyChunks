@@ -1,6 +1,9 @@
 package com.vicious.loadmychunks.common.system.loaders.extension;
 
+import com.vicious.loadmychunks.common.config.LMCConfig;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
+import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.loaders.IChunkLoader;
 import com.vicious.loadmychunks.common.system.loaders.IChunkPositioned;
 import com.vicious.loadmychunks.common.system.loaders.PhantomChunkLoader;
@@ -28,10 +31,11 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
 
     @Override
     public void removeHost(Object host){
-        //? if >1.16.5
+        //? if >1.16.5 {
         hosts = ArrayUtils.removeAllOccurrences(hosts,ReferenceHelper.get(IChunkLoader.class,host));
-        //? if <1.16.6
+        //?} else {
         /*hosts = ArrayUtils.removeAllOccurences(hosts, ReferenceHelper.get(IChunkLoader.class,host));*/
+        //?}
     }
 
     @Override
@@ -43,6 +47,20 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
     public void addHost(Object host){
         if(!ArrayUtils.contains(hosts,ReferenceHelper.get(IChunkLoader.class,host))) {
             hosts = ArrayUtils.add(hosts, ReferenceHelper.get(IChunkLoader.class, host));
+        }
+    }
+
+    @Override
+    public ILoadState getActiveState() {
+        if(!isUnhosted()){
+            ILoadState state = LoadStateRegistry.DISABLED;
+            for (IChunkLoader host : hosts) {
+                state = host.getActiveState().getSuperiorLoadState(state);
+            }
+            return state;
+        }
+        else{
+            return LoadStateRegistry.DISABLED;
         }
     }
 

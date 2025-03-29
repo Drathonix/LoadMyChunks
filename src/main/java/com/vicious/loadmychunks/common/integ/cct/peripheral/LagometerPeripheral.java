@@ -7,16 +7,17 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class LagometerPeripheral extends AbstractLagometerPeripheral {
-    protected final BlockPos pos;
-    protected final ServerLevel level;
-    private ChunkDataModule cdm;
+    protected final @NotNull BlockPos pos;
+    protected final @NotNull ServerLevel level;
+    private final @NotNull ChunkDataModule cdm;
 
-    public LagometerPeripheral(BlockPos pos, Level level){
+    public LagometerPeripheral(@NotNull BlockPos pos, @NotNull Level level){
         this.pos = pos;
         this.level = (ServerLevel)level;
         this.cdm = ChunkDataManager.getOrCreateChunkData(this.level,pos);
@@ -41,17 +42,17 @@ public class LagometerPeripheral extends AbstractLagometerPeripheral {
     }
 
     @Override
-    public ChunkDataModule getChunkDataModule() {
+    public @NotNull ChunkDataModule getChunkDataModule() {
         return this.cdm;
     }
 
     @Override
-    protected ServerLevel getLevel() {
+    protected @NotNull ServerLevel getLevel() {
         return level;
     }
 
     @Override
-    protected BlockPos getPosition() {
+    protected @NotNull BlockPos getPosition() {
         return pos;
     }
 }

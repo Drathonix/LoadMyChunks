@@ -111,6 +111,11 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
+    public boolean supportsEntityTicking() {
+        return true;
+    }
+
+    @Override
     public @Nullable ExtensionChunkLoaders getExtensionChunkLoaders() {
         return extensions;
     }
@@ -175,7 +180,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
-    public ChunkPos getChunkPos() {
+    public @NotNull ChunkPos getChunkPos() {
         return new ChunkPos(getPosition());
     }
 

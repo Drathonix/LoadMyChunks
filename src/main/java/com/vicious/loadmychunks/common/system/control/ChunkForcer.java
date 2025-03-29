@@ -10,18 +10,19 @@ import net.minecraft.world.level.entity.Visibility;
 import java.util.Comparator;
 
 public class ChunkForcer {
-    private static final int level = 0;
+    // Putting this here for reference
+    // Any level below or equal to 31 is entity ticking, 32 is block ticking, 33 is full but not loaded, 34+ is not full.
+    // private static final int FULL_CHUNK_LEVEL = 33;
+    private static final int BLOCK_TICKING_LEVEL = 32;
+    private static final int ENTITY_TICKING_LEVEL = 31;
+
     public static final TicketType<ChunkPos> FORCED = TicketType.create("lmc_forced", Comparator.comparingLong(ChunkPos::toLong));
     public static final TicketType<ChunkPos> ENTITY = TicketType.create("lmc_entity", Comparator.comparingLong(ChunkPos::toLong));
     private synchronized static void addTicket(DistanceManager manager, ChunkPos pos, boolean entityTicking){
-        manager.addTicket(entityTicking ? ENTITY : FORCED,pos,level,pos);
+        manager.addTicket(entityTicking ? ENTITY : FORCED, pos, entityTicking ? ENTITY_TICKING_LEVEL : BLOCK_TICKING_LEVEL, pos);
     }
     private synchronized static void removeTicket(DistanceManager manager, ChunkPos pos, boolean entityTicking){
-        manager.removeTicket(entityTicking ? ENTITY : FORCED,pos,level,pos);
-    }
-
-    public static void forceChunk(ServerLevel level, ChunkPos pos) {
-        forceChunk(level,pos,false);
+        manager.removeTicket(entityTicking ? ENTITY : FORCED, pos, entityTicking ? ENTITY_TICKING_LEVEL : BLOCK_TICKING_LEVEL, pos);
     }
 
     public static void unforceChunk(ServerLevel level, ChunkPos pos, boolean wasEntityTicking){

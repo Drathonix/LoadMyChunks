@@ -2,6 +2,7 @@ package com.vicious.loadmychunks.common.system.loaders;
 
 
 import com.vicious.loadmychunks.common.registry.LoaderTypeKeys;
+import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.vicious.loadmychunks.common.system.control.ILoadState;
 import com.vicious.loadmychunks.common.system.control.LoadStateEnum;
 import net.minecraft.nbt.CompoundTag;
@@ -12,10 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class PhantomChunkLoader implements IChunkLoader{
+public abstract class PhantomChunkLoader implements IChunkLoader{
     protected ChunkPos chunkPos;
-    protected LoadStateEnum loadState = LoadStateEnum.TICKING;
-
     public PhantomChunkLoader(){}
     public PhantomChunkLoader(ChunkPos pos){
         this.chunkPos = pos;
@@ -50,17 +49,8 @@ public class PhantomChunkLoader implements IChunkLoader{
         return Objects.hash(chunkPos);
     }
 
-    public void setActiveState(ILoadState state){
-        this.loadState = state;
-    }
-
     @Override
-    public ILoadState getActiveState() {
-        return loadState;
-    }
-
-    @Override
-    public ChunkPos getChunkPos() {
+    public @NotNull ChunkPos getChunkPos() {
         return chunkPos;
     }
 }

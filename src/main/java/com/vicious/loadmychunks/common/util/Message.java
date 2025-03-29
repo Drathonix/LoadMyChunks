@@ -10,9 +10,11 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 //? if <1.18.3 {
 /*import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.Util;
 *///?}
 
@@ -40,7 +42,10 @@ public class Message {
      * @param player the recipient.
      * @param message the message.
      */
-    public static void send(@NotNull ServerPlayer player, @NotNull Component message) {
+    public static void send(@NotNull ServerPlayer player, @Nullable Component message) {
+        if(message == null){
+            return;
+        }
         //? if >1.18.2
         player.sendSystemMessage(message);
         //? if <1.18.3
@@ -95,5 +100,27 @@ public class Message {
      */
     public static @NotNull MutableComponent clickCommand(@NotNull MutableComponent component, @NotNull String command) {
         return component.setStyle(component.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command)));
+    }
+
+    /**
+     * Creates an empty component.
+     * @return a new empty component.
+     */
+    public static MutableComponent empty() {
+        return literal("");
+    }
+
+    /**
+     * Creates a literal text component.
+     * @param text the text.
+     * @return a Text Component
+     */
+    public static MutableComponent literal(String text) {
+        //? if <1.18.3 {
+        /*return new TextComponent(text);
+         *///?}
+        //? if >1.18.2 {
+        return Component.literal(text);
+        //?}
     }
 }

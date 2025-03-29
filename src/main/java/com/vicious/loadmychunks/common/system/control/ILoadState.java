@@ -2,7 +2,6 @@ package com.vicious.loadmychunks.common.system.control;
 
 import com.vicious.loadmychunks.common.LoadMyChunks;
 import com.vicious.loadmychunks.common.registry.custom.LoadStateRegistry;
-import com.vicious.loadmychunks.common.system.ThreadSafetyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;

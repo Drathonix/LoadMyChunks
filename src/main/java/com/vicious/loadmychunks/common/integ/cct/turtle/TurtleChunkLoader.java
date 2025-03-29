@@ -51,6 +51,11 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         return false;
     }
 
+    @Override
+    public boolean supportsEntityTicking() {
+        return false;
+    }
+
     public TurtleExtensionChunkLoader createTurtleExtension(ChunkPos position) {
         if(peripheral == null) {
             throw new IllegalStateException("No peripheral.");

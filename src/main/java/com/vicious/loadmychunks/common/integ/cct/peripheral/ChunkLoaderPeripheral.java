@@ -8,6 +8,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -27,12 +28,12 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     }
 
     @Override
-    public IChunkLoader getChunkLoader() {
+    public @NotNull IChunkLoader getChunkLoader() {
         return loader;
     }
 
     @Override
-    public ChunkDataModule getChunkDataModule() {
+    public @NotNull ChunkDataModule getChunkDataModule() {
         return this.cdm;
     }
 
@@ -42,12 +43,12 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     }
 
     @Override
-    protected ServerLevel getLevel() {
+    protected @NotNull ServerLevel getLevel() {
         return level;
     }
 
     @Override
-    protected BlockPos getPosition() {
+    protected @NotNull BlockPos getPosition() {
         return pos;
     }
 

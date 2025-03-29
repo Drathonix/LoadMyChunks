@@ -51,7 +51,7 @@ public class LMCConfig {
     public static boolean useDebugLogging = false;
 
     @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine")
-    public static boolean pluginMode = false
+    public static boolean pluginMode = false;
 
     @Save(description = "Maximum number of times a chunk loader's range can be extended.")
     @Range(minimum=0,maximum=10)

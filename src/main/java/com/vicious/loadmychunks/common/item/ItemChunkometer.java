@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.vicious.loadmychunks.common.config.LMCConfig;
 import com.vicious.loadmychunks.common.system.ChunkDataManager;
 import com.vicious.loadmychunks.common.system.ChunkDataModule;
+import com.vicious.loadmychunks.common.util.Message;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,7 +28,7 @@ import java.util.UUID;
 
 public class ItemChunkometer extends ItemHasTooltip {
     public ItemChunkometer(Properties properties) {
-        super(properties);
+        super(properties,1);
     }
 
     //? if >1.21.1 {
@@ -81,27 +82,28 @@ public class ItemChunkometer extends ItemHasTooltip {
 
     *///?}
 
-    //? if >1.18.2 && <1.21.2 {
+    //TODO: reenable if necessary
+    // if >1.18.2 && <1.21.2 {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         if(level instanceof ServerLevel sl) {
             ChunkPos pos = new ChunkPos(player.blockPosition());
             ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
             if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
-                MutableComponent response = Component.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withBold(true));
+                MutableComponent response = Message.styled(Message.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z),ChatFormatting.WHITE,true,false);
                 player.sendSystemMessage(response);
-                response = Component.empty().withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(false));
+                response = Message.styled(Message.empty(),ChatFormatting.AQUA,false,false);
                 if (cdm.onCooldown()) {
-                    response.append(Component.translatable("loadmychunks.chunkinfo.line2.overticked"));
+                    response.append(Message.translatable("loadmychunks.chunkinfo.line2.overticked"));
                 } else {
                     if (cdm.getLoadState().shouldLoad()) {
-                        response.append(Component.translatable("loadmychunks.chunkinfo.line2.forced"));
+                        response.append(Message.translatable("loadmychunks.chunkinfo.line2.forced"));
                     } else {
-                        response.append(Component.translatable("loadmychunks.chunkinfo.line2.notforced"));
+                        response.append(Message.translatable("loadmychunks.chunkinfo.line2.notforced"));
                     }
                 }
                 response.append("\n");
-                response.append(Component.translatable("loadmychunks.chunkinfo.line3", cdm.getTickTimer().getDuration())).append("\n");
+                response.append(Message.translatable("loadmychunks.chunkinfo.line3", cdm.getTickTimer().getDuration())).append("\n");
                 StringBuilder csl = new StringBuilder();
                 Iterator<UUID> iterator = cdm.getPlayerOwners().iterator();
                 while (iterator.hasNext()) {
@@ -116,14 +118,14 @@ public class ItemChunkometer extends ItemHasTooltip {
                         csl.append(", ");
                     }
                 }
-                response.append(Component.translatable("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
+                response.append(Message.translatable("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
                 if (cdm.onCooldown()) {
-                    response.append("\n").append(Component.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
+                    response.append("\n").append(Message.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
                 }
                 player.sendSystemMessage(response);
             }
             else{
-                player.sendSystemMessage(Component.translatable("loadmychunks.chunkinfo.need_ownership").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                player.sendSystemMessage(Message.styled(Message.translatable("loadmychunks.chunkinfo.need_ownership"),ChatFormatting.RED,false,false));
             }
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));

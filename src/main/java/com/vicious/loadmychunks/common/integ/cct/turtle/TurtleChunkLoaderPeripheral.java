@@ -12,6 +12,7 @@ import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     }
 
     @Override
-    public ChunkDataModule getChunkDataModule() {
+    public @NotNull ChunkDataModule getChunkDataModule() {
         return cdm;
     }
 
@@ -61,7 +62,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     }
 
     @Override
-    protected ServerLevel getLevel() {
+    protected @NotNull ServerLevel getLevel() {
         //? if >1.16.5
         return (ServerLevel) turtle.getLevel();
         //? if <=1.16.5
@@ -69,7 +70,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     }
 
     @Override
-    protected BlockPos getPosition() {
+    protected @NotNull BlockPos getPosition() {
         return chunkLoader.get().getPosition();
     }
 
@@ -91,7 +92,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
         return equals((Object)other);
     }
 
-    public TurtleChunkLoader getChunkLoader() {
+    public @NotNull TurtleChunkLoader getChunkLoader() {
         return chunkLoader.get();
     }
 

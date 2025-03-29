@@ -29,7 +29,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 
@@ -51,7 +50,7 @@ public class LMCContent {
 
     public static RegistrySupplier<Item> itemTickometer;
     public static RegistrySupplier<Item> itemPlayerSpoofer;
-    public static RegistrySupplier<Item> itemPerfectedPlayerSpoofer;
+    public static RegistrySupplier<Item> itemLifeforceBroadcaster;
     public static RegistrySupplier<Item> itemLocatingCore;
     public static RegistrySupplier<Item> itemDiamondWire;
     public static RegistrySupplier<ItemChunkLoaderExtension> itemExtension;
@@ -92,13 +91,13 @@ public class LMCContent {
             }, ItemLagometer::new);
         });
         LMCRegistrar.ITEM.queue(reg->{
-            itemTickometer = reg.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties()));
-            itemPlayerSpoofer = reg.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties()));
-            itemLocatingCore = reg.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties()));
-            itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties()));
+            itemTickometer = reg.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties(),1));
+            itemPlayerSpoofer = reg.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties(),3));
+            itemLocatingCore = reg.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties(),2));
+            itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties(),3));
             itemChunkometer = reg.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
             itemExtension = reg.register(ModResource.of("chunk_loader_extension"), () -> new ItemChunkLoaderExtension(new LMCProperties()));
-            itemPlayerSpoofer = reg.register(ModResource.of("perfected_player_spoofer"), () -> new ItemPerfectedPlayerSpoofer(new LMCProperties()));
+            itemPlayerSpoofer = reg.register(ModResource.of("lifeforce_broadcaster"), () -> new ItemLifeforceBroadcaster(new LMCProperties()));
         });
 
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{

@@ -23,7 +23,6 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
 
     public static final LoaderType<PlacedChunkLoader> PLACED_TYPE = register(LoaderTypeKeys.PLACED_LOADER,new LoaderType<>(PlacedChunkLoader::new));
     public static final LoaderType<PlacedExtensionChunkLoader> PLACED_EXTENSION_TYPE = register(LoaderTypeKeys.PLACED_EXTENSION_LOADER,new LoaderType<>(PlacedExtensionChunkLoader::new));
-    public static final LoaderType<PhantomChunkLoader> PHANTOM_TYPE = register(LoaderTypeKeys.PHANTOM_LOADER,new LoaderType<>(PhantomChunkLoader::new));
 
     private LoaderTypeRegistry() {
         super(KEY, Lifecycle.stable(),true);

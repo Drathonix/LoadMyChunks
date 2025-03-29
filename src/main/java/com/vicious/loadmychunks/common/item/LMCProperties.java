@@ -8,9 +8,9 @@ import net.minecraft.world.item.Item;
 
 public class LMCProperties extends Item.Properties {
     public LMCProperties(){
-        //? if <=1.19.3
+        //? if <=1.19.3 {
         /*this.tab(LMCContent.creativeTab.get());*/
-        //? if >1.19.3 {
+        //?} else {
         if(this instanceof InjectedItemPropertiesExtension) {
             //noinspection UnstableApiUsage
             ((InjectedItemPropertiesExtension) this).arch$tab(LMCContent.creativeTab);

@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ItemLagometer extends BlockItem {
+public class ItemLagometer extends BlockItemHasTooltip {
     public ItemLagometer(Block block, Properties properties) {
-        super(block, properties);
+        super(block, properties,1);
     }
 
     //? if <=1.20.5 {

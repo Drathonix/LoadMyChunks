@@ -62,9 +62,10 @@ public class ChunkDataManager {
         for (ServerLevel serverLevel : levelManagers.keySet()) {
             LevelChunkLoaderManager value = levelManagers.get(serverLevel);
             for (long l : value.forcedChunksByUUID.getOrDefault(uuid, new LongOpenHashSet())) {
-                ChunkDataModule cdm =  value.getOrCreateData(l);
+                ChunkDataModule cdm = value.getOrCreateData(l);
+                ILoadState loadState = cdm.getLoadState();
                 cdm.update();
-                cdm.updateChunkLoadState(serverLevel);
+                cdm.updateChunkLoadState(serverLevel,loadState);
             }
         }
     }
@@ -239,7 +240,7 @@ public class ChunkDataManager {
                 module.load(tag.getCompound(key),level);
                 module.update();
                 if(module.onCooldown()){
-                    shutDown(pos);
+                    shutDown(pos,LoadStateRegistry.DISABLED);
                 }
                 else{
                     module.getLoadState().apply(level,pos, LoadStateRegistry.DISABLED);
@@ -258,11 +259,12 @@ public class ChunkDataManager {
 
         public synchronized void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
-            ILoadState previous = cdm.getLoadState();
-            if(cdm.addLoader(level,loader)) {
-                cdm.updateChunkLoadState(level,previous);
-            }
-            setDirty();
+            cdm.consumeLoadState(previous->{
+                if(cdm.addLoader(level,loader)) {
+                    cdm.updateChunkLoadState(level,previous);
+                }
+                setDirty();
+            });
         }
 
         public void removeChunkLoader(IChunkLoader loader, ChunkPos pos){
@@ -271,10 +273,12 @@ public class ChunkDataManager {
 
         public synchronized void removeChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
-            if(cdm.removeLoader(level,loader)) {
-                cdm.updateChunkLoadState(level);
-            }
-            setDirty();
+            cdm.consumeLoadState(previous-> {
+                if(cdm.removeLoader(level,loader)) {
+                    cdm.updateChunkLoadState(level,previous);
+                }
+                setDirty();
+            });
         }
 
         public synchronized @NotNull ChunkDataModule getOrCreateData(long pos){
@@ -317,9 +321,11 @@ public class ChunkDataManager {
 
         public synchronized void tick(){
             if(configReloaded){
-                for (ChunkDataModule chunkDataModule : getChunkDataModules()) {
-                    chunkDataModule.update();
-                    chunkDataModule.updateChunkLoadState(level);
+                for (ChunkDataModule cdm : getChunkDataModules()) {
+                    cdm.consumeLoadState(previous->{
+                        cdm.update();
+                        cdm.updateChunkLoadState(level,previous);
+                    });
                 }
             }
             if(tickCounter >= purgeTimer){
@@ -329,15 +335,16 @@ public class ChunkDataManager {
 
             Iterator<ChunkDataModule> iterator = shutoffLoaders.iterator();
             while (iterator.hasNext()){
-                ChunkDataModule module = iterator.next();
-                if(!module.onCooldown()) {
+                ChunkDataModule cdm = iterator.next();
+                if(!cdm.onCooldown()) {
                     iterator.remove();
-                    ILoadState previous = module.getLoadState();
-                    module.update();
-                    if(module.getLoadState().shouldLoad()){
-                        module.startGrace();
-                    }
-                    module.getLoadState().apply(level, module.getPosition(),previous);
+                    cdm.consumeLoadState(previous->{
+                        cdm.update();
+                        if(cdm.getLoadState().shouldLoad()){
+                            cdm.startGrace();
+                        }
+                        cdm.getLoadState().apply(level, cdm.getPosition(),previous);
+                    });
                 }
 
             }

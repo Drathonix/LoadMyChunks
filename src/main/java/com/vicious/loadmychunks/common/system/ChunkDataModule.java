@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class ChunkDataModule {
     private final Timings chunkTickTimer = new Timings();
@@ -320,7 +321,9 @@ public class ChunkDataModule {
                 }
             }
             if(doStateUpdateCheck) {
-                update(()->updateChunkLoadState(level));
+                consumeLoadState(previous->{
+                    update(()->updateChunkLoadState(level,previous));
+                });
             }
         }
     }
@@ -339,5 +342,9 @@ public class ChunkDataModule {
 
     public void configReloaded(ServerLevel level) {
 
+    }
+
+    public void consumeLoadState(Consumer<ILoadState> consumer){
+        consumer.accept(loadState);
     }
 }

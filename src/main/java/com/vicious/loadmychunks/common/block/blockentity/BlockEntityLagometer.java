@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockEntityLagometer extends BEBase implements IInformable {
     private ChunkDataModule cdm;
 
-        //? if <=1.16.5 {
+    //? if <=1.16.5 {
     /*public BlockEntityLagometer() {
         super(LMCContent.lagometerBlockEntity.get());
     }

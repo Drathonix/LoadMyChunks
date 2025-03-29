@@ -1,26 +1,20 @@
 package com.vicious.loadmychunks.common.item;
 
 import com.vicious.loadmychunks.common.util.Message;
-import net.minecraft.core.Registry;
-//? if >1.19.3
 import net.minecraft.core.registries.BuiltInRegistries;
-
 import net.minecraft.network.chat.Component;
-//? if <1.18.3
-/*import net.minecraft.network.chat.TranslatableComponent;*/
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public class ItemHasTooltip extends Item {
+public class BlockItemHasTooltip extends BlockItem {
     private final int nLines;
 
-    public ItemHasTooltip(Properties properties, int nLines) {
-        super(properties);
+    public BlockItemHasTooltip(Block block, Properties properties, int nLines) {
+        super(block, properties);
         this.nLines = nLines;
     }
 
@@ -31,10 +25,9 @@ public class ItemHasTooltip extends Item {
         for (int i = 0; i < nLines; i++) {
             list.add(Message.translatable(getTooltipTranslationKey(i)));
         }
-    }
-    *///?}
 
-    //? if >1.20.5 {
+    }
+    *///?} else {
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);

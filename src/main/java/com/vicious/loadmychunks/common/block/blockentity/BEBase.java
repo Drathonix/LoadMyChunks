@@ -15,29 +15,21 @@ public class BEBase extends BlockEntity {
     public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
-    //?}
-    //? if <=1.16.5 {
+    @Override
+    public void setLevel(Level level) {
+        super.setLevel(level);
+        validate(level);
+    }
+    //?} else {
     /*public BEBase(BlockEntityType<?> blockEntityType) {
         super(blockEntityType);
     }
-    *///?}
-
-    //? if <=1.16.5 {
     /*@Override
     public void setLevelAndPosition(Level level, BlockPos blockPos) {
         super.setLevelAndPosition(level, blockPos);
         validate(level);
     }
     *///?}
-
-    //? if >1.16.5 {
-    @Override
-    public void setLevel(Level level) {
-        super.setLevel(level);
-        validate(level);
-    }
-    //?}
-
 
     //? if >1.20.5 {
     @Override
@@ -49,13 +41,7 @@ public class BEBase extends BlockEntity {
     protected void saveAdditional(@NotNull CompoundTag arg, HolderLookup.@NotNull Provider arg2) {
         this.read(arg);
     }
-    //?}
-
-    protected void write(CompoundTag tag) {}
-
-    protected void read(CompoundTag tag) {}
-
-    //? if >1.16.5 && <1.20.5 {
+    //?} else if >1.16.5 && <1.20.5 {
     /*@Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
@@ -67,9 +53,7 @@ public class BEBase extends BlockEntity {
         super.saveAdditional(compoundTag);
         this.read(compoundTag);
     }
-    *///?}
-
-    //? if <=1.16.5 {
+    *///?} else if <=1.16.5 {
     /*@Override
     public CompoundTag save(CompoundTag compoundTag) {
         super.save(compoundTag);
@@ -83,6 +67,10 @@ public class BEBase extends BlockEntity {
         this.write(compoundTag);
     }
     *///?}
+
+    protected void write(CompoundTag tag) {}
+
+    protected void read(CompoundTag tag) {}
 
     public void validate(Level level){
 

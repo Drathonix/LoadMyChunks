@@ -22,9 +22,7 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     /*public BlockEntityChunkLoader() {
         super(LMCContent.chunkLoaderBlockEntity.get());
     }
-    *///?}
-
-    //? if >1.16.5 {
+    *///?} else {
     public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
         super(LMCContent.chunkLoaderBlockEntity.get(), blockPos, blockState);
     }
@@ -33,14 +31,6 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     @Override
     public PlacedChunkLoader loadMyChunks$getChunkLoader() {
         return chunkLoader;
-    }
-
-    @Override
-    public boolean loadMyChunks$extendRange(int amount) {
-        if(level instanceof ServerLevel) {
-            return chunkLoader.tryExtendBy((ServerLevel) level, amount);
-        }
-        return false;
     }
 
     @Override

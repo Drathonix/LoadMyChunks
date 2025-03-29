@@ -9,12 +9,13 @@ import com.vicious.loadmychunks.common.system.loaders.extension.IExtensionChunkL
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Any object that implements this interface can be stored in the ChunkDataManager and can load chunks.
- * @since 1.0.0
+ * @since 1.2.0
  * @author Jack Andersen
  */
 public interface IChunkLoader extends IChunkPositioned {
@@ -33,6 +34,15 @@ public interface IChunkLoader extends IChunkPositioned {
      */
     default ILoadState getDefaultState(){
         return LoadStateRegistry.TICKING;
+    }
+
+    /**
+     * Sets the loader's default state.
+     * @param state the new default state.
+     * @return the previous state.
+     */
+    default ILoadState setDefaultState(ILoadState state){
+        throw new IllegalStateException("setDefaultState not implemented for this chunk loader");
     }
 
     /**
@@ -79,6 +89,7 @@ public interface IChunkLoader extends IChunkPositioned {
         return true;
     }
 
+    @ApiStatus.Internal
     default void extend(ServerLevel serverLevel, int range){
         synchronized (this) {
             setExtensionRange(range);
@@ -119,6 +130,14 @@ public interface IChunkLoader extends IChunkPositioned {
     }
 
     default boolean supportsEntityTicking(){
-        return true;
+        return false;
+    }
+
+    /**
+     * Enables entity ticking if not already enabled.
+     * @return true if the state changed
+     */
+    default boolean enableEntityTicking() {
+        return setDefaultState(LoadStateRegistry.ENTITY_TICKING) != LoadStateRegistry.ENTITY_TICKING;
     }
 }
