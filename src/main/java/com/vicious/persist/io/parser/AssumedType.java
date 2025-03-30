@@ -1,5 +1,9 @@
 package com.vicious.persist.io.parser;
 
+/**
+ * Represents a list of possible types that a parsed value can be.
+ * @author Jack Andersen
+ */
 public enum AssumedType {
     UNKNOWN{
         @Override
@@ -48,15 +52,19 @@ public enum AssumedType {
             else return STRING;
         }
 
+        /**
+         * Returns the double type class.
+         * @return double.class
+         */
         @Override
         public Class<?> getType() {
             return double.class;
         }
     },
     BOOLEAN{
+        final String booleanChars = "TtRrUuEeFfAaLlSs";
         @Override
         public AssumedType append(char c) {
-            String booleanChars = "TtRrUuEeFfAaLlSs";
             if(booleanChars.indexOf(c) >= 0){
                 return this;
             }
@@ -87,9 +95,18 @@ public enum AssumedType {
         }
     };
 
+    /**
+     * Gives the assumed class of the parsed value.
+     * @return the expected type.
+     */
     public Class<?> getType(){
         return String.class;
     }
 
+    /**
+     * Appends a char and recalculates the assumed type if necessary.
+     * @param c the char
+     * @return the new AssumedType.
+     */
     public abstract AssumedType append(char c);
 }

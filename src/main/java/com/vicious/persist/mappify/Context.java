@@ -6,16 +6,16 @@ import com.vicious.persist.mappify.reflect.FieldData;
 import com.vicious.persist.mappify.registry.Reserved;
 import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.NotationFormat;
-import com.vicious.persist.util.ClassMap;
 import com.vicious.persist.util.StringTree;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Represents the current state of a {@link Mappifier}
+ * Represents the current state of a {@link com.vicious.persist.mappify.Mappifier}
  *
  * Every class has 2 possible Contexts.
  * The static Context applies to only elements with the static modifier.
@@ -25,7 +25,6 @@ import java.util.function.Consumer;
  * @since 1.0
  */
 public class Context {
-    private static final ClassMap<ClassData> classData = new ClassMap<>();
     /**
      * True if the source is a {@link Class} instance.
      */
@@ -40,6 +39,10 @@ public class Context {
      */
     public final boolean isEnum;
     /**
+     * Whether the source object is an array instance.
+     */
+    public final boolean isArray;
+    /**
      * The source object that the context applies to.
      */
     public final Object source;
@@ -48,20 +51,25 @@ public class Context {
      */
     public final ClassData data;
 
+    /**
+     * Creates a context from the source object.
+     * @param source any object.
+     */
     protected Context(Object source){
         this.isStatic = source instanceof Class<?>;
         this.isEnum = source instanceof Enum<?>;
+        this.isArray = source instanceof Array;
         this.type = isEnum ? ((Enum<?>) source).getDeclaringClass() : isStatic ? (Class<?>)source : source.getClass();
         this.source=source;
-        this.data = getClassData(this);
+        this.data = ClassData.getClassData(this.type);
     }
 
+    /**
+     * Creates a context from the source object.
+     * @param source any object.
+     */
     public static Context of(Object source){
         return new Context(source);
-    }
-
-    public static synchronized ClassData getClassData(Context context) {
-        return classData.computeIfAbsent(context.getType(), ClassData::new);
     }
 
     public Class<?> getType(){
@@ -103,7 +111,6 @@ public class Context {
     /**
      * Applies key transformations from {@link ReplaceKeys}
      * @param map the map to transform.
-     * @return untransformed key.
      */
     public void transform(Map<Object, Object> map) {
         if(map.containsKey(Reserved.TRANSFORMER_VER) && map.get(Reserved.TRANSFORMER_VER) instanceof Number){
@@ -126,7 +133,7 @@ public class Context {
                 String[] dest = replacement.split("/");
                 Map<Object,Object> sub = rootMap;
                 for (int i = 0; i < dest.length-1; i++) {
-                    sub = (Map<Object,Object>)sub.computeIfAbsent(dest,k->new HashMap<>());
+                    sub = (Map<Object,Object>)sub.computeIfAbsent(dest[i],k->new HashMap<>());
                 }
                 sub.put(dest[dest.length-1],val);
             } else if (depth+1 < treeDepth && map.get(str) instanceof Map && tree.containsNode(pth)) {
@@ -137,5 +144,9 @@ public class Context {
 
     public int getTransformerVer() {
         return data.getTransformerVer();
+    }
+
+    public FieldData<?> getField(String targetField) {
+        return data.getField(targetField);
     }
 }

@@ -9,15 +9,17 @@ import java.lang.annotation.Target;
  * Used to indicate Generic types on savable fields. This is required for Reflection to be able to retrieve generics.
  * Generics should be listed in the order read from left to right.
  * Examples :
- * \@Save
- * \@Typing(String.class)
- * List\<String\> list = new ArrayList\<\>();
- * \@Save
- * \@Typing(String.class,Integer.class)
- * Map\<String,Integer\> map = new HashMap\<\>();
- * \@Save
- * \@Typing(String.class,ArrayList.class,ArrayList.class,HashMap.class,Integer.class,Double.class)
- * Map\<String,ArrayList\<ArrayList\<HashMap\<Integer,Double\>\>\>\> map = new HashMap\<\>();
+ * {@literal
+ * @Save
+ * @Typing(String.class)
+ * List<String> list = new ArrayList<>();
+ * @Save
+ * @Typing(String.class,Integer.class)
+ * Map<String,Integer> map = new HashMap<>();
+ * @Save
+ * @Typing(String.class,ArrayList.class,ArrayList.class,HashMap.class,Integer.class,Double.class)
+ * Map<String,ArrayList<ArrayList<HashMap<Integer,Double>>>> map = new HashMap<>();
+ * }
  * @since 1.0
  * @author Jack Andersen
  */

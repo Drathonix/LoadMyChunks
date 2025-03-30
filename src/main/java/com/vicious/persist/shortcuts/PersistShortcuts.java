@@ -1,9 +1,13 @@
 package com.vicious.persist.shortcuts;
 
+import com.vicious.persist.except.NoSuchSavableElementException;
 import com.vicious.persist.io.writer.wrapped.WrappedObjectMap;
 import com.vicious.persist.mappify.Context;
 import com.vicious.persist.mappify.Mappifier;
+import com.vicious.persist.mappify.reflect.FieldData;
 import com.vicious.persist.util.FileUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,5 +101,24 @@ public class PersistShortcuts {
     public static void init(Object obj){
         readFromFile(obj);
         saveAsFile(obj);
+    }
+
+    /**
+     * A shortcut method to set a value while using Persist's built-in value validator.
+     * @param target the object that contains the value.
+     * @param value the new value to set.
+     * @param targetField the name of the field to modify.
+     * @author Jack Andersen
+     * @since 1.3.0
+     */
+    public static void set(@NotNull Object target, @Nullable Object value, @NotNull String targetField) {
+        Context ctx = Context.of(target);
+        FieldData<?> data = ctx.getField(targetField);
+        if(data != null){
+            data.set(ctx,value);
+        }
+        else{
+            throw new NoSuchSavableElementException(targetField + " is not present in the target object.");
+        }
     }
 }

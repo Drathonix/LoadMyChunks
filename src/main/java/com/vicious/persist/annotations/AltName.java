@@ -16,5 +16,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD,ElementType.METHOD})
 public @interface AltName {
+    /**
+     * Stores the alternate names for the Field.
+     * @return a String array of all alternate names.
+     */
     String[] value();
 }

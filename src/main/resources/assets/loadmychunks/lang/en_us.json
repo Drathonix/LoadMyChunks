@@ -53,8 +53,8 @@
     "loadmychunks.lifeforce_broadcaster.cannot_entity_tick": "This block cannot force entity ticking.",
     "loadmychunks.chunkinfo.need_ownership": "You need to have a chunk loader in this chunk to use this feature.",
     "loadmychunks.chunkinfo.line1": "Chunk (%s,%s) Information",
-    "loadmychunks.chunkinfo.line2.forced.entity_ticking": "Forced Entity Ticking.",
-    "loadmychunks.chunkinfo.line2.forced": "Forced Block Entity Ticking.",
+    "loadmychunks.chunkinfo.line2.forced.entity_ticking": "Forced (Entity Ticking).",
+    "loadmychunks.chunkinfo.line2.forced": "Forced (Block Entity Ticking).",
     "loadmychunks.chunkinfo.line2.notforced": "Not Force Loaded.",
     "loadmychunks.chunkinfo.line2.overticked": "Not Force Loaded, Overticked.",
     "loadmychunks.chunkinfo.line3": "Last Tick Duration: %sms",
@@ -71,11 +71,15 @@
     "commands.loadmychunks.list.forceloaded.header": "Forceloaded Chunks",
     "commands.loadmychunks.list.overticked.header": "Overticked Chunks",
     "commands.loadmychunks.list.forceloaded.entry": "(%s,%s)",
+    "commands.loadmychunks.list.forceloaded.entry.entity_ticking": "(%s,%s) - entity ticking",
     "commands.loadmychunks.list.forceloaded.entry.permanent": "(%s,%s) permanent",
+    "commands.loadmychunks.list.forceloaded.entry.permanent.entity_ticking": "(%s,%s) permanent - entity ticking",
     "commands.loadmychunks.config.bad_path_not_found": "Invalid path object not found at: %s",
     "commands.loadmychunks.config.invalid_integer": "Invalid integer: %s",
     "commands.loadmychunks.config.invalid_value": "Invalid value: %s",
     "commands.loadmychunks.config.value_set": "%s set to %s",
-    "loadmychunks.turtle.adjective.loading": "Loading"
+    "loadmychunks.turtle.adjective.loading": "Loading",
+
+    "tag.item.loadmychunks.chunk_loaders": "Chunk Loaders"
 }
 

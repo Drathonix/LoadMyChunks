@@ -10,6 +10,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
+ * Main entry point for the class name scanner feature.
  * @author Jack Andersen
  */
 public class Persist {

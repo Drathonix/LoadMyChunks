@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author Jack Andersen
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD,ElementType.METHOD})
+@Target({ElementType.FIELD,ElementType.METHOD, ElementType.PARAMETER})
 public @interface Save {
     /**
      * The name of the savable element. If left empty this defaults to the Method or Field name.
@@ -29,15 +29,6 @@ public @interface Save {
     String description() default "";
 
     /**
-     * A special marker for savable elements that contain objects with internal savable elements.
-     * When false, savable objects will be converted to a map containing the object's savable elements.
-     * When true, savable objects will be stored using Stringify.
-     * This is specifically useful for referencing enums that are also savable objects where normally a user would just want to store the enum's name rather than all the enum's savable elements.
-     * @return the setting.
-     */
-    boolean raw() default false;
-
-    /**
      * A special sub-annotation that marks a Method as a setter method for a savable element.
      * The Setter annotation must use the same effective name as the getter.
      * Any method annotated with this will be called over the Field.
@@ -49,5 +40,18 @@ public @interface Save {
          * @return The savable element's effective name.
          */
         String value();
+    }
+    /**
+     * A special sub-annotation that marks a Constructor as an initializer.
+     * The initializer should contain all {@link Save} fields as parameters.
+     * @since 1.4.2
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.CONSTRUCTOR)
+    @interface Constructor{
+        /**
+         * @return An array containing all the names of the {@link Save} fields each parameter corresponds to.
+         */
+        String[] value();
     }
 }

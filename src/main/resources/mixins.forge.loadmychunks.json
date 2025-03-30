@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.drathonix.loadmychunks.forge.mixin",
+  "compatibilityLevel": "JAVA_${java_ver}",
+  "mixins": [
+    "MixinTicket"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

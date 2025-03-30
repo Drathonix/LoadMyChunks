@@ -7,38 +7,54 @@ import com.vicious.persist.annotations.Save;
 import com.vicious.persist.except.InvalidAnnotationException;
 import com.vicious.persist.except.InvalidSavableElementException;
 import com.vicious.persist.mappify.Context;
+import com.vicious.persist.mappify.registry.Initializers;
 import com.vicious.persist.mappify.registry.Reserved;
 import com.vicious.persist.shortcuts.NotationFormat;
+import com.vicious.persist.util.ClassMap;
+import com.vicious.persist.util.ReflectionHelper;
 import com.vicious.persist.util.StringTree;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
+ * Stores necessary information for Persist's Mappifier.
  * @author Jack Andersen
  * @since 1.0
  */
 public class ClassData {
+    private static final ClassMap<ClassData> classData = new ClassMap<>();
     /**
+     * Map of all savable Fields by name or alt name. This is not a BiMap
      * A map of all Fields marked with {@link Save} by savable name.
      */
-    private final Map<String, FieldData<?>> savableFields = new HashMap<>();
+    @NotNull
+    private final Map<String, FieldData<?>> nameToField = new LinkedHashMap<>();
+
     /**
-     * The Fields marked with {@link PersistentPath} by context (non-static or static)
+     * Set of all unique Fields present in the class.
+     */
+    @NotNull
+    private final Set<FieldData<?>> savableFields = new LinkedHashSet<>();
+
+    /**
+     * The Fields marked with {@link com.vicious.persist.annotations.PersistentPath} by context (non-static or static)
      * There can only be a maximum of two.
      */
+    @NotNull
     private final PathFieldData<?>[] persistentPath = new PathFieldData[2];
     /**
      * A tree of key transformations that may be applied before object unmapping.
      */
     @SuppressWarnings("unchecked")
+    @NotNull
     private final StringTree<String>[] keyTransformations = new StringTree[2];
 
     /**
@@ -47,19 +63,17 @@ public class ClassData {
     private final int transformerVer;
 
     /**
-     * Goes through a class' hierarchy and executes some arbitrary code.
-     * @param cls the child class
-     * @param consumer the code to execute on that class' hierarchy
+     * Set of all Fields that must be unmapped.
      */
-    private static void forEach(Class<?> cls, Consumer<Class<?>> consumer){
-        if(cls != null){
-            consumer.accept(cls);
-            for (Class<?> anInterface : cls.getInterfaces()) {
-                consumer.accept(anInterface);
-            }
-            forEach(cls.getSuperclass(), consumer);
-        }
-    }
+    @NotNull
+    private final Set<FieldData<?>> requiredFields = new LinkedHashSet<>();
+
+    /**
+     * A special initializer for classes with @Save constructors. If this is present the constructor will be called when initializing the object.
+     * @since 1.4.2
+     */
+    @Nullable
+    private final Initializers.CustomConstructor<?> initializer;
 
     /**
      * Initializes the savableFields and persistentPath reference maps.
@@ -69,7 +83,8 @@ public class ClassData {
      */
     public ClassData(Class<?> c){
         AtomicInteger tSum = new AtomicInteger(0);
-        forEach(c,cls->{
+        boolean hasInitializer = Initializers.canGenerateInitializerFor(c);
+        ReflectionHelper.forEach(c, cls->{
             for (Method m1 : cls.getDeclaredMethods()) {
                 Save save = m1.getAnnotation(Save.class);
                 PersistentPath path = m1.getAnnotation(PersistentPath.class);
@@ -81,7 +96,7 @@ public class ClassData {
                     if(Reserved.isReserved(name)){
                         throw new InvalidSavableElementException("Method " + m1.getName() + " in " + m1.getDeclaringClass() + " @Save(\"" + name + "\"), has a reserved name! Use a different name.");
                     }
-                    if(savableFields.containsKey(name)){
+                    if(nameToField.containsKey(name)){
                         continue;
                     }
                     Method setter = null;
@@ -98,15 +113,16 @@ public class ClassData {
                         }
                     }
                     AltName altName = m1.getAnnotation(AltName.class);
-                    FieldData<?> data = new FieldData<>(m1,setter);
+                    FieldData<?> data = new FieldData<>(m1,setter,hasInitializer);
                     if(altName != null){
                         for (String s : altName.value()) {
-                            if(!savableFields.containsKey(s) && !Reserved.isReserved(s)) {
-                                savableFields.put(s, data);
+                            if(!nameToField.containsKey(s) && !Reserved.isReserved(s)) {
+                                nameToField.put(s, data);
                             }
                         }
                     }
-                    savableFields.put(name, data);
+                    nameToField.put(name, data);
+                    savableFields.add(data);
                 }
                 if(path != null){
                     int idx = Modifier.isStatic(m1.getModifiers()) ? 1 : 0;
@@ -124,7 +140,7 @@ public class ClassData {
                 PersistentPath path = field.getAnnotation(PersistentPath.class);
                 if(save != null){
                     String name = save.value().isEmpty() ? field.getName() : save.value();
-                    if(savableFields.containsKey(name)){
+                    if(nameToField.containsKey(name)){
                         continue;
                     }
                     if(Reserved.isReserved(name)){
@@ -141,15 +157,16 @@ public class ClassData {
                         }
                     }
                     AltName altName = field.getAnnotation(AltName.class);
-                    FieldData<?> data = new FieldData<>(field,setter);
+                    FieldData<?> data = new FieldData<>(field,setter,hasInitializer);
                     if(altName != null){
                         for (String s : altName.value()) {
-                            if(!savableFields.containsKey(s) && !Reserved.isReserved(s)) {
-                                savableFields.put(s, data);
+                            if(!nameToField.containsKey(s) && !Reserved.isReserved(s)) {
+                                nameToField.put(s, data);
                             }
                         }
                     }
-                    savableFields.put(name, data);
+                    nameToField.put(name, data);
+                    savableFields.add(data);
                 }
                 if(path != null){
                     int idx = Modifier.isStatic(field.getModifiers()) ? 1 : 0;
@@ -201,7 +218,36 @@ public class ClassData {
                 }
             }
         });
+        for (FieldData<?> value : savableFields) {
+            if(value.isRequired()){
+                requiredFields.add(value);
+            }
+        }
+        initializer = Initializers.tryGenerateCustomReconstructorFor(c,this);
         transformerVer=tSum.get();
+    }
+
+    /**
+     * Gets the class data for an arbitrary object.
+     * @param object the object, can be a class object or an instance.
+     * @return the object's class data.
+     */
+    public static @NotNull ClassData getClassData(@NotNull Object object){
+        if(object instanceof Class<?>){
+            return getClassData((Class<?>)object);
+        }
+        else{
+            return getClassData(object.getClass());
+        }
+    }
+
+    /**
+     * Gets the class data for a specific class.
+     * @param type the class to use.
+     * @return A ClassData object.
+     */
+    public static synchronized @NotNull ClassData getClassData(Class<?> type) {
+        return classData.computeIfAbsent(type, ClassData::new);
     }
 
     /**
@@ -216,10 +262,10 @@ public class ClassData {
     /**
      * Iterates through all the FieldData instances of the static context provided.
      * @param isStatic the static context level to filter by.
-     * @param accessor some arbitrary code to run on the {@link FieldData} instance.
+     * @param accessor some arbitrary code to run on the {@link com.vicious.persist.mappify.reflect.FieldData} instance.
      */
     public void forEach(boolean isStatic, Consumer<FieldData<?>> accessor){
-        savableFields.forEach((name, field) -> {
+        savableFields.forEach(field -> {
             if(field.matchesStaticness(isStatic)) {
                 accessor.accept(field);
             }
@@ -232,7 +278,7 @@ public class ClassData {
      * @return if savable fields exist for the static context.
      */
     public boolean hasTraitsInContext(boolean isStatic) {
-        for (FieldData<?> value : savableFields.values()) {
+        for (FieldData<?> value : savableFields) {
             if(value.matchesStaticness(isStatic)) {
                 return true;
             }
@@ -241,20 +287,20 @@ public class ClassData {
     }
 
     /**
-     * Executes arbitrary code on a {@link FieldData} instance if there is one present.
+     * Executes arbitrary code on a {@link com.vicious.persist.mappify.reflect.FieldData} instance if there is one present.
      * @param key the FieldData's name
      * @param isStatic the expected static context.
      * @param consumer some arbitrary code.
      */
     public void whenPresent(String key, boolean isStatic, Consumer<FieldData<?>> consumer) {
-        FieldData<?> field = savableFields.get(key);
+        FieldData<?> field = nameToField.get(key);
         if(field != null && field.matchesStaticness(isStatic)) {
             consumer.accept(field);
         }
     }
 
     /**
-     * Returns the persistent {@link PathFieldData} instance for the context.
+     * Returns the persistent {@link com.vicious.persist.mappify.reflect.PathFieldData} instance for the context.
      * @param context the static context.
      * @return the PathFieldData instance for the context.
      * @throws IllegalArgumentException if no PathFieldData is present.
@@ -317,6 +363,10 @@ public class ClassData {
         return keyTransformations[isStatic ? 1 : 0];
     }
 
+    /**
+     * Gets the transformer version for the class type.
+     * @return an int representing the transformer version.
+     */
     public int getTransformerVer() {
         return transformerVer;
     }
@@ -332,7 +382,7 @@ public class ClassData {
                 out.append("\tCan Migrate: ").append(getPersistentPathMigrateMode(Context.of(Class.class))).append("\n");
             } catch (Throwable ignored){}
             out.append("\tSavable Elements: {\n");
-            savableFields.forEach((name, field) -> {
+            nameToField.forEach((name, field) -> {
                 if(field.matchesStaticness(true)) {
                     out.append("\t\t").append(name).append(": ").append(field.getType()).append("\n");
                 }
@@ -350,7 +400,7 @@ public class ClassData {
                 out.append("\tCan Migrate: ").append(getPersistentPathMigrateMode(Context.of(1))).append("\n");
             } catch (Throwable ignored){}
             out.append("\tSavable Elements: {\n");
-            savableFields.forEach((name, field) -> {
+            nameToField.forEach((name, field) -> {
                 if(field.matchesStaticness(false)) {
                     out.append("\t\t").append(name).append(": ").append(field.getType()).append("\n");
                 }
@@ -360,5 +410,54 @@ public class ClassData {
             out.append("}\n");
         }
         return out.toString();
+    }
+
+    /**
+     * Gets a Persist Field instance.
+     * @param targetField the name of the field to retrieve.
+     * @return the target field or null.
+     */
+    public @Nullable FieldData<?> getField(String targetField) {
+        return nameToField.get(targetField);
+    }
+
+    /**
+     * Gets all the keys for the field provided
+     * @param field the field to search for.
+     * @return a Set containing 0 or more keys for the field.
+     */
+    public @NotNull Set<String> getKeysOfField(@NotNull FieldData<?> field){
+        Set<String> keys = new HashSet<>();
+        for (Map.Entry<String, FieldData<?>> entry : nameToField.entrySet()) {
+            if(entry.getValue() == field){
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
+    }
+    /**
+     * Gets a copy of the class' required fields.
+     * @return all required fields
+     */
+    public Set<FieldData<?>> copyRequired() {
+        return new HashSet<>(requiredFields);
+    }
+
+    /**
+     * Gets the custom constructor for this type if present.
+     * @return a custom constructor or null.
+     * @since 1.4.2
+     */
+    public @Nullable Initializers.CustomConstructor<?> getInitializer() {
+        return initializer;
+    }
+
+    /**
+     * Checks that there is a custom initializer generated for this type.
+     * @return true if there is an initializer available
+     * @since 1.4.2
+     */
+    public boolean hasInitializer() {
+        return initializer != null;
     }
 }

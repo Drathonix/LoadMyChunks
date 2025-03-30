@@ -38,15 +38,15 @@ public class Stringify {
     }
 
     private static byte clampedParseByte(String str){
-        return (byte)Math.clamp(Long.parseLong(str), Byte.MIN_VALUE, Byte.MAX_VALUE);
+        return (byte)Math.min(Math.max(Long.parseLong(str),Byte.MIN_VALUE),Byte.MAX_VALUE);
     }
 
     private static short clampedParseShort(String str){
-        return (short)Math.clamp(Long.parseLong(str), Short.MIN_VALUE, Short.MAX_VALUE);
+        return (short) Math.min(Math.max(Long.parseLong(str),Short.MIN_VALUE),Short.MAX_VALUE);
     }
 
     private static int clampedParseInt(String str){
-        return Math.clamp(Long.parseLong(str), Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return (int) Math.min(Math.max(Long.parseLong(str),Integer.MIN_VALUE),Integer.MAX_VALUE);
     }
 
    /*private static float clampedParseFloat(String str){

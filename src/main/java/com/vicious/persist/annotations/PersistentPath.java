@@ -9,8 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Marks a class String Field or Method as the path to save to.
- * See {@link com.vicious.persist.shortcuts.PersistShortcuts#saveAsFile(Object) for further usage information.
- *
+ * See {@link com.vicious.persist.shortcuts.PersistShortcuts#saveAsFile(Object)} for further usage information.
  * @since 1.0
  * @author Jack Andersen
  */

@@ -1,14 +1,16 @@
 package com.vicious.persist.mappify.reflect;
 
-import com.vicious.persist.annotations.Range;
-import com.vicious.persist.annotations.Save;
-import com.vicious.persist.annotations.Typing;
+import com.vicious.persist.annotations.*;
 import com.vicious.persist.except.InvalidSavableElementException;
 import com.vicious.persist.mappify.Context;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a savable element's annotations and its getter and setter functions.
@@ -37,7 +39,11 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
      * The optional {@link Range} Field annotation instance.
      */
     @Nullable
-    public final Range rangeData;
+    public final Range range;
+
+    @Nullable
+    public final CleanString cleanString;
+
     /**
      * The optional {@link Typing} Field annotation instance.
      */
@@ -49,8 +55,18 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
     @Nullable
     public final Method setter;
 
-    public FieldData(T element, @Nullable Method setter) {
-        if(element instanceof Method && setter == null) {
+    /**
+     * When true this Field must be included in a map when unmapping.
+     */
+    private final boolean required;
+    /**
+     * When true enums will be stored in Object format rather than in Reference format.
+     */
+    private final boolean objectified;
+
+
+    public FieldData(T element, @Nullable Method setter, boolean hasInitializer) {
+        if(element instanceof Method && setter == null && !hasInitializer) {
             throw new InvalidSavableElementException("Method " + element.getName() + " in " + element.getDeclaringClass() + " annotated with @Save is missing a setter method annotated with @Save.Setter(" + element.getName() + ")");
         }
         this.getterElement = element;
@@ -60,8 +76,37 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
         }
         element.setAccessible(true);
         this.saveData = element.getAnnotation(Save.class);
-        this.rangeData = element.getAnnotation(Range.class);
-        this.typing = element.getAnnotation(Typing.class);
+        this.range = element.getAnnotation(Range.class);
+        this.cleanString = element.getAnnotation(CleanString.class);
+        Typing tempTyping = element.getAnnotation(Typing.class);
+        if(tempTyping == null){
+            Class<?> type = element instanceof Field ? ((Field) element).getType() : (element instanceof Method ? ((Method) element).getReturnType() : null);
+            if(type == null){
+                throw new IllegalStateException("Getter element is somehow not a field or method, this is usually impossible.");
+            }
+            if(type.isArray()){
+                List<Class<?>> components = new LinkedList<>();
+                while(type.getComponentType() != null){
+                    components.add(type.getComponentType());
+                    type = type.getComponentType();
+                }
+                Class<?>[] typingArray = components.toArray(new Class<?>[0]);
+                tempTyping = new Typing(){
+                    @Override
+                    public Class<? extends Annotation> annotationType() {
+                        return Typing.class;
+                    }
+
+                    @Override
+                    public Class<?>[] value() {
+                        return typingArray;
+                    }
+                };
+            }
+        }
+        this.typing = tempTyping;
+        this.required = element.isAnnotationPresent(Required.class);
+        this.objectified = element.isAnnotationPresent(Objectified.class);
     }
 
     public boolean matchesStaticness(boolean isStatic) {
@@ -96,13 +141,13 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
      */
     public void set(Context context, @Nullable Object value) {
         try {
-            if(rangeData != null && value instanceof Number){
+            if(range != null && value instanceof Number){
                 double v = ((Number)value).doubleValue();
-                if(v < rangeData.minimum()){
-                    v = Math.max(v,rangeData.minimum());
+                if(v < range.minimum()){
+                    v = Math.max(v, range.minimum());
                 }
-                else if (v > rangeData.maximum()){
-                    v = Math.min(v,rangeData.maximum());
+                else if (v > range.maximum()){
+                    v = Math.min(v, range.maximum());
                 }
                 if(value instanceof Double) {
                     value = v;
@@ -121,6 +166,14 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
                 }
                 else if(value instanceof Long){
                     value = (long)v;
+                }
+            }
+            if(cleanString != null && value instanceof String){
+                for (CleanString.Replacement replacement : cleanString.replacements()) {
+                    value = ((String)value).replaceAll(replacement.target(),replacement.replacement());
+                }
+                if(((String) value).length() > cleanString.maxLength()){
+                    value = ((String) value).substring(0, cleanString.maxLength());
                 }
             }
             if (setter != null) {
@@ -143,8 +196,8 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
         return getterElement.getName();
     }
 
-    public boolean isRaw() {
-        return saveData.raw();
+    public boolean objectified() {
+        return objectified;
     }
 
     @Override
@@ -169,8 +222,30 @@ public class FieldData<T extends AccessibleObject & Member> implements TypeInfo 
     public String toString() {
         return "FieldData{" +
                 ", saveData=" + saveData +
-                ", rangeData=" + rangeData +
+                ", rangeData=" + range +
                 ", typing=" + typing +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        FieldData<?> fieldData = (FieldData<?>) object;
+        return Objects.equals(getterElement, fieldData.getterElement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getterElement);
+    }
+
+    /**
+     * Checks if this field must be present when unmapping.
+     * @since 1.3.1
+     * @return whether the field is marked with {@link Required}.
+     */
+    public boolean isRequired() {
+        return required;
     }
 }
