@@ -62,6 +62,7 @@ public class LoadMyChunks {
 	public static final String MOD_ID = "loadmychunks";
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Level debugLevel = Level.DEBUG;
+	public static boolean stopping = false;
 
 	//? if <1.20.5
 	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
@@ -115,6 +116,7 @@ public class LoadMyChunks {
 	 * @param server the server instance
 	 */
 	public static void serverStarted(MinecraftServer server) {
+		LoadMyChunks.stopping=false;
 		LoadMyChunks.server = server;
 	}
 

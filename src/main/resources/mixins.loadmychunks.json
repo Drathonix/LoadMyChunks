@@ -10,6 +10,7 @@
     "MixinDistanceManager",
     "MixinLevel",
     "MixinLevelChunk",
+    "MixinMinecraftServer",
     "MixinPersistentEntitySectionManager",
     "MixinServerLevel",
     "MixinServerLevelEntityCallbacks",

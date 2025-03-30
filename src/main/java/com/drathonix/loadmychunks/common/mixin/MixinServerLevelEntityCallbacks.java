@@ -1,5 +1,6 @@
 package com.drathonix.loadmychunks.common.mixin;
 
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -22,10 +23,12 @@ public class MixinServerLevelEntityCallbacks {
 
     @Inject(method = "onTickingEnd(Lnet/minecraft/world/entity/Entity;)V",at = @At("HEAD"))
     public synchronized void lmc$removeFromChunkTicker(Entity arg, CallbackInfo ci){
-        ServerLevel level = (ServerLevel) arg.level();
-        LevelChunk c = level.getChunkAt(arg.blockPosition());
-        if(c instanceof ILevelChunkMixin){
-            ((ILevelChunkMixin)c).lmc$removeEntity(arg);
+        if(!LoadMyChunks.stopping) {
+            ServerLevel level = (ServerLevel) arg.level();
+            LevelChunk c = level.getChunkAt(arg.blockPosition());
+            if (c instanceof ILevelChunkMixin) {
+                ((ILevelChunkMixin) c).lmc$removeEntity(arg);
+            }
         }
     }
 }
