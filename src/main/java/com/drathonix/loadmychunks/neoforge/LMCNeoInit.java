@@ -48,8 +48,10 @@ public class LMCNeoInit {
     }
 
     public static void newRegistry(NewRegistryEvent event){
-        event.register(LoaderTypeRegistry.INSTANCE);
-        event.register(LoadStateRegistry.INSTANCE);
+        LoadMyChunks.modMode(()->{
+            event.register(LoaderTypeRegistry.INSTANCE);
+            event.register(LoadStateRegistry.INSTANCE);
+        });
     }
 }
 *///?}

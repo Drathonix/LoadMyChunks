@@ -69,6 +69,12 @@ public class ExtensionChunkLoaders extends Long2ObjectOpenHashMap<IExtensionChun
         return ecl;
     }
 
+    public void requestUpdates() {
+        for (IExtensionChunkLoader<?> ecl : values()) {
+            ChunkDataManager.requestUpdate(level,ecl.getChunkPos());
+        }
+    }
+
     @FunctionalInterface
     public interface Factory<T extends IExtensionChunkLoader<?>> {
         T create(ChunkPos position);

@@ -9,6 +9,9 @@ import net.minecraft.world.level.block.NetherPortalBlock;
 
 import java.util.Comparator;
 
+/**
+ * Handles the forcing of chunks using {@link net.minecraft.server.level.Ticket}s
+ */
 public class ChunkForcer {
     // Putting this here for reference
     // Any level below or equal to 31 is entity ticking, 32 is block ticking, 33 is full but not loaded, 34+ is not full.
@@ -27,10 +30,22 @@ public class ChunkForcer {
         manager.addTicket(entityTicking ? ENTITY : FORCED, pos, entityTicking ? ENTITY_TICKING_LEVEL : BLOCK_TICKING_LEVEL, pos);
     }
 
+    /**
+     * Stops forcing a chunk using LMC chunk forcing.
+     * @param level the level.
+     * @param pos the chunk to force.
+     * @param wasEntityTicking whether the chunk was previously entity ticking.
+     */
     public static void unforceChunk(ServerLevel level, ChunkPos pos, boolean wasEntityTicking){
         removeTicket(level.getChunkSource().chunkMap.getDistanceManager(),pos,wasEntityTicking);
     }
 
+    /**
+     * Forces a chunk using LMC chunk forcing.
+     * @param level the level.
+     * @param pos the chunk to force.
+     * @param doEntityTicking whether to enable entity ticking.
+     */
     public static void forceChunk(ServerLevel level, ChunkPos pos, boolean doEntityTicking){
         addTicket(level.getChunkSource().chunkMap.getDistanceManager(),pos,doEntityTicking);
     }

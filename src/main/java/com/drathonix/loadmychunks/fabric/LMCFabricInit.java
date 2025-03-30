@@ -24,8 +24,10 @@ public class LMCFabricInit implements ModInitializer {
         //? if cc-tweaked {
         Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
         //?}
-        FabricRegistryBuilder.from(LoaderTypeRegistry.INSTANCE).buildAndRegister();
-        FabricRegistryBuilder.from(LoadStateRegistry.INSTANCE).buildAndRegister();
+        LoadMyChunks.modMode(()->{
+            FabricRegistryBuilder.from(LoaderTypeRegistry.INSTANCE).buildAndRegister();
+            FabricRegistryBuilder.from(LoadStateRegistry.INSTANCE).buildAndRegister();
+        });
     }
 
     @Override

@@ -18,6 +18,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ChunkDataModule {
-    private final Timings chunkTickTimer = new Timings();
+    private final CombinedTimings chunkTickTimer = new CombinedTimings();
     private Period gracePeriod;
     private Period disabledPeriod;
     public ILoadState defaultLoadState = LoadStateEnum.DISABLED;
@@ -46,7 +47,6 @@ public class ChunkDataModule {
     }
 
     public void load(CompoundTag tag, ServerLevel level){
-        chunkTickTimer.load(tag.getCompound("timings"));
         if(tag.contains("grace")){
             gracePeriod = new Period(tag.getLong("grace"));
         }
@@ -80,7 +80,6 @@ public class ChunkDataModule {
 
     public CompoundTag save(){
         CompoundTag tag = new CompoundTag();
-        tag.put("timings",chunkTickTimer.save());
         if(gracePeriod != null){
             tag.putLong("grace",gracePeriod.getEnd());
         }
@@ -162,7 +161,7 @@ public class ChunkDataModule {
 
     }
 
-    public @NotNull Timings getTickTimer(){
+    public @NotNull CombinedTimings getTickTimer(){
         return chunkTickTimer;
     }
 
@@ -241,7 +240,12 @@ public class ChunkDataModule {
         float frac = chunkTickTimer.getLagFraction();
         while(iterator.hasNext()) {
             IInformable informable = iterator.next();
-            informable.informLagFrac(frac);
+            informable.lmc$informLagFrac(frac);
+            if(informable instanceof BlockEntity){
+                if(((BlockEntity) informable).isRemoved()){
+                    iterator.remove();
+                }
+            }
             if(informable instanceof Entity){
                 //? if >1.16.5 {
                 if(((Entity) informable).chunkPosition().toLong() != position.toLong()){

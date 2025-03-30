@@ -33,6 +33,8 @@ public abstract class MixinLevel implements ILevelMixin {
 
     @Shadow public abstract boolean isClientSide();
 
+    @Shadow public abstract ProfilerFiller getProfiler();
+
     /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
      */

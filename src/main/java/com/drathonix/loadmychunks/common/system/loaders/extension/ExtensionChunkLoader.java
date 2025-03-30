@@ -1,5 +1,6 @@
 package com.drathonix.loadmychunks.common.system.loaders.extension;
 
+import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.loaders.IChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.PhantomChunkLoader;
 import com.drathonix.loadmychunks.common.util.ReferenceHelper;

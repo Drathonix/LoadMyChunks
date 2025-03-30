@@ -24,36 +24,38 @@ public class LoadMyChunksClient {
 
     public static void init(){
         LoadMyChunks.logger.info("Initializing Client Side");
+        LoadMyChunks.modMode(()->{
         //? if >1.20.5 {
-        ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
-            NetworkManager.sendToServer(new LagReadingRequest());
-            return LoadMyChunksClient.lagLevel;
+            ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.of("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+                NetworkManager.sendToServer(new LagReadingRequest());
+                return LoadMyChunksClient.lagLevel;
+            });
+            ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.of("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+                NetworkManager.sendToServer(new LagReadingRequest());
+                return LoadMyChunksClient.lagLevel;
+            });
+            //?}
+            //? if >1.16.5 && <=1.20.5 {
+            /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+                NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
+                return LoadMyChunksClient.lagLevel;
+            });
+            ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+                NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
+                return LoadMyChunksClient.lagLevel;
+            });
+            *///?}
+            //? if <=1.16.5 {
+            /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity) -> {
+                NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
+                return LoadMyChunksClient.lagLevel;
+            });
+            ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity) -> {
+                NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
+                return LoadMyChunksClient.lagLevel;
+            });
+            *///?}
         });
-        ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
-            NetworkManager.sendToServer(new LagReadingRequest());
-            return LoadMyChunksClient.lagLevel;
-        });
-        //?}
-        //? if >1.16.5 && <=1.20.5 {
-        /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
-            NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
-            return LoadMyChunksClient.lagLevel;
-        });
-        ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
-            NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
-            return LoadMyChunksClient.lagLevel;
-        });
-        *///?}
-        //? if <=1.16.5 {
-        /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity) -> {
-            NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
-            return LoadMyChunksClient.lagLevel;
-        });
-        ItemPropertiesRegistry.register(LMCContent.itemChunkometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity) -> {
-            NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
-            return LoadMyChunksClient.lagLevel;
-        });
-        *///?}
         //? if <=1.20.5 {
         /*NetworkManager.registerReceiver(NetworkManager.Side.S2C,LoadMyChunks.LAG_READING_PACKET_ID,((buf, context) -> {
             lagLevel=buf.readFloat();

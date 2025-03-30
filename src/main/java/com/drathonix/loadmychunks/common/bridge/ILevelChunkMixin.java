@@ -1,6 +1,8 @@
 package com.drathonix.loadmychunks.common.bridge;
 
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
 
 public interface ILevelChunkMixin {
     //? if <=1.16.5 {
@@ -9,7 +11,20 @@ public interface ILevelChunkMixin {
     void loadMyChunks$tick();
     //?}
 
+    //? if <=1.16.5 {
+
+    //?} else {
+
+    /**
+     * Ticks entities. Critically important fact that this happens before block entity ticking.
+     * @param profilerFiller
+     */
+    void loadMyChunks$tickEntities(ProfilerFiller profilerFiller);
+    //?}
     ChunkDataModule loadMyChunks$getDataModule();
+
+    void lmc$removeEntity(Entity entity);
+    void lmc$addEntity(Entity entity);
 
     long loadMyChunks$posAsLong();
 }

@@ -82,7 +82,8 @@ public class ItemChunkometer extends ItemHasTooltip {
     // if >1.18.2 && <1.21.2 {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
-        if(level instanceof ServerLevel sl) {
+        if(level instanceof ServerLevel) {
+            ServerLevel sl = (ServerLevel) level;
             ChunkPos pos = new ChunkPos(player.blockPosition());
             ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
             if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {

@@ -14,6 +14,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * Any object that implements this interface can be stored in the ChunkDataManager and can load chunks.
  * @since 1.2.0
@@ -141,6 +143,7 @@ public interface IChunkLoader extends IChunkPositioned {
     default boolean enableEntityTicking(ServerLevel level) {
         boolean changed = setDefaultState(LoadStateRegistry.ENTITY_TICKING) != LoadStateRegistry.ENTITY_TICKING;
         if(changed){
+            Optional.ofNullable(getExtensionChunkLoaders()).ifPresent(ExtensionChunkLoaders::requestUpdates);
             ChunkDataManager.requestUpdate(level,getChunkPos());
         }
         return changed;

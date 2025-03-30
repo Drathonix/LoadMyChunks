@@ -12,6 +12,7 @@
     "MixinLevelChunk",
     "MixinPersistentEntitySectionManager",
     "MixinServerLevel",
+    "MixinServerLevelEntityCallbacks",
     "MixinServerPlayer",
     "MixinTickingTracker",
     "cct.MixinAbstractComputerBlockEntity",

@@ -76,15 +76,9 @@ public class ChunkDataManager {
 
     //? if >1.16.5 {
     public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
-        if(levelManagers.containsKey(level)){
-            levelManagers.get(level).clear();
-            LevelChunkLoaderManager out = new LevelChunkLoaderManager(level,tag);
-            levelManagers.replace(level,out);
-            return out;
-        }
-        else{
-            return levelManagers.put(level, new LevelChunkLoaderManager(level,tag));
-        }
+        LevelChunkLoaderManager manager = getManager(level);
+        manager.load(tag);
+        return manager;
     }
     //?}
 
@@ -234,25 +228,6 @@ public class ChunkDataManager {
             level.getServer().addTickable(this::tick);
         }
 
-        //? if >1.16.5 {
-        public LevelChunkLoaderManager(@NotNull ServerLevel level, @NotNull CompoundTag tag){
-            this(level);
-            for (String key : tag.getAllKeys()) {
-                long index = Long.parseLong(key);
-                ChunkPos pos = new ChunkPos(index);
-                ChunkDataModule module = getOrCreateData(index);
-                module.load(tag.getCompound(key),level);
-                module.update();
-                if(module.onCooldown()){
-                    shutDown(pos,LoadStateRegistry.DISABLED);
-                }
-                else{
-                    module.getLoadState().apply(level,pos, LoadStateRegistry.DISABLED);
-                }
-            }
-        }
-        //?}
-
         public @NotNull ChunkDataModule getOrCreateData(@NotNull ChunkPos pos){
             return getOrCreateData(pos.toLong());
         }
@@ -290,24 +265,24 @@ public class ChunkDataManager {
             setDirty();
             return cdm;
         }
-        //? if <=1.16.5 {
-        /*@Override
+
         public void load(CompoundTag tag) {
             for (String key : tag.getAllKeys()) {
                 long index = Long.parseLong(key);
                 ChunkPos pos = new ChunkPos(index);
                 ChunkDataModule module = getOrCreateData(index);
-                module.load(tag.getCompound(key),level);
-                module.update();
-                if(module.onCooldown()){
-                    shutDown(pos);
-                }
-                else{
-                    module.getLoadState().apply(level,pos);
-                }
+                module.consumeLoadState(previous->{
+                    module.load(tag.getCompound(key),level);
+                    module.update();
+                    if(module.onCooldown()){
+                        shutDown(pos,previous);
+                    }
+                    else{
+                        module.getLoadState().apply(level,pos,previous);
+                    }
+                });
             }
         }
-        *///?}
 
         //? if <=1.20.5
         /*@Override*/

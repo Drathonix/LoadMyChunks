@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(ServerPlayer.class)
 public class MixinServerPlayer implements IInformable {
     @Override
-    public void informLagFrac(float frac) {
+    public void lmc$informLagFrac(float frac) {
         //? if <=1.20.5 {
         /*FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
         newBuf.writeFloat(frac);

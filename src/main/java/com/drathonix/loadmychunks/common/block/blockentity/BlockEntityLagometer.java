@@ -36,7 +36,7 @@ public class BlockEntityLagometer extends BEBase implements IInformable {
     //?}
 
     @Override
-    public void informLagFrac(float frac) {
+    public void lmc$informLagFrac(float frac) {
         if(!isRemoved()) {
             BlockState blockState = getBlockState();
             int prevLag = blockState.getValue(BlockLagometer.LAG);

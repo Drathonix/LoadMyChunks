@@ -72,15 +72,20 @@ public class LoadMyChunks {
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
 		LMCConfig.init();
+		if(LMCConfig.pluginMode){
+			logger.info("Plugin mode is enabled! Item and block registration steps will be skipped");
+		}
 		if(LMCConfig.useDebugLogging){
 			logger.info("Changing to debug logging");
 			debugLevel = Level.INFO;
 			logger.info("Using Debug Logging");
 		}
 		CommandRegistrationEvent.EVENT.register(LoadMyChunks::registerCommands);
-		LoadMyChunks.logger.info("Adding Chunk loader blocks");
-		LMCContent.init();
-		logger.info("Chunk Loader Loading Complete.");
+		modMode(()->{
+			LoadMyChunks.logger.info("Adding LMC content.");
+			LMCContent.init();
+		});
+		logger.info("Content added.");
 		//? if <=1.20.5 {
 		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
@@ -291,5 +296,15 @@ public class LoadMyChunks {
 			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.forceload.unset", pos.x, pos.z));
 		}
 		return 1;
+	}
+
+	/**
+	 * Executes code only if the mod is in mod mode.
+	 * @param exec arbitrary runnable.
+	 */
+	public static void modMode(Runnable exec){
+		if(!LMCConfig.pluginMode){
+			exec.run();
+		}
 	}
 }

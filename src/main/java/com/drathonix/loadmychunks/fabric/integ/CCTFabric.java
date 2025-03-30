@@ -35,17 +35,17 @@ public class CCTFabric {
     //?} else {
     /*public static void init(){
         //? if >1.20.1 {
-        /*DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,ITurtleUpgrade.serialiserRegistryKey());
-        *///?} else {
-        /*DeferredRegister<TurtleUpgradeSerialiser<?>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,TurtleUpgradeSerialiser.registryId());
-        *///?}
+        DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,ITurtleUpgrade.serialiserRegistryKey());
+        //?} else {
+        DeferredRegister<TurtleUpgradeSerialiser<?>> turtleUpgrades = DeferredRegister.create(LoadMyChunks.MOD_ID,TurtleUpgradeSerialiser.registryId());
+        //?}
         LMCContent.chunkLoaderBlockMap.forEach((color,supplier)->{
             TurtleChunkLoaderUpgrade tclu = new TurtleChunkLoaderUpgrade(supplier);
             //? if >=1.20.4 {
             RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()->UpgradeSerialiser.simple((key)->tclu));
             //?} else {
-            /*RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()-> TurtleUpgradeSerialiser.simple((key)->tclu));
-            *///?}
+            /^RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>> reg = turtleUpgrades.register((!color.isEmpty() ? color + "_" : "") + "chunk_loader", ()-> TurtleUpgradeSerialiser.simple((key)->tclu));
+            ^///?}
             CCTRegistryContent.registrySuppliers.add(reg);
         });
         turtleUpgrades.register();

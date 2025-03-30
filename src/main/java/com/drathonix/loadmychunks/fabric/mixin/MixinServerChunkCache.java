@@ -12,6 +12,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+/**
+ * Allows LMC to enable random ticks in entity ticking forced chunks.
+ * Normally vanilla does not randomly tick when a chunk is forced. This behavior is maintained except for LMC chunkloading.
+ */
 @Mixin(ServerChunkCache.class)
 public class MixinServerChunkCache {
     @Shadow @Final private DistanceManager distanceManager;
