@@ -52,7 +52,7 @@ public class BlockChunkLoader extends BaseEntityBlock {
         }
     }
 
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean isMoving) {
         BlockEntityChunkLoader blockEntity = (BlockEntityChunkLoader) level.getBlockEntity(blockPos);
         IHasChunkloader.ifPresent(blockEntity,loader->{
             int k = loader.getExtensionRange();
@@ -67,7 +67,7 @@ public class BlockChunkLoader extends BaseEntityBlock {
             }
             Containers.dropContents(level,blockPos, out);
         });
-        super.onRemove(blockState, level, blockPos, blockState2, bl);
+        super.onRemove(blockState, level, blockPos, blockState2, isMoving);
     }
 
     /*@Override

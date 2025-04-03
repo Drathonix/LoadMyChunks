@@ -2,35 +2,32 @@
 package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.config.LMCConfig;
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
+import com.drathonix.loadmychunks.common.mixin.cct.MixinTurtleBrain;
 import com.drathonix.loadmychunks.common.registry.LoaderTypeKeys;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
-import com.drathonix.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TurtleChunkLoader extends PlacedChunkLoader {
-    @Nullable protected TurtleChunkLoaderPeripheral peripheral;
-    protected boolean loadExtensions = false;
     public TurtleChunkLoader() {}
-    public TurtleChunkLoader(BlockPos pos, @Nullable TurtleChunkLoaderPeripheral peripheral, int r, ExtensionChunkLoaders extensions, long activityEnd) {
+    public TurtleChunkLoader(BlockPos pos, @Nullable ITurtleBrainMixin turtle, long activityEnd, ILoadState defaultState) {
         super(pos,activityEnd);
-        this.extensionRange=r;
-        this.extensions = extensions;
-        this.peripheral=peripheral;
-        if(LMCConfig.cost.enabled && peripheral != null) {
-            timingsCheck(peripheral.getLevel(), peripheral.getChunkDataModule(), peripheral.getLevel().getGameTime());
+        setDefaultState(defaultState);
+        if(LMCConfig.cost.enabled && turtle != null) {
+            timingsCheck((ServerLevel) turtle.getLevel(), turtle.lmc$getChunkDataModule(), turtle.getLevel().getGameTime());
         }
     }
 
-    public TurtleChunkLoader(BlockPos pos) {
-        super(pos);
+    public TurtleChunkLoader(BlockPos pos, ITurtleBrainMixin turtle) {
+        this(pos,turtle,0, LMCConfig.cct.turtleChunkLoaderDefaultLevel.get());
     }
 
     @Override
@@ -38,12 +35,8 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         return LoaderTypeKeys.CCT_TURTLE_LOADER;
     }
 
-    public TurtleChunkLoader move(TurtleChunkLoaderPeripheral peripheral, BlockPos newPosition) {
-        TurtleChunkLoader moved = new TurtleChunkLoader(newPosition, peripheral, extensionRange, extensions,activityEnd);
-        if(moved.extensions != null) {
-            moved.extensions.recompute(TurtleExtensionChunkLoader.class, extensionRange, this::createTurtleExtension);
-        }
-        return moved;
+    public TurtleChunkLoader move(ITurtleBrainMixin turtle, BlockPos newPosition) {
+        return new TurtleChunkLoader(newPosition, turtle, activityEnd, defaultState);
     }
 
     @Override
@@ -52,38 +45,8 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
     }
 
     @Override
-    public boolean supportsEntityTicking() {
-        return false;
-    }
-
-    public TurtleExtensionChunkLoader createTurtleExtension(ChunkPos position) {
-        if(peripheral == null) {
-            throw new IllegalStateException("No peripheral.");
-        }
-        return new TurtleExtensionChunkLoader(position, peripheral.getMutableChunkLoader());
-    }
-
-    @Override
-    protected boolean outOfTime() {
-        if(!LMCConfig.cct.turtlesConsumeItems){
-            return false;
-        }
-        return super.outOfTime();
-    }
-
-    @Override
-    public ExtensionChunkLoaders.Factory<?> getExtensionFactory() {
-        return this::createTurtleExtension;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends IExtensionChunkLoader<?>> Class<T> getExtensionClass() {
-        return (Class<T>) TurtleExtensionChunkLoader.class;
-    }
-
-    public void setPeripheral(@Nullable TurtleChunkLoaderPeripheral peripheral) {
-        this.peripheral = peripheral;
+    public boolean shouldConsumeItems() {
+        return super.shouldConsumeItems() && LMCConfig.cct.turtlesConsumeItems;
     }
 
     @Override
@@ -98,26 +61,9 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         return loadState;
     }
 
-    public ILoadState getExtensionLoadState() {
-        return loadExtensions ? loadState : LoadStateEnum.DISABLED;
-    }
-
     @Override
-    public void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
-        if(!loadState.shouldLoad()){
-            return;
-        }
-        long timeRemaining = activityEnd-gameTime;
-        if(LMCConfig.cost.timeSecondsGained/10L >= timeRemaining){
-            if(LMCConfig.consumeFuel(level, getPosition(),1+getExtensionCount())){
-                activityEnd=gameTime+Math.max(0,timeRemaining)+LMCConfig.cost.timeSecondsGained*20;
-                chunkDataModule.updateCheckTime(activityEnd-LMCConfig.cost.timeSecondsGained/10L);
-            }
-        }
-        timeRemaining = activityEnd-gameTime;
-        if(timeRemaining <= 0){
-            activityEnd = -1;
-        }
+    public @NotNull BlockPos getItemSource() {
+        return getPosition();
     }
 }
 //?}

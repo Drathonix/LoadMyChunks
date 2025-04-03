@@ -1,5 +1,6 @@
 package com.drathonix.loadmychunks.common.system.loaders;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +24,7 @@ public interface IHasChunkloader {
      * Executes an arbitrary void function if the chunk loader instance is not null.
      * @param consumer the void function.
      */
+    @ApiStatus.NonExtendable
     default void ifPresent(@NotNull Consumer<IChunkLoader> consumer){
         IChunkLoader loader = loadMyChunks$getChunkLoader();
         if(loader != null){
@@ -36,6 +38,7 @@ public interface IHasChunkloader {
      * @return null or some T.
      * @param <T> the return type.
      */
+    @ApiStatus.NonExtendable
     default <T> @Nullable T map(@NotNull Function<IChunkLoader,T> fn){
         IChunkLoader loader = loadMyChunks$getChunkLoader();
         if(loader != null){
@@ -73,6 +76,7 @@ public interface IHasChunkloader {
      * Useful for null safety and functional programming if the provided functional methods are not enough.
      * @return an empty or full optional of IChunkLoader.
      */
+    @ApiStatus.NonExtendable
     default Optional<IChunkLoader> optional(){
         return Optional.ofNullable(loadMyChunks$getChunkLoader());
     }

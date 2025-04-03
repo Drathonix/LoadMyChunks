@@ -9,6 +9,7 @@ public class MixinTurtleMoveCommand {
 
 }
 *///?} else {
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -19,6 +20,7 @@ import dan200.computercraft.api.turtle.TurtleSide;
 /*import dan200.computercraft.shared.TurtlePermissions;
 import dan200.computercraft.ComputerCraft;
 *///?}
+import dan200.computercraft.shared.turtle.core.TurtleBrain;
 import dan200.computercraft.shared.turtle.core.TurtleMoveCommand;
 import dan200.computercraft.shared.turtle.core.TurtlePlayer;
 import net.minecraft.core.BlockPos;
@@ -43,35 +45,21 @@ public class MixinTurtleMoveCommand {
             ,remap = true
     )
     public boolean checkCanTP(ITurtleAccess turtle, Level oldWorld, BlockPos newPosition){
-        BlockPos oldPosition = turtle.getPosition();
         boolean stable = oldWorld.isLoaded(newPosition);
         if(oldWorld instanceof ServerLevel) {
-            for (TurtleSide side : TurtleSide.values()) {
-                IPeripheral peripheral = turtle.getPeripheral(side);
-                if (peripheral instanceof TurtleChunkLoaderPeripheral) {
-                    stable = true;
-                    ChunkDataManager.addChunkLoader((ServerLevel) oldWorld, newPosition, ((TurtleChunkLoaderPeripheral) peripheral).getChunkLoader().move((TurtleChunkLoaderPeripheral) peripheral,newPosition));
-                }
-            }
+            stable = stable || ((ITurtleBrainMixin)turtle).lmc$preMove((ServerLevel)oldWorld,newPosition);
         }
         if(stable){
             return turtle.teleportTo(oldWorld,newPosition);
         }
-        return stable;
+        return false;
     }
-    *///?}
-
-    //? >1.19.2 {
+    *///?} else {
     @Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void changeLogic(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir, Direction direction, ServerLevel oldWorld, BlockPos oldPosition, BlockPos newPosition) {
         boolean stable = oldWorld.isLoaded(newPosition);
-        for (TurtleSide side : TurtleSide.values()) {
-            IPeripheral peripheral = turtle.getPeripheral(side);
-            if (peripheral instanceof TurtleChunkLoaderPeripheral) {
-                stable = true;
-                TurtleChunkLoaderPeripheral tclp = ((TurtleChunkLoaderPeripheral) peripheral);
-                ChunkDataManager.addChunkLoader(oldWorld, newPosition, tclp.getChunkLoader().move(tclp,newPosition));
-            }
+        if(turtle instanceof ITurtleBrainMixin){
+            stable = stable || ((ITurtleBrainMixin)turtle).lmc$preMove(oldWorld,newPosition);
         }
         if(!stable){
             cir.setReturnValue(TurtleCommandResult.failure("Cannot enter unloaded area"));
@@ -79,28 +67,17 @@ public class MixinTurtleMoveCommand {
     }
     //?}
 
-    @Inject(method = "execute",at = @At(value = "RETURN"),remap = false)
-    public void postMove(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir){
-        if(cir.getReturnValue().isSuccess()) {
-            for (TurtleSide side : TurtleSide.values()) {
-                IPeripheral peripheral = turtle.getPeripheral(side);
-                if (peripheral instanceof TurtleChunkLoaderPeripheral) {
-                    ((TurtleChunkLoaderPeripheral) peripheral).setPosition(turtle.getPosition());
-                }
-            }
-        }
-    }
-
     /**
      * @author Drathonix
      * @reason If anyone else touches the original method, I will be very unhappy.
      */
     @Overwrite
     private static TurtleCommandResult canEnter(TurtlePlayer turtlePlayer,
-                                                //? if >1.19.2
+                                                //? if >1.19.2 {
                                                 ServerLevel world,
-                                                //? if <=1.19.2
+                                                //?} else {
                                                 /*Level world,*/
+                                                //?}
                                                 BlockPos position) {
         if (world.isOutsideBuildHeight(position)) {
             return TurtleCommandResult.failure(position.getY() < 0 ? "Too low to move" : "Too high to move");
@@ -108,10 +85,11 @@ public class MixinTurtleMoveCommand {
         if (!world.isInWorldBounds(position)) return TurtleCommandResult.failure("Cannot leave the world");
 
         // Check spawn protection
-        //? if <=1.19.2
+        //? if <=1.19.2 {
         /*if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {*/
-        //? if >1.19.2
+        //?} else {
         if (turtlePlayer.isBlockProtected(world, position)) {
+        //?}
             return TurtleCommandResult.failure("Cannot enter protected area");
         }
 

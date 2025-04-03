@@ -131,7 +131,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     protected boolean outOfTime(){
-        return LMCConfig.cost.enabled && activityEnd == -1;
+        return shouldConsumeItems() && activityEnd == -1;
     }
 
     @Override
@@ -185,21 +185,18 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
-    public void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
-        if(!loadState.shouldLoad()){
-            return;
-        }
-        long timeRemaining = activityEnd-gameTime;
-        if(LMCConfig.cost.timeSecondsGained/10L >= timeRemaining){
-            if(LMCConfig.consumeFuel(level,position.above())){
-                activityEnd=gameTime+Math.max(0,timeRemaining)+LMCConfig.cost.timeSecondsGained*20;
-                chunkDataModule.updateCheckTime(activityEnd-LMCConfig.cost.timeSecondsGained/10L);
-            }
-        }
-        timeRemaining = activityEnd-gameTime;
-        if(timeRemaining <= 0){
-            activityEnd = -1;
-        }
+    public long getActivityEnd() {
+        return activityEnd;
+    }
+
+    @Override
+    public void setActivityEnd(long activityEnd) {
+        this.activityEnd = activityEnd;
+    }
+
+    @Override
+    public @NotNull BlockPos getItemSource() {
+        return position.above();
     }
 
     @Override

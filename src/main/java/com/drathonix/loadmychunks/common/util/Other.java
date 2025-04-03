@@ -1,7 +1,12 @@
 package com.drathonix.loadmychunks.common.util;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 
@@ -35,5 +40,15 @@ public class Other {
         *///?} else if >1.19.4 {
         return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
         //?}
+    }
+
+    public static void serverLevel(BlockEntity blockEntity, Consumer<ServerLevel> cons) {
+        serverLevel(blockEntity.getLevel(), cons);
+    }
+
+    public static void serverLevel(Level level, Consumer<ServerLevel> cons) {
+        if(level instanceof ServerLevel){
+            cons.accept((ServerLevel) level);
+        }
     }
 }

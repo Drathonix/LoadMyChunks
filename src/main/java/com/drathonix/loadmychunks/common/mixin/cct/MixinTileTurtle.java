@@ -12,6 +12,7 @@ public class MixinTileTurtle {
 
 import com.drathonix.loadmychunks.common.bridge.IContextDestroyable;
 import com.drathonix.loadmychunks.common.bridge.IDestroyable;
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.loaders.IChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
@@ -38,12 +39,7 @@ public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity i
     @Override
     public void loadMyChunks$destroy() {
         if(getLevel() instanceof ServerLevel) {
-            for (TurtleSide value : TurtleSide.values()) {
-                IPeripheral p = brain.getPeripheral(value);
-                if (p instanceof IContextDestroyable) {
-                    ((IContextDestroyable) p).loadMyChunks$destroy(this);
-                }
-            }
+            ((ITurtleBrainMixin)brain).lmc$removeChunkLoader();
         }
     }
 

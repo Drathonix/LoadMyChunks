@@ -1,6 +1,7 @@
 package com.drathonix.loadmychunks.common.system.loaders;
 
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public interface IOwnable {
      * Effectively a null check.
      * @return whether the owner object is present.
      */
+    @ApiStatus.NonExtendable
     default boolean hasOwner(){
         return getOwner() != null;
     }
@@ -36,6 +38,7 @@ public interface IOwnable {
      * Checks if the owner has exceeded the chunk limit. The null owner counts as the global owner.
      * @return whether the chunk limit has been exceeded.
      */
+    @ApiStatus.NonExtendable
     default boolean hasExceededChunkLimit(){
         return ChunkDataManager.hasExceededOwnershipCap(getOwner());
     }

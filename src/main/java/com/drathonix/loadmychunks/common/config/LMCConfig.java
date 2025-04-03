@@ -1,11 +1,15 @@
 package com.drathonix.loadmychunks.common.config;
 
 import com.drathonix.loadmychunks.common.config.regis.ItemStackRetriever;
+import com.drathonix.loadmychunks.common.config.regis.LoadStateRetriever;
+import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
+import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.vicious.persist.annotations.PersistentPath;
 import com.vicious.persist.annotations.ReplaceKeys;
 import com.vicious.persist.annotations.Save;
 import com.vicious.persist.annotations.Range;
+import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.NotationFormat;
 import com.vicious.persist.shortcuts.PersistShortcuts;
 import net.minecraft.core.BlockPos;
@@ -61,6 +65,9 @@ public class LMCConfig {
     @Save(description = "Configures chunk loader item consumption")
     public static Cost cost = new Cost();
 
+    @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
+    public LoadStateRetriever placedChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
+
     public static boolean isLagometerAllowedOnTurtle(){
         return cct.lagometerComputerExposureLevel == 2;
     }
@@ -74,26 +81,15 @@ public class LMCConfig {
         public boolean enableTurtleChunkLoading = true;
         @Save(description = "Makes turtles consume items to remain loaded (only applies if cost/enabled is true)")
         public boolean turtlesConsumeItems = true;
-        @Save(description = "Makes all turtles act as chunk loaders without needing a peripheral. Chunk Loader Peripheral LUA features will  be unavailable without a chunk loader peripheral present.")
-        public boolean turtlesChunkLoadWithoutPeripheral = true;
+        @Save(description = "Makes all turtles act as chunk loaders without needing a peripheral. Chunk Loader Peripheral LUA features will still be unavailable without a chunk loader peripheral present. In addition they will consume items if the feature is enabled.")
+        public boolean turtlesChunkLoadWithoutPeripheral = false;
         @Save(description = "Makes turtle chunk loaders ignore LMC's lag limit system. Not recommended for public servers.")
         public boolean ignoreTickChecks = false;
         @Save(description = "When 2: Usage allowed in all computers. When 1: Usage banned in turtles and pocket computers. When 0: Usage banned in all computers")
         @Range(minimum = 0, maximum = 2)
         public int lagometerComputerExposureLevel=2;
-        @Save(description = "When enabled turtles can force random ticks -- note that this also requires that random ticking be set to ON as turtles cannot be upgraded.")
-        public boolean turtlesCanForceRandomTicking = false;
-    }
-
-    public enum SettingLevel {
-        ON,
-        ITEM,
-        OFF;
-    }
-
-    public static class Ticking {
-        @Save(description = "By default forced chunks only tick block entities, this allows entities and random ticks to occur as well. When ON this feature is always enabled. When ITEM this feature only activates if the loader has been upgraded with an Improved Player Spoofer. When OFF this feature is disabled.")
-        public SettingLevel forceEntityAndRandomTicking = SettingLevel.ITEM;
+        @Save(description = "Controls the default level for turtle chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
+        public LoadStateRetriever turtleChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
     }
 
     public static class Cost {
@@ -117,7 +113,16 @@ public class LMCConfig {
             ChunkDataManager.handleConfigReload();
         }
 
-      //  @Save(description = "When true, the cost is per loader rather than per chunk loaded. This applies only to extended loaders which load more chunks per loader.")
+        public long getDurationFor(ILoadState defaultState) {
+            if(defaultState.shouldForceEntities()){
+                return (long)(timeSecondsGained*entityTickingCostFactor);
+            }
+            else{
+                return timeSecondsGained;
+            }
+        }
+
+        //  @Save(description = "When true, the cost is per loader rather than per chunk loaded. This applies only to extended loaders which load more chunks per loader.")
       //  public boolean useCostPerLoaderMode = false;
     }
 

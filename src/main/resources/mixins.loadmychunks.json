@@ -18,6 +18,7 @@
     "MixinTickingTracker",
     "cct.MixinAbstractComputerBlockEntity",
     "cct.MixinTileTurtle",
+    "cct.MixinTurtleBlock",
     "cct.MixinTurtleBrain",
     "cct.MixinTurtleMoveCommand"
   ],

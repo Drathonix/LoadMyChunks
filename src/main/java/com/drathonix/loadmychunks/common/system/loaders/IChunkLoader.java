@@ -7,6 +7,7 @@ import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
 import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -85,6 +86,7 @@ public interface IChunkLoader extends IChunkPositioned {
 
     default void setExtensionRange(int range){}
 
+    @ApiStatus.NonExtendable
     default boolean tryExtendBy(ServerLevel serverLevel, int amount){
         int r = getExtensionRange();
         if(LMCConfig.maximumRangeExtensions < r+amount) return false;
@@ -92,7 +94,7 @@ public interface IChunkLoader extends IChunkPositioned {
         return true;
     }
 
-    @ApiStatus.Internal
+    @ApiStatus.NonExtendable
     default void extend(ServerLevel serverLevel, int range){
         synchronized (this) {
             setExtensionRange(range);
@@ -126,8 +128,41 @@ public interface IChunkLoader extends IChunkPositioned {
 
     ResourceLocation getTypeId();
 
-    default void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime){}
+    default boolean shouldConsumeItems(){
+        return LMCConfig.cost.enabled;
+    }
 
+    default @NotNull BlockPos getItemSource(){
+        return new BlockPos(0,0,0);
+    }
+
+    default long getActivityEnd(){
+        return -1;
+    }
+    default void setActivityEnd(long l){}
+
+    @ApiStatus.NonExtendable
+    default void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
+        if(!getActiveState().shouldLoad()){
+            return;
+        }
+        long activityEnd = getActivityEnd();
+        long timeRemaining = activityEnd-gameTime;
+        long duration = LMCConfig.cost.getDurationFor(getActiveState());
+        if(duration/10L >= timeRemaining){
+            if(LMCConfig.consumeFuel(level,getItemSource())){
+                activityEnd=gameTime+Math.max(0,timeRemaining)+duration*20;
+                setActivityEnd(activityEnd);
+                chunkDataModule.updateCheckTime(activityEnd-duration/10L);
+            }
+        }
+        timeRemaining = activityEnd-gameTime;
+        if(timeRemaining <= 0){
+            setActivityEnd(-1);
+        }
+    }
+
+    @ApiStatus.NonExtendable
     default int getExtensionCount() {
         return getExtensionChunkLoaders() != null ? getExtensionChunkLoaders().size() : 0;
     }
@@ -140,6 +175,7 @@ public interface IChunkLoader extends IChunkPositioned {
      * Enables entity ticking if not already enabled.
      * @return true if the state changed
      */
+    @ApiStatus.NonExtendable
     default boolean enableEntityTicking(ServerLevel level) {
         boolean changed = setDefaultState(LoadStateRegistry.ENTITY_TICKING) != LoadStateRegistry.ENTITY_TICKING;
         if(changed){

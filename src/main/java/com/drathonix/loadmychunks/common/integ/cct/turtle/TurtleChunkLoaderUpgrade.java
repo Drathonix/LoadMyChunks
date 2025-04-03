@@ -4,6 +4,7 @@ package com.drathonix.loadmychunks.common.integ.cct.turtle;
 //? if <=1.18.2 {
 /*import dan200.computercraft.api.client.TransformedModel;
 *///?}
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
@@ -82,7 +83,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     @Nullable
     @Override
     public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        return new TurtleChunkLoaderPeripheral(turtle, side);
+        return new TurtleChunkLoaderPeripheral((ITurtleBrainMixin) turtle, side);
     }
 
     //? if <=1.18.2 {

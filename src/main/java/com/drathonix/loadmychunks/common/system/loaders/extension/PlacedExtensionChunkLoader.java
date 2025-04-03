@@ -81,18 +81,12 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     }
 
     @Override
-    public void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
-        long timeRemaining = activityEnd-gameTime;
-        if(LMCConfig.cost.timeSecondsGained/10L >= timeRemaining){
-            if(!isUnhosted() && LMCConfig.consumeFuel(level, getHost(0).getPosition().above())){
-                activityEnd=gameTime+LMCConfig.cost.timeSecondsGained*20;
-                chunkDataModule.updateCheckTime(activityEnd);
-            }
-        }
-        timeRemaining = activityEnd-gameTime;
-        if(timeRemaining <= 0){
-            activityEnd = -1;
-        }
+    public @NotNull BlockPos getItemSource() {
+        return getPrimaryHostLoader().getItemSource();
     }
 
+    @Override
+    public boolean shouldConsumeItems() {
+        return !isUnhosted();
+    }
 }

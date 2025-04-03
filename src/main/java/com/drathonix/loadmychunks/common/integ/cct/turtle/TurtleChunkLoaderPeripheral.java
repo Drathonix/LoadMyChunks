@@ -2,12 +2,13 @@
 package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.bridge.IContextDestroyable;
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.peripheral.AbstractChunkLoaderPeripheral;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
+import com.drathonix.loadmychunks.common.util.Other;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -16,30 +17,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
-public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral implements IContextDestroyable {
-    private final ITurtleAccess turtle;
-    private final TurtleSide side;
-    private final AtomicReference<TurtleChunkLoader> chunkLoader = new AtomicReference<>();
-    private ChunkDataModule cdm;
+public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
+    private final ITurtleBrainMixin turtle;
+    public final TurtleSide side;
 
-    public TurtleChunkLoaderPeripheral(ITurtleAccess turtle, TurtleSide side) {
-        //? if >1.16.5
+    public TurtleChunkLoaderPeripheral(ITurtleBrainMixin turtle, TurtleSide side) {
+        //? if >1.16.5 {
         if(turtle.getLevel() instanceof ServerLevel) {
-        //? if <=1.16.5
+        //?} else {
         /*if(turtle.getWorld() instanceof ServerLevel) {*/
+        //?}
             this.turtle = turtle;
             this.side = side;
-            //? if >1.16.5 {
-            this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getLevel(),turtle.getPosition());
-            this.chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getLevel(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition())));
-            chunkLoader.get().setPeripheral(this);
-            //?}
-            //? if <=1.16.5 {
-            /*this.cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) turtle.getWorld(),turtle.getPosition());
-            this.chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel) turtle.getWorld(),turtle.getPosition(),TurtleChunkLoader.class,loader-> loader.getPosition().equals(turtle.getPosition()),()->new TurtleChunkLoader(turtle.getPosition())));
-            *///?}
+            turtle.lmc$getOrCreateChunkLoader();
         }
         else{
             throw new IllegalStateException("Turtle chunk loader code cannot be accessed on the clientside.");
@@ -47,13 +38,14 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     }
 
     @Override
-    public void detach(IComputerAccess computer) {
-        super.detach(computer);
+    public @NotNull ChunkDataModule getChunkDataModule() {
+        return turtle.lmc$getChunkDataModule();
     }
 
     @Override
-    public @NotNull ChunkDataModule getChunkDataModule() {
-        return cdm;
+    public @NotNull TurtleChunkLoader getChunkLoader() {
+        //     Require that the chunk loader be nonnull (it will be anyways given the peripheral is installed)
+        return turtle.lmc$getOrCreateChunkLoader();
     }
 
     @Override
@@ -63,15 +55,16 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
 
     @Override
     protected @NotNull ServerLevel getLevel() {
-        //? if >1.16.5
+        //? if >1.16.5 {
         return (ServerLevel) turtle.getLevel();
-        //? if <=1.16.5
+        //?} else {
         /*return (ServerLevel) turtle.getWorld();*/
+        //?}
     }
 
     @Override
     protected @NotNull BlockPos getPosition() {
-        return chunkLoader.get().getPosition();
+        return getChunkLoader().getPosition();
     }
 
     @Override
@@ -90,33 +83,6 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral i
     @Override
     public boolean equals(@Nullable IPeripheral other) {
         return equals((Object)other);
-    }
-
-    public @NotNull TurtleChunkLoader getChunkLoader() {
-        return chunkLoader.get();
-    }
-
-    @Override
-    public void loadMyChunks$destroy(Object context) {
-        IPeripheral opposite = turtle.getPeripheral(side == TurtleSide.LEFT ? TurtleSide.RIGHT : TurtleSide.LEFT);
-        if (context instanceof BlockEntity || !(opposite instanceof AbstractChunkLoaderPeripheral)) {
-            cdm.consumeLoadState(previous->{
-                cdm.removeLoader(getLevel(),chunkLoader.get());
-                cdm.updateChunkLoadState(getLevel(),previous);
-            });
-            ChunkDataManager.setDirty(getLevel());
-        }
-    }
-
-    public void setPosition(BlockPos newPosition) {
-        chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent(getLevel(),newPosition, TurtleChunkLoader.class,loader->loader.getPosition().equals(newPosition),()->new TurtleChunkLoader(newPosition)));
-        chunkLoader.get().setPeripheral(this);
-        cdm = ChunkDataManager.getOrCreateChunkData(getLevel(), newPosition);
-        ChunkDataManager.setDirty(getLevel());
-    }
-
-    public AtomicReference<TurtleChunkLoader> getMutableChunkLoader(){
-        return chunkLoader;
     }
 }
 //?}
