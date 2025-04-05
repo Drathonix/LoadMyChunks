@@ -3,9 +3,7 @@ package com.drathonix.loadmychunks.common.config.regis;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.vicious.persist.mappify.registry.Stringify;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 
 public class LoadStateRetriever extends RegistryRetriever<ILoadState> {
     static {

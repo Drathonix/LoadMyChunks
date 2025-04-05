@@ -1,5 +1,6 @@
 package com.drathonix.loadmychunks.common.item;
 
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.mojang.authlib.GameProfile;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
@@ -8,10 +9,11 @@ import com.drathonix.loadmychunks.common.util.Message;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 //? if <1.18.3 {
-/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-*///?}
+//?}
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 //? if <1.21.2
 import net.minecraft.world.InteractionResultHolder;
@@ -88,7 +90,7 @@ public class ItemChunkometer extends ItemHasTooltip {
             ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
             if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
                 MutableComponent response = Message.styled(Message.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z),ChatFormatting.WHITE,true,false);
-                player.sendSystemMessage(response);
+                Message.send((ServerPlayer) player,response);
                 response = Message.styled(Message.empty(),ChatFormatting.AQUA,false,false);
                 if (cdm.onCooldown()) {
                     response.append(Message.translatable("loadmychunks.chunkinfo.line2.overticked"));
@@ -111,7 +113,7 @@ public class ItemChunkometer extends ItemHasTooltip {
                 Iterator<UUID> iterator = cdm.getPlayerOwners().iterator();
                 while (iterator.hasNext()) {
                     UUID u = iterator.next();
-                    Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
+                    Optional<GameProfile> profile = MultiversioningHelper.enforceOptional(sl.getServer().getProfileCache().get(u));
                     if (profile.isPresent()) {
                         csl.append(profile.get().getName());
                     } else {
@@ -125,10 +127,10 @@ public class ItemChunkometer extends ItemHasTooltip {
                 if (cdm.onCooldown()) {
                     response.append("\n").append(Message.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
                 }
-                player.sendSystemMessage(response);
+                Message.send((ServerPlayer)player,response);
             }
             else{
-                player.sendSystemMessage(Message.styled(Message.translatable("loadmychunks.chunkinfo.need_ownership"),ChatFormatting.RED,false,false));
+                Message.send((ServerPlayer)player,Message.styled(Message.translatable("loadmychunks.chunkinfo.need_ownership"),ChatFormatting.RED,false,false));
             }
         }
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));

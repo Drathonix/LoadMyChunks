@@ -87,6 +87,6 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
 
     @Override
     public boolean shouldConsumeItems() {
-        return !isUnhosted();
+        return !isUnhosted() && super.shouldConsumeItems();
     }
 }

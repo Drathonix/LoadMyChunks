@@ -1,6 +1,7 @@
 //? if cc-tweaked {
 package com.drathonix.loadmychunks.common.integ.cct.peripheral;
 
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.mojang.authlib.GameProfile;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
@@ -145,13 +146,7 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
      */
     public final Optional<GameProfile> getOwnerProfile(){
         if(getChunkLoader() instanceof IOwnable) {
-            return Optional.ofNullable(((IOwnable) getChunkLoader()).getOwner()).flatMap(owner -> {
-                //? >1.16.5 {
-                return getLevel().getServer().getProfileCache().get(owner);
-                //?} else {
-                /*return getLevel().getServer().getProfileCache().get(ownable.getOwner());
-                 *///?}
-            });
+            return Optional.ofNullable(((IOwnable) getChunkLoader()).getOwner()).flatMap(owner -> MultiversioningHelper.enforceOptional(getLevel().getServer().getProfileCache().get(owner)));
         }
         return Optional.empty();
     }
@@ -189,7 +184,7 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
      * @return true if the chunk loader should load the chunk in its current state.
      */
     @LuaFunction
-    public boolean shouldLoad(ILuaContext context, IComputerAccess access, IArguments arguments){
+    public final boolean shouldLoad(ILuaContext context, IComputerAccess access, IArguments arguments){
         return getChunkLoader().getActiveState().shouldLoad();
     }
 
@@ -201,7 +196,7 @@ public abstract class AbstractChunkLoaderPeripheral extends AbstractLagometerPer
      * @return true if the chunk loader should tick entities in the chunk in its current state.
      */
     @LuaFunction
-    public boolean shouldEntityTick(ILuaContext context, IComputerAccess access, IArguments arguments){
+    public final boolean shouldEntityTick(ILuaContext context, IComputerAccess access, IArguments arguments){
         return getChunkLoader().getActiveState().shouldForceEntities();
     }
 }

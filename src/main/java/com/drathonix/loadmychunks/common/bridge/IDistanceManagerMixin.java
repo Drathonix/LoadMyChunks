@@ -27,4 +27,7 @@ public interface IDistanceManagerMixin {
             throw new IllegalStateException("Distance manager mixin was not applied!");
         }
     }
+
+    boolean lmc$inEntityTickingRange(long pos);
+    boolean lmc$hasPlayersNearby(long pos);
 }

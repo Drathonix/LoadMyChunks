@@ -1,5 +1,8 @@
 //? if forge {
-/*package com.drathonix.loadmychunks.forge;
+package com.drathonix.loadmychunks.forge;
+import com.drathonix.loadmychunks.client.LoadMyChunksClient;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
+import com.drathonix.loadmychunks.common.integ.Integrations;
 import com.drathonix.loadmychunks.forge.LMCForge;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,4 +20,4 @@ public class LMCForgeClient {
         Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);
     }
 }
-*///?}
+//?}

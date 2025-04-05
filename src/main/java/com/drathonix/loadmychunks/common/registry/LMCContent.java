@@ -8,20 +8,20 @@ import com.drathonix.loadmychunks.common.block.blockentity.BlockEntityChunkLoade
 import com.drathonix.loadmychunks.common.debug.LoadMyChunksDebug;
 import com.drathonix.loadmychunks.common.item.*;
 import com.drathonix.loadmychunks.common.util.ModResource;
-import com.drathonix.loadmychunks.common.util.Other;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.unified.BlockEntityTypeBuilder;
 //? if <=1.16.5 {
-/*import me.shedaniel.architectury.registry.CreativeTabs;
+import me.shedaniel.architectury.registry.CreativeTabs;
 import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
-*///?}
+//?}
 //? if >1.16.5 {
-import dev.architectury.registry.CreativeTabRegistry;
+/*import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-//?}
+*///?}
 //? if >1.19.5
-import net.minecraft.core.registries.Registries;
+/*import net.minecraft.core.registries.Registries;*/
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -30,7 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 //? if <1.19.5
-/*import net.minecraft.world.level.material.Material;*/
+import net.minecraft.world.level.material.Material;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +41,8 @@ public class LMCContent {
     //? if =1.20.1 && forge {
     /*private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.field_44688);
     *///?} else if >1.19.4 {
-    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
-    //?}
+    /*private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
+    *///?}
     public static final Map<String,RegistrySupplier<Block>> chunkLoaderBlockMap = new HashMap<>();
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
     public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
@@ -65,29 +65,29 @@ public class LMCContent {
 
     public static void init() {
         //? if <=1.18.1
-        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
+        creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         //? if <1.19.3 && >1.18.1
         /*creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if >1.19.3 && <1.19.5
         /*creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());*/
         //? if >1.20.0 {
-        creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        /*creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         TABS.register();
-        //?}
+        *///?}
         LMCRegistrar.BLOCK.queue(reg->{
             chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
-                return new BlockChunkLoader(Other.properties(50f,1200f));
+                return new BlockChunkLoader(MultiversioningHelper.properties(50f,1200f));
             });
             String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
             for (String color : colors) {
                 RegistrySupplier<Block> block = registerCLBlockWithItem(reg,color + "_chunk_loader", () -> {
-                    return new BlockChunkLoader(Other.properties(50f,1200f));
+                    return new BlockChunkLoader(MultiversioningHelper.properties(50f,1200f));
                 });
                 chunkLoaderBlockMap.put(color, block);
             }
             chunkLoaderBlockMap.put("",chunkLoaderBlock);
             lagometerBlock = registerBlockWithItem(reg,"lagometer",()->{
-                return new BlockLagometer(Other.properties(3.5f,4f));
+                return new BlockLagometer(MultiversioningHelper.properties(3.5f,4f));
             }, ItemLagometer::new);
         });
         LMCRegistrar.ITEM.queue(reg->{

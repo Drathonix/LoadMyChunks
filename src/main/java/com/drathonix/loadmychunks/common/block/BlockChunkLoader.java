@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -26,13 +27,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockChunkLoader extends BaseEntityBlock {
     //? if >1.20.3 {
-    public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
+    /*public static final MapCodec<BlockChunkLoader> CODEC = simpleCodec(BlockChunkLoader::new);
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
-    //?}
+    *///?}
 
     public BlockChunkLoader(Properties properties) {
         super(properties);
@@ -85,18 +86,18 @@ public class BlockChunkLoader extends BaseEntityBlock {
     }
 
     //? if >1.16.5 {
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BlockEntityChunkLoader(blockPos,blockState);
     }
-    //?}
+    *///?}
 
     //? if <=1.16.5 {
-    /*@Nullable
+    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockGetter blockGetter) {
         return new BlockEntityChunkLoader();
     }
-    *///?}
+    //?}
 }

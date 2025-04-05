@@ -1,5 +1,6 @@
 package com.drathonix.loadmychunks.common;
 
+import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,7 +12,7 @@ import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.PersistShortcuts;
 
 //? if >=1.20.6
-import com.drathonix.loadmychunks.common.integ.Integrations;
+/*import com.drathonix.loadmychunks.common.integ.Integrations;*/
 import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 import com.drathonix.loadmychunks.common.network.LagReadingRequest;
 import com.drathonix.loadmychunks.common.registry.LMCContent;
@@ -21,23 +22,24 @@ import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.util.Brigadier;
 import com.drathonix.loadmychunks.common.util.Message;
 //? if <=1.16.5 {
-/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
-*///?}
-//? if >1.16.5 {
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.networking.NetworkManager;
 //?}
+//? if >1.16.5 {
+/*import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.networking.NetworkManager;
+*///?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
-import net.minecraft.commands.CommandBuildContext;
+/*import net.minecraft.commands.CommandBuildContext;*/
 //? if <1.18.3
-/*import net.minecraft.network.chat.TextComponent;*/
+import net.minecraft.network.chat.TextComponent;
 //? if <1.20 {
-/*import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
-*///?}
+//?}
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -48,11 +50,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 import java.util.Map;
 //? if <=1.20.4
-/*import com.drathonix.loadmychunks.common.util.ModResource;*/
+import com.drathonix.loadmychunks.common.util.ModResource;
 
 /**
  * The main entry point class for the mod.
@@ -65,7 +68,7 @@ public class LoadMyChunks {
 	public static boolean stopping = false;
 
 	//? if <1.20.5
-	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
+	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
 
 	/**
 	 * Initializes the mod. Should not be called more than once.
@@ -73,7 +76,7 @@ public class LoadMyChunks {
 	public static void init() {
 		logger.info("Preparing to load your chunks...");
 		LMCConfig.init();
-		if(LMCConfig.pluginMode){
+		if(LMCConfig.zeroContent){
 			logger.info("Plugin mode is enabled! Item and block registration steps will be skipped");
 		}
 		if(LMCConfig.useDebugLogging){
@@ -88,27 +91,27 @@ public class LoadMyChunks {
 		});
 		logger.info("Content added.");
 		//? if <=1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			//? if =1.20.1 && forge {
-			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.getLevel(), plr.blockPosition());
-			^///?} else if <1.19.5 {
-			/^ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
-			^///?} else {
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
-			//?}
+			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.getLevel(), plr.blockPosition());
+			*///?} else if <1.19.5 {
+			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
+			//?} else {
+			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
+			*///?}
 			//TODO: integrate permissions with LP
 			if (!LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
 				cdm.addRecipient((IInformable) plr);
 			}
 		}));
-		*///?}
+		//?}
 		//? if >1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		Integrations.invokeServer(()->{
 			NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
 		});
-		//?}
+		*///?}
 	}
 
 	/**
@@ -140,10 +143,10 @@ public class LoadMyChunks {
 	 * Command registration entry point
 	 */
 	//? <1.19 {
-	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
-	*///?} else {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
-	//?}
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	//?} else {
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	*///?}
 		dispatcher.register(Brigadier.admin(Brigadier.literal("loadmychunks",root->{
 			root.add(Brigadier.executes(Brigadier.literal("forceload",forceLoad->{
 				forceLoad.add(Brigadier.executes(Brigadier.bool("permanent",boolForceLoad->{
@@ -261,6 +264,10 @@ public class LoadMyChunks {
 					return 0;
 				}));
 			}));
+			root.add(Brigadier.executes(Brigadier.literal("reload",empty->{}),ctx->{
+				LMCConfig.reload();
+				return 1;
+			}));
 		})));
 	}
 
@@ -305,7 +312,7 @@ public class LoadMyChunks {
 	 * @param exec arbitrary runnable.
 	 */
 	public static void modMode(Runnable exec){
-		if(!LMCConfig.pluginMode){
+		if(!LMCConfig.zeroContent){
 			exec.run();
 		}
 	}

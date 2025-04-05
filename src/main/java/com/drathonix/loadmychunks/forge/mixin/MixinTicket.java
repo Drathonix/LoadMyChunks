@@ -1,5 +1,5 @@
 //? if forge {
-/*package com.drathonix.loadmychunks.forge.mixin;
+package com.drathonix.loadmychunks.forge.mixin;
 
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import net.minecraft.server.level.Ticket;
@@ -22,4 +22,4 @@ public class MixinTicket {
         }
     }
 }
-*///?}
+//?}

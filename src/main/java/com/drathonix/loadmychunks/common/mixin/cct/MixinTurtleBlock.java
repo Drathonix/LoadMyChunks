@@ -1,24 +1,59 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
+//? if cc-tweaked {
 
+import com.drathonix.loadmychunks.common.LoadMyChunks;
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
 import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
-import dan200.computercraft.shared.turtle.blocks.TurtleBlock;
+//? if <=1.16.5 {
+import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
+//?}
+import dan200.computercraft.shared.computer.core.ComputerFamily;
+import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractChestBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fml.RegistryObject;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+//? if >1.16.5 {
+/*import dan200.computercraft.shared.turtle.blocks.TurtleBlock;
 @Mixin(TurtleBlock.class)
-public class MixinTurtleBlock {
-    @Redirect(method="onRemove",at=@At(value = "INVOKE",target = "Lnet/minecraft/world/Containers;dropContents(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/Container;)V"))
+*///?} else {
+import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
+@Mixin(BlockTurtle.class)
+//?}
+public abstract class MixinTurtleBlock implements ITurtleBlockMixin
+{
+    @Override
+    public void lmc$dropItems(Level level, BlockPos pos) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if(be instanceof IHasChunkloader){
+            ((IHasChunkloader) be).ifPresent(loader->{
+                if(loader.getDefaultState() == LoadStateRegistry.ENTITY_TICKING) {
+                    Containers.dropItemStack(level,pos.getX(),pos.getY(),pos.getZ(), LMCContent.itemLifeforceBroadcaster.get().getDefaultInstance());
+                }
+            });
+        }
+    }
+
+    //? if <=1.16.5 {
+
+    //?} else {
+    /*@Redirect(method="onRemove",at=@At(value = "INVOKE",target = "Lnet/minecraft/world/Containers;dropContents(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/Container;)V"))
     public void lmc$dropAdditional(Level level, BlockPos pos, Container container){
+        lmc$dropItems();
         Containers.dropContents(level,pos,container);
         BlockEntity be = level.getBlockEntity(pos);
         if(be instanceof IHasChunkloader){
@@ -29,4 +64,11 @@ public class MixinTurtleBlock {
             });
         }
     }
+    *///?}
 }
+//?} else {
+/*@Mixin(LoadMyChunks.class)
+public abstract class MixinTurtleBlock {
+
+}
+*///?}

@@ -25,7 +25,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     protected int extensionRange = 0;
     @Nullable protected UUID owner;
     protected BlockPos position;
-    protected ILoadState defaultState = LoadStateRegistry.TICKING;
+    protected ILoadState defaultState = LMCConfig.placedChunkLoaderDefaultLevel.get();
     protected ILoadState loadState = defaultState;
     protected long activityEnd = -1;
 

@@ -9,6 +9,11 @@ import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Created after
+ * @since 1.2.0
+ * @author Jack Andersen
+ */
 public interface ILoadState {
     /**
      * Controls if this state can force a chunk to remain loaded and tick block entities.

@@ -5,12 +5,13 @@ import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.system.control.LoaderPower;
 import com.drathonix.loadmychunks.common.util.ModResource;
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
+//? if >1.16.5 {
+/*import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
+*///?}
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -38,11 +39,19 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
     public static final ILoadState PERMANENTLY_DISABLED = LoadStateEnum.PERMANENTLY_DISABLED;
 
     private LoadStateRegistry() {
-        super(KEY, Lifecycle.stable(),true);
+        //? if >1.16.5 {
+        /*super(KEY, Lifecycle.stable(),true);
+        *///?} else {
+        super(KEY, Lifecycle.stable());
+        //?}
     }
 
     private static ILoadState register(ResourceLocation id, ILoadState type){
-        INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        //? if >1.16.5 {
+        /*INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        *///?} else {
+        INSTANCE.register(ResourceKey.create(KEY,id), type, Lifecycle.stable());
+        //?}
         return type;
     }
 
@@ -72,14 +81,14 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
      * @return the decoded state or default state.
      */
     public static ILoadState fromCompound(@NotNull String key, @NotNull CompoundTag tag, @NotNull ILoadState defaultState){
-        if(tag.contains(key, Tag.TAG_INT)){
+        if(tag.contains(key, 3)){
             int k = tag.getInt(key);
             if(statesByIndex.size() < k || k < 0){
                 return defaultState;
             }
             return statesByIndex.get(k);
         }
-        if(tag.contains(key, Tag.TAG_STRING)){
+        if(tag.contains(key, 8)){
             Optional<ResourceLocation> k = Optional.ofNullable(ModResource.parse(tag.getString(key)));
             return k.map(l->INSTANCE.getOptional(l).orElse(defaultState)).orElse(defaultState);
         }
@@ -91,7 +100,9 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
             registerLoadState(value.getResourceLocation(),value);
         }
         ENTITY_TICKING = registerLoadState(ModResource.of("entity_ticking"), id->new ILoadState() {
-            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            //? if >1.16.5 {
+            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            *///?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {
@@ -110,7 +121,9 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         });
 
         ENTITY_TICKING_PERMANENT = registerLoadState(ModResource.of("entity_ticking_permanent"), id->new ILoadState() {
-            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            //? if >1.16.5 {
+            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            *///?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {

@@ -2,6 +2,7 @@ package com.drathonix.loadmychunks.common.mixin;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -10,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net.minecraft.server.level.ServerLevel$EntityCallbacks")
+//? if >1.16.5 {
+/*@Mixin(targets = "net.minecraft.server.level.ServerLevel$EntityCallbacks")
 public class MixinServerLevelEntityCallbacks {
     @Inject(method = "onTickingStart(Lnet/minecraft/world/entity/Entity;)V",at = @At("HEAD"))
     public synchronized void lmc$addToChunkTicker(Entity arg, CallbackInfo ci){
@@ -32,3 +34,29 @@ public class MixinServerLevelEntityCallbacks {
         }
     }
 }
+*///?} else {
+@Mixin(ServerLevel.class)
+public class MixinServerLevelEntityCallbacks {
+    @Inject(method = "add",at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    public synchronized void lmc$addToChunkTicker(Entity arg, CallbackInfo ci){
+        MultiversioningHelper.serverLevel(arg,sl->{
+            LevelChunk c = sl.getChunkAt(arg.blockPosition());
+            if(c instanceof ILevelChunkMixin){
+                ((ILevelChunkMixin)c).lmc$addEntity(arg);
+            }
+        });
+    }
+
+    @Inject(method = "removeEntity",at = @At("HEAD"))
+    public synchronized void lmc$removeFromChunkTicker(Entity arg, boolean keepData, CallbackInfo ci){
+        if(!LoadMyChunks.stopping) {
+            MultiversioningHelper.serverLevel(arg,sl-> {
+                LevelChunk c = sl.getChunkAt(arg.blockPosition());
+                if (c instanceof ILevelChunkMixin) {
+                    ((ILevelChunkMixin) c).lmc$removeEntity(arg);
+                }
+            });
+        }
+    }
+}
+//?}

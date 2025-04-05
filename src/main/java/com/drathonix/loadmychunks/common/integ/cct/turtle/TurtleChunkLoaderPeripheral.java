@@ -1,18 +1,13 @@
 //? if cc-tweaked {
 package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
-import com.drathonix.loadmychunks.common.bridge.IContextDestroyable;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.peripheral.AbstractChunkLoaderPeripheral;
-import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
-import com.drathonix.loadmychunks.common.util.Other;
-import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.TurtleSide;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,13 +19,13 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
 
     public TurtleChunkLoaderPeripheral(ITurtleBrainMixin turtle, TurtleSide side) {
         //? if >1.16.5 {
-        if(turtle.getLevel() instanceof ServerLevel) {
-        //?} else {
-        /*if(turtle.getWorld() instanceof ServerLevel) {*/
+        /*if(turtle.getLevel() instanceof ServerLevel) {
+        *///?} else {
+        if(turtle.getWorld() instanceof ServerLevel) {
         //?}
             this.turtle = turtle;
             this.side = side;
-            turtle.lmc$getOrCreateChunkLoader();
+            turtle.lmc$addToCDM();
         }
         else{
             throw new IllegalStateException("Turtle chunk loader code cannot be accessed on the clientside.");
@@ -45,7 +40,7 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     @Override
     public @NotNull TurtleChunkLoader getChunkLoader() {
         //     Require that the chunk loader be nonnull (it will be anyways given the peripheral is installed)
-        return turtle.lmc$getOrCreateChunkLoader();
+        return turtle.lmc$getChunkLoader();
     }
 
     @Override
@@ -56,9 +51,9 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     @Override
     protected @NotNull ServerLevel getLevel() {
         //? if >1.16.5 {
-        return (ServerLevel) turtle.getLevel();
-        //?} else {
-        /*return (ServerLevel) turtle.getWorld();*/
+        /*return (ServerLevel) turtle.getLevel();
+        *///?} else {
+        return (ServerLevel) turtle.getWorld();
         //?}
     }
 

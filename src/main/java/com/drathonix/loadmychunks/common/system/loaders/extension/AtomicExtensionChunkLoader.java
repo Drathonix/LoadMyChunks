@@ -23,9 +23,9 @@ public abstract class AtomicExtensionChunkLoader<T extends IChunkLoader> extends
     @SuppressWarnings("unchecked")
     public void removeHost(Object loader){
         //? if >1.16.5
-        hosts = ArrayUtils.removeAllOccurrences(hosts,(AtomicReference<T>) loader);
+        /*hosts = ArrayUtils.removeAllOccurrences(hosts,(AtomicReference<T>) loader);*/
         //? if <1.16.6
-        /*hosts = ArrayUtils.removeAllOccurences(hosts,(AtomicReference<T>) loader);*/
+        hosts = ArrayUtils.removeAllOccurences(hosts,(AtomicReference<T>) loader);
     }
 
     @Override

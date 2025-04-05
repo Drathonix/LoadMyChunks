@@ -8,7 +8,9 @@ import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
 import com.drathonix.loadmychunks.common.util.ModResource;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
+//? if >1.16.5 {
+/*import net.minecraft.core.RegistrationInfo;
+*///?}
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +26,11 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
     public static final LoaderType<PlacedExtensionChunkLoader> PLACED_EXTENSION_TYPE = register(LoaderTypeKeys.PLACED_EXTENSION_LOADER,new LoaderType<>(PlacedExtensionChunkLoader::new));
 
     private LoaderTypeRegistry() {
-        super(KEY, Lifecycle.stable(),true);
+        //? if >1.16.5 {
+        /*super(KEY, Lifecycle.stable(),true);
+        *///?} else {
+        super(KEY, Lifecycle.stable());
+        //?}
     }
 
     /**
@@ -35,7 +41,11 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
      * @param <T> the chunk loader class.
      */
     public static <T extends IChunkLoader> LoaderType<T> register(ResourceLocation id, LoaderType<T> type){
-        INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        //? if >1.16.5 {
+        /*INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        *///?} else {
+        INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
+        //?}
         return type;
     }
 }

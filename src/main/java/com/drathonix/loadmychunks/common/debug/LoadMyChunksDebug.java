@@ -1,11 +1,11 @@
 package com.drathonix.loadmychunks.common.debug;
 
 //? if <1.16.6 {
-/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 
-*///?}
-import com.drathonix.loadmychunks.common.util.Other;
+//?}
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.unified.BlockEntityTypeBuilder;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -14,21 +14,28 @@ import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.registry.LMCRegistrar;
 import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
-import dev.architectury.event.events.common.CommandRegistrationEvent;
+/*import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
-//?}
+*///?}
 //? if >1.18.3
-import net.minecraft.commands.CommandBuildContext;
+/*import net.minecraft.commands.CommandBuildContext;*/
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-//? if <1.18.3
-/*import net.minecraft.network.chat.TextComponent;*/
+//? if <1.18.3 {
+import net.minecraft.network.chat.TextComponent;
+//?}
+//? if <1.19.5 {
+import net.minecraft.world.level.material.Material;
+//?}
+
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.*;
-//? if <1.19.5
-/*import net.minecraft.world.level.material.Material;*/
+import java.util.function.Supplier;
+
 
 public class LoadMyChunksDebug {
     static int laggerMsSleep = 1;
@@ -36,19 +43,19 @@ public class LoadMyChunksDebug {
     static RegistrySupplier<BlockEntityType<DebugBlockEntityLagger>> laggerBlockEntity;
 
     //? if >1.19.4 {
-    public static void init(){
+    /*public static void init(){
         LMCRegistrar.BLOCK.queue(reg->{
-            RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(Other.properties()));
+            RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(MultiversioningHelper.properties()));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
                 LoadMyChunksDebug.laggerBlockEntity = breg.register(ModResource.of("lagger"), () -> BlockEntityTypeBuilder.build(DebugBlockEntityLagger::new,List.of(laggerBlock.get())));
             });
         });
         CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
-    //?}
+    *///?}
 
     //? if >1.18.2 {
-    static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+    /*static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{
             ctx.getSource().sendSystemMessage(Component.literal("Sleep time is " + laggerMsSleep));
             return 0;
@@ -58,10 +65,10 @@ public class LoadMyChunksDebug {
             return 0;
         })))));
     }
-    //?}
+    *///?}
 
     //? if <1.19.5 {
-    /*public static void init(){
+    public static void init(){
         LMCRegistrar.BLOCK.queue(reg->{
             Supplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of(Material.STONE)));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
@@ -74,9 +81,9 @@ public class LoadMyChunksDebug {
         });
         CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
-    *///?}
+    //?}
     //? if <1.18.3 {
-    /*static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+    static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{
             ctx.getSource().sendSuccess(new TextComponent("Sleep time is " + laggerMsSleep),false);
             return 0;
@@ -86,5 +93,5 @@ public class LoadMyChunksDebug {
             return 0;
         })))));
     }
-    *///?}
+    //?}
 }

@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.Optional;
 
@@ -72,20 +73,42 @@ public interface IChunkLoader extends IChunkPositioned {
         return false;
     }
 
+    /**
+     * Gets the extension map. Only applicable if {@link IChunkLoader#supportsExtensions()} is true
+     * @return null or the extension chunk loader map.
+     */
     default @Nullable ExtensionChunkLoaders getExtensionChunkLoaders() {
         return null;
     }
 
+    /**
+     * Checks if the chunk loader has extensions.
+     * @return whether the extension map is present.
+     */
     default boolean hasExtensions(){
         return getExtensionChunkLoaders() != null;
     }
 
+    /**
+     * Gets the extension range. Only applicable if {@link IChunkLoader#supportsExtensions()} is true
+     * @return the extension range.
+     */
     default int getExtensionRange(){
         return 0;
     }
 
+    /**
+     * Sets the extension range. Only applicable if {@link IChunkLoader#supportsExtensions()}
+     * @param range the range to change to.
+     */
     default void setExtensionRange(int range){}
 
+    /**
+     * Tries to extend a chunk loader if it has not exceeded the maximum range.
+     * @param serverLevel the chunk loader's level.
+     * @param amount the amount to extend by.
+     * @return false if the chunk loader cannot be extended anymore.
+     */
     @ApiStatus.NonExtendable
     default boolean tryExtendBy(ServerLevel serverLevel, int amount){
         int r = getExtensionRange();
@@ -94,6 +117,11 @@ public interface IChunkLoader extends IChunkPositioned {
         return true;
     }
 
+    /**
+     * Extends the range of a chunk loader. Only applicable if {@link IChunkLoader#supportsExtensions()} is true.
+     * @param serverLevel the level of the chunk loader.
+     * @param range the new range of extension.
+     */
     @ApiStatus.NonExtendable
     default void extend(ServerLevel serverLevel, int range){
         synchronized (this) {
@@ -113,34 +141,86 @@ public interface IChunkLoader extends IChunkPositioned {
         }
     }
 
-    default void setExtensionsMap(ExtensionChunkLoaders extensions){}
+    /**
+     * Sets the extensions map. Only applicable if {@link IChunkLoader#supportsExtensions()} is true.
+     * @param extensions the extensions instance.
+     */
+    default void setExtensionsMap(ExtensionChunkLoaders extensions){
+        throw new UnsupportedOperationException("Must be implemented by child class.");
+    }
 
+    /**
+     * Gets the extension chunk loader storage factory, only applicable if {@link IChunkLoader#supportsExtensions()} is true.
+     * @return a factory.
+     */
     default ExtensionChunkLoaders.Factory<?> getExtensionFactory(){
         throw new UnsupportedOperationException("Must be implemented by child class.");
     }
 
+    /**
+     * Gets the extension type class, only applicable if {@link IChunkLoader#supportsExtensions()} is true.
+     * @return the extension type class.
+     * @param <T> the extension type.
+     */
     default <T extends IExtensionChunkLoader<?>> Class<T> getExtensionClass() {
         throw new UnsupportedOperationException("Must be implemented by child class.");
     }
 
+    /**
+     * Writes the chunk loader state to a compound tag.
+     * @param tag the tag to save to.
+     * @return the modified compound tag.
+     */
     @NotNull CompoundTag save(@NotNull CompoundTag tag);
+
+    /**
+     * Loads the state from a compound tag.
+     * @param tag the state tag.
+     * @param level the level of the chunk loader instance.
+     * @throws DoNotAddException if the chunk loader is invalid and should not be added to the {@link ChunkDataModule}
+     */
     void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException;
 
+    /**
+     * Gets the id of this chunk loader for reference in {@link com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry}
+     * @return the registry id.
+     */
     ResourceLocation getTypeId();
 
+    /**
+     * Controls if the chunk loader should consume items.
+     * @return whether to consume items to increase loading time.
+     */
     default boolean shouldConsumeItems(){
         return LMCConfig.cost.enabled;
     }
 
-    default @NotNull BlockPos getItemSource(){
-        return new BlockPos(0,0,0);
-    }
+    /**
+     * Must be implemented to provide support for {@link LMCConfig.Cost}
+     * @return the position of an {@link net.minecraft.world.level.block.entity.BlockEntity} {@link net.minecraft.world.Container} to consume items from.
+     */
+    @NotNull BlockPos getItemSource();
 
+    /**
+     * Gets the end of loading activity. Only used if {@link LMCConfig.Cost#enabled} is true.
+     * @return the end time of chunk ticking.
+     */
     default long getActivityEnd(){
         return -1;
     }
+
+    /**
+     * Sets the end of loading activity. Only used if {@link LMCConfig.Cost#enabled} is true.
+     * @param l the loading end time.
+     */
     default void setActivityEnd(long l){}
 
+    /**
+     * Only applied if {@link LMCConfig.Cost#enabled} is true. Consumes items if 1/10 or less of the duration is remaining and grants more loading time.
+     * @param level the level.
+     * @param chunkDataModule the chunk loader's CDM.
+     * @param gameTime the current game tick.
+     */
     @ApiStatus.NonExtendable
     default void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
         if(!getActiveState().shouldLoad()){
@@ -162,11 +242,20 @@ public interface IChunkLoader extends IChunkPositioned {
         }
     }
 
+    /**
+     * Gets the number of extension upgrades applied to the chunk loader.
+     * @return some positive integer.
+     */
     @ApiStatus.NonExtendable
+    @Range(from = 0, to = Integer.MAX_VALUE)
     default int getExtensionCount() {
         return getExtensionChunkLoaders() != null ? getExtensionChunkLoaders().size() : 0;
     }
 
+    /**
+     * When true the chunk loader can be upgraded to support entity ticking.
+     * @return whether entity ticking is supported.
+     */
     default boolean supportsEntityTicking(){
         return false;
     }

@@ -9,7 +9,6 @@ import com.vicious.persist.annotations.PersistentPath;
 import com.vicious.persist.annotations.ReplaceKeys;
 import com.vicious.persist.annotations.Save;
 import com.vicious.persist.annotations.Range;
-import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.NotationFormat;
 import com.vicious.persist.shortcuts.PersistShortcuts;
 import net.minecraft.core.BlockPos;
@@ -43,30 +42,30 @@ public class LMCConfig {
     @Range(minimum = 1, maximum = 60*60*24)
     public static long reloadGracePeriod = 5;
 
-    @Save(description = "Allows limiting number of loaded chunks.")
-    public static Limit limitSettings = new Limit();
-
-    @Save(description = "Integration settings for CC:Tweaked")
-    public static CCTIntegration cct  = new CCTIntegration();
-
     @Save(description = "The lagometer effectively allows xraying chunks to find bases on chunk lag. On pvp servers I highly recommend setting this to true. On pve servers the lagometer is relatively harmless to player base security. Keep this false.")
     public static boolean lagometerNeedsChunkOwnership = false;
 
     @Save
     public static boolean useDebugLogging = false;
 
-    @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine")
-    public static boolean pluginMode = false;
-
     @Save(description = "Maximum number of times a chunk loader's range can be extended.")
     @Range(minimum=0,maximum=10)
     public static int maximumRangeExtensions=1;
+    @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
+    public static LoadStateRetriever placedChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
+
+    @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine.")
+    public static boolean zeroContent = false;
 
     @Save(description = "Configures chunk loader item consumption")
     public static Cost cost = new Cost();
 
-    @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
-    public LoadStateRetriever placedChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
+    @Save(description = "Allows limiting number of loaded chunks.")
+    public static Limit limitSettings = new Limit();
+
+    @Save(description = "Integration settings for CC:Tweaked")
+    public static CCTIntegration cct  = new CCTIntegration();
+
 
     public static boolean isLagometerAllowedOnTurtle(){
         return cct.lagometerComputerExposureLevel == 2;
@@ -74,6 +73,10 @@ public class LMCConfig {
 
     public static boolean isLagometerAllowedOnComputer(){
         return cct.lagometerComputerExposureLevel >= 1;
+    }
+
+    public static void reload() {
+        PersistShortcuts.readFromFile(LMCConfig.class);
     }
 
     public static class CCTIntegration {

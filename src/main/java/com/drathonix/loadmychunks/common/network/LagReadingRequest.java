@@ -2,11 +2,11 @@ package com.drathonix.loadmychunks.common.network;
 
 //TODO: unify across all vers.
 //? if <=1.20.5 {
-/*public class LagReadingRequest{}
-*///?}
+public class LagReadingRequest{}
+//?}
 
 //? if >1.20.5 {
-import com.drathonix.loadmychunks.common.bridge.IInformable;
+/*import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
@@ -41,4 +41,4 @@ public record LagReadingRequest() implements CustomPacketPayload {
         }
     }
 }
-//?}
+*///?}

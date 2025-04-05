@@ -3,19 +3,15 @@ import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Predicate
 
-// Baseline code. Minimal edits necessary.
-// TODO acknowledge that you add plugins here.
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.9.22"
     //id("fabric-loom") // Leaving this here if you want to swap loom.
-    id("dev.architectury.loom")
+    id("fabric-loom") version "1.6-SNAPSHOT"
     //id("dev.kikugie.j52j") // Recommended by kiku if using swaps in json5.
     id("me.modmuss50.mod-publish-plugin")
 }
 
-// Leave this alone unless adding more dependencies.
-// TODO acknowledge that you add dependency repositories here.
 repositories {
     mavenCentral()
     exclusiveContent {
@@ -78,9 +74,6 @@ fun optionalStrProperty(key: String) : Optional<String> {
 }
 
 class VersionRange(val min: String, val max: String){
-    fun asForgelike() : String{
-        return "${if(min.isEmpty()) "(" else "["}${min},${max}${if(max.isEmpty()) ")" else "]"}"
-    }
     fun asFabric() : String{
         var out = ""
         if(min.isNotEmpty()){
@@ -148,39 +141,18 @@ class Env {
 
     val mcVersion = versionProperty("deps.core.mc.version_range")
 
-    val loader = property("loom.platform").toString()
-    val isFabric = loader == "fabric"
-    val isForge = loader == "forge"
-    val isNeo = loader == "neoforge"
-    val isCommon = project.parent!!.name == "common"
-    val isApi = project.parent!!.name == "api"
-    val type = if(isFabric) EnvType.FABRIC else if(isForge) EnvType.FORGE else EnvType.NEOFORGE
+    val loader = "fabric"
+    val isFabric = true
+    val type = EnvType.FABRIC
 
-    // TODO: if MC requires higher JVMs in future updates change this controller.
-    val javaVer = if(atMost("1.16.5")) 8 else if(atMost("1.20.4")) 17 else 21
+    val javaVer = 8
 
     val fabricLoaderVersion = versionProperty("deps.core.fabric.loader.version_range")
-    val forgeMavenVersion = versionProperty("deps.core.forge.version_range")
-    val forgeVersion = VersionRange(extractForgeVer(forgeMavenVersion.min),extractForgeVer(forgeMavenVersion.max))
-    val neoforgeVersion = versionProperty("deps.core.neoforge.version_range")
-    // The modloader system is separate from the API in Neo
-    val neoforgeLoaderVersion = versionProperty("deps.core.neoforge.loader.version_range")
 
     fun atLeast(version: String) = stonecutter.compare(mcVersion.min, version) >= 0
     fun atMost(version: String) = stonecutter.compare(mcVersion.min, version) <= 0
     fun isNot(version: String) = stonecutter.compare(mcVersion.min, version) != 0
     fun isExact(version: String) = stonecutter.compare(mcVersion.min, version) == 0
-
-    private fun extractForgeVer(str: String) : String {
-        val split = str.split("-")
-        if(split.size == 1){
-            return split[0]
-        }
-        if(split.size > 1){
-            return split[1]
-        }
-        return ""
-    }
 }
 val env = Env()
 
@@ -194,12 +166,6 @@ enum class DepType {
     },
     // Implementation
     IMPL,
-    // Forge Runtime Library
-    FRL{
-        override fun includeInDepsList(): Boolean {
-            return false
-        }
-    },
     // Implementation and Included in output jar.
     INCLUDE{
         override fun includeInDepsList(): Boolean {
@@ -230,10 +196,6 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
     val enabled = this.enableCondition.test(this)
 }
 
-val cctAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
-        src -> src.versionRange.isPresent
-}
 /**
  * APIs with hardcoded support for convenience. These are optional.
  */
@@ -245,23 +207,6 @@ val apis = arrayListOf(
         optionalVersionProperty("deps.api.architectury"))
     { src ->
         src.versionRange.isPresent
-    },
-    cctAPISource,
-    APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){
-            _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
-    },
-    APISource(DepType.FRL,APIModInfo(),"io.netty:netty-codec-http",Optional.of(VersionRange("4.1.82.Final",""))){
-            _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
-    },
-    APISource(DepType.FRL,APIModInfo(),"io.netty:netty-codec-socks",Optional.of(VersionRange("4.1.82.Final",""))){
-            _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
-    },
-    APISource(DepType.FRL,APIModInfo(),"io.netty:netty-handler-proxy",Optional.of(VersionRange("4.1.82.Final",""))){
-            _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
-    },
-    // FLR for Cobalt
-    APISource(DepType.FRL,APIModInfo(),if(env.atLeast("1.20")) "cc.tweaked:cobalt" else "org.squiddev:Cobalt",Optional.of(VersionRange(if(env.atLeast("1.20")) "0.9.3" else "0.7.0",""))){
-            _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     }
 )
 
@@ -295,13 +240,9 @@ class ModFabric {
 class ModMixins {
     val enableVanillaMixin = boolProperty("mixins.vanilla.enable")
     val enableFabricMixin = boolProperty("mixins.fabric.enable")
-    val enableForgeMixin = boolProperty("mixins.forge.enable")
-    val enableNeoforgeMixin = boolProperty("mixins.neoforge.enable")
 
     val vanillaMixin = "mixins.${mod.id}.json"
     val fabricMixin = "mixins.fabric.${mod.id}.json"
-    val forgeMixin = "mixins.forge.${mod.id}.json"
-    val neoForgeMixin = "mixins.neoforge.${mod.id}.json"
     val extraMixins = listProperty("mixins.extras")
 
     /**
@@ -310,11 +251,7 @@ class ModMixins {
     fun getMixins(env: EnvType) : List<String> {
         val out = arrayListOf<String>()
         if(enableVanillaMixin) out.add(vanillaMixin)
-        when (env) {
-            EnvType.FABRIC -> if(enableFabricMixin) out.add(fabricMixin)
-            EnvType.FORGE -> if(enableForgeMixin) out.add(forgeMixin)
-            EnvType.NEOFORGE -> if(enableNeoforgeMixin) out.add(neoForgeMixin)
-        }
+        if(enableFabricMixin) out.add(fabricMixin)
         return out
     }
 }
@@ -385,15 +322,7 @@ class ModDependencies {
     fun forEachRequired(cons: BiConsumer<String,VersionRange>){
         fre(loadAfterRequired,cons)
         cons.accept("minecraft",env.mcVersion)
-        if(env.isForge) {
-            cons.accept("forge", env.forgeVersion)
-        }
-        if (env.isNeo){
-            cons.accept("neoforge", env.neoforgeVersion)
-        }
-        if(env.isFabric) {
-            cons.accept("fabric", env.fabricLoaderVersion)
-        }
+        cons.accept("fabric", env.fabricLoaderVersion)
         apis.forEach{src->
             if(src.enabled && !src.type.isOptional() && src.type.includeInDepsList()) src.versionRange.ifPresent { ver -> src.modInfo.modid?.let {
                 cons.accept(it, ver)
@@ -407,34 +336,14 @@ val dependencies = ModDependencies()
  * These values will change between versions and mod loaders. Handles generation of specific entries in mods.toml and neoforge.mods.toml
  */
 class SpecialMultiversionedConstants {
-    private val mandatoryIndicator = if(env.isNeo) "required" else "mandatory"
-    val mixinField = if(env.atMost("1.20.4") && env.isNeo) neoForgeMixinField() else if(env.isFabric) fabricMixinField() else ""
+    val mixinField = fabricMixinField()
 
-    val forgelikeLoaderVer =  if(env.isForge) env.forgeVersion.asForgelike() else env.neoforgeLoaderVersion.asForgelike()
-    val forgelikeAPIVer = if(env.isForge) env.forgeVersion.asForgelike() else env.neoforgeVersion.asForgelike()
-    val dependenciesField = if(env.isFabric) fabricDependencyList() else forgelikeDependencyField()
+    val dependenciesField = fabricDependencyList()
     val excludes = excludes0()
     private fun excludes0() : List<String> {
         val out = arrayListOf<String>()
-        if(!env.isForge) {
-            // NeoForge before 1.21 still uses the forge mods.toml :/ One of those goofy changes between versions.
-            if(!env.isNeo || !env.atLeast("1.20.6")) {
-                out.add("META-INF/mods.toml")
-            }
-        }
-        if(!env.isFabric){
-            out.add("fabric.mod.json")
-        }
-        if(!env.isNeo){
-            out.add("META-INF/neoforge.mods.toml")
-        }
-        return out
-    }
-    private fun neoForgeMixinField () : String {
-        var out = ""
-        for (mixin in modMixins.getMixins(EnvType.NEOFORGE)) {
-            out += "[[mixins]]\nconfig=\"${mixin}\"\n"
-        }
+        out.add("META-INF/mods.toml")
+        out.add("META-INF/neoforge.mods.toml")
         return out
     }
     private fun fabricMixinField () : String {
@@ -468,27 +377,6 @@ class SpecialMultiversionedConstants {
         return "$out\n  }"
 
     }
-    private fun forgelikeDependencyField() : String {
-        var out = ""
-        dependencies.forEachBefore{modid ->
-            out += forgedep(modid,VersionRange("",""),"BEFORE",false)
-        }
-        dependencies.forEachOptional{modid,ver->
-            out += forgedep(modid,ver,"AFTER",false)
-        }
-        dependencies.forEachRequired{modid,ver->
-            out += forgedep(modid,ver,"AFTER",true)
-        }
-        return out
-    }
-    private fun forgedep(modid: String, versionRange: VersionRange, order: String, mandatory: Boolean) : String {
-        return "[[dependencies.${mod.id}]]\n" +
-                "modId=\"${modid}\"\n" +
-                "${mandatoryIndicator}=${mandatory}\n" +
-                "versionRange=\"${versionRange.asForgelike()}\"\n" +
-                "ordering=\"${order}\"\n" +
-                "side=\"BOTH\"\n"
-    }
 }
 val mod = ModProperties()
 val modFabric = ModFabric()
@@ -514,47 +402,16 @@ apis.forEach{ src ->
 
 //TODO: Add more stonecutter consts here.
 stonecutter.const("fabric",env.isFabric)
-stonecutter.const("forge",env.isForge)
-stonecutter.const("neoforge",env.isNeo)
+stonecutter.const("forge",false)
+stonecutter.const("neoforge",false)
 
-loom {
-    silentMojangMappingsLicense()
-    if (env.isForge) forge {
-        for (mixin in modMixins.getMixins(EnvType.FORGE)) {
-            mixinConfigs(
-                mixin
-            )
-        }
-    }
-
-    decompilers {
-        get("vineflower").apply { // Adds names to lambdas - useful for mixins
-            options.put("mark-corresponding-synthetics", "1")
-        }
-    }
-
-    runConfigs.all {
-        ideConfigGenerated(stonecutter.current.isActive)
-        vmArgs("-Dmixin.debug.export=true")
-        runDir = "../../run"
-    }
-}
 base { archivesName.set(env.archivesBaseName) }
 
 dependencies {
     minecraft("com.mojang:minecraft:${env.mcVersion.min}")
     // TODO do you really want to use yarn though? Like what convenience does it even give you smh?
     mappings(loom.officialMojangMappings())
-
-    if(env.isFabric) {
-        modImplementation("net.fabricmc:fabric-loader:${env.fabricLoaderVersion.min}")
-    }
-    if(env.isForge){
-        "forge"("net.minecraftforge:forge:${env.forgeMavenVersion.min}")
-    }
-    if(env.isNeo){
-        "neoForge"("net.neoforged:neoforge:${env.neoforgeVersion.min}")
-    }
+    modImplementation("net.fabricmc:fabric-loader:${env.fabricLoaderVersion.min}")
 
     apis.forEach { src->
         if(src.enabled) {
@@ -565,9 +422,6 @@ dependencies {
                 if(src.type == DepType.IMPL) {
                     modImplementation("${src.mavenLocation}:${ver.min}")
                 }
-                if(src.type == DepType.FRL && env.isForge){
-                    "forgeRuntimeLibrary"("${src.mavenLocation}:${ver.min}")
-                }
                 if(src.type == DepType.INCLUDE) {
                     modImplementation("${src.mavenLocation}:${ver.min}")
                     include("${src.mavenLocation}:${ver.min}")
@@ -575,14 +429,14 @@ dependencies {
             }
         }
     }
-
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
+
 }
 
 java {
     withSourcesJar()
     //TODO update this is newer java is ever required.
-    val java = if(env.javaVer == 8) JavaVersion.VERSION_1_8 else if(env.javaVer == 17) JavaVersion.VERSION_17 else JavaVersion.VERSION_21
+    val java = JavaVersion.VERSION_1_8
     targetCompatibility = java
     sourceCompatibility = java
 }
@@ -611,9 +465,7 @@ abstract class ProcessResourcesExtension : ProcessResources() {
         }
     }
 }
-if(env.atMost("1.20.6")){
-    tasks.replace("processResources",ProcessResourcesExtension::class)
-}
+tasks.replace("processResources",ProcessResourcesExtension::class)
 
 tasks.processResources {
     val map = mapOf<String,String>(
@@ -633,8 +485,6 @@ tasks.processResources {
         "mc_max" to env.mcVersion.max,
         "issue_tracker" to mod.issueTracker,
         "java_ver" to env.javaVer.toString(),
-        "forgelike_loader_ver" to dynamics.forgelikeLoaderVer,
-        "forgelike_api_ver" to dynamics.forgelikeAPIVer,
         "loader_id" to env.loader,
         "license" to mod.license,
         "mixin_field" to dynamics.mixinField,
@@ -647,12 +497,16 @@ tasks.processResources {
         exclude(file)
     }
     filesMatching("fabric.mod.json") { expand(map) }
-    filesMatching("META-INF/mods.toml") { expand(map) }
-    filesMatching("META-INF/neoforge.mods.toml") { expand(map) }
     modMixins.getMixins(env.type).forEach { str->
         filesMatching(str) { expand(map) }
     }
 }
+
+/*jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}*/
 
 publishMods {
     file = tasks.remapJar.get().archiveFile

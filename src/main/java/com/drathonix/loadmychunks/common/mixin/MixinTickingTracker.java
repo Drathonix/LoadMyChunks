@@ -3,8 +3,8 @@ package com.drathonix.loadmychunks.common.mixin;
 import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.Ticket;
-import net.minecraft.server.level.TickingTracker;
 import net.minecraft.util.SortedArraySet;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,10 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
+//? if >1.16.5 {
+/*import net.minecraft.server.level.TickingTracker;
 @Mixin(TickingTracker.class)
+
 public class MixinTickingTracker implements ITickingTrackerMixin {
     @Shadow @Final private Long2ObjectOpenHashMap<SortedArraySet<Ticket<?>>> tickets;
 
@@ -23,10 +26,16 @@ public class MixinTickingTracker implements ITickingTrackerMixin {
             return false;
         }
         for (Ticket<?> ticket : tickets) {
-            if(ticket.getType() == ChunkForcer.ENTITY){
+            if(ticket.getTicketLevel() <= ChunkForcer.ENTITY_TICKING_LEVEL){
                 return true;
             }
         }
         return false;
     }
 }
+*///?} else {
+@Mixin(targets="net.minecraft.server.level.DistanceManager$ChunkTicketTracker")
+public abstract class MixinTickingTracker implements ITickingTrackerMixin {
+
+}
+//?}
