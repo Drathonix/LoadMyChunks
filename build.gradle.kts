@@ -246,6 +246,9 @@ val apis = arrayListOf(
     { src ->
         src.versionRange.isPresent
     },
+    APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
+        src.versionRange.isPresent
+    },
     cctAPISource,
     APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){
             _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent

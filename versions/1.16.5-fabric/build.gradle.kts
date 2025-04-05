@@ -199,6 +199,10 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
 /**
  * APIs with hardcoded support for convenience. These are optional.
  */
+val cctAPISource = APISource(DepType.API_OPTIONAL,
+    APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
+        src -> src.versionRange.isPresent
+}
 val apis = arrayListOf(
     APISource(DepType.API, APIModInfo(if(env.atMost("1.16.5")) "fabric" else "fabric-api","fabric-api"), "net.fabricmc.fabric-api:fabric-api",optionalVersionProperty("deps.api.fabric")) { src ->
         src.versionRange.isPresent && env.isFabric
@@ -207,7 +211,11 @@ val apis = arrayListOf(
         optionalVersionProperty("deps.api.architectury"))
     { src ->
         src.versionRange.isPresent
-    }
+    },
+    APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
+        src.versionRange.isPresent
+    },
+    cctAPISource
 )
 
 // Stores information about the mod itself.

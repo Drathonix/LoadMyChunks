@@ -1,16 +1,16 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
 //? if !cc-tweaked {
-/*import com.drathonix.loadmychunks.common.LoadMyChunks;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 @Mixin(LoadMyChunks.class)
 public class MixinTurtleBrain {
 
 }
-*///?}
+//?}
 //? if cc-tweaked {
 
-import com.drathonix.loadmychunks.common.config.LMCConfig;
+/*import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
@@ -21,8 +21,8 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.shared.computer.core.ServerComputer;
 //? if >=1.20.6 {
-/*import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
-*///?}
+/^import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
+^///?}
 //? if <=1.19.2 {
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 //?}
@@ -47,8 +47,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     @Shadow public abstract IPeripheral getPeripheral(TurtleSide side);
 
     //? if >1.16.5 {
-    /*@Shadow public abstract Level getLevel();
-    *///?} else {
+    /^@Shadow public abstract Level getLevel();
+    ^///?} else {
     @Shadow public abstract Level getWorld();
     //?}
 
@@ -88,8 +88,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
 
     @Inject(method="setOwner",at = @At("RETURN"))
     //? if >1.19.2 {
-    /*public void lmc$postMove(TurtleBlockEntity owner, CallbackInfo ci) {
-    *///?} else {
+    /^public void lmc$postMove(TurtleBlockEntity owner, CallbackInfo ci) {
+    ^///?} else {
     public void lmc$postMove(TileTurtle owner, CallbackInfo ci) {
     //?}
         MultiversioningHelper.serverLevel(owner,sl->{
@@ -105,8 +105,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     public @NotNull TurtleChunkLoader lmc$getChunkLoader() {
         if (lmc$chunkLoader.get() == null) {
             //? if >1.16.5 {
-            /*MultiversioningHelper.serverLevel(getLevel(), sl-> {
-            *///?} else {
+            /^MultiversioningHelper.serverLevel(getLevel(), sl-> {
+            ^///?} else {
             MultiversioningHelper.serverLevel(getWorld(), sl-> {
             //?}
                 BlockPos pos = getPosition();
@@ -128,8 +128,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     public @NotNull ChunkDataModule lmc$getChunkDataModule() {
         if(lmc$cdm == null) {
             //? if >1.16.5 {
-            /*MultiversioningHelper.serverLevel(getLevel(), sl-> {
-            *///?} else {
+            /^MultiversioningHelper.serverLevel(getLevel(), sl-> {
+            ^///?} else {
             MultiversioningHelper.serverLevel(getWorld(), sl-> {
             //?}
                 this.lmc$cdm = ChunkDataManager.getOrCreateChunkData(sl, getPosition());
@@ -138,4 +138,4 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
         return lmc$cdm;
     }
 }
-//?}
+*///?}

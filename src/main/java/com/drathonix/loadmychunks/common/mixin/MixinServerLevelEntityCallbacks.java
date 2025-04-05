@@ -37,7 +37,7 @@ public class MixinServerLevelEntityCallbacks {
 *///?} else {
 @Mixin(ServerLevel.class)
 public class MixinServerLevelEntityCallbacks {
-    @Inject(method = "add",at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
+    @Inject(method = "add",at = @At(remap=false,value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;",ordinal = 0))
     public synchronized void lmc$addToChunkTicker(Entity arg, CallbackInfo ci){
         MultiversioningHelper.serverLevel(arg,sl->{
             LevelChunk c = sl.getChunkAt(arg.blockPosition());
@@ -47,13 +47,13 @@ public class MixinServerLevelEntityCallbacks {
         });
     }
 
-    @Inject(method = "removeEntity",at = @At("HEAD"))
-    public synchronized void lmc$removeFromChunkTicker(Entity arg, boolean keepData, CallbackInfo ci){
+    @Inject(method = "removeFromChunk",at = @At("HEAD"))
+    public synchronized void lmc$removeFromChunkTicker(Entity entity, CallbackInfo ci){
         if(!LoadMyChunks.stopping) {
-            MultiversioningHelper.serverLevel(arg,sl-> {
-                LevelChunk c = sl.getChunkAt(arg.blockPosition());
+            MultiversioningHelper.serverLevel(entity,sl-> {
+                LevelChunk c = sl.getChunkAt(entity.blockPosition());
                 if (c instanceof ILevelChunkMixin) {
-                    ((ILevelChunkMixin) c).lmc$removeEntity(arg);
+                    ((ILevelChunkMixin) c).lmc$removeEntity(entity);
                 }
             });
         }

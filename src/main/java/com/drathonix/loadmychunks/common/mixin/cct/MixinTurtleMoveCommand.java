@@ -1,15 +1,15 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
 //? if !cc-tweaked {
-/*import com.drathonix.loadmychunks.common.LoadMyChunks;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(LoadMyChunks.class)
 public class MixinTurtleMoveCommand {
 
 }
-*///?} else {
-import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
+//?} else {
+/*import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -37,14 +37,14 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @SuppressWarnings("all")
 @Mixin(value = TurtleMoveCommand.class
 //? if forge && <=1.20.1
-, remap=false
+/^, remap=false^/
 )
 public class MixinTurtleMoveCommand {
 
     //? if <=1.19.2 {
     @Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
             //? if forge && <=1.16.5
-            ,remap = true
+            /^,remap = true^/
     )
     public boolean checkCanTP(ITurtleAccess turtle, Level oldWorld, BlockPos newPosition){
         boolean stable = oldWorld.isLoaded(newPosition);
@@ -57,7 +57,7 @@ public class MixinTurtleMoveCommand {
         return false;
     }
     //?} else {
-    /*@Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    /^@Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void changeLogic(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir, Direction direction, ServerLevel oldWorld, BlockPos oldPosition, BlockPos newPosition) {
         boolean stable = oldWorld.isLoaded(newPosition);
         if(turtle instanceof ITurtleBrainMixin){
@@ -69,17 +69,17 @@ public class MixinTurtleMoveCommand {
             cir.setReturnValue(TurtleCommandResult.failure("Cannot enter unloaded area"));
         }
     }
-    *///?}
+    ^///?}
 
-    /**
+    /^*
      * @author Drathonix
      * @reason If anyone else touches the original method, I will be very unhappy.
-     */
+     ^/
     @Overwrite
     private static TurtleCommandResult canEnter(TurtlePlayer turtlePlayer,
                                                 //? if >1.19.2 {
-                                                /*ServerLevel world,
-                                                *///?} else {
+                                                /^ServerLevel world,
+                                                ^///?} else {
                                                 Level world,
                                                 //?}
                                                 BlockPos position) {
@@ -92,8 +92,8 @@ public class MixinTurtleMoveCommand {
         //? if <=1.19.2 {
         if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {
         //?} else {
-        /*if (turtlePlayer.isBlockProtected(world, position)) {
-        *///?}
+        /^if (turtlePlayer.isBlockProtected(world, position)) {
+        ^///?}
             return TurtleCommandResult.failure("Cannot enter protected area");
         }
 
@@ -104,4 +104,4 @@ public class MixinTurtleMoveCommand {
         return TurtleCommandResult.success();
     }
 }
-//?}
+*///?}

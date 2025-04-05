@@ -29,7 +29,7 @@ stonecutter {
     // TODO Disable any versions you don't want to support anb enable any versions you want to support
     // The versions listed here, commented out or otherwise, all have pre-made gradle.properties.
     create(rootProject) {
-        vers("1.16.5-fabric","1.16.5").buildscript = "versions/1.16.5-fabric/build.gradle.kts"
+        vers("1.16.5-fabric","1.16.5")//.buildscript = "versions/1.16.5-fabric/build.gradle.kts"
         vers("1.16.5-forge","1.16.5").buildscript = "versions/1.16.5-forge/build.gradle.kts"
         vers("1.18.2-fabric","1.18.2")
         vers("1.18.2-forge","1.18.2")

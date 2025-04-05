@@ -6,8 +6,8 @@ package com.drathonix.loadmychunks.common.integ;
 import me.shedaniel.architectury.platform.Platform;
 //?}
 //? if fabric {
-/*import net.fabricmc.api.EnvType;
-*///?}
+import net.fabricmc.api.EnvType;
+//?}
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -49,13 +49,13 @@ public class Integrations {
      */
     public static void invokeServer(Runnable runnable) {
         //? if neoforge || forge {
-        if(Platform.getEnv().isDedicatedServer()){
+        /*if(Platform.getEnv().isDedicatedServer()){
             runnable.run();
         }
-        //?} else {
-        /*if(Platform.getEnv() == EnvType.SERVER){
+        *///?} else {
+        if(Platform.getEnv() == EnvType.SERVER){
             runnable.run();
         }
-        *///?}
+        //?}
     }
 }

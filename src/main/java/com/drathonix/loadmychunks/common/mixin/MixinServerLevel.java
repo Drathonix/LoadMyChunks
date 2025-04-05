@@ -105,7 +105,7 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     /*@Redirect(method = "tick",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/entity/EntityTickList;forEach(Ljava/util/function/Consumer;)V"))
     public void lmcEntitiesTickChunkwiseOverride(EntityTickList instance, Consumer<Entity> entity){
     *///?} else {
-    @Redirect(method = "tick",at = @At(value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
+    @Redirect(method = "tick",at = @At(remap = false,value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
     public ObjectIterator<Entity> lmcEntitiesTickChunkwiseOverride(ObjectSet<Entity> instance){
     //?}
         //noinspection resource

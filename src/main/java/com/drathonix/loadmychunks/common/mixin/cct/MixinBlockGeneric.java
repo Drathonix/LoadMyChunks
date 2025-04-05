@@ -1,12 +1,13 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 //? if cc-tweaked {
-import dan200.computercraft.shared.common.BlockGeneric;
+/*import dan200.computercraft.shared.common.BlockGeneric;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,8 +21,8 @@ public class MixinBlockGeneric {
         }
     }
 }
-//?} else {
-/*@Mixin(LoadMyChunks.class)
-public class MixinBlockComputerBase {
+*///?} else {
+@Mixin(LoadMyChunks.class)
+public class MixinBlockGeneric {
 }
-*///?}
+//?}

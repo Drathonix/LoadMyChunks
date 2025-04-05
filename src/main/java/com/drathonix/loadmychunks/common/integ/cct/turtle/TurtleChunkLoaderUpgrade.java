@@ -1,5 +1,5 @@
 //? if cc-tweaked {
-package com.drathonix.loadmychunks.common.integ.cct.turtle;
+/*package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 //? if <=1.18.2 {
 import dan200.computercraft.api.client.TransformedModel;
@@ -11,11 +11,11 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.api.turtle.TurtleUpgradeType;
 //? if >=1.20.6 {
-/*import dan200.computercraft.api.upgrades.UpgradeType;
-*///?}
+/^import dan200.computercraft.api.upgrades.UpgradeType;
+^///?}
 //? if >1.16.5 {
-/*import dev.architectury.registry.registries.RegistrySupplier;
-*///?}
+/^import dev.architectury.registry.registries.RegistrySupplier;
+^///?}
 //? if <=1.16.5 {
 import me.shedaniel.architectury.registry.RegistrySupplier;
 //?}
@@ -34,15 +34,15 @@ import org.jetbrains.annotations.Nullable;
 public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     private final RegistrySupplier<Block> block;
     //? if >=1.20.6 {
-    /*private RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>> upgradeType;
-    *///?}
+    /^private RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>> upgradeType;
+    ^///?}
 
 
     //? if >1.16.5 {
-    /*public TurtleChunkLoaderUpgrade(RegistrySupplier<Block> block){
+    /^public TurtleChunkLoaderUpgrade(RegistrySupplier<Block> block){
         this.block = block;
     }
-    *///?}
+    ^///?}
 
     //? if <=1.16.5 {
     private final ResourceLocation key;
@@ -54,18 +54,18 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     //?}
 
     //? if >=1.20.6 {
-    /*@Override
+    /^@Override
     public UpgradeType<? extends ITurtleUpgrade> getType() {
         return upgradeType.get();
     }
-    *///?} else {
+    ^///?} else {
     @Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2 {
-        /*return BuiltInRegistries.BLOCK.getKey(block.get());
-        *///?} elif <=1.19.2 && >1.16.5 {
-        /*return Registry.BLOCK.getKey(block.get());
-        *///?} else {
+        /^return BuiltInRegistries.BLOCK.getKey(block.get());
+        ^///?} elif <=1.19.2 && >1.16.5 {
+        /^return Registry.BLOCK.getKey(block.get());
+        ^///?} else {
         return key;
         //?}
     }
@@ -101,7 +101,7 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
 
 
     //? if >=1.20.6 {
-    /*@Override
+    /^@Override
     public TurtleUpgradeType getUpgradeType() {
         return TurtleUpgradeType.PERIPHERAL;
     }
@@ -113,6 +113,6 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     public Component getAdjective() {
         return Component.translatable("loadmychunks.turtle.adjective.loading");
     }
-    *///?}
+    ^///?}
 }
-//?}
+*///?}

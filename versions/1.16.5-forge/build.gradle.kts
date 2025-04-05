@@ -236,12 +236,12 @@ val apis = arrayListOf(
     APISource(DepType.API, APIModInfo(if(env.atMost("1.16.5")) "fabric" else "fabric-api","fabric-api"), "net.fabricmc.fabric-api:fabric-api",optionalVersionProperty("deps.api.fabric")) { src ->
         src.versionRange.isPresent && env.isFabric
     },
-    APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
-      src.versionRange.isPresent
-    },
     APISource(DepType.API,APIModInfo("architectury","architectury-api"),"${if(env.atLeast("1.18.0")) "dev.architectury" else "me.shedaniel"}:architectury-${env.loader}",
         optionalVersionProperty("deps.api.architectury"))
     { src ->
+        src.versionRange.isPresent
+    },
+    APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
         src.versionRange.isPresent
     },
     cctAPISource,
@@ -513,6 +513,9 @@ tasks.shadowJar{
     dependsOn(tasks.remapJar)
     configurations = listOf(project.configurations.getByName("embed"))
     archiveClassifier = ""
+}
+tasks.remapJar{
+    finalizedBy(tasks.shadowJar)
 }
 
 java {
