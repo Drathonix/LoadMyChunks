@@ -4,9 +4,9 @@ import com.drathonix.loadmychunks.common.util.ModResource;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 //TODO: unify netcode.
 //? if >1.20.5 {
-/*import com.drathonix.loadmychunks.common.network.LagReadingPacket;
+import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 import com.drathonix.loadmychunks.common.network.LagReadingRequest;
-*///?}
+//?}
 import com.drathonix.loadmychunks.common.registry.LMCContent;
 //? if >1.16.5 {
 import dev.architectury.networking.NetworkManager;
@@ -17,8 +17,8 @@ import dev.architectury.registry.item.ItemPropertiesRegistry;
 import me.shedaniel.architectury.registry.ItemPropertiesRegistry;
 *///?}
 //? if <=1.20.5 {
-import net.minecraft.network.FriendlyByteBuf;
-//?}
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 import io.netty.buffer.Unpooled;
 
 public class LoadMyChunksClient {
@@ -28,7 +28,7 @@ public class LoadMyChunksClient {
         LoadMyChunks.logger.info("Initializing Client Side");
         LoadMyChunks.modMode(()->{
         //? if >1.20.5 {
-            /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.of("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+            ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.of("lag"), (itemStack, clientLevel, livingEntity, i) -> {
                 NetworkManager.sendToServer(new LagReadingRequest());
                 return LoadMyChunksClient.lagLevel;
             });
@@ -36,9 +36,9 @@ public class LoadMyChunksClient {
                 NetworkManager.sendToServer(new LagReadingRequest());
                 return LoadMyChunksClient.lagLevel;
             });
-            *///?}
+            //?}
             //? if >1.16.5 && <=1.20.5 {
-            ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
+            /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity, i) -> {
                 NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
                 return LoadMyChunksClient.lagLevel;
             });
@@ -46,7 +46,7 @@ public class LoadMyChunksClient {
                 NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
                 return LoadMyChunksClient.lagLevel;
             });
-            //?}
+            *///?}
             //? if <=1.16.5 {
             /*ItemPropertiesRegistry.register(LMCContent.itemTickometer.get(), ModResource.parse("lag"), (itemStack, clientLevel, livingEntity) -> {
                 NetworkManager.sendToServer(LoadMyChunks.LAG_READING_PACKET_ID,new FriendlyByteBuf(Unpooled.buffer()));
@@ -59,12 +59,12 @@ public class LoadMyChunksClient {
             *///?}
         });
         //? if <=1.20.5 {
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C,LoadMyChunks.LAG_READING_PACKET_ID,((buf, context) -> {
+        /*NetworkManager.registerReceiver(NetworkManager.Side.S2C,LoadMyChunks.LAG_READING_PACKET_ID,((buf, context) -> {
             lagLevel=buf.readFloat();
         }));
-        //?}
-        //? if >1.20.5 {
-        /*NetworkManager.registerReceiver(NetworkManager.Side.S2C, LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC,LagReadingPacket::handleClient);
         *///?}
+        //? if >1.20.5 {
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC,LagReadingPacket::handleClient);
+        //?}
     }
 }

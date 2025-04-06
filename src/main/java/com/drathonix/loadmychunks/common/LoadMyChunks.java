@@ -13,7 +13,7 @@ import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.PersistShortcuts;
 
 //? if >=1.20.6
-/*import com.drathonix.loadmychunks.common.integ.Integrations;*/
+import com.drathonix.loadmychunks.common.integ.Integrations;
 import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 import com.drathonix.loadmychunks.common.network.LagReadingRequest;
 import com.drathonix.loadmychunks.common.registry.LMCContent;
@@ -56,7 +56,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.Map;
 //? if <=1.20.4
-import com.drathonix.loadmychunks.common.util.ModResource;
+/*import com.drathonix.loadmychunks.common.util.ModResource;*/
 
 /**
  * The main entry point class for the mod.
@@ -69,7 +69,7 @@ public class LoadMyChunks {
 	public static boolean stopping = false;
 
 	//? if <1.20.5
-	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
+	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
 
 	/**
 	 * Initializes the mod. Should not be called more than once.
@@ -92,7 +92,7 @@ public class LoadMyChunks {
 		});
 		logger.info("Content added.");
 		//? if <=1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			MultiversioningHelper.serverLevel(plr,sl->{
 				ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, plr.blockPosition());
@@ -102,13 +102,13 @@ public class LoadMyChunks {
 				}
 			});
 		}));
-		//?}
+		*///?}
 		//? if >1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		Integrations.invokeServer(()->{
 			NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
 		});
-		*///?}
+		//?}
 	}
 
 	/**

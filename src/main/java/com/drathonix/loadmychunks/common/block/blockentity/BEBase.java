@@ -2,7 +2,7 @@ package com.drathonix.loadmychunks.common.block.blockentity;
 
 import net.minecraft.core.BlockPos;
 //? if >1.20.5
-/*import net.minecraft.core.HolderLookup;*/
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
