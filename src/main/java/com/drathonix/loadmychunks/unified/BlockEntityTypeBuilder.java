@@ -136,7 +136,7 @@ public class BlockEntityTypeBuilder {
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Block... blocks) {
-        //? >1.20.5 && !=1.20.6 && !=1.21 && !=1.21.1 {
+        //? >1.20.5 && !=1.20.6 && !=1.21.1 {
         /*return new BlockEntityType<>(factory,blocks);
         *///?} else {
         return new BlockEntityType<>(factory, Set.of(blocks),null);
