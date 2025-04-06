@@ -309,6 +309,7 @@ public class ChunkDataManager {
                         cdm.updateChunkLoadState(level,previous);
                     });
                 }
+                configReloaded=false;
             }
             if(tickCounter >= purgeTimer){
                 data.values().removeIf(module -> !module.shouldPersist() && !level.hasChunk(module.getPosition().x, module.getPosition().z));

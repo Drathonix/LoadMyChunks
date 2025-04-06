@@ -214,6 +214,8 @@ public class LoadMyChunks {
 							return 0;
 						}
 						Message.sendSystem(ctx,Message.translatable("commands.loadmychunks.config.value_set",path, value));
+						LMCConfig.postReload();
+						Message.sendSystem(ctx,Message.translatable("commands.loadmychunks.config.reload_complete"));
 						return 1;
 					}));
 				}));
@@ -262,7 +264,9 @@ public class LoadMyChunks {
 				}));
 			}));
 			root.add(Brigadier.executes(Brigadier.literal("reload",empty->{}),ctx->{
+				Message.sendSystem(ctx,Message.translatable("commands.loadmychunks.config.reload_started"));
 				LMCConfig.reload();
+				Message.sendSystem(ctx,Message.translatable("commands.loadmychunks.config.reload_complete"));
 				return 1;
 			}));
 		})));

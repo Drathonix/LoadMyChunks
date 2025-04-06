@@ -77,7 +77,9 @@
     "commands.loadmychunks.config.bad_path_not_found": "Invalid path object not found at: %s",
     "commands.loadmychunks.config.invalid_integer": "Invalid integer: %s",
     "commands.loadmychunks.config.invalid_value": "Invalid value: %s",
-    "commands.loadmychunks.config.value_set": "%s set to %s",
+    "commands.loadmychunks.config.value_set": "%s set to %s, reloading config and CDMs, this may take a moment.",
+    "commands.loadmychunks.config.reload_started": "Config reload started!",
+    "commands.loadmychunks.config.reload_complete": "Config reload complete!",
     "loadmychunks.turtle.adjective.loading": "Loading",
 
     "tag.item.loadmychunks.chunk_loaders": "Chunk Loaders"

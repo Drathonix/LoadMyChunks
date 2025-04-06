@@ -54,7 +54,7 @@ public class LMCConfig {
     @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
     public static LoadStateRetriever placedChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
 
-    @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine.")
+    @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine. Must restart the game to enable!")
     public static boolean zeroContent = false;
 
     @Save(description = "Configures chunk loader item consumption")
@@ -77,6 +77,11 @@ public class LMCConfig {
 
     public static void reload() {
         PersistShortcuts.readFromFile(LMCConfig.class);
+        postReload();
+    }
+
+    public static void postReload() {
+        ChunkDataManager.handleConfigReload();
     }
 
     public static class CCTIntegration {
@@ -109,12 +114,6 @@ public class LMCConfig {
 
         @Save(description = "Change this to set the itemstack consumed.")
         public ItemStackRetriever itemStack = new ItemStackRetriever(Items.ENDER_PEARL.getDefaultInstance());
-
-        @Save.Setter("enabled")
-        public void setEnabled(boolean enabled){
-            this.enabled=enabled;
-            ChunkDataManager.handleConfigReload();
-        }
 
         public long getDurationFor(ILoadState defaultState) {
             if(defaultState.shouldForceEntities()){

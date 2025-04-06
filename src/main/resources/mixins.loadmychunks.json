@@ -15,7 +15,6 @@
     "MixinServerLevelEntityCallbacks",
     "MixinServerPlayer",
     "MixinTickingTracker",
-    "cct.MixinAbstractComputerBlockEntity",
     "cct.MixinBlockGeneric",
     "cct.MixinTileTurtle",
     "cct.MixinTurtleBlock",
