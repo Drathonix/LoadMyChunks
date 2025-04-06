@@ -8,7 +8,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("net.minecraftforge.gradle") version "6.0.16" apply false
 }
-stonecutter active "1.19.4-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.20.1-forge" /* [SC] DO NOT EDIT */
 
 // Builds every version into `build/libs/{mod.version}/`
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {

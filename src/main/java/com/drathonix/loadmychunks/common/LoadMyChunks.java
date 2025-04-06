@@ -2,6 +2,7 @@ package com.drathonix.loadmychunks.common;
 
 import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
@@ -35,9 +36,9 @@ import net.minecraft.commands.CommandBuildContext;
 //? if <1.18.3
 /*import net.minecraft.network.chat.TextComponent;*/
 //? if <1.20 {
-import net.minecraft.world.phys.Vec3;
+/*import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
-//?}
+*///?}
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.commands.CommandSourceStack;
@@ -93,17 +94,13 @@ public class LoadMyChunks {
 		//? if <=1.20.5 {
 		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
-			//? if =1.20.1 && forge {
-			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.getLevel(), plr.blockPosition());
-			*///?} else if <1.19.5 {
-			ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level, plr.blockPosition());
-			//?} else {
-			/*ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData((ServerLevel) plr.level(), plr.blockPosition());
-			*///?}
-			//TODO: integrate permissions with LP
-			if (!LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
-				cdm.addRecipient((IInformable) plr);
-			}
+			MultiversioningHelper.serverLevel(plr,sl->{
+				ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, plr.blockPosition());
+				//TODO: integrate permissions with LP
+				if (!LMCConfig.lagometerNeedsChunkOwnership || plr.hasPermissions(2) || cdm.containsOwnedLoader(plr.getUUID())) {
+					cdm.addRecipient((IInformable) plr);
+				}
+			});
 		}));
 		//?}
 		//? if >1.20.5 {

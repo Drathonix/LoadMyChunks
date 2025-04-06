@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 //? if <1.19.5
-import net.minecraft.world.level.material.Material;
+/*import net.minecraft.world.level.material.Material;*/
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,13 +24,11 @@ public class MultiversioningHelper {
      * @return some properties.
      */
     public static @NotNull BlockBehaviour.Properties properties() {
-        //? if =1.20.1 && forge {
-        /*return BlockBehaviour.Properties.method_9637().requiresCorrectToolForDrops();
-        *///?} else if <1.19.5 {
-        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
-        //?} else if >1.19.4 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
-        *///?}
+        //? if <1.19.5 {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
+        *///?} else if >1.19.4 {
+        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        //?}
     }
 
     /**
@@ -38,13 +36,11 @@ public class MultiversioningHelper {
      * @return some properties.
      */
     public static @NotNull BlockBehaviour.Properties properties(float strength, float blastResistance) {
-        //? if =1.20.1 && forge {
-        /*return BlockBehaviour.Properties.method_9637().requiresCorrectToolForDrops().strength(strength, blastResistance);
-        *///?} else if <1.19.5 {
-        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
-        //?} else if >1.19.4 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
-        *///?}
+        //? if <1.19.5 {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
+        *///?} else if >1.19.4 {
+        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
+        //?}
     }
 
     public static void serverLevel(BlockEntity blockEntity, Consumer<ServerLevel> cons) {
@@ -75,10 +71,10 @@ public class MultiversioningHelper {
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
         //? if >1.19.4 {
-        /*Level l = arg.level();
-        *///?} else {
-        Level l = arg.level;
-        //?}
+        Level l = arg.level();
+        //?} else {
+        /*Level l = arg.level;
+        *///?}
     }
 
     /**

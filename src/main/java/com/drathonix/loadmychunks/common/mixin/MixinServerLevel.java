@@ -20,12 +20,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
 //? if >=1.20.1 {
-/*//? if !forge || >1.20.1 {
 import net.minecraft.world.RandomSequences;
-//?} else {
-/^import net.minecraft.class_8565;
-^///?}
-*///?}
+//?}
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
@@ -152,27 +148,23 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     *///?}
 
     //? if >1.19.4 && <=1.20.1 {
-    /*@Inject(method = "<init>",at = @At("RETURN"))
+    @Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(
             MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess arg, ServerLevelData arg2, ResourceKey arg3, LevelStem arg4, ChunkProgressListener arg5, boolean bl, long l, List list, boolean bl2,
-            //? if !forge {
             RandomSequences arg6,
-            //?} else {
-            /^class_8565 arg6,
-            ^///?}
             CallbackInfo ci){
         getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
     }
-    *///?}
+    //?}
 
 
 
     //? if >1.18.2 && <=1.19.4 {
-    @Inject(method = "<init>",at = @At("RETURN"))
+    /*@Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
         getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
     }
-    //?}
+    *///?}
 
     //? if >1.18.1 && <1.18.3 {
     /*@Inject(method = "<init>", at = @At("RETURN"))

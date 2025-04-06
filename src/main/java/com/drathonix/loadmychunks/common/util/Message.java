@@ -59,12 +59,12 @@ public class Message {
      */
     public static void sendSuccess(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull Component message) {
         //? if <1.20.1 {
-        ctx.getSource().sendSuccess(message,true);
-        //?} else if >=1.20.1 && !forge {
+        /*ctx.getSource().sendSuccess(message,true);
+        *///?} else if >=1.20.1 && !forge {
         /*ctx.getSource().sendSuccess(()->message,true);
         *///?} else if >=1.20.1 && forge {
-        /*ctx.getSource().sendSystemMessage(message);
-        *///?}
+        ctx.getSource().sendSystemMessage(message);
+        //?}
     }
 
     /**

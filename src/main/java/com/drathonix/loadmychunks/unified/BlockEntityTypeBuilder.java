@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 //? if fabric {
-//? >1.16.5 {
+/*//? >1.16.5 {
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 //?}
 
@@ -45,7 +45,7 @@ public class BlockEntityTypeBuilder {
         return build(factory,blockArr);
     }
     //?} else {
-    /*public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
+    /^public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
         return build(factory,blocks.toArray(new Block[0]));
     }
 
@@ -70,10 +70,10 @@ public class BlockEntityTypeBuilder {
         }
         return build(factory,blockArr);
     }
-    *///?}
+    ^///?}
 }
-//?} elif forge {
-/*public class BlockEntityTypeBuilder {
+*///?} elif forge {
+public class BlockEntityTypeBuilder {
     //? if >1.16.5 {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
         return BlockEntityType.Builder.of(factory,blocks.toArray(new Block[0])).build(null);
@@ -101,7 +101,7 @@ public class BlockEntityTypeBuilder {
         return BlockEntityType.Builder.of(factory,blockArr).build(null);
     }
     //?} else {
-    /^public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
+    /*public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
         return BlockEntityType.Builder.of(factory,blocks.toArray(new Block[0])).build(null);
     }
 
@@ -126,9 +126,9 @@ public class BlockEntityTypeBuilder {
         }
         return BlockEntityType.Builder.of(factory,blockArr).build(null);
     }
-    ^///?}
+    *///?}
 }
-*///?} elif neoforge {
+//?} elif neoforge {
 /*public class BlockEntityTypeBuilder {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
         return build(factory, blocks.toArray(new Block[0]));

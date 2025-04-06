@@ -25,8 +25,8 @@ import net.minecraft.commands.Commands;
 /*import net.minecraft.network.chat.TextComponent;
 *///?}
 //? if <1.19.5 {
-import net.minecraft.world.level.material.Material;
-//?}
+/*import net.minecraft.world.level.material.Material;
+*///?}
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
@@ -43,7 +43,7 @@ public class LoadMyChunksDebug {
     static RegistrySupplier<BlockEntityType<DebugBlockEntityLagger>> laggerBlockEntity;
 
     //? if >1.19.4 {
-    /*public static void init(){
+    public static void init(){
         LMCRegistrar.BLOCK.queue(reg->{
             RegistrySupplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(MultiversioningHelper.properties()));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
@@ -52,7 +52,7 @@ public class LoadMyChunksDebug {
         });
         CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
-    *///?}
+    //?}
 
     //? if >1.18.2 {
     static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
@@ -68,7 +68,7 @@ public class LoadMyChunksDebug {
     //?}
 
     //? if <1.19.5 {
-    public static void init(){
+    /*public static void init(){
         LMCRegistrar.BLOCK.queue(reg->{
             Supplier<DebugBlockLagger> laggerBlock = LMCContent.registerBlockWithItem(reg,"lagger",()->new DebugBlockLagger(BlockBehaviour.Properties.of(Material.STONE)));
             LMCRegistrar.BLOCK_ENTITY_TYPE.queue(breg->{
@@ -81,7 +81,7 @@ public class LoadMyChunksDebug {
         });
         CommandRegistrationEvent.EVENT.register(LoadMyChunksDebug::registerCommands);
     }
-    //?}
+    *///?}
     //? if <1.18.3 {
     /*static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{

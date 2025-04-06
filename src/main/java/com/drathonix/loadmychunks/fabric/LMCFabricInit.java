@@ -1,5 +1,5 @@
 //? if fabric {
-package com.drathonix.loadmychunks.fabric;
+/*package com.drathonix.loadmychunks.fabric;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -36,4 +36,4 @@ public class LMCFabricInit implements ModInitializer {
         LMCFabricInit.init();
     }
 }
-//?}
+*///?}

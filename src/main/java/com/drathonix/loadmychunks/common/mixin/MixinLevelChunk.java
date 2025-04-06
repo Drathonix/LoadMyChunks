@@ -54,8 +54,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 //? if forge || neoforge {
-/*import net.minecraftforge.entity.PartEntity;
-*///?}
+import net.minecraftforge.entity.PartEntity;
+//?}
 
 @Mixin(LevelChunk.class)
 
@@ -125,8 +125,8 @@ public abstract class MixinLevelChunk
                             profilerfiller.push("tick");
                             // Neoforge/forge specific
                             //? if neoforge || forge {
-                            /*if(!(entity instanceof PartEntity))
-                                *///?}
+                            if(!(entity instanceof PartEntity))
+                                //?}
                                 sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                             profilerfiller.pop();

@@ -1,9 +1,9 @@
 //? if forge {
-/*package com.drathonix.loadmychunks.forge;
+package com.drathonix.loadmychunks.forge;
 
 import com.drathonix.loadmychunks.common.util.BoolArgument;
 //? if <=1.16.5
-/^import me.shedaniel.architectury.platform.forge.EventBuses;^/
+/*import me.shedaniel.architectury.platform.forge.EventBuses;*/
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -26,9 +26,9 @@ import dev.architectury.platform.forge.EventBuses;
 //?}
 
 //? if <=1.16.5 {
-/^import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+/*import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-^///?}
+*///?}
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -48,10 +48,10 @@ public class LMCForge {
         LoadMyChunks.init();
         MinecraftForge.EVENT_BUS.register(LMCForge.class);
         //? if >1.18.2 && <=1.19.3 {
-        /^ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        /*ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
-        ^///?} else if >1.19.3 {
+        *///?} else if >1.19.3 {
         ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
@@ -62,7 +62,7 @@ public class LMCForge {
 
 
     //? if <=1.16.5 {
-    /^@SubscribeEvent
+    /*@SubscribeEvent
     public void serverStarted(FMLServerStartedEvent event){
         LoadMyChunks.serverStarted(event.getServer());
     }
@@ -71,7 +71,7 @@ public class LMCForge {
     public void serverStopped(FMLServerStoppedEvent event){
         LoadMyChunks.serverStopped(event.getServer());
     }
-    ^///?}
+    *///?}
 
     //? if >1.16.5 {
     @SubscribeEvent
@@ -85,4 +85,4 @@ public class LMCForge {
     }
     //?}
 }
-*///?}
+//?}
