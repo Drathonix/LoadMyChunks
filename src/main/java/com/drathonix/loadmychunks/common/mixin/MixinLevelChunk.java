@@ -53,8 +53,11 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-//? if forge || neoforge {
-import net.minecraftforge.entity.PartEntity;
+//? if forge {
+/*import net.minecraftforge.entity.PartEntity;
+*///?}
+//? if neoforge {
+import net.neoforged.neoforge.entity.PartEntity;
 //?}
 
 @Mixin(LevelChunk.class)

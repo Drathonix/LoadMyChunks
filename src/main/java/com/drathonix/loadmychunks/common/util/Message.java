@@ -61,10 +61,10 @@ public class Message {
         //? if <1.20.1 {
         /*ctx.getSource().sendSuccess(message,true);
         *///?} else if >=1.20.1 && !forge {
-        /*ctx.getSource().sendSuccess(()->message,true);
-        *///?} else if >=1.20.1 && forge {
-        ctx.getSource().sendSystemMessage(message);
-        //?}
+        ctx.getSource().sendSuccess(()->message,true);
+        //?} else if >=1.20.1 && forge {
+        /*ctx.getSource().sendSystemMessage(message);
+        *///?}
     }
 
     /**

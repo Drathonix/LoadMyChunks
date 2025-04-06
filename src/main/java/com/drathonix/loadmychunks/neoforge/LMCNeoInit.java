@@ -1,8 +1,10 @@
 //? if neoforge {
-/*package com.drathonix.loadmychunks.neoforge;
+package com.drathonix.loadmychunks.neoforge;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
+import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
+import com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 import com.drathonix.loadmychunks.common.util.BoolArgument;
 
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -18,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.lang.reflect.InvocationTargetException;
 
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @Mod(LoadMyChunks.MOD_ID)
 public class LMCNeoInit {
@@ -27,7 +30,7 @@ public class LMCNeoInit {
     }
     public static void init(IEventBus meb) {
         NeoForge.EVENT_BUS.register(LMCNeoInit.class);
-        meb.addListener(MMDNeo::newRegistry);
+        meb.addListener(LMCNeoInit::newRegistry);
         //TODO: WATCH NEO FOR CHANGES REGARDING THIS FEATURE.
         ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, LoadMyChunks.MOD_ID);
@@ -54,4 +57,4 @@ public class LMCNeoInit {
         });
     }
 }
-*///?}
+//?}

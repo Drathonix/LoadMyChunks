@@ -18,14 +18,14 @@ import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrarManager;
 //?}
 //? if >1.20.3 {
-/*import net.minecraft.core.HolderOwner;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-*///?}
+//?}
 
 /**
  * Used to instantiate architectury registry suppliers in older versions. Merely used for versioning simplification
@@ -89,7 +89,7 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     //?}
 
     //? if >1.20.3 {
-    /*@Override
+    @Override
     public T value() {
         return null;
     }
@@ -120,11 +120,11 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     }
 
     //? if >1.20.5 {
-    /^@Override
+    /*@Override
     public boolean is(Holder<T> holder) {
         return false;
     }
-    ^///?}
+    *///?}
 
     @Override
     public Stream<TagKey<T>> tags() {
@@ -150,7 +150,7 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     public boolean canSerializeIn(HolderOwner<T> holderOwner) {
         return false;
     }
-    *///?}
+    //?}
 
     //? if >1.20.6 && neoforge {
     /*public ResourceKey<T> getKey() {
