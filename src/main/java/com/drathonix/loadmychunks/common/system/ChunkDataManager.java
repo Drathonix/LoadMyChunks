@@ -75,12 +75,12 @@ public class ChunkDataManager {
     }
 
     //? if >1.16.5 {
-    /*public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+    public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
         LevelChunkLoaderManager manager = getManager(level);
         manager.load(tag);
         return manager;
     }
-    *///?}
+    //?}
 
     public static @NotNull Map<String,List<IChunkLoader>> getChunkLoadersOf(@Nullable UUID owner) {
         if(owner == null){
@@ -226,7 +226,7 @@ public class ChunkDataManager {
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
             //? if <=1.16.5
-            super("loadmychunks_manager");
+            /*super("loadmychunks_manager");*/
             this.level=level;
             level.getServer().addTickable(this::tick);
         }

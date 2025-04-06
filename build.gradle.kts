@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.accessors.warnAboutDiscontinuedJsonProjectSchema
 import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -529,7 +530,6 @@ loom {
             )
         }
     }
-
     decompilers {
         get("vineflower").apply { // Adds names to lambdas - useful for mixins
             options.put("mark-corresponding-synthetics", "1")

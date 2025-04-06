@@ -3,23 +3,23 @@ package com.drathonix.loadmychunks.common.debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 //? if <=1.16.5
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+/*import net.minecraft.world.level.block.entity.TickableBlockEntity;*/
 import net.minecraft.world.level.block.state.BlockState;
 
 class DebugBlockEntityLagger extends BlockEntity
     //? if <=1.16.5
-        implements TickableBlockEntity
+        /*implements TickableBlockEntity*/
     {
     //? if >1.16.5 {
-    /*public DebugBlockEntityLagger(BlockPos blockPos, BlockState blockState) {
+    public DebugBlockEntityLagger(BlockPos blockPos, BlockState blockState) {
         super(LoadMyChunksDebug.laggerBlockEntity.get(), blockPos, blockState);
     }
-    *///?}
+    //?}
     //? if <=1.16.5 {
-    DebugBlockEntityLagger() {
+    /*DebugBlockEntityLagger() {
         super(LoadMyChunksDebug.laggerBlockEntity.get());
     }
-    //?}
+    *///?}
 
     void serverTick(){
         try {
@@ -29,9 +29,9 @@ class DebugBlockEntityLagger extends BlockEntity
 
 
     //? if <=1.16.5 {
-    @Override
+    /*@Override
     public void tick() {
         serverTick();
     }
-    //?}
+    *///?}
 }

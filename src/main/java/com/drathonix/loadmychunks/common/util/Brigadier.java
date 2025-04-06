@@ -153,10 +153,10 @@ public class Brigadier {
      */
     public static @NotNull BlockPos getBlockPos(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull String arg) throws CommandSyntaxException {
         //? if <1.18.2 {
-        return BlockPosArgument.getOrLoadBlockPos(ctx,arg);
-        //?} else if <1.20.1 {
-        /*return BlockPosArgument.getSpawnablePos(ctx,arg);
-        *///?} else {
+        /*return BlockPosArgument.getOrLoadBlockPos(ctx,arg);
+        *///?} else if <1.20.1 {
+        return BlockPosArgument.getSpawnablePos(ctx,arg);
+        //?} else {
         /*return BlockPosArgument.getBlockPos(ctx, arg);
         *///?}
     }

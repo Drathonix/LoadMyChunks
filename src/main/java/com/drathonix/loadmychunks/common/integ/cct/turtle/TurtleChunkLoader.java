@@ -1,5 +1,5 @@
 //? if cc-tweaked {
-/*package com.drathonix.loadmychunks.common.integ.cct.turtle;
+package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
@@ -12,9 +12,9 @@ import com.drathonix.loadmychunks.common.system.loaders.DoNotAddException;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
 import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
-//? if >1.16.5 {
-/^import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity;
-^///?} else {
+//? if >=1.19.2 {
+/*import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity;
+*///?} else {
 import dan200.computercraft.shared.computer.blocks.TileComputerBase;
 //?}
 import net.minecraft.core.BlockPos;
@@ -59,11 +59,11 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         super.load(tag, level);
         // Force the computer online.
         BlockEntity target = level.getBlockEntity(position);
-        //? if >1.16.5 {
-        /^if(target instanceof AbstractComputer){
+        //? if >=1.19.2 {
+        /*if(target instanceof AbstractComputerBlockEntity){
             ((AbstractComputerBlockEntity) target).createServerComputer().turnOn();
         }
-        ^///?} else {
+        *///?} else {
         if(target instanceof TileComputerBase){
             ((TileComputerBase) target).createServerComputer().turnOn();
         }
@@ -101,4 +101,4 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         return getPosition();
     }
 }
-*///?}
+//?}

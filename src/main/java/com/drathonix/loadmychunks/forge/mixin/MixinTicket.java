@@ -1,5 +1,5 @@
 //? if forge {
-/*package com.drathonix.loadmychunks.forge.mixin;
+package com.drathonix.loadmychunks.forge.mixin;
 
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import net.minecraft.server.level.Ticket;
@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinTicket {
     @Shadow @Final private TicketType<?> type;
 
-    @Inject(method = "isForceTicks",at=@At("HEAD"), cancellable = true)
+    @Inject(method = "isForceTicks",at=@At("HEAD"), cancellable = true,remap = false)
     public void overrideLMC(CallbackInfoReturnable<Boolean> cir) {
         if(type == ChunkForcer.FORCED){
             cir.setReturnValue(true);
         }
     }
 }
-*///?}
+//?}

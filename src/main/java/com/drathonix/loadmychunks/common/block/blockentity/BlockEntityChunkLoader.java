@@ -19,14 +19,14 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
     private UUID owner = Util.NIL_UUID;
 
     //? if <=1.16.5 {
-    public BlockEntityChunkLoader() {
+    /*public BlockEntityChunkLoader() {
         super(LMCContent.chunkLoaderBlockEntity.get());
     }
-    //?} else {
-    /*public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
+    *///?} else {
+    public BlockEntityChunkLoader(BlockPos blockPos, BlockState blockState) {
         super(LMCContent.chunkLoaderBlockEntity.get(), blockPos, blockState);
     }
-    *///?}
+    //?}
 
     @Override
     public PlacedChunkLoader loadMyChunks$getChunkLoader() {

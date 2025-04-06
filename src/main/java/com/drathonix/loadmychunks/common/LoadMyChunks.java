@@ -22,13 +22,13 @@ import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.util.Brigadier;
 import com.drathonix.loadmychunks.common.util.Message;
 //? if <=1.16.5 {
-import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
-//?}
-//? if >1.16.5 {
-/*import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.networking.NetworkManager;
 *///?}
+//? if >1.16.5 {
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.networking.NetworkManager;
+//?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
 /*import net.minecraft.commands.CommandBuildContext;*/

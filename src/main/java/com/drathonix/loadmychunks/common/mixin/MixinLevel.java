@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 //? if >1.16.5 {
-/*import net.minecraft.world.level.block.entity.TickingBlockEntity;*/
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 //?}
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -18,7 +18,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -27,7 +30,7 @@ import java.util.List;
 @Mixin(value = Level.class,priority = 0)
 public abstract class MixinLevel implements ILevelMixin {
     //? if >1.16.5 {
-    /*@Shadow private boolean tickingBlockEntities;
+    @Shadow private boolean tickingBlockEntities;
 
     @Shadow @Final protected List<TickingBlockEntity> blockEntityTickers;
 
@@ -37,9 +40,9 @@ public abstract class MixinLevel implements ILevelMixin {
 
     @Shadow public abstract ProfilerFiller getProfiler();
 
-    /^*
+    /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
-     ^/
+     */
     //TODO: investigate if this has significant mod conflicts.
     @Inject(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     public void tickChunkWise(CallbackInfo ci, ProfilerFiller profilerFiller){
@@ -70,11 +73,11 @@ public abstract class MixinLevel implements ILevelMixin {
     public Level loadMyChunks$cast(){
         return Level.class.cast(this);
     }
-    *///?}
+    //?}
 
     //TODO: Remove redundancies
     //? if <=1.16.5 {
-    @Shadow public abstract LevelChunk getChunk(int i, int j);
+    /*@Shadow public abstract LevelChunk getChunk(int i, int j);
 
     @Unique private static final Iterator<BlockEntity> lmc$emptyIter = Collections.emptyIterator();
 
@@ -86,11 +89,11 @@ public abstract class MixinLevel implements ILevelMixin {
 
     @Shadow public abstract ProfilerFiller getProfiler();
 
-    /**
+    /^*
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
      *
      * @return An empty list to spoof the original method
-     */
+     ^/
     //TODO: investigate if this has significant mod conflicts.
     @Redirect(method = "tickBlockEntities",at = @At(value = "INVOKE",target = "Ljava/util/List;iterator()Ljava/util/Iterator;"))
     public Iterator<BlockEntity> tickChunkWise(List<BlockEntity> instance){
@@ -127,5 +130,5 @@ public abstract class MixinLevel implements ILevelMixin {
     public Level loadMyChunks$cast(){
         return Level.class.cast(this);
     }
-    //?}
+    *///?}
 }

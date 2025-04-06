@@ -1,10 +1,10 @@
 package com.drathonix.loadmychunks.common.debug;
 
 //? if <1.16.6 {
-import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.registry.RegistrySupplier;
 
-//?}
+*///?}
 import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.unified.BlockEntityTypeBuilder;
 
@@ -14,9 +14,9 @@ import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.registry.LMCRegistrar;
 import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
-/*import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
-*///?}
+//?}
 //? if >1.18.3
 /*import net.minecraft.commands.CommandBuildContext;*/
 import net.minecraft.commands.CommandSourceStack;

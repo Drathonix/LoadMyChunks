@@ -4,6 +4,7 @@ import com.drathonix.loadmychunks.common.bridge.*;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 
+import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.common.util.ProtectedEntityTickList;
 import net.minecraft.core.BlockPos;
@@ -13,13 +14,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
 //? if >1.16.5 {
-/*import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-*///?}
-//? if <=1.16.5 {
-import net.minecraft.world.level.TickList;
+//?} else {
+/*import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.chunk.ChunkBiomeContainer;
@@ -27,7 +28,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-//?}
+*///?}
+
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.UpgradeData;
@@ -48,18 +50,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 //? if forge || neoforge {
-/*import net.minecraftforge.entity.PartEntity;
-*///?}
+import net.minecraftforge.entity.PartEntity;
+//?}
 
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk
     //? if >1.16.5 {
-        /*extends MixinChunkAccess
-    *///?}
+        extends MixinChunkAccess
+    //?}
         implements ILevelChunkMixin {
     @Shadow @Final Level level;
 
@@ -102,10 +105,10 @@ public abstract class MixinLevelChunk
                 if (!MultiversioningHelper.isRemoved(entity)) {
                     if (mixin.lmc$shouldDiscardEntity(entity)) {
                         //? if >1.16.5 {
-                        /*entity.discard();
-                        *///?} else {
-                        entity.remove();
-                        //?}
+                        entity.discard();
+                        //?} else {
+                        /*entity.remove();
+                        *///?}
                     } else {
                         profilerfiller.push("checkDespawn");
                         entity.checkDespawn();
@@ -122,8 +125,8 @@ public abstract class MixinLevelChunk
                             profilerfiller.push("tick");
                             // Neoforge/forge specific
                             //? if neoforge || forge {
-                            /*if(!(entity instanceof PartEntity))
-                                *///?}
+                            if(!(entity instanceof PartEntity))
+                                //?}
                                 sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                             profilerfiller.pop();
@@ -139,7 +142,7 @@ public abstract class MixinLevelChunk
 
 
     //? if >1.16.5 {
-    /*@Unique
+    @Unique
     private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
     @Unique
     private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
@@ -197,52 +200,6 @@ public abstract class MixinLevelChunk
         }
     }
 
-    @Unique
-    @Override
-    public void loadMyChunks$tickEntities(ProfilerFiller profilerfiller) {
-        if(level instanceof ServerLevel) {
-            boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings();
-            boolean useTimings = applyTimings || loadMyChunks$loadDataModule.shouldUseTimings();
-            ServerLevel sl = (ServerLevel) level;
-            IServerLevelMixin mixin = (IServerLevelMixin) sl;
-            if(useTimings){
-                loadMyChunks$loadDataModule.getTickTimer().startEntities();
-            }
-            lmc$entities.forEach(entity -> {
-                if (!entity.isRemoved()) {
-                    if (mixin.lmc$shouldDiscardEntity(entity)) {
-                        entity.discard();
-                    } else {
-                        profilerfiller.push("checkDespawn");
-                        entity.checkDespawn();
-                        profilerfiller.pop();
-                        if (sl.getChunkSource().chunkMap.getDistanceManager().inEntityTickingRange(entity.chunkPosition().toLong())) {
-                            Entity vehicle = entity.getVehicle();
-                            if (vehicle != null) {
-                                if (!vehicle.isRemoved() && vehicle.hasPassenger(entity)) {
-                                    return; // this continues the forEach for anyone confused.
-                                }
-                                entity.stopRiding();
-                            }
-                            // Anything here will not be a passenger.
-                            profilerfiller.push("tick");
-                            // Neoforge/forge specific
-                            //? if neoforge || forge {
-                            if(!(entity instanceof PartEntity))
-                            //?}
-                                sl.guardEntityTick(sl::tickNonPassenger, entity);
-
-                            profilerfiller.pop();
-                        }
-                    }
-                }
-            });
-            if(useTimings){
-                loadMyChunks$loadDataModule.getTickTimer().endEntities();
-            }
-        }
-    }
-
     // Use inject instead due to conflict with fabric mixins
     @Inject(method = "getBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/chunk/LevelChunk$EntityCreationType;)Lnet/minecraft/world/level/block/entity/BlockEntity;",at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;",ordinal = 0),
             slice = @Slice(
@@ -295,12 +252,12 @@ public abstract class MixinLevelChunk
         return remappingFunction.apply(key, instance.get(key));
     }
 
-    *///?}
+    //?}
 
     //TODO: Remove redundant code. For now I'm just assuming 1.16.5 is too complex to really integrate well (I'm definitely wrong)
     //? if <=1.16.5 {
 
-    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    /*@Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
     @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
@@ -406,5 +363,5 @@ public abstract class MixinLevelChunk
             }
         }
     }
-    //?}
+    *///?}
 }

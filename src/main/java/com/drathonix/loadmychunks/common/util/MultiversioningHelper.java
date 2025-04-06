@@ -59,28 +59,35 @@ public class MultiversioningHelper {
 
     public static boolean isRemoved(Entity entity) {
         //? if >1.16.5 {
-        /*return entity.isRemoved();
-        *///?} else {
-        return entity.removed;
-        //?}
+        return entity.isRemoved();
+        //?} else {
+        /*return entity.removed;
+        *///?}
     }
 
     public static ChunkPos chunkPosOf(Entity entity) {
         //? if >1.16.5 {
-        /*return entity.chunkPosition();
-        *///?} else {
-        return new ChunkPos(entity.xChunk, entity.zChunk);
-        //?}
+        return entity.chunkPosition();
+        //?} else {
+        /*return new ChunkPos(entity.xChunk, entity.zChunk);
+        *///?}
     }
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
-        //? if >1.16.5 {
+        //? if >1.18.2 {
         /*Level l = arg.level();
         *///?} else {
         Level l = arg.level;
         //?}
     }
 
+    /**
+     * Checks if the object is an optional and if not puts it in an optional. The expected output must not be of type {@literal Optional<Optional<?>>}
+     * @param obj the possible optional.
+     * @return an optional.
+     * @param <T> the optional value type.
+     */
+    @SuppressWarnings("unchecked")
     public static <T> Optional<T> enforceOptional(@Nullable Object obj) {
         if(obj instanceof Optional){
             return (Optional<T>) obj;
