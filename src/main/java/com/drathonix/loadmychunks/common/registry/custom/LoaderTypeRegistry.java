@@ -26,15 +26,15 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
     public static final LoaderType<PlacedExtensionChunkLoader> PLACED_EXTENSION_TYPE = register(LoaderTypeKeys.PLACED_EXTENSION_LOADER,new LoaderType<>(PlacedExtensionChunkLoader::new));
 
     private LoaderTypeRegistry() {
-        //? if >=1.19.2 {
+        //? if >=1.19.4 {
         super(KEY, Lifecycle.stable(),true);
         //?} else if >=1.18.2 {
         /*super(KEY, Lifecycle.stable(),null);
-        *///?} else if >1.16.5 {
+         *///?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
-        *///?} else {
+         *///?} else {
         /*super(KEY, Lifecycle.stable());
-        *///?}
+         *///?}
     }
 
     /**

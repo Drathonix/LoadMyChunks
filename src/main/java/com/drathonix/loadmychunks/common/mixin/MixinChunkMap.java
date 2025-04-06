@@ -16,9 +16,8 @@ import net.minecraft.world.level.chunk.LightChunkGetter;
 /*import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 *///?} else {
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
-//?}
-import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+//?}
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

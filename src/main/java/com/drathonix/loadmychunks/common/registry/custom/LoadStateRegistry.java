@@ -12,7 +12,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
 //?}
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -42,11 +41,11 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
     public static final ILoadState PERMANENTLY_DISABLED = LoadStateEnum.PERMANENTLY_DISABLED;
 
     private LoadStateRegistry() {
-        //? if >=1.19.2 {
+        //? if >=1.19.4 {
         super(KEY, Lifecycle.stable(),true);
         //?} else if >=1.18.2 {
         /*super(KEY, Lifecycle.stable(),null);
-         *///?} else if >1.16.5 {
+        *///?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
         /*super(KEY, Lifecycle.stable());
@@ -58,7 +57,7 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
         //?} else {
         /*INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
-         *///?}
+        *///?}
         return type;
     }
 
