@@ -23,8 +23,8 @@ import dan200.computercraft.api.upgrades.UpgradeSerialiser;
 *///?}
 
 //? if >=1.19.2 {
-/*import dan200.computercraft.client.turtle.TurtleUpgradeModellers;
-*///?}
+import dan200.computercraft.client.turtle.TurtleUpgradeModellers;
+//?}
 
 import java.util.*;
 
@@ -41,10 +41,10 @@ public class CCTRegistryContent {
 
     public static void registerClient() {
         //? if >1.18.2 {
-        /*registrySuppliers.forEach(v->{
+        registrySuppliers.forEach(v->{
             TurtleUpgradeModellers.register(v.get(), new UpgradeModeller<>());
         });
-        *///?}
+        //?}
         LoaderTypeRegistry.register(LoaderTypeKeys.CCT_TURTLE_LOADER, new LoaderType<>(TurtleChunkLoader::new));
     }
 }

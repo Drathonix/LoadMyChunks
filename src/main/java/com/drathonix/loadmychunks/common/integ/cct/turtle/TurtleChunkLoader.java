@@ -12,7 +12,7 @@ import com.drathonix.loadmychunks.common.system.loaders.DoNotAddException;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
 import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChunkLoader;
-//? if >=1.19.2 {
+//? if >1.19.2 {
 /*import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity;
 *///?} else {
 import dan200.computercraft.shared.computer.blocks.TileComputerBase;
@@ -59,7 +59,7 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         super.load(tag, level);
         // Force the computer online.
         BlockEntity target = level.getBlockEntity(position);
-        //? if >=1.19.2 {
+        //? if >1.19.2 {
         /*if(target instanceof AbstractComputerBlockEntity){
             ((AbstractComputerBlockEntity) target).createServerComputer().turnOn();
         }

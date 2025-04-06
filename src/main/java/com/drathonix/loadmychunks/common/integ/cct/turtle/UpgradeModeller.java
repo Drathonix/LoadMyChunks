@@ -6,7 +6,7 @@ import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
 import dan200.computercraft.api.client.TransformedModel;
 //? if >1.18.2
-/*import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;*/
+import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dan200.computercraft.api.turtle.TurtleSide;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class UpgradeModeller<T extends ITurtleUpgrade>
     //? if >1.18.2
-        /*implements TurtleUpgradeModeller<T>*/
+        implements TurtleUpgradeModeller<T>
 {
     public static final Transformation leftTransform = getMatrixFor(-0.45f);
     public static final Transformation rightTransform = getMatrixFor(-0.05f);
@@ -45,11 +45,11 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
     }
     *///?}
     //? if <=1.19.2 && >1.18.2 {
-    /*@Override
+    @Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess iTurtleAccess, TurtleSide side) {
         return TransformedModel.of(t.getCraftingItem(),side == TurtleSide.LEFT ? leftTransform : rightTransform);
     }
-    *///?}
+    //?}
 
 
     //? if <1.20.6 && >=1.20.4 {

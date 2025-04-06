@@ -168,18 +168,18 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
 
     //? if >1.18.2 && <=1.19.4 {
-    /*@Inject(method = "<init>",at = @At("RETURN"))
+    @Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
         getDataStorage().computeIfAbsent(tag->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag),()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
     }
-    *///?}
+    //?}
 
     //? if >1.18.1 && <1.18.3 {
-    @Inject(method = "<init>", at = @At("RETURN"))
+    /*@Inject(method = "<init>", at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, Holder holder, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci) {
         getDataStorage().computeIfAbsent((tag) -> ChunkDataManager.loadManager(ServerLevel.class.cast(this), tag), () -> ChunkDataManager.getManager(ServerLevel.class.cast(this)), "loadmychunks_manager");
     }
-    //?}
+    *///?}
 
     //? if >1.16.5 && <=1.18.1 {
     /*@Inject(method = "<init>",at = @At("RETURN"))

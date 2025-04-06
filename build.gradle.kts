@@ -432,6 +432,9 @@ class SpecialMultiversionedConstants {
         if(!env.isNeo){
             out.add("META-INF/neoforge.mods.toml")
         }
+        if(!cctAPISource.enabled){
+            out.add("data/loadmychunks/computercraft.turtle_upgrade")
+        }
         return out
     }
     private fun neoForgeMixinField () : String {

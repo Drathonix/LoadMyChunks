@@ -18,12 +18,12 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 //? if >1.18.3
-/*import net.minecraft.commands.CommandBuildContext;*/
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 //? if <1.18.3 {
-import net.minecraft.network.chat.TextComponent;
-//?}
+/*import net.minecraft.network.chat.TextComponent;
+*///?}
 //? if <1.19.5 {
 import net.minecraft.world.level.material.Material;
 //?}
@@ -55,7 +55,7 @@ public class LoadMyChunksDebug {
     *///?}
 
     //? if >1.18.2 {
-    /*static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+    static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{
             ctx.getSource().sendSystemMessage(Component.literal("Sleep time is " + laggerMsSleep));
             return 0;
@@ -65,7 +65,7 @@ public class LoadMyChunksDebug {
             return 0;
         })))));
     }
-    *///?}
+    //?}
 
     //? if <1.19.5 {
     public static void init(){
@@ -83,7 +83,7 @@ public class LoadMyChunksDebug {
     }
     //?}
     //? if <1.18.3 {
-    static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+    /*static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
         dispatcher.register(Commands.literal("lmcdebug").then(Commands.literal("lagger").then(Commands.literal("sleep").executes(ctx->{
             ctx.getSource().sendSuccess(new TextComponent("Sleep time is " + laggerMsSleep),false);
             return 0;
@@ -93,5 +93,5 @@ public class LoadMyChunksDebug {
             return 0;
         })))));
     }
-    //?}
+    *///?}
 }
