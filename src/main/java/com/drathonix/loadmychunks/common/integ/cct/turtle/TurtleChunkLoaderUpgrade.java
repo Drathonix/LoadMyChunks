@@ -21,9 +21,10 @@ import dev.architectury.registry.registries.RegistrySupplier;
 *///?}
 
 //? if >1.19.2 {
+import net.minecraft.core.registries.BuiltInRegistries;
 //?} else {
-import net.minecraft.core.Registry;
-//?}
+/*import net.minecraft.core.Registry;
+*///?}
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -62,10 +63,10 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     @Override
     public ResourceLocation getUpgradeID() {
         //? if >1.19.2 {
-        /*return BuiltInRegistries.BLOCK.getKey(block.get());
-        *///?} elif <=1.19.2 && >1.16.5 {
-        return Registry.BLOCK.getKey(block.get());
-        //?} else {
+        return BuiltInRegistries.BLOCK.getKey(block.get());
+        //?} elif <=1.19.2 && >1.16.5 {
+        /*return Registry.BLOCK.getKey(block.get());
+        *///?} else {
         /*return key;
         *///?}
     }

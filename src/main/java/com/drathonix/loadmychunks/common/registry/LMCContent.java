@@ -59,17 +59,17 @@ public class LMCContent {
     public static RegistrySupplier<Block> chunkLoaderBlock;
 
     //? if <=1.19.3 || >1.19.4
-    public static RegistrySupplier<CreativeModeTab> creativeTab;
+    /*public static RegistrySupplier<CreativeModeTab> creativeTab;*/
     //? if >1.19.3 && <1.19.5
-    /*public static CreativeTabRegistry.TabSupplier creativeTab;*/
+    public static CreativeTabRegistry.TabSupplier creativeTab;
 
     public static void init() {
         //? if <=1.18.1
         /*creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if <1.19.3 && >1.18.1
-        creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if >1.19.3 && <1.19.5
-        /*creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());*/
+        creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());
         //? if >1.20.0 {
         /*creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         TABS.register();

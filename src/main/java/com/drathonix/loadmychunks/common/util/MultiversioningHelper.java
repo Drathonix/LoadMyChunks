@@ -74,7 +74,7 @@ public class MultiversioningHelper {
     }
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
-        //? if >1.19.2 {
+        //? if >1.19.4 {
         /*Level l = arg.level();
         *///?} else {
         Level l = arg.level;

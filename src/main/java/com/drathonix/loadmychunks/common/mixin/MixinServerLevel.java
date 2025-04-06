@@ -21,10 +21,10 @@ import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
 //? if >=1.20.1 {
 /*//? if !forge || >1.20.1 {
-/^import net.minecraft.world.RandomSequences;
-^///?} else {
-import net.minecraft.class_8565;
-//?}
+import net.minecraft.world.RandomSequences;
+//?} else {
+/^import net.minecraft.class_8565;
+^///?}
 *///?}
 
 import net.minecraft.world.entity.Entity;

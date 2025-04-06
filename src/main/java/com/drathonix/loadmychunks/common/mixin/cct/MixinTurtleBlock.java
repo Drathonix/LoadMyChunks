@@ -8,10 +8,9 @@ import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
 //? if <=1.19.2 {
-import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
-//?}
+/*import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
+*///?}
 import dan200.computercraft.shared.computer.core.ComputerFamily;
-import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
@@ -23,15 +22,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 //? if >1.19.2 {
-/*import dan200.computercraft.shared.turtle.blocks.TurtleBlock;
+import dan200.computercraft.shared.turtle.blocks.TurtleBlock;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 @Mixin(TurtleBlock.class)
-*///?} else {
-import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
+//?} else {
+/*import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
 @Mixin(BlockTurtle.class)
-//?}
+*///?}
 public abstract class MixinTurtleBlock implements ITurtleBlockMixin
 {
     @Override
@@ -47,20 +49,11 @@ public abstract class MixinTurtleBlock implements ITurtleBlockMixin
     }
 
     //? if >1.19.2 {
-    /*@Redirect(method="onRemove",at=@At(value = "INVOKE",target = "Lnet/minecraft/world/Containers;dropContents(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/Container;)V"))
-    public void lmc$dropAdditional(Level level, BlockPos pos, Container container){
-        lmc$dropItems();
-        Containers.dropContents(level,pos,container);
-        BlockEntity be = level.getBlockEntity(pos);
-        if(be instanceof IHasChunkloader){
-            ((IHasChunkloader) be).ifPresent(loader->{
-                if(loader.getDefaultState() == LoadStateRegistry.ENTITY_TICKING) {
-                    Containers.dropItemStack(level,pos.getX(),pos.getY(),pos.getZ(), LMCContent.itemLifeforceBroadcaster.get().getDefaultInstance());
-                }
-            });
-        }
+    @Inject(method = "onRemove",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/Containers;dropContents(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/Container;)V"))
+    public void lmc$dropAdditional(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving, CallbackInfo ci){
+        lmc$dropItems(level,pos);
     }
-    *///?}
+    //?}
 }
 //?} else {
 /*@Mixin(LoadMyChunks.class)

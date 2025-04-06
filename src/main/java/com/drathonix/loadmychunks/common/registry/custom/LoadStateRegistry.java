@@ -8,7 +8,7 @@ import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
 import net.minecraft.core.Holder;
 //?}
-//? if >1.19.2 {
+//? if >1.19.4 {
 /*import net.minecraft.core.RegistrationInfo;
 *///?}
 import net.minecraft.core.MappedRegistry;
@@ -41,17 +41,19 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
     public static final ILoadState PERMANENTLY_DISABLED = LoadStateEnum.PERMANENTLY_DISABLED;
 
     private LoadStateRegistry() {
-        //? if >=1.18.2 {
-        super(KEY, Lifecycle.stable(),null);
-        //?} else if >1.16.5 {
+        //? if >=1.19.2 {
+        super(KEY, Lifecycle.stable(),true);
+        //?} else if >=1.18.2 {
+        /*super(KEY, Lifecycle.stable(),null);
+         *///?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
-        *///?} else {
+         *///?} else {
         /*super(KEY, Lifecycle.stable());
          *///?}
     }
 
     private static ILoadState register(ResourceLocation id, ILoadState type){
-        //? if >1.19.2 {
+        //? if >1.19.4 {
         /*INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
         *///?} else {
         INSTANCE.register(ResourceKey.create(KEY,id), type, Lifecycle.stable());

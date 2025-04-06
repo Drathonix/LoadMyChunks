@@ -6,24 +6,29 @@
   <component name="ChangeListManager">
     <list default="true" id="d95d64dd-5eca-4cab-a1b5-6183b13ff3cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/LoadMyChunks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/LoadMyChunks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/debug/LoadMyChunksDebug.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/debug/LoadMyChunksDebug.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/CCTRegistryContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/CCTRegistryContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/config/regis/ItemRetriever.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/config/regis/ItemRetriever.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/config/regis/ItemStackRetriever.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/config/regis/ItemStackRetriever.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/TurtleChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/TurtleChunkLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/TurtleChunkLoaderUpgrade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/TurtleChunkLoaderUpgrade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/UpgradeModeller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/integ/cct/turtle/UpgradeModeller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemChunkLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemChunkLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemChunkometer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemChunkometer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/MixinChunkMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/MixinChunkMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/BlockItemHasTooltip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/BlockItemHasTooltip.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemHasTooltip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/ItemHasTooltip.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/LMCProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/item/LMCProperties.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/MixinServerLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/MixinServerLevel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinAbstractComputerBlockEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinAbstractComputerBlockEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinBlockGeneric.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinBlockGeneric.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTileTurtle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTileTurtle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleBrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleBrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleMoveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/mixin/cct/MixinTurtleMoveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/FakeRegistrySupplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/FakeRegistrySupplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/LMCContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/LMCContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/LMCRegistrar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/LMCRegistrar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/custom/LoadStateRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/custom/LoadStateRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/custom/LoaderTypeRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/registry/custom/LoaderTypeRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/system/ChunkDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/system/ChunkDataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/BoolArgument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/BoolArgument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/MultiversioningHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/common/util/MultiversioningHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/fabric/LMCFabricInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/fabric/LMCFabricInit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/forge/LMCForge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/forge/LMCForge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/forge/integ/CCTForge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/drathonix/loadmychunks/forge/integ/CCTForge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stonecutter.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/stonecutter.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -150,18 +155,18 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.19.2-fabric" type="2d1252cf:ModuleNode" />
+                <item name="1.19.4-forge" type="2d1252cf:ModuleNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.19.2-fabric" type="2d1252cf:ModuleNode" />
+                <item name="1.19.4-forge" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="LoadMyChunks" type="f1a62948:ProjectNode" />
-                <item name="1.19.2-fabric" type="2d1252cf:ModuleNode" />
+                <item name="1.19.4-forge" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
               </path>
@@ -328,29 +333,7 @@
       <command value="addTicket" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.LoadMyChunks:versions:1.19.2-forge [build]">
-    <configuration name="LoadMyChunks [&quot;Refresh active project&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="&quot;Refresh active project&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.LoadMyChunks [&quot;Set active project to 1.19.4-forge&quot;]">
     <configuration name="LoadMyChunks [&quot;Set active project to 1.19.2-forge&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -373,7 +356,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="LoadMyChunks [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LoadMyChunks [&quot;Set active project to 1.19.4-fabric&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -384,7 +367,51 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
+            <option value="&quot;Set active project to 1.19.4-fabric&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="LoadMyChunks [&quot;Set active project to 1.19.4-forge&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="&quot;Set active project to 1.19.4-forge&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="LoadMyChunks [&quot;Set active project to 1.20.4-forge&quot;]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="&quot;Set active project to 1.20.4-forge&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -417,32 +444,10 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="LoadMyChunks:versions:1.19.2-fabric [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LoadMyChunks:versions:1.19.4-fabric [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/versions/1.19.2-fabric" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="LoadMyChunks:versions:1.19.2-forge [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/versions/1.19.2-forge" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/versions/1.19.4-fabric" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -485,11 +490,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.LoadMyChunks:versions:1.19.2-forge [build]" />
-        <item itemvalue="Gradle.LoadMyChunks [&quot;Refresh active project&quot;]" />
-        <item itemvalue="Gradle.LoadMyChunks [build]" />
+        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.19.4-forge&quot;]" />
+        <item itemvalue="Gradle.LoadMyChunks:versions:1.19.4-fabric [build]" />
+        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.19.4-fabric&quot;]" />
+        <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.20.4-forge&quot;]" />
         <item itemvalue="Gradle.LoadMyChunks [&quot;Set active project to 1.19.2-forge&quot;]" />
-        <item itemvalue="Gradle.LoadMyChunks:versions:1.19.2-fabric [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -581,7 +586,7 @@
       <workItem from="1743876165756" duration="1469000" />
       <workItem from="1743877721138" duration="3858000" />
       <workItem from="1743881643138" duration="9183000" />
-      <workItem from="1743949022086" duration="3339000" />
+      <workItem from="1743949022086" duration="4455000" />
     </task>
     <servers />
   </component>
