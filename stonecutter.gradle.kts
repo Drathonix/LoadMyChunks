@@ -31,7 +31,7 @@ abstract class SymlinkBuildsTask : DefaultTask() {
             val projLibs = File(project.layout.buildDirectory.get().asFile.absolutePath.plus("/libs"))
             if(projLibs.exists()) {
                 projLibs.listFiles()?.forEach { file ->
-                    if(file.name.contains(vers.get()) && !file.name.contains("sources")) {
+                    if(file.name.contains(vers.get()) && !file.name.contains("sources") && file.name.endsWith(".jar")) {
                         val destFileName = file.name.replace(vers.get()+"+", "")
                         val destFile = File(destDir, destFileName)
                         Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -55,7 +55,6 @@ tasks.named<SymlinkBuildsTask>("updateUnchangedSymlinkBuilds") {
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
     group = "project"
     ofTask("build")
-    finalizedBy("updateUnchangedSymlinkBuilds")
 }
 
 stonecutter registerChiseled tasks.register("chiseledClean", stonecutter.chiseled) {
