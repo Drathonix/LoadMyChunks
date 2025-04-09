@@ -344,10 +344,6 @@ public class ChunkDataModule {
         this.nextGameTimeCheckTick = time;
     }
 
-    public void configReloaded(ServerLevel level) {
-
-    }
-
     public void consumeLoadState(Consumer<ILoadState> consumer){
         consumer.accept(loadState);
     }

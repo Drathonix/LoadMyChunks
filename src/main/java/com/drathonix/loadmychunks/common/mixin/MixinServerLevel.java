@@ -182,8 +182,8 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
     //? if <=1.16.5 {
     @Inject(method = "<init>",at = @At("RETURN"))
-    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, DimensionType dimensionType, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci){
-        getDataStorage().computeIfAbsent(()-> ChunkDataManager.getManager(ServerLevel.class.cast(this)),"loadmychunks_manager");
+    public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, DimensionType dimensionType, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci) {
+        getDataStorage().computeIfAbsent(() -> ChunkDataManager.getManager(ServerLevel.class.cast(this)), "loadmychunks_manager");
     }
     //?}
 }
