@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 //? if <1.19.5
 /*import net.minecraft.world.level.material.Material;*/
 import org.jetbrains.annotations.Nullable;
@@ -92,5 +93,13 @@ public class MultiversioningHelper {
         else{
             return (Optional<T>) Optional.ofNullable(obj);
         }
+    }
+
+    public static <T> @Nullable T serverLevel(BlockEntity blockEntity, Function<ServerLevel,T> func) {
+        Level l = blockEntity.getLevel();
+        if(l instanceof ServerLevel){
+            return func.apply((ServerLevel) l);
+        }
+        return null;
     }
 }

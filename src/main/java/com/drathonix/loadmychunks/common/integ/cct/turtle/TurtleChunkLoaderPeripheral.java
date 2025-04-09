@@ -18,14 +18,9 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     public final TurtleSide side;
 
     public TurtleChunkLoaderPeripheral(ITurtleBrainMixin turtle, TurtleSide side) {
-        //? if >1.16.5 {
         if(turtle.getLevel() instanceof ServerLevel) {
-        //?} else {
-        /*if(turtle.getWorld() instanceof ServerLevel) {
-        *///?}
             this.turtle = turtle;
             this.side = side;
-            turtle.lmc$addToCDM();
         }
         else{
             throw new IllegalStateException("Turtle chunk loader code cannot be accessed on the clientside.");

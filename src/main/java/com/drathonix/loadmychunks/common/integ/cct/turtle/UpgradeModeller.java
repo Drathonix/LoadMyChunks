@@ -3,8 +3,8 @@ package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.mojang.math.Transformation;
 //? if <=1.19.2 {
-/*import com.mojang.math.Vector3f;*/
-//?}
+/*import com.mojang.math.Vector3f;
+*///?}
 import dan200.computercraft.api.client.TransformedModel;
 //? if >1.18.2 {
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;

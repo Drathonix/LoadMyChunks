@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CCTForge {
     //? if <1.20.6 && >=1.20.4
-    public static DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.serialiserRegistryKey(), LoadMyChunks.MOD_ID);
+    /^public static DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.serialiserRegistryKey(), LoadMyChunks.MOD_ID);^/
     //? if <=1.20.1 && >1.19.2
     /^public static DeferredRegister<TurtleUpgradeSerialiser<?>> turtleUpgrades = DeferredRegister.create(TurtleUpgradeSerialiser.registryId(),LoadMyChunks.MOD_ID);^/
     //? if <=1.19.2 && >1.16.5

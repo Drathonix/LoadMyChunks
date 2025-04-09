@@ -28,6 +28,7 @@ import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,14 +39,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 @Mixin(value = TurtleBlockEntity.class,remap = false)
 //? if <=1.19.2
 /*@Mixin(value = TileTurtle.class,remap = false)*/
-public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity implements IDestroyable,IHasChunkloader {
+public abstract class MixinTileTurtle implements IDestroyable,IHasChunkloader {
     @Shadow
     private TurtleBrain brain;
 
     @Override
     public void loadMyChunks$destroy() {
         MultiversioningHelper.serverLevel((BlockEntity)(Object)this, sl-> {
-            BlockPos pos = getBlockPos();
+            BlockPos pos = ((BlockEntity)(Object)this).getBlockPos();
             TurtleChunkLoader query = ((ITurtleBrainMixin)brain).lmc$getChunkLoader().move(pos);
             ChunkDataManager.removeChunkLoader(sl,pos,query);
         });
@@ -53,9 +54,10 @@ public abstract class MixinTileTurtle extends MixinAbstractComputerBlockEntity i
 
     @Override
     public @Nullable IChunkLoader loadMyChunks$getChunkLoader() {
-        if(level instanceof ServerLevel) {
-            return ChunkDataManager.getOrCreateChunkData((ServerLevel) level, getBlockPos()).getChunkLoaderAt(getBlockPos());
-        }
+        MultiversioningHelper.serverLevel(((BlockEntity)(Object)this),sl->{
+            BlockPos pos = ((BlockEntity)(Object)this).getBlockPos();
+            return ChunkDataManager.getOrCreateChunkData(sl, pos).getChunkLoaderAt(pos);
+        });
         return null;
     }
 }

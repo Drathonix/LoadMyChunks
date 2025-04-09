@@ -30,7 +30,7 @@ public class LMCConfig {
         PersistShortcuts.init(LMCConfig.class);
     }
 
-    @Save(description = "The maximum time in milliseconds it can take to tick a chunk completely. If this time is exceeded the chunk will be considered 'overticked' and the loader temporarily disabled. Note these ranges are super arbitrary, Running with 0 will functionally disable the mod and running at 1000 will only disable chunks if they take an entire second to process (1tps) which is basically gameplay ruining tps lag. The default here is equal to ~2 TPS per loaded chunk max which should be fair for well-designed end game bases.")
+    @Save(description = "The maximum time in milliseconds it can take to tick a chunk completely. If this time is exceeded the chunk will be considered 'overticked' and the loader temporarily disables. Note these ranges are super arbitrary, Running with 0 will functionally disable the mod and running at 1000 will only disable chunks if they take an entire second to process (1tps) which is basically gameplay ruining tps lag. The default here is equal to ~2 TPS per loaded chunk max which should be fair for well-designed end game bases.")
     @Range(minimum = 1,maximum = 1000)
     public static long msPerChunk = 5;
 
@@ -89,7 +89,7 @@ public class LMCConfig {
         public boolean enableTurtleChunkLoading = true;
         @Save(description = "Makes turtles consume items to remain loaded (only applies if cost/enabled is true)")
         public boolean turtlesConsumeItems = true;
-        @Save(description = "Makes all turtles act as chunk loaders without needing a peripheral. Chunk Loader Peripheral LUA features will still be unavailable without a chunk loader peripheral present. In addition they will consume items if the feature is enabled.")
+        @Save(description = "Makes all turtles act as chunk loaders without needing a peripheral. Chunk Loader Peripheral LUA features will still be unavailable without a chunk loader peripheral present. In addition, they will consume items if the feature is enabled.")
         public boolean turtlesChunkLoadWithoutPeripheral = false;
         @Save(description = "Makes turtle chunk loaders ignore LMC's lag limit system. Not recommended for public servers.")
         public boolean ignoreTickChecks = false;

@@ -63,9 +63,10 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     @Inject(method = "updatePeripherals", at = @At("TAIL"))
     public void lmc$checkShouldUnload(ServerComputer serverComputer, CallbackInfo ci){
         if(lmc$shouldChunkLoad()){
-            return;
+            lmc$addToCDM();
+        } else {
+            lmc$removeChunkLoader();
         }
-        lmc$removeChunkLoader();
     }
 
     @Inject(method="setupComputer",at = @At("HEAD"))

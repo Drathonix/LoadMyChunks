@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 //@Suppress("UnstableApiUsage")
 
 plugins {
@@ -10,10 +13,49 @@ plugins {
 }
 stonecutter active "1.21.1-fabric" /* [SC] DO NOT EDIT */
 
+abstract class SymlinkBuildsTask : DefaultTask() {
+    @get:Input
+    abstract val libs: Property<String>
+    @get:Input
+    abstract val vers: Property<String>
+    @get:Input
+    abstract val dest: Property<String>
+    @get:Input
+    abstract val root: Property<Project>
+
+    @TaskAction
+    fun run() {
+        val destDir = File(libs.get().plus("/").plus(dest.get()))
+        Files.createDirectories(destDir.toPath())
+        for (project in root.get().subprojects) {
+            val projLibs = File(project.layout.buildDirectory.get().asFile.absolutePath.plus("/libs"))
+            if(projLibs.exists()) {
+                projLibs.listFiles()?.forEach { file ->
+                    if(file.name.contains(vers.get()) && !file.name.contains("sources")) {
+                        val destFileName = file.name.replace(vers.get()+"+", "")
+                        val destFile = File(destDir, destFileName)
+                        Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.register("updateUnchangedSymlinkBuilds", SymlinkBuildsTask::class.java) {}
+
+tasks.named<SymlinkBuildsTask>("updateUnchangedSymlinkBuilds") {
+    libs.set(rootProject.layout.buildDirectory.get().asFile.absolutePath.plus("/libs"))
+    vers.set(rootProject.property("version").toString())
+    dest.set("symlink")
+    root.set(rootProject)
+}
+
 // Builds every version into `build/libs/{mod.version}/`
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
     group = "project"
     ofTask("build")
+    finalizedBy("updateUnchangedSymlinkBuilds")
 }
 
 stonecutter registerChiseled tasks.register("chiseledClean", stonecutter.chiseled) {
