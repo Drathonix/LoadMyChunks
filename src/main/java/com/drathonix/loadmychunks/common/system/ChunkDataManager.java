@@ -163,13 +163,10 @@ public class ChunkDataManager {
     }
 
     public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,true,predicate,supplier);
-    }
-    public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, BlockPos blockPos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
-        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,doAdd,predicate,supplier);
+        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,predicate,supplier);
     }
     public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, ChunkPos chunkPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,true,predicate,supplier);
+        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,predicate,supplier);
     }
 
     public static void clear() {
@@ -241,6 +238,9 @@ public class ChunkDataManager {
 
         public synchronized void addChunkLoader(IChunkLoader loader, long pos){
             ChunkDataModule cdm = getOrCreateData(pos);
+            if(loader instanceof IOwnable){
+                markChunkOwnedBy(pos, ((IOwnable) loader).getOwner());
+            }
             cdm.consumeLoadState(previous->{
                 if(cdm.addLoader(level,loader)) {
                     cdm.updateChunkLoadState(level,previous);
@@ -349,11 +349,11 @@ public class ChunkDataManager {
         public String getLevelName() {
             return ((ServerLevelData)level.getLevelData()).getLevelName();
         }
-        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
-            return computeChunkLoaderIfAbsent(new ChunkPos(blockPos),type,doAdd,predicate,supplier);
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
+            return computeChunkLoaderIfAbsent(new ChunkPos(blockPos),type,predicate,supplier);
         }
         @SuppressWarnings("all")
-        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ChunkPos pos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ChunkPos pos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
             ChunkDataModule cdm = getOrCreateData(pos);
             for (IChunkLoader loader : cdm.getLoaders()) {
                 if(loader.getClass() == type){
@@ -363,9 +363,7 @@ public class ChunkDataManager {
                 }
             }
             T out = supplier.get();
-            if(doAdd) {
-                addChunkLoader(out, pos);
-            }
+            addChunkLoader(out, pos);
             return out;
         }
 

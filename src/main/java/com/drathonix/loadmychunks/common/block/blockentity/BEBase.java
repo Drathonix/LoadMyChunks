@@ -24,7 +24,7 @@ public class BEBase extends BlockEntity {
     public BEBase(BlockEntityType<?> blockEntityType) {
         super(blockEntityType);
     }
-    /*@Override
+    @Override
     public void setLevelAndPosition(Level level, BlockPos blockPos) {
         super.setLevelAndPosition(level, blockPos);
         validate(level);

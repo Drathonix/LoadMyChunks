@@ -5,6 +5,7 @@ import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
 import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -58,16 +59,22 @@ public class BlockEntityChunkLoader extends BEBase implements IDestroyable, IHas
 
     @Override
     public void validate(Level level) {
-        if(level instanceof ServerLevel && chunkLoader == null) {
-            chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent((ServerLevel)level,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos(),owner));
-        }
+        MultiversioningHelper.serverLevel(level,sl->{
+            if(chunkLoader == null) {
+                chunkLoader = ChunkDataManager.computeChunkLoaderIfAbsent(sl,getBlockPos(),PlacedChunkLoader.class, loader-> loader.getPosition().equals(getBlockPos()),()-> new PlacedChunkLoader(getBlockPos(),owner));
+            }
+        });
     }
 
     public void setOwner(UUID uuid) {
+        UUID prev = this.owner;
         this.owner=uuid == null ? Util.NIL_UUID : uuid;
-        if(chunkLoader != null){
-            this.chunkLoader.setOwner(uuid);
-            ChunkDataManager.markChunkOwnedBy((ServerLevel) level,chunkLoader.getChunkPos().toLong(), chunkLoader.getOwner());
-        }
+        MultiversioningHelper.serverLevel(level,sl->{
+            if(chunkLoader != null){
+                this.chunkLoader.setOwner(uuid);
+                ChunkDataManager.markChunkNotOwnedBy(sl,chunkLoader.getChunkPos().toLong(),prev);
+                ChunkDataManager.markChunkOwnedBy(sl,chunkLoader.getChunkPos().toLong(), uuid);
+            }
+        });
     }
 }
