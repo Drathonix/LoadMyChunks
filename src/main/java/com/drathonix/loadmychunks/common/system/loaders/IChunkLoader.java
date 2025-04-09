@@ -223,12 +223,12 @@ public interface IChunkLoader extends IChunkPositioned {
      */
     @ApiStatus.NonExtendable
     default void timingsCheck(ServerLevel level, ChunkDataModule chunkDataModule, long gameTime) {
-        if(!getActiveState().shouldLoad()){
+        if(!getDefaultState().shouldLoad()){
             return;
         }
         long activityEnd = getActivityEnd();
         long timeRemaining = activityEnd-gameTime;
-        long duration = LMCConfig.cost.getDurationFor(getActiveState());
+        long duration = LMCConfig.cost.getDurationFor(getDefaultState());
         if(duration/10L >= timeRemaining){
             if(LMCConfig.consumeFuel(level,getItemSource())){
                 activityEnd=gameTime+Math.max(0,timeRemaining)+duration*20;
