@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 //? if <1.18.3 {
-/*import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.Util;
-*///?}
+//?}
 
 /**
  * Multi-versioning abstraction utility class for Components/Chat
@@ -29,11 +29,11 @@ public class Message {
      */
     public static @NotNull MutableComponent translatable(@NotNull String key, Object... args) {
         //? if <1.18.3 {
-        /*return new TranslatableComponent(key,args);
-        *///?}
-        //? if >1.18.2 {
-        return Component.translatable(key,args);
+        return new TranslatableComponent(key,args);
         //?}
+        //? if >1.18.2 {
+        /*return Component.translatable(key,args);
+        *///?}
     }
 
     /**
@@ -46,10 +46,10 @@ public class Message {
             return;
         }
         //? if >1.18.2 {
-        player.sendSystemMessage(message);
-        //?} else {
-        /*player.sendMessage(message, Util.NIL_UUID);
-        *///?}
+        /*player.sendSystemMessage(message);
+        *///?} else {
+        player.sendMessage(message, Util.NIL_UUID);
+        //?}
     }
 
     /**
@@ -59,10 +59,10 @@ public class Message {
      */
     public static void sendSuccess(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull Component message) {
         //? if <1.20.1 {
-        /*ctx.getSource().sendSuccess(message,true);
-        *///?} else if >=1.20.1 && !forge {
-        ctx.getSource().sendSuccess(()->message,true);
-        //?} else if >=1.20.1 && forge {
+        ctx.getSource().sendSuccess(message,true);
+        //?} else if >=1.20.1 && !forge {
+        /*ctx.getSource().sendSuccess(()->message,true);
+        *///?} else if >=1.20.1 && forge {
         /*ctx.getSource().sendSystemMessage(message);
         *///?}
     }
@@ -86,10 +86,10 @@ public class Message {
      */
     public static void sendSystem(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull Component component) {
         //? if <1.19.2 {
-        /*sendSuccess(ctx,component);
-        *///?} else {
-        ctx.getSource().sendSystemMessage(component);
-        //?}
+        sendSuccess(ctx,component);
+        //?} else {
+        /*ctx.getSource().sendSystemMessage(component);
+        *///?}
     }
 
     /**
@@ -117,10 +117,10 @@ public class Message {
      */
     public static MutableComponent literal(String text) {
         //? if <1.18.3 {
-        /*return new TextComponent(text);
-         *///?}
+        return new TextComponent(text);
+         //?}
         //? if >1.18.2 {
-        return Component.literal(text);
-        //?}
+        /*return Component.literal(text);
+        *///?}
     }
 }

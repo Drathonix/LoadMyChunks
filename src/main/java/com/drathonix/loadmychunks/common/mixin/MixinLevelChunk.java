@@ -16,11 +16,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 //? if >1.16.5 {
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+/*import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-//?} else {
-/*import net.minecraft.world.level.TickList;
+*///?} else {
+import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.chunk.ChunkBiomeContainer;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-*///?}
+//?}
 
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -64,8 +64,8 @@ import java.util.function.Consumer;
 
 public abstract class MixinLevelChunk
     //? if >1.16.5 {
-        extends MixinChunkAccess
-    //?}
+        /*extends MixinChunkAccess
+    *///?}
         implements ILevelChunkMixin {
     @Shadow @Final Level level;
 
@@ -93,6 +93,15 @@ public abstract class MixinLevelChunk
         return chunkPos.toLong();
     }
 
+    @Inject(method = "addEntity",at = @At("TAIL"))
+    public void onAdd(Entity entity, CallbackInfo ci){
+        lmc$addEntity(entity);
+    }
+    @Inject(method = "removeEntity(Lnet/minecraft/world/entity/Entity;I)V",at = @At("TAIL"))
+    public void onRemove(Entity entity, int i, CallbackInfo ci){
+        lmc$removeEntity(entity);
+    }
+
     @Unique
     @Override
     public void loadMyChunks$tickEntities(ProfilerFiller profilerfiller) {
@@ -108,10 +117,10 @@ public abstract class MixinLevelChunk
                 if (!MultiversioningHelper.isRemoved(entity)) {
                     if (mixin.lmc$shouldDiscardEntity(entity)) {
                         //? if >1.16.5 {
-                        entity.discard();
-                        //?} else {
-                        /*entity.remove();
-                        *///?}
+                        /*entity.discard();
+                        *///?} else {
+                        entity.remove();
+                        //?}
                     } else {
                         profilerfiller.push("checkDespawn");
                         entity.checkDespawn();
@@ -145,7 +154,7 @@ public abstract class MixinLevelChunk
 
 
     //? if >1.16.5 {
-    @Unique
+    /*@Unique
     private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
     @Unique
     private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
@@ -255,12 +264,12 @@ public abstract class MixinLevelChunk
         return remappingFunction.apply(key, instance.get(key));
     }
 
-    //?}
+    *///?}
 
     //TODO: Remove redundant code. For now I'm just assuming 1.16.5 is too complex to really integrate well (I'm definitely wrong)
     //? if <=1.16.5 {
 
-    /*@Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
     @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
@@ -366,5 +375,5 @@ public abstract class MixinLevelChunk
             }
         }
     }
-    *///?}
+    //?}
 }

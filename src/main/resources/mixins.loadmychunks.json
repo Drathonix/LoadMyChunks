@@ -12,7 +12,6 @@
     "MixinLevelChunk",
     "MixinMinecraftServer",
     "MixinServerLevel",
-    "MixinServerLevelEntityCallbacks",
     "MixinServerPlayer",
     "MixinTickingTracker",
     "cct.MixinBlockGeneric",

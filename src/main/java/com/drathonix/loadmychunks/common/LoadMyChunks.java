@@ -13,7 +13,7 @@ import com.vicious.persist.mappify.registry.Stringify;
 import com.vicious.persist.shortcuts.PersistShortcuts;
 
 //? if >=1.20.6
-import com.drathonix.loadmychunks.common.integ.Integrations;
+/*import com.drathonix.loadmychunks.common.integ.Integrations;*/
 import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 import com.drathonix.loadmychunks.common.network.LagReadingRequest;
 import com.drathonix.loadmychunks.common.registry.LMCContent;
@@ -23,22 +23,22 @@ import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.util.Brigadier;
 import com.drathonix.loadmychunks.common.util.Message;
 //? if <=1.16.5 {
-/*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
-*///?}
-//? if >1.16.5 {
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.networking.NetworkManager;
 //?}
+//? if >1.16.5 {
+/*import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.networking.NetworkManager;
+*///?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
-import net.minecraft.commands.CommandBuildContext;
+/*import net.minecraft.commands.CommandBuildContext;*/
 //? if <1.18.3
-/*import net.minecraft.network.chat.TextComponent;*/
+import net.minecraft.network.chat.TextComponent;
 //? if <1.20 {
-/*import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
-*///?}
+//?}
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.commands.CommandSourceStack;
@@ -56,7 +56,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.Map;
 //? if <=1.20.4
-/*import com.drathonix.loadmychunks.common.util.ModResource;*/
+import com.drathonix.loadmychunks.common.util.ModResource;
 
 /**
  * The main entry point class for the mod.
@@ -69,7 +69,7 @@ public class LoadMyChunks {
 	public static boolean stopping = false;
 
 	//? if <1.20.5
-	/*public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");*/
+	public static ResourceLocation LAG_READING_PACKET_ID = ModResource.of("lag");
 
 	/**
 	 * Initializes the mod. Should not be called more than once.
@@ -92,7 +92,7 @@ public class LoadMyChunks {
 		});
 		logger.info("Content added.");
 		//? if <=1.20.5 {
-		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
+		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LAG_READING_PACKET_ID, ((buf, context) -> {
 			Player plr = context.getPlayer();
 			MultiversioningHelper.serverLevel(plr,sl->{
 				ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, plr.blockPosition());
@@ -102,13 +102,13 @@ public class LoadMyChunks {
 				}
 			});
 		}));
-		*///?}
+		//?}
 		//? if >1.20.5 {
-		NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
+		/*NetworkManager.registerReceiver(NetworkManager.Side.C2S, LagReadingRequest.TYPE,LagReadingRequest.STREAM_CODEC, LagReadingRequest::handleServer);
 		Integrations.invokeServer(()->{
 			NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
 		});
-		//?}
+		*///?}
 	}
 
 	/**
@@ -140,10 +140,10 @@ public class LoadMyChunks {
 	 * Command registration entry point
 	 */
 	//? <1.19 {
-	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
-	*///?} else {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
-	//?}
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	//?} else {
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	*///?}
 		dispatcher.register(Brigadier.admin(Brigadier.literal("loadmychunks",root->{
 			root.add(Brigadier.executes(Brigadier.literal("forceload",forceLoad->{
 				forceLoad.add(Brigadier.executes(Brigadier.bool("permanent",boolForceLoad->{

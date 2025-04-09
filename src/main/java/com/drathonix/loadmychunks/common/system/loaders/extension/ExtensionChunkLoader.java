@@ -23,10 +23,10 @@ public abstract class ExtensionChunkLoader<T extends IChunkLoader> extends Phant
     @Override
     public void removeHost(Object host){
         //? if >1.16.5 {
-        hosts = ArrayUtils.removeAllOccurrences(hosts,ReferenceHelper.get(IChunkLoader.class,host));
-        //?} else {
-        /*hosts = ArrayUtils.removeAllOccurences(hosts, ReferenceHelper.get(IChunkLoader.class,host));
-        *///?}
+        /*hosts = ArrayUtils.removeAllOccurrences(hosts,ReferenceHelper.get(IChunkLoader.class,host));
+        *///?} else {
+        hosts = ArrayUtils.removeAllOccurences(hosts, ReferenceHelper.get(IChunkLoader.class,host));
+        //?}
     }
 
     @Override

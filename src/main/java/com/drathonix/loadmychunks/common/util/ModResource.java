@@ -16,9 +16,9 @@ public class ModResource {
      */
     public static @NotNull ResourceLocation of(@NotNull String string){
         //? if <1.20.7
-        /*return new ResourceLocation(LoadMyChunks.MOD_ID,string);*/
+        return new ResourceLocation(LoadMyChunks.MOD_ID,string);
         //? if >1.20.6
-        return ResourceLocation.fromNamespaceAndPath(LoadMyChunks.MOD_ID,string);
+        /*return ResourceLocation.fromNamespaceAndPath(LoadMyChunks.MOD_ID,string);*/
     }
 
     /**
@@ -28,13 +28,13 @@ public class ModResource {
      */
     public static @Nullable ResourceLocation parse(@NotNull String string) {
         //? if <1.20.7 {
-        /*try {
+        try {
             return new ResourceLocation(string);
         } catch(Throwable t){
             return null;
         }
-        *///?} else {
-        return ResourceLocation.tryParse(string);
-        //?}
+        //?} else {
+        /*return ResourceLocation.tryParse(string);
+        *///?}
     }
 }

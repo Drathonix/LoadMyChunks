@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 //? if <1.19.5
-/*import net.minecraft.world.level.material.Material;*/
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -26,10 +26,10 @@ public class MultiversioningHelper {
      */
     public static @NotNull BlockBehaviour.Properties properties() {
         //? if <1.19.5 {
-        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
-        *///?} else if >1.19.4 {
-        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
-        //?}
+        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
+        //?} else if >1.19.4 {
+        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        *///?}
     }
 
     /**
@@ -38,10 +38,10 @@ public class MultiversioningHelper {
      */
     public static @NotNull BlockBehaviour.Properties properties(float strength, float blastResistance) {
         //? if <1.19.5 {
-        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
-        *///?} else if >1.19.4 {
-        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
-        //?}
+        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
+        //?} else if >1.19.4 {
+        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
+        *///?}
     }
 
     public static void serverLevel(BlockEntity blockEntity, Consumer<ServerLevel> cons) {
@@ -56,26 +56,26 @@ public class MultiversioningHelper {
 
     public static boolean isRemoved(Entity entity) {
         //? if >1.16.5 {
-        return entity.isRemoved();
-        //?} else {
-        /*return entity.removed;
-        *///?}
+        /*return entity.isRemoved();
+        *///?} else {
+        return entity.removed;
+        //?}
     }
 
     public static ChunkPos chunkPosOf(Entity entity) {
         //? if >1.16.5 {
-        return entity.chunkPosition();
-        //?} else {
-        /*return new ChunkPos(entity.xChunk, entity.zChunk);
-        *///?}
+        /*return entity.chunkPosition();
+        *///?} else {
+        return new ChunkPos(entity.xChunk, entity.zChunk);
+        //?}
     }
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
         //? if >1.19.4 {
-        Level l = arg.level();
-        //?} else {
-        /*Level l = arg.level;
-        *///?}
+        /*Level l = arg.level();
+        *///?} else {
+        Level l = arg.level;
+        //?}
         serverLevel(l, cons);
     }
 

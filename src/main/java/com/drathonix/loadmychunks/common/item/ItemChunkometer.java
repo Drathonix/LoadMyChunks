@@ -9,9 +9,9 @@ import com.drathonix.loadmychunks.common.util.Message;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 //? if <1.18.3 {
-/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-*///?}
+//?}
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

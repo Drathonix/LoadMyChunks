@@ -3,10 +3,10 @@ package com.drathonix.loadmychunks.common.item;
 import com.drathonix.loadmychunks.common.util.Message;
 
 //? if >1.19.3 {
-import net.minecraft.core.registries.BuiltInRegistries;
- //?} else {
-/*import net.minecraft.core.Registry;
-*///?}
+/*import net.minecraft.core.registries.BuiltInRegistries;
+ *///?} else {
+import net.minecraft.core.Registry;
+//?}
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,30 +25,30 @@ public class ItemHasTooltip extends Item {
     }
 
     //? if <=1.20.5 {
-    /*@Override
+    @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
         for (int i = 0; i < nLines; i++) {
             list.add(Message.translatable(getTooltipTranslationKey(i)));
         }
     }
-    *///?}
+    //?}
 
     //? if >1.20.5 {
-    @Override
+    /*@Override
     public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         for (int i = 0; i < nLines; i++) {
             list.add(Message.translatable(getTooltipTranslationKey(i)));
         }
     }
-    //?}
+    *///?}
 
     public String getTooltipTranslationKey(int k){
         //? if <=1.19.3 {
-        /*return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".") + "." + k;
-        *///?} else {
-        return "tooltip." + BuiltInRegistries.ITEM.getKey(this).toString().replace(":",".") + "." + k;
-        //?}
+        return "tooltip." + Registry.ITEM.getKey(this).toString().replace(":",".") + "." + k;
+        //?} else {
+        /*return "tooltip." + BuiltInRegistries.ITEM.getKey(this).toString().replace(":",".") + "." + k;
+        *///?}
     }
 }

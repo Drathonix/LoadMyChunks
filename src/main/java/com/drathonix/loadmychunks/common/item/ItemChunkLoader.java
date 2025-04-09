@@ -1,7 +1,7 @@
 package com.drathonix.loadmychunks.common.item;
 
 //? if <1.18.3
-/*import net.minecraft.network.chat.TranslatableComponent;*/
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 
 public class ItemChunkLoader extends BlockItemHasTooltip {
