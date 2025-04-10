@@ -46,10 +46,10 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     @Shadow public abstract IPeripheral getPeripheral(TurtleSide side);
 
     //? if >1.16.5 {
-    /^@Shadow public abstract Level getLevel();
-    ^///?} else {
-    @Shadow public abstract Level getWorld();
-    //?}
+    @Shadow public abstract Level getLevel();
+    //?} else {
+    /^@Shadow public abstract Level getWorld();
+    ^///?}
 
     @Shadow @NotNull
     public abstract BlockPos getPosition();
@@ -105,10 +105,10 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     public @NotNull TurtleChunkLoader lmc$getChunkLoader() {
         if (lmc$chunkLoader.get() == null) {
             //? if >1.16.5 {
-            /^MultiversioningHelper.serverLevel(getLevel(), sl-> {
-            ^///?} else {
-            MultiversioningHelper.serverLevel(getWorld(), sl-> {
-            //?}
+            MultiversioningHelper.serverLevel(getLevel(), sl-> {
+            //?} else {
+            /^MultiversioningHelper.serverLevel(getWorld(), sl-> {
+            ^///?}
                 BlockPos pos = getPosition();
                 lmc$chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent(
                         sl,
@@ -128,10 +128,10 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     public @NotNull ChunkDataModule lmc$getChunkDataModule() {
         if(lmc$cdm == null) {
             //? if >1.16.5 {
-            /^MultiversioningHelper.serverLevel(getLevel(), sl-> {
-            ^///?} else {
-            MultiversioningHelper.serverLevel(getWorld(), sl-> {
-            //?}
+            MultiversioningHelper.serverLevel(getLevel(), sl-> {
+            //?} else {
+            /^MultiversioningHelper.serverLevel(getWorld(), sl-> {
+            ^///?}
                 this.lmc$cdm = ChunkDataManager.getOrCreateChunkData(sl, getPosition());
             });
         }

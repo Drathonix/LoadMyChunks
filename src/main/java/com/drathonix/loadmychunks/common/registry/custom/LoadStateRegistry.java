@@ -6,8 +6,8 @@ import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.system.control.LoaderPower;
 import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
-/*import net.minecraft.core.Holder;
-*///?}
+import net.minecraft.core.Holder;
+//?}
 //? if >1.20.4 {
 /*import net.minecraft.core.RegistrationInfo;
 *///?}
@@ -44,12 +44,12 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         //? if >=1.19.4 {
         /*super(KEY, Lifecycle.stable(),true);
         *///?} else if >=1.18.2 {
-        /*super(KEY, Lifecycle.stable(),null);
-        *///?} else if >1.16.5 {
+        super(KEY, Lifecycle.stable(),null);
+        //?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
-        super(KEY, Lifecycle.stable());
-         //?}
+        /*super(KEY, Lifecycle.stable());
+         *///?}
     }
 
     private static ILoadState register(ResourceLocation id, ILoadState type){
@@ -107,8 +107,8 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         }
         ENTITY_TICKING = registerLoadState(ModResource.of("entity_ticking"), id->new ILoadState() {
             //? if >1.16.5 {
-            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
-            *///?}
+            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            //?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {
@@ -128,8 +128,8 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
 
         ENTITY_TICKING_PERMANENT = registerLoadState(ModResource.of("entity_ticking_permanent"), id->new ILoadState() {
             //? if >1.16.5 {
-            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
-            *///?}
+            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            //?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {

@@ -84,10 +84,10 @@ public interface ITurtleBrainMixin extends ITurtleAccess {
     }
 
     //? if <=1.16.5 {
-    @NotNull
+    /^@NotNull
     default Level getLevel() {
         return getWorld();
     }
-    //?}
+    ^///?}
 }
 *///?}

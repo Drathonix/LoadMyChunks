@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BEBase extends BlockEntity {
     //? if >1.16.5 {
-    /*public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+    public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
     @Override
@@ -20,8 +20,8 @@ public class BEBase extends BlockEntity {
         super.setLevel(level);
         validate(level);
     }
-    *///?} else {
-    public BEBase(BlockEntityType<?> blockEntityType) {
+    //?} else {
+    /*public BEBase(BlockEntityType<?> blockEntityType) {
         super(blockEntityType);
     }
     @Override
@@ -29,7 +29,7 @@ public class BEBase extends BlockEntity {
         super.setLevelAndPosition(level, blockPos);
         validate(level);
     }
-    //?}
+    *///?}
 
     //? if >1.20.5 {
     /*@Override
@@ -42,7 +42,7 @@ public class BEBase extends BlockEntity {
         this.read(arg);
     }
     *///?} else if >1.16.5 && <1.20.5 {
-    /*@Override
+    @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.write(compoundTag);
@@ -53,7 +53,7 @@ public class BEBase extends BlockEntity {
         super.saveAdditional(compoundTag);
         this.read(compoundTag);
     }
-    *///?} else if <=1.16.5 {
+    //?} else if <=1.16.5 {
     /*@Override
     public CompoundTag save(CompoundTag compoundTag) {
         super.save(compoundTag);

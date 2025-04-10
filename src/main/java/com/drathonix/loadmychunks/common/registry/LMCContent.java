@@ -11,15 +11,15 @@ import com.drathonix.loadmychunks.common.util.ModResource;
 import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.unified.BlockEntityTypeBuilder;
 //? if <=1.16.5 {
-import me.shedaniel.architectury.registry.CreativeTabs;
+/*import me.shedaniel.architectury.registry.CreativeTabs;
 import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.RegistrySupplier;
-//?}
+*///?}
 //? if >1.16.5 {
-/*import dev.architectury.registry.CreativeTabRegistry;
+import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-*///?}
+//?}
 //? if >1.19.5
 /*import net.minecraft.core.registries.Registries;*/
 import net.minecraft.network.chat.Component;
@@ -63,9 +63,9 @@ public class LMCContent {
 
     public static void init() {
         //? if <=1.18.1
-        creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if <1.19.3 && >1.18.1
-        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
+        creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         //? if >1.19.3 && <1.19.5
         /*creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());*/
         //? if >1.20.0 {

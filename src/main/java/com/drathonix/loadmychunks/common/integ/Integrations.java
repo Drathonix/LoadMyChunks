@@ -1,10 +1,10 @@
 package com.drathonix.loadmychunks.common.integ;
 
 //? if >1.16.5 {
-/*import dev.architectury.platform.Platform;
-*///?} else {
-import me.shedaniel.architectury.platform.Platform;
-//?}
+import dev.architectury.platform.Platform;
+//?} else {
+/*import me.shedaniel.architectury.platform.Platform;
+*///?}
 //? if fabric {
 import net.fabricmc.api.EnvType;
 //?}

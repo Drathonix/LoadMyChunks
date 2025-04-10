@@ -46,10 +46,10 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
     @Override
     protected @NotNull ServerLevel getLevel() {
         //? if >1.16.5 {
-        /^return (ServerLevel) turtle.getLevel();
-        ^///?} else {
-        return (ServerLevel) turtle.getWorld();
-        //?}
+        return (ServerLevel) turtle.getLevel();
+        //?} else {
+        /^return (ServerLevel) turtle.getWorld();
+        ^///?}
     }
 
     @Override

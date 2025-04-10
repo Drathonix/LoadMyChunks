@@ -8,6 +8,7 @@
     "MixinChunkAccess",
     "MixinChunkMap",
     "MixinDistanceManager",
+    "MixinEntitySection",
     "MixinLevel",
     "MixinLevelChunk",
     "MixinMinecraftServer",

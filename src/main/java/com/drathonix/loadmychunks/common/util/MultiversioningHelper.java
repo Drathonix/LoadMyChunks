@@ -56,18 +56,18 @@ public class MultiversioningHelper {
 
     public static boolean isRemoved(Entity entity) {
         //? if >1.16.5 {
-        /*return entity.isRemoved();
-        *///?} else {
-        return entity.removed;
-        //?}
+        return entity.isRemoved();
+        //?} else {
+        /*return entity.removed;
+        *///?}
     }
 
     public static ChunkPos chunkPosOf(Entity entity) {
         //? if >1.16.5 {
-        /*return entity.chunkPosition();
-        *///?} else {
-        return new ChunkPos(entity.xChunk, entity.zChunk);
-        //?}
+        return entity.chunkPosition();
+        //?} else {
+        /*return new ChunkPos(entity.xChunk, entity.zChunk);
+        *///?}
     }
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {

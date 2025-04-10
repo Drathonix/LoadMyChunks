@@ -29,12 +29,12 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
         //? if >=1.19.4 {
         /*super(KEY, Lifecycle.stable(),true);
         *///?} else if >=1.18.2 {
-        /*super(KEY, Lifecycle.stable(),null);
-         *///?} else if >1.16.5 {
+        super(KEY, Lifecycle.stable(),null);
+         //?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
-        super(KEY, Lifecycle.stable());
-         //?}
+        /*super(KEY, Lifecycle.stable());
+         *///?}
     }
 
     /**

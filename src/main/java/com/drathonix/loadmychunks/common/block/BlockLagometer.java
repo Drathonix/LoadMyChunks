@@ -42,20 +42,20 @@ public class BlockLagometer extends BaseEntityBlock {
     }
 
     //? if <=1.16.5 {
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockGetter blockGetter) {
         return new BlockEntityLagometer();
     }
-    //?}
+    *///?}
 
     //? if >1.16.5 {
-    /*@Nullable
+    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BlockEntityLagometer(blockPos,blockState);
     }
-    *///?}
+    //?}
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState blockState) {

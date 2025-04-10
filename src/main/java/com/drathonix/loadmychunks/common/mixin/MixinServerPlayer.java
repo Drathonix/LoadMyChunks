@@ -4,10 +4,10 @@ import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 //? if >1.16.5 {
-/*import dev.architectury.networking.NetworkManager;
-*///?} else {
-import me.shedaniel.architectury.networking.NetworkManager;
-//?}
+import dev.architectury.networking.NetworkManager;
+//?} else {
+/*import me.shedaniel.architectury.networking.NetworkManager;
+*///?}
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

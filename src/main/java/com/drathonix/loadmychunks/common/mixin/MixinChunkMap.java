@@ -36,8 +36,8 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
     @Shadow @Final private Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap;
 
     //? if >1.16.5 {
-    /*@Shadow abstract boolean anyPlayerCloseEnoughForSpawning(ChunkPos chunkPos);
-    *///?}
+    @Shadow abstract boolean anyPlayerCloseEnoughForSpawning(ChunkPos chunkPos);
+    //?}
 
     /**
      * method to capture the distance manager instance without using access transformers in 1.16.5 because I HATE them. I HATE THEM SO MUCH!
@@ -75,9 +75,9 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
     @Override
     public boolean lmc$playerDistCheck(ChunkPos pos) {
         //? if >1.16.5 {
-        /*return anyPlayerCloseEnoughForSpawning(pos);
-        *///?} else {
-        if (!lmc$distanceManager.lmc$hasPlayersNearby(pos.toLong())) {
+        return anyPlayerCloseEnoughForSpawning(pos);
+        //?} else {
+        /*if (!lmc$distanceManager.lmc$hasPlayersNearby(pos.toLong())) {
             return false;
         } else {
             for (ServerPlayer serverplayer : this.level.getServer().getPlayerList().getPlayers()) {
@@ -88,7 +88,7 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
 
             return false;
         }
-        //?}
+        *///?}
     }
 
     @Unique

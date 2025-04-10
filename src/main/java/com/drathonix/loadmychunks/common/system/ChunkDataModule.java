@@ -248,16 +248,16 @@ public class ChunkDataModule {
             }
             if(informable instanceof Entity){
                 //? if >1.16.5 {
-                /*if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
-                    iterator.remove();
-                }
-                *///?}
-                //? if <=1.16.5 {
-                Entity e = (Entity) informable;
-                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
                     iterator.remove();
                 }
                 //?}
+                //? if <=1.16.5 {
+                /*Entity e = (Entity) informable;
+                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                    iterator.remove();
+                }
+                *///?}
             }
         }
     }

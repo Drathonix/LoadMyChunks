@@ -2,16 +2,16 @@ package com.drathonix.loadmychunks.common.registry;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 //? if >1.16.5 {
-/*import dev.architectury.registry.registries.DeferredRegister;
-*///?}
+import dev.architectury.registry.registries.DeferredRegister;
+//?}
 //? if >1.19.3 {
 /*import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 *///?}
 //? if <=1.16.5 {
-import me.shedaniel.architectury.registry.DeferredRegister;
+/*import me.shedaniel.architectury.registry.DeferredRegister;
 import me.shedaniel.architectury.registry.Registries;
-//?}
+*///?}
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

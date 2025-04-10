@@ -75,12 +75,12 @@ public class ChunkDataManager {
     }
 
     //? if >1.16.5 {
-    /*public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
+    public static synchronized LevelChunkLoaderManager loadManager(ServerLevel level, CompoundTag tag){
         LevelChunkLoaderManager manager = getManager(level);
         manager.load(tag);
         return manager;
     }
-    *///?}
+    //?}
 
     public static @NotNull Map<String,List<IChunkLoader>> getChunkLoadersOf(@Nullable UUID owner) {
         if(owner == null){
@@ -162,11 +162,18 @@ public class ChunkDataManager {
         return getManager(level).getOrCreateData(pos);
     }
 
+    public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, BlockPos blockPos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
+        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,doAdd,predicate,supplier);
+    }
+    public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, ChunkPos chunkPos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
+        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,doAdd,predicate,supplier);
+    }
+
     public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,predicate,supplier);
+        return getManager(sl).computeChunkLoaderIfAbsent(blockPos,type,true,predicate,supplier);
     }
     public static <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ServerLevel sl, ChunkPos chunkPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,predicate,supplier);
+        return getManager(sl).computeChunkLoaderIfAbsent(chunkPos,type,true,predicate,supplier);
     }
 
     public static void clear() {
@@ -223,7 +230,7 @@ public class ChunkDataManager {
 
         public LevelChunkLoaderManager(@NotNull ServerLevel level){
             //? if <=1.16.5
-            super("loadmychunks_manager");
+            /*super("loadmychunks_manager");*/
             this.level=level;
             level.getServer().addTickable(this::tick);
         }
@@ -349,11 +356,11 @@ public class ChunkDataManager {
         public String getLevelName() {
             return ((ServerLevelData)level.getLevelData()).getLevelName();
         }
-        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
-            return computeChunkLoaderIfAbsent(new ChunkPos(blockPos),type,predicate,supplier);
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(BlockPos blockPos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
+            return computeChunkLoaderIfAbsent(new ChunkPos(blockPos),type,doAdd,predicate,supplier);
         }
         @SuppressWarnings("all")
-        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ChunkPos pos, Class<T> type, Predicate<T> predicate, Supplier<T> supplier) {
+        public synchronized  <T extends IChunkLoader> T computeChunkLoaderIfAbsent(ChunkPos pos, Class<T> type, boolean doAdd, Predicate<T> predicate, Supplier<T> supplier) {
             ChunkDataModule cdm = getOrCreateData(pos);
             for (IChunkLoader loader : cdm.getLoaders()) {
                 if(loader.getClass() == type){
@@ -363,7 +370,9 @@ public class ChunkDataManager {
                 }
             }
             T out = supplier.get();
-            addChunkLoader(out, pos);
+            if(doAdd) {
+                addChunkLoader(out, pos);
+            }
             return out;
         }
 

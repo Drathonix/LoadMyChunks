@@ -11,16 +11,16 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 //? if >=1.20.6
 /^import dan200.computercraft.api.upgrades.UpgradeType;^/
 //? if >1.16.5
-/^import dev.architectury.registry.registries.RegistrySupplier;^/
+import dev.architectury.registry.registries.RegistrySupplier;
 
 //? if >1.16.5 && <1.20.4
-/^import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;^/
+import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;
 //? if >1.16.5 && <1.20.6
-/^import dan200.computercraft.api.upgrades.UpgradeSerialiser;^/
+import dan200.computercraft.api.upgrades.UpgradeSerialiser;
 
 //? if <=1.16.5 {
-import me.shedaniel.architectury.registry.RegistrySupplier;
-//?}
+/^import me.shedaniel.architectury.registry.RegistrySupplier;
+^///?}
 
 //? if >=1.19.2 {
 /^import dan200.computercraft.client.turtle.TurtleUpgradeModellers;
@@ -34,10 +34,10 @@ public class CCTRegistryContent {
     ^///?} else if <1.20.6 && >1.20.1 {
     /^public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
     ^///?} else if <=1.20.1 && >1.16.5 {
-    /^public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
-    ^///?} else {
-    public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();
-    //?}
+    public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
+    //?} else {
+    /^public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();
+    ^///?}
 
     public static void registerClient() {
         //? if >1.18.2 {
