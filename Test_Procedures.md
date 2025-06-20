@@ -34,6 +34,14 @@ After each command, run /loadmychunks list (forced/overticked) to view.
 3. /loadmychunks unforceload - Unforces a chunk if it has been forced via command. Loaders will still work.
 4. /loadmychunks unforceload true - Permanently prevents a chunk from being forceloaded by loaders.
 
+### Test entity ticking
+1. Apply a lifeforce broadcaster to an existing chunk loader.
+2. Place a random tickable block (some crop)
+3. Teleport over 1000 blocks away. (Record current position before doing this)
+4. Set random tick speed to 1000. Wait ~5 seconds.
+5. Set RTS back to 3.
+6. Return to chunk loader. If crop has grown, this feature is working.
+
 ### CCT Tests
 Tests are executed on a turtle using this script:
 ```lua
@@ -56,24 +64,24 @@ end
 
 # 1.2.0 Test Table
 
-| Version \| Procedure | Boots | Placed Chunk Loader | Removed Chunk Loader | Placed & Extended Chunk Loader | Removed Extended Chunk Loader | Chunk Loader Item Consumption | Test forceload command | CCT: Repeat tasks 2,3 & 5 |
-|----------------------|-------|---------------------|----------------------|--------------------------------|-------------------------------|-------------------------------|------------------------|---------------------------|
-| 1.16.5-Forge         | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.16.5-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      | 2                         |
-| 1.18.2-Forge         | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.18.2-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      | 2                         |
-| 1.19.2-Forge         | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.19.2-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      | 2                         |
-| 1.19.4-Forge         | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.19.4-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.1-Forge         | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.1-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.4-Forge         | 1     |                     |                      |                                |                               |                               | 3                      | 2                         |
-| 1.20.4-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.4-Neoforge      | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.6-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.20.6-Neoforge      | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.21-Fabric          | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.21-Neoforge        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.21.1-Fabric        | 1     |                     |                      |                                |                               |                               | 3                      |                           |
-| 1.21.1-Neoforge      | 1     |                     |                      |                                |                               |                               | 3                      |                           |
+| Version \| Procedure | Boots | Placed Chunk Loader | Removed Chunk Loader | Placed & Extended Chunk Loader | Removed Extended Chunk Loader | Test Entity Ticking | Chunk Loader Item Consumption | Test forceload command | CCT: Repeat tasks 2,3 & 5 |
+|----------------------|-------|---------------------|----------------------|--------------------------------|-------------------------------|---------------------|-------------------------------|------------------------|---------------------------|
+| 1.16.5-Forge         | 1     | 1                   | 1                    |                                |                               |                     |                               | 3                      |                           |
+| 1.16.5-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      | 2                         |
+| 1.18.2-Forge         | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.18.2-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      | 2                         |
+| 1.19.2-Forge         | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.19.2-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      | 2                         |
+| 1.19.4-Forge         | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.19.4-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.1-Forge         | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.1-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.4-Forge         | 1     |                     |                      |                                |                               |                     |                               | 3                      | 2                         |
+| 1.20.4-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.4-Neoforge      | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.6-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.20.6-Neoforge      | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.21-Fabric          | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.21-Neoforge        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.21.1-Fabric        | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |
+| 1.21.1-Neoforge      | 1     |                     |                      |                                |                               |                     |                               | 3                      |                           |

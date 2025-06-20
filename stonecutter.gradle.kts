@@ -5,13 +5,13 @@ import java.nio.file.StandardCopyOption
 
 plugins {
     id("dev.kikugie.stonecutter")
-    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
     id("dev.kikugie.j52j") version "1.0" apply false // Enables asset processing by writing json5 files
     id("me.modmuss50.mod-publish-plugin") version "0.5.+" apply false // Publishes builds to hosting websites
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("net.minecraftforge.gradle") version "6.0.16" apply false
 }
-stonecutter active "1.18.2-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.1-fabric" /* [SC] DO NOT EDIT */
 
 abstract class SymlinkBuildsTask : DefaultTask() {
     @get:Input
