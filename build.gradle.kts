@@ -8,7 +8,7 @@ import java.util.function.Predicate
 // TODO acknowledge that you add plugins here.
 plugins {
     `maven-publish`
-    kotlin("jvm") version "1.9.22"
+    //kotlin("jvm") version "1.9.24"
     //id("fabric-loom") // Leaving this here if you want to swap loom.
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j") // Recommended by kiku if using swaps in json5.
@@ -161,7 +161,9 @@ class Env {
     val javaVer = if(atMost("1.16.5")) 8 else if(atMost("1.20.4")) 17 else 21
 
     val fabricLoaderVersion = versionProperty("deps.core.fabric.loader.version_range")
-    val forgeMavenVersion = versionProperty("deps.core.forge.version_range")
+    val forgeMavenVersion: VersionRange = versionProperty("deps.core.forge.version_range")
+    private val fgl: String = if(isForge) forgeMavenVersion.min.substring(forgeMavenVersion.min.lastIndexOf("-")) else ""
+    val forgeLanguageVersion = VersionRange(if(isForge) fgl.substring(0,fgl.indexOf(".")) else "","")
     val forgeVersion = VersionRange(extractForgeVer(forgeMavenVersion.min),extractForgeVer(forgeMavenVersion.max))
     val neoforgeVersion = versionProperty("deps.core.neoforge.version_range")
     // The modloader system is separate from the API in Neo
@@ -414,7 +416,7 @@ class SpecialMultiversionedConstants {
     private val mandatoryIndicator = if(env.isNeo) "required" else "mandatory"
     val mixinField = if(env.atMost("1.20.4") && env.isNeo) neoForgeMixinField() else if(env.isFabric) fabricMixinField() else ""
 
-    val forgelikeLoaderVer =  if(env.isForge) env.forgeVersion.asForgelike() else env.neoforgeLoaderVersion.asForgelike()
+    val forgelikeLoaderVer =  if(env.isForge) env.forgeLanguageVersion.asForgelike() else env.neoforgeLoaderVersion.asForgelike()
     val forgelikeAPIVer = if(env.isForge) env.forgeVersion.asForgelike() else env.neoforgeVersion.asForgelike()
     val dependenciesField = if(env.isFabric) fabricDependencyList() else forgelikeDependencyField()
     val excludes = excludes0()
@@ -528,7 +530,7 @@ loom {
     silentMojangMappingsLicense()
     if (env.isForge) forge {
         for (mixin in modMixins.getMixins(EnvType.FORGE)) {
-            mixinConfigs(
+            mixinConfig(
                 mixin
             )
         }
@@ -644,7 +646,8 @@ tasks.processResources {
         "loader_id" to env.loader,
         "license" to mod.license,
         "mixin_field" to dynamics.mixinField,
-        "dependencies_field" to dynamics.dependenciesField
+        "dependencies_field" to dynamics.dependenciesField,
+        "REFMAP_TEMPFIX" to ""
     )
     map.forEach{ (key, value) ->
         inputs.property(key,value)

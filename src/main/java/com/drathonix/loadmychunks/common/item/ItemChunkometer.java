@@ -8,19 +8,10 @@ import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 import com.drathonix.loadmychunks.common.util.Message;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
-//? if <1.18.3 {
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-//?}
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-//? if <1.21.2
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -31,84 +22,34 @@ public class ItemChunkometer extends ItemHasTooltip {
         super(properties,1);
     }
 
-    // if >1.21.1 {
-    /*@Override
-    public InteractionResult useOn(UseOnContext useOnContext) {
-        if(useOnContext.getLevel() instanceof ServerLevel sl && useOnContext.getPlayer() instanceof ServerPlayer player) {
-            ChunkPos pos = new ChunkPos(player.blockPosition());
-            ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
-            if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
-                MutableComponent response = Component.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withBold(true));
-                player.sendSystemMessage(response);
-                response = Component.empty().withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(false));
-                if (cdm.onCooldown()) {
-                    response.append(Component.translatable("loadmychunks.chunkinfo.line2.overticked"));
-                } else {
-                    if (cdm.getLoadState().shouldLoad()) {
-                        response.append(Component.translatable("loadmychunks.chunkinfo.line2.forced"));
-                    } else {
-                        response.append(Component.translatable("loadmychunks.chunkinfo.line2.notforced"));
-                    }
-                }
-                response.append("\n");
-                response.append(Component.translatable("loadmychunks.chunkinfo.line3", cdm.getTickTimer().getDuration())).append("\n");
-                StringBuilder csl = new StringBuilder();
-                Iterator<UUID> iterator = cdm.getPlayerOwners().iterator();
-                while (iterator.hasNext()) {
-                    UUID u = iterator.next();
-                    Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
-                    if (profile.isPresent()) {
-                        csl.append(profile.get().getName());
-                    } else {
-                        csl.append(u.toString());
-                    }
-                    if (iterator.hasNext()) {
-                        csl.append(", ");
-                    }
-                }
-                response.append(Component.translatable("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
-                if (cdm.onCooldown()) {
-                    response.append("\n").append(Component.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
-                }
-                player.sendSystemMessage(response);
-            }
-            else{
-                player.sendSystemMessage(Component.translatable("loadmychunks.chunkinfo.need_ownership").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-            }
-        }
-        return InteractionResult.SUCCESS;
-    }
-    *///}
-
-    //TODO: reenable if necessary
-    // if >1.18.2 && <1.21.2 {
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
-        if(level instanceof ServerLevel) {
-            ServerLevel sl = (ServerLevel) level;
+    protected InteractionResult useOnCtx(UseOnContext useOnContext) {
+        MultiversioningHelper.serverLevel(useOnContext.getLevel(),sl->{
+            ServerPlayer player = (ServerPlayer) useOnContext.getPlayer();
+            if(player == null){
+                return;
+            }
             ChunkPos pos = new ChunkPos(player.blockPosition());
             ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
             if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
                 MutableComponent response = Message.styled(Message.translatable("loadmychunks.chunkinfo.line1", pos.x, pos.z),ChatFormatting.WHITE,true,false);
-                Message.send((ServerPlayer) player,response);
+                Message.send(player,response);
                 response = Message.styled(Message.empty(),ChatFormatting.AQUA,false,false);
                 if (cdm.onCooldown()) {
-                    response.append(Message.translatable("loadmychunks.chunkinfo.line2.overticked"));
+                    response = Message.append(response,Message.translatable("loadmychunks.chunkinfo.line2.overticked"));
                 } else {
                     if (cdm.getLoadState().shouldLoad()) {
                         if(cdm.getLoadState().shouldForceEntities()) {
-                            response.append(Message.translatable("loadmychunks.chunkinfo.line2.forced.entity_ticking"));
-                        }
-                        else{
-                            response.append(Message.translatable("loadmychunks.chunkinfo.line2.forced"));
-
+                            response = Message.append(response,Message.translatable("loadmychunks.chunkinfo.line2.forced.entity_ticking"));
+                        } else {
+                            response = Message.append(response,Message.translatable("loadmychunks.chunkinfo.line2.forced"));
                         }
                     } else {
-                        response.append(Message.translatable("loadmychunks.chunkinfo.line2.notforced"));
+                        response = Message.append(response,Message.translatable("loadmychunks.chunkinfo.line2.notforced"));
                     }
                 }
-                response.append("\n");
-                response.append(Message.translatable("loadmychunks.chunkinfo.line3", cdm.getTickTimer().getDuration())).append("\n");
+                response = Message.append(response,"\n");
+                response = Message.append(response,Message.translatable("loadmychunks.chunkinfo.line3",cdm.getTickTimer().getDuration()));
                 StringBuilder csl = new StringBuilder();
                 Iterator<UUID> iterator = cdm.getPlayerOwners().iterator();
                 while (iterator.hasNext()) {
@@ -123,79 +64,21 @@ public class ItemChunkometer extends ItemHasTooltip {
                         csl.append(", ");
                     }
                 }
-                response.append(Message.translatable("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
-                if (cdm.onCooldown()) {
-                    response.append("\n").append(Message.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
+                if(!cdm.getLoaders().isEmpty()) {
+                    response = Message.append(response,"\n");
+                    response = Message.append(response, Message.translatable("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
+                    if (cdm.onCooldown()) {
+                        response = Message.append(response, "\n");
+                        response = Message.append(response, Message.translatable("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining() / 1000));
+                    }
                 }
-                Message.send((ServerPlayer)player,response);
+                Message.send(player,response);
             }
             else{
-                Message.send((ServerPlayer)player,Message.styled(Message.translatable("loadmychunks.chunkinfo.need_ownership"),ChatFormatting.RED,false,false));
+                Message.send(player,Message.styled(Message.translatable("loadmychunks.chunkinfo.need_ownership"),ChatFormatting.RED,false,false));
             }
-        }
-        return InteractionResultHolder.success(player.getItemInHand(interactionHand));
+        });
+        return InteractionResult.SUCCESS;
     }
-    //}
-
-    //TODO: Improve messaging abstraction
-    // if <1.18.3 {
-    /*@Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
-        if(level instanceof ServerLevel) {
-            ServerLevel sl = (ServerLevel) level;
-            ChunkPos pos = new ChunkPos(player.blockPosition());
-            ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(sl, pos);
-            if (!LMCConfig.lagometerNeedsChunkOwnership || player.hasPermissions(2) || cdm.containsOwnedLoader(player.getUUID())) {
-                MutableComponent response = new TranslatableComponent("loadmychunks.chunkinfo.line1", pos.x, pos.z).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withBold(true));
-                player.sendMessage(response,player.getUUID());
-                response = new TextComponent("").withStyle(Style.EMPTY.withColor(ChatFormatting.AQUA).withBold(false));
-                if (cdm.onCooldown()) {
-                    response.append(new TranslatableComponent("loadmychunks.chunkinfo.line2.overticked"));
-                } else {
-                    if (cdm.getLoadState().shouldLoad()) {
-                        response.append(new TranslatableComponent("loadmychunks.chunkinfo.line2.forced"));
-                    } else {
-                        response.append(new TranslatableComponent("loadmychunks.chunkinfo.line2.notforced"));
-                    }
-                }
-                response.append("\n");
-                response.append(new TranslatableComponent("loadmychunks.chunkinfo.line3", cdm.getTickTimer().getDuration())).append("\n");
-                StringBuilder csl = new StringBuilder();
-                Iterator<UUID> iterator = cdm.getPlayerOwners().iterator();
-                while (iterator.hasNext()) {
-                    UUID u = iterator.next();
-                    //? if <1.16.6 {
-                    /^GameProfile profile = sl.getServer().getProfileCache().get(u);
-                    if (profile != null) {
-                        csl.append(profile.getName());
-                    }
-                    ^///?}
-                    //? if >1.16.5 {
-                    Optional<GameProfile> profile = sl.getServer().getProfileCache().get(u);
-                    if (profile.isPresent()) {
-                        csl.append(profile.get().getName());
-                    }
-                    //?}
-                    else {
-                        csl.append(u.toString());
-                    }
-                    if (iterator.hasNext()) {
-                        csl.append(", ");
-                    }
-
-                }
-                response.append(new TranslatableComponent("loadmychunks.chunkinfo.line4", cdm.getLoaders().size(), csl.toString()));
-                if (cdm.onCooldown()) {
-                    response.append("\n").append(new TranslatableComponent("loadmychunks.chunkinfo.line5", cdm.getDisabledPeriod().getTimeRemaining()/1000));
-                }
-                player.sendMessage(response,player.getUUID());
-            }
-            else{
-                player.sendMessage(new TranslatableComponent("loadmychunks.chunkinfo.need_ownership").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),player.getUUID());
-            }
-        }
-        return InteractionResultHolder.success(player.getItemInHand(interactionHand));
-    }
-    *///}
 }
 

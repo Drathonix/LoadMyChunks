@@ -2,6 +2,7 @@ package com.drathonix.loadmychunks.common.config.regis;
 
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.vicious.persist.mappify.registry.Stringify;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,6 +21,6 @@ public class LoadStateRetriever extends RegistryRetriever<ILoadState> {
 
     @Override
     ILoadState retrieve() {
-        return LoadStateRegistry.INSTANCE.get(location);
+        return MultiversioningHelper.enforceValue(LoadStateRegistry.INSTANCE.get(location));
     }
 }

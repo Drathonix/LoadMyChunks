@@ -16,20 +16,20 @@ public class ItemChunkLoaderExtension extends ItemHasTooltip {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext useOnContext) {
-        if(useOnContext.getPlayer() instanceof ServerPlayer){
-            BlockPos pos = useOnContext.getClickedPos();
-            BlockEntity be = useOnContext.getLevel().getBlockEntity(pos);
-            Message.send((ServerPlayer)useOnContext.getPlayer(), IHasChunkloader.map(be,loader->{
+    public InteractionResult useOnCtx(UseOnContext ctx) {
+        if(ctx.getPlayer() instanceof ServerPlayer){
+            BlockPos pos = ctx.getClickedPos();
+            BlockEntity be = ctx.getLevel().getBlockEntity(pos);
+            Message.send((ServerPlayer)ctx.getPlayer(), IHasChunkloader.map(be,loader->{
                 if(loader.supportsExtensions()){
-                    boolean success = loader.tryExtendBy((ServerLevel) useOnContext.getLevel(),1);
+                    boolean success = loader.tryExtendBy((ServerLevel) ctx.getLevel(),1);
                     if(!success){
                         return Message.translatable("loadmychunks.chunk_loader_extension.max_extensions_reached");
                     }
                     else{
-                        ItemStack stack = useOnContext.getItemInHand();
+                        ItemStack stack = ctx.getItemInHand();
                         stack.shrink(1);
-                        useOnContext.getPlayer().setItemInHand(useOnContext.getHand(),stack);
+                        ctx.getPlayer().setItemInHand(ctx.getHand(),stack);
                         return Message.translatable("loadmychunks.chunk_loader_extension.extended_range",1, loader.getExtensionRange());
                     }
                 }
@@ -39,7 +39,7 @@ public class ItemChunkLoaderExtension extends ItemHasTooltip {
             }));
             return InteractionResult.FAIL;
         }
-        return super.useOn(useOnContext);
+        return super.useOnCtx(ctx);
     }
 
 }

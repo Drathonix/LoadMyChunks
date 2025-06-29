@@ -116,7 +116,11 @@ public abstract class MixinLevelChunk
                 loadMyChunks$loadDataModule.getTickTimer().startEntities();
             }
             lmc$entities.forEach(entity -> {
-                if (!MultiversioningHelper.isRemoved(entity)) {
+                if (!MultiversioningHelper.isRemoved(entity)
+                        //? if >=1.21.2 {
+                        /*&& !sl.tickRateManager().isEntityFrozen(entity)
+                        *///?}
+                ) {
                     if (mixin.lmc$shouldDiscardEntity(entity)) {
                         //? if >1.16.5 {
                         entity.discard();

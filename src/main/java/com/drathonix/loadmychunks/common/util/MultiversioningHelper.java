@@ -1,6 +1,15 @@
 package com.drathonix.loadmychunks.common.util;
 
+import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.mojang.authlib.GameProfile;
+//? if >1.16.5 {
+import net.minecraft.core.Holder;
+//?}
+//? if >1.21.3 {
+/*import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+*///?}
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -10,10 +19,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 //? if <1.19.5
-import net.minecraft.world.level.material.Material;
+/*import net.minecraft.world.level.material.Material;*/
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,11 +34,13 @@ public class MultiversioningHelper {
      * Creates a default properties object.
      * @return some properties.
      */
-    public static @NotNull BlockBehaviour.Properties properties() {
-        //? if <1.19.5 {
-        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
-        //?} else if >1.19.4 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+    public static @NotNull BlockBehaviour.Properties properties(String key) {
+        //? if >1.21.3 {
+        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().setId(ResourceKey.create(Registries.BLOCK,ModResource.of(key)));
+        *///?} else if >1.19.4 {
+        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        //?} else {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
         *///?}
     }
 
@@ -36,12 +48,8 @@ public class MultiversioningHelper {
      * Creates a default properties object with the strength and blastResistance provided.
      * @return some properties.
      */
-    public static @NotNull BlockBehaviour.Properties properties(float strength, float blastResistance) {
-        //? if <1.19.5 {
-        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(strength, blastResistance);
-        //?} else if >1.19.4 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(strength, blastResistance);
-        *///?}
+    public static @NotNull BlockBehaviour.Properties properties(String key, float strength, float blastResistance) {
+        return properties(key).strength(strength,blastResistance);
     }
 
     public static void serverLevel(BlockEntity blockEntity, Consumer<ServerLevel> cons) {
@@ -72,10 +80,10 @@ public class MultiversioningHelper {
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
         //? if >1.19.4 {
-        /*Level l = arg.level();
-        *///?} else {
-        Level l = arg.level;
-        //?}
+        Level l = arg.level();
+        //?} else {
+        /*Level l = arg.level;
+        *///?}
         serverLevel(l, cons);
     }
 
@@ -101,5 +109,19 @@ public class MultiversioningHelper {
             return func.apply((ServerLevel) l);
         }
         return null;
+    }
+
+    public static <T> T enforceValue(Object obj) {
+        if(obj instanceof Optional<?>){
+            return enforceValue((T)((Optional<?>) obj).get());
+        }
+        //? if >1.16.5 {
+        else if(obj instanceof Holder.Reference<?>){
+            return (T)((Holder.Reference<?>) obj).value();
+        }
+        //?}
+        else{
+            return (T)obj;
+        }
     }
 }

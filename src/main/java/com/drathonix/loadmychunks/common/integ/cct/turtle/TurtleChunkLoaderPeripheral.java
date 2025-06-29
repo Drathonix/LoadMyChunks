@@ -1,5 +1,5 @@
 //? if cc-tweaked {
-/*package com.drathonix.loadmychunks.common.integ.cct.turtle;
+package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.peripheral.AbstractChunkLoaderPeripheral;
@@ -48,8 +48,8 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
         //? if >1.16.5 {
         return (ServerLevel) turtle.getLevel();
         //?} else {
-        /^return (ServerLevel) turtle.getWorld();
-        ^///?}
+        /*return (ServerLevel) turtle.getWorld();
+        *///?}
     }
 
     @Override
@@ -75,4 +75,4 @@ public class TurtleChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
         return equals((Object)other);
     }
 }
-*///?}
+//?}

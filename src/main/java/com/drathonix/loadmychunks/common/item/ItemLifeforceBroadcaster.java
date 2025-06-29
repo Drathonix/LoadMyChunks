@@ -16,7 +16,7 @@ public class ItemLifeforceBroadcaster extends ItemHasTooltip {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext useOnContext) {
+    public InteractionResult useOnCtx(UseOnContext useOnContext) {
         if(useOnContext.getPlayer() instanceof ServerPlayer){
             BlockPos pos = useOnContext.getClickedPos();
             BlockEntity be = useOnContext.getLevel().getBlockEntity(pos);
@@ -39,7 +39,7 @@ public class ItemLifeforceBroadcaster extends ItemHasTooltip {
             }));
             return InteractionResult.FAIL;
         }
-        return super.useOn(useOnContext);
+        return super.useOnCtx(useOnContext);
     }
 
 }

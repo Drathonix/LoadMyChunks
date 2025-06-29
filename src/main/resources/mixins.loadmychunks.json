@@ -12,6 +12,7 @@
     "MixinLevel",
     "MixinLevelChunk",
     "MixinMinecraftServer",
+    "MixinServerChunkCache",
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinTickingTracker",
@@ -22,8 +23,9 @@
     "cct.MixinTurtleMoveCommand"
   ],
   "client": [
+    "client.MixinRangeSelectItemModelProperties"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  }${REFMAP_TEMPFIX}
 }

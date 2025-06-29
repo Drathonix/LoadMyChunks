@@ -7,7 +7,7 @@ import java.util.function.Predicate
 // TODO acknowledge that you add plugins here.
 plugins {
     `maven-publish`
-    kotlin("jvm") version "1.9.22"
+    //kotlin("jvm") version "1.9.24"
     //id("fabric-loom") // Leaving this here if you want to swap loom.
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j") // Recommended by kiku if using swaps in json5.
@@ -160,6 +160,7 @@ class Env {
 
     val forgeMavenVersion = versionProperty("deps.core.forge.version_range")
     val forgeVersion = VersionRange(extractForgeVer(forgeMavenVersion.min),extractForgeVer(forgeMavenVersion.max))
+    val forgeLanguageVersion = VersionRange("36","")
 
     fun atLeast(version: String) = stonecutter.compare(mcVersion.min, version) >= 0
     fun atMost(version: String) = stonecutter.compare(mcVersion.min, version) <= 0
@@ -383,7 +384,7 @@ val dependencies = ModDependencies()
  */
 class SpecialMultiversionedConstants {
     private val mandatoryIndicator = "mandatory"
-    val forgelikeLoaderVer =  env.forgeVersion.asForgelike()
+    val forgelikeLoaderVer =  env.forgeLanguageVersion.asForgelike()
     val forgelikeAPIVer = env.forgeVersion.asForgelike()
     val dependenciesField = forgelikeDependencyField()
     val excludes = excludes0()
@@ -391,6 +392,8 @@ class SpecialMultiversionedConstants {
         val out = arrayListOf<String>()
         out.add("fabric.mod.json")
         out.add("META-INF/neoforge.mods.toml")
+        out.add("mixins.fabric.loadmychunks.json")
+        out.add("mixins.neoforge.loadmychunks.json")
         return out
     }
     private fun fabricDependencyList() : String{
@@ -457,9 +460,9 @@ stonecutter.const("neoforge",env.isNeo)
 
 loom {
     silentMojangMappingsLicense()
-    if (env.isForge) forge {
+    forge {
         for (mixin in modMixins.getMixins(EnvType.FORGE)) {
-            mixinConfigs(
+            mixinConfig(
                 mixin
             )
         }
@@ -575,7 +578,8 @@ tasks.processResources {
         "forgelike_api_ver" to dynamics.forgelikeAPIVer,
         "loader_id" to env.loader,
         "license" to mod.license,
-        "dependencies_field" to dynamics.dependenciesField
+        "dependencies_field" to dynamics.dependenciesField,
+        "REFMAP_TEMPFIX" to ",\n    \"refmap\": \"loadmychunks-1.16.5-forge-refmap.json\""
     )
     map.forEach{ (key, value) ->
         inputs.property(key,value)

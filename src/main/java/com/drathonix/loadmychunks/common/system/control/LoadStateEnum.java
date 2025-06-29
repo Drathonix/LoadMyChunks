@@ -43,7 +43,7 @@ public enum LoadStateEnum implements ILoadState {
 
     //? if >1.16.5 {
     /**
-     * Holder instance is being stored for use in datapacks (although I have no idea why you'd want to use datapacks for these.
+     * Holder instance is being stored for use in datapacks (although I have no idea why you'd want to use datapacks for these).
      */
     public final Holder.Reference<ILoadState> holder;
     LoadStateEnum(){

@@ -9,21 +9,21 @@ import com.drathonix.loadmychunks.common.util.BoolArgument;
 import com.drathonix.loadmychunks.common.util.ModResource;
 import net.fabricmc.api.ModInitializer;
 //? if >1.18.2 {
-/*import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-*///?}
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+//?}
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
 public class LMCFabricInit implements ModInitializer {
     public static void init() {
         //? if >1.18.2 {
-        /*ArgumentTypeRegistry.registerArgumentType(ModResource.of("lmcenum"), BoolArgument.class,new BoolArgument.Info());
-        *///?}
+        ArgumentTypeRegistry.registerArgumentType(ModResource.of("lmcenum"), BoolArgument.class,new BoolArgument.Info());
+        //?}
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
         //? if cc-tweaked {
-        /*Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
-        *///?}
+        Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
+        //?}
         LoadMyChunks.modMode(()->{
             FabricRegistryBuilder.from(LoaderTypeRegistry.INSTANCE).buildAndRegister();
             FabricRegistryBuilder.from(LoadStateRegistry.INSTANCE).buildAndRegister();

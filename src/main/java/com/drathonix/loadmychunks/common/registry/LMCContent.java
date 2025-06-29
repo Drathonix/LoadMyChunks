@@ -21,7 +21,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 //? if >1.19.5
-/*import net.minecraft.core.registries.Registries;*/
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -30,7 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 //? if <1.19.5
-import net.minecraft.world.level.material.Material;
+/*import net.minecraft.world.level.material.Material;*/
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,8 @@ import java.util.function.Supplier;
 
 public class LMCContent {
     //? if >1.19.4 {
-    /*private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
-    *///?}
+    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
+    //?}
     public static final Map<String,RegistrySupplier<Block>> chunkLoaderBlockMap = new HashMap<>();
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
     public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
@@ -65,37 +65,37 @@ public class LMCContent {
         //? if <=1.18.1
         /*creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if <1.19.3 && >1.18.1
-        creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if >1.19.3 && <1.19.5
         /*creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());*/
         //? if >1.20.0 {
-        /*creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         TABS.register();
-        *///?}
+        //?}
         LMCRegistrar.BLOCK.queue(reg->{
             chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
-                return new BlockChunkLoader(MultiversioningHelper.properties(50f,1200f));
+                return new BlockChunkLoader(MultiversioningHelper.properties("chunk_loader",50f,1200f));
             });
             String[] colors = new String[]{"white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black"};
             for (String color : colors) {
                 RegistrySupplier<Block> block = registerCLBlockWithItem(reg,color + "_chunk_loader", () -> {
-                    return new BlockChunkLoader(MultiversioningHelper.properties(50f,1200f));
+                    return new BlockChunkLoader(MultiversioningHelper.properties(color + "_chunk_loader",50f,1200f));
                 });
                 chunkLoaderBlockMap.put(color, block);
             }
             chunkLoaderBlockMap.put("",chunkLoaderBlock);
             lagometerBlock = registerBlockWithItem(reg,"lagometer",()->{
-                return new BlockLagometer(MultiversioningHelper.properties(3.5f,4f));
+                return new BlockLagometer(MultiversioningHelper.properties("lagometer",3.5f,4f));
             }, ItemLagometer::new);
         });
         LMCRegistrar.ITEM.queue(reg->{
-            itemTickometer = reg.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties(),1));
-            itemPlayerSpoofer = reg.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties(),3));
-            itemLocatingCore = reg.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties(),2));
-            itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties(),3));
-            itemChunkometer = reg.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties()));
-            itemExtension = reg.register(ModResource.of("chunk_loader_extension"), () -> new ItemChunkLoaderExtension(new LMCProperties()));
-            itemLifeforceBroadcaster = reg.register(ModResource.of("lifeforce_broadcaster"), () -> new ItemLifeforceBroadcaster(new LMCProperties()));
+            itemTickometer = reg.register(ModResource.of("tickometer"), () -> new ItemHasTooltip(new LMCProperties("tickometer"),1));
+            itemPlayerSpoofer = reg.register(ModResource.of("player_spoofer"), () -> new ItemHasTooltip(new LMCProperties("player_spoofer"),3));
+            itemLocatingCore = reg.register(ModResource.of("dimensional_locator"), () -> new ItemHasTooltip(new LMCProperties("dimensional_locator"),2));
+            itemDiamondWire = reg.register(ModResource.of("diamond_wire"), () -> new ItemHasTooltip(new LMCProperties("diamond_wire"),3));
+            itemChunkometer = reg.register(ModResource.of("chunkometer"), () -> new ItemChunkometer(new LMCProperties("chunkometer")));
+            itemExtension = reg.register(ModResource.of("chunk_loader_extension"), () -> new ItemChunkLoaderExtension(new LMCProperties("chunk_loader_extension")));
+            itemLifeforceBroadcaster = reg.register(ModResource.of("lifeforce_broadcaster"), () -> new ItemLifeforceBroadcaster(new LMCProperties("lifeforce_broadcaster")));
         });
 
         LMCRegistrar.BLOCK_ENTITY_TYPE.queue(reg->{
@@ -114,7 +114,7 @@ public class LMCContent {
         ResourceLocation resource = ModResource.of(name);
         RegistrySupplier<T> block = reg.register(resource, supplier);
         LMCRegistrar.ITEM.queue(ireg->{
-            ireg.register(resource, () -> new BlockItem(block.get(), new LMCProperties()));
+            ireg.register(resource, () -> new BlockItem(block.get(), new LMCProperties(name)));
         });
         return block;
     }
@@ -123,7 +123,7 @@ public class LMCContent {
         ResourceLocation resource = ModResource.of(name);
         RegistrySupplier<T> block = reg.register(resource, supplier);
         LMCRegistrar.ITEM.queue(ireg->{
-            ireg.register(resource, () -> function.apply(block.get(),new LMCProperties()));
+            ireg.register(resource, () -> function.apply(block.get(),new LMCProperties(name)));
         });
         return block;
     }
@@ -132,7 +132,7 @@ public class LMCContent {
         ResourceLocation resource = ModResource.of(name);
         RegistrySupplier<T> block = reg.register(resource, supplier);
         LMCRegistrar.ITEM.queue(ireg->{
-            ireg.register(resource, () -> new ItemChunkLoader(block.get(), new LMCProperties()));
+            ireg.register(resource, () -> new ItemChunkLoader(block.get(), new LMCProperties(name)));
         });
         return block;
     }
