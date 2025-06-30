@@ -1,5 +1,5 @@
 //? if neoforge && cc-tweaked {
-/*package com.drathonix.loadmychunks.neoforge.integ;
+package com.drathonix.loadmychunks.neoforge.integ;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
@@ -15,7 +15,7 @@ import com.drathonix.loadmychunks.neoforge.LMCNeoInit;
 import dan200.computercraft.api.peripheral.PeripheralCapability;
 import dan200.computercraft.api.turtle.ITurtleUpgrade;
 //? if <1.20.6
-/^import dan200.computercraft.api.upgrades.UpgradeSerialiser;^/
+/*import dan200.computercraft.api.upgrades.UpgradeSerialiser;*/
 //? if >=1.20.6
 import dan200.computercraft.api.upgrades.UpgradeType;
 import dan200.computercraft.shared.ModRegistry;
@@ -38,7 +38,7 @@ public class CCTNeo {
     }
     //?}
     //? if <1.20.6 {
-    /^public static DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.serialiserRegistryKey(),LoadMyChunks.MOD_ID);
+    /*public static DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.serialiserRegistryKey(),LoadMyChunks.MOD_ID);
     static {
         LMCContent.chunkLoaderBlockMap.forEach((color,supplier)->{
             TurtleChunkLoaderUpgrade tclu = new TurtleChunkLoaderUpgrade(supplier);
@@ -46,7 +46,7 @@ public class CCTNeo {
             CCTRegistryContent.registrySuppliers.add(reg);
         });
     }
-    ^///?}
+    *///?}
 
     public static void register(IEventBus bus) {
         turtleUpgrades.register(bus);
@@ -83,4 +83,4 @@ public class CCTNeo {
         CCTRegistryContent.registerClient();
     }
 }
-*///?}
+//?}

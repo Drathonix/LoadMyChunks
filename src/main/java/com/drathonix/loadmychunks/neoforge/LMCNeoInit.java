@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.drathonix.loadmychunks.neoforge;
+package com.drathonix.loadmychunks.neoforge;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -37,7 +37,7 @@ public class LMCNeoInit {
         args.register("lmcbool",()->info);
         args.register(meb);
         //? if cc-tweaked
-        /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);^/
+        Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);
     }
 
     @SubscribeEvent
@@ -57,4 +57,4 @@ public class LMCNeoInit {
         });
     }
 }
-*///?}
+//?}

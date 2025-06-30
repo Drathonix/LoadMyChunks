@@ -2,7 +2,9 @@ package com.drathonix.loadmychunks.common.system;
 
 
 import com.drathonix.loadmychunks.common.bridge.IInformable;
+import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
+import com.drathonix.loadmychunks.common.mixin.MixinLevelChunk;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 import com.drathonix.loadmychunks.common.system.control.*;
@@ -37,6 +39,7 @@ public class ChunkDataModule {
     //private ILevelChunkMixin chunk;
     private final Set<IInformable> recipients = new HashSet<>();
     private long nextGameTimeCheckTick = -1;
+    private volatile ILevelChunkMixin mixin;
 
     public ChunkDataModule(ChunkPos position){
         this.position=position;
@@ -346,5 +349,13 @@ public class ChunkDataModule {
 
     public void consumeLoadState(Consumer<ILoadState> consumer){
         consumer.accept(loadState);
+    }
+
+    public void setChunk(ILevelChunkMixin mixin) {
+        this.mixin = mixin;
+    }
+
+    public ILevelChunkMixin getChunk() {
+        return mixin;
     }
 }

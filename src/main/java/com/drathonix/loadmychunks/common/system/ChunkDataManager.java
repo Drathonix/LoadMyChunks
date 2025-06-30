@@ -1,8 +1,8 @@
 package com.drathonix.loadmychunks.common.system;
 
 
+import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
-import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.loaders.IChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.IOwnable;
@@ -10,8 +10,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-//? if >1.18.2
+//? if >1.20.5 {
 import net.minecraft.core.HolderLookup;
+//?}
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -202,7 +204,22 @@ public class ChunkDataManager {
         getManager(level).requestUpdate(chunkPos);
     }
 
+
+    public static void waitForChunkInit(ServerLevel sl, ChunkPos chunkPos, Consumer<ChunkDataModule> consumer) {
+        getManager(sl).WAITING_FOR_INIT.computeIfAbsent(chunkPos.toLong(),l->new ArrayList<>()).add(consumer);
+    }
+
+    public static ChunkDataModule bindChunk(ServerLevel sl, long l, ILevelChunkMixin mixin) {
+        ChunkDataModule cdm = getOrCreateChunkData(sl,l);
+        cdm.setChunk(mixin);
+        for (Consumer<ChunkDataModule> cons : getManager(sl).WAITING_FOR_INIT.remove(l)) {
+            cons.accept(cdm);
+        }
+        return cdm;
+    }
+
     public static class LevelChunkLoaderManager extends SavedData{
+        protected final Long2ObjectLinkedOpenHashMap<List<Consumer<ChunkDataModule>>> WAITING_FOR_INIT = new Long2ObjectLinkedOpenHashMap<>();
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
         private final Map<UUID, LongOpenHashSet> forcedChunksByUUID = new HashMap<>();

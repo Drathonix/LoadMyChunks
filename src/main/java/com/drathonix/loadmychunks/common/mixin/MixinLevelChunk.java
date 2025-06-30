@@ -51,14 +51,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 //? if forge {
 /*import net.minecraftforge.entity.PartEntity;
 *///?}
 //? if neoforge {
-/*import net.neoforged.neoforge.entity.PartEntity;
-*///?}
+import net.neoforged.neoforge.entity.PartEntity;
+//?}
 
 @Mixin(LevelChunk.class)
 
@@ -143,8 +142,8 @@ public abstract class MixinLevelChunk
                             profilerfiller.push("tick");
                             // Neoforge/forge specific
                             //? if neoforge || forge {
-                            /*if(!(entity instanceof PartEntity))
-                                *///?}
+                            if(!(entity instanceof PartEntity))
+                                //?}
                                 sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                             profilerfiller.pop();
@@ -175,7 +174,7 @@ public abstract class MixinLevelChunk
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V",at = @At("RETURN"))
     public void setup(Level arg, ChunkPos arg2, UpgradeData arg3, LevelChunkTicks arg4, LevelChunkTicks arg5, long l, LevelChunkSection[] args, LevelChunk.PostLoadProcessor arg6, BlendingData arg7, CallbackInfo ci){
         if(level instanceof ServerLevel sl) {
-            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData(sl,chunkPos);
+            this.loadMyChunks$loadDataModule = ChunkDataManager.bindChunk(sl,loadMyChunks$posAsLong(),this);
         }
     }
 

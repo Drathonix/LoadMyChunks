@@ -10,7 +10,7 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "0.5.+" apply false // Publishes builds to hosting websites
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
-stonecutter active "1.20.6-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.20.6-neoforge" /* [SC] DO NOT EDIT */
 
 abstract class SymlinkBuildsTask : DefaultTask() {
     @get:Input

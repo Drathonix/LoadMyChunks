@@ -12,7 +12,6 @@
     "MixinLevel",
     "MixinLevelChunk",
     "MixinMinecraftServer",
-    "MixinServerChunkCache",
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinTickingTracker",

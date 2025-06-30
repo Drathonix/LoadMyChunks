@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.drathonix.loadmychunks.neoforge;
+package com.drathonix.loadmychunks.neoforge;
 
 import com.drathonix.loadmychunks.client.LoadMyChunksClient;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 //? if <1.20.6
-/^@Mod.EventBusSubscriber(modid= LoadMyChunks.MOD_ID,bus= Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)^/
+/*@Mod.EventBusSubscriber(modid= LoadMyChunks.MOD_ID,bus= Mod.EventBusSubscriber.Bus.MOD,value= Dist.CLIENT)*/
 //? if >=1.20.6
 @EventBusSubscriber(modid=LoadMyChunks.MOD_ID, bus= EventBusSubscriber.Bus.MOD, value= Dist.CLIENT)
 public class LMCNeoforgeClient {
@@ -24,7 +24,7 @@ public class LMCNeoforgeClient {
         }
         public static void clientInit() {
             //? if cc-tweaked
-            /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);^/
+            Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
         }
 }
-*///?}
+//?}

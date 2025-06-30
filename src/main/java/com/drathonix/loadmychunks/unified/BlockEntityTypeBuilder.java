@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 //? if fabric {
-//? >1.16.5 {
+/*//? >1.16.5 {
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 //?}
 
@@ -46,7 +46,7 @@ public class BlockEntityTypeBuilder {
         return build(factory,blockArr);
     }
     //?} else {
-    /*public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
+    /^public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
         return build(factory,blocks.toArray(new Block[0]));
     }
 
@@ -71,9 +71,9 @@ public class BlockEntityTypeBuilder {
         }
         return build(factory,blockArr);
     }
-    *///?}
+    ^///?}
 }
-//?} elif forge {
+*///?} elif forge {
 /*public class BlockEntityTypeBuilder {
     //? if >1.16.5 {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
@@ -130,7 +130,7 @@ public class BlockEntityTypeBuilder {
     ^///?}
 }
 *///?} elif neoforge {
-/*public class BlockEntityTypeBuilder {
+public class BlockEntityTypeBuilder {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
         return build(factory, blocks.toArray(new Block[0]));
     }
@@ -138,8 +138,8 @@ public class BlockEntityTypeBuilder {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Block... blocks) {
         return new BlockEntityType<>(factory, Set.of(blocks)
                 //? if <1.21.2 {
-                /^, null
-                ^///?}
+                , null
+                //?}
         );
     }
 
@@ -161,4 +161,4 @@ public class BlockEntityTypeBuilder {
         return build(factory,blockArr);
     }
 }
-*///?}
+//?}
