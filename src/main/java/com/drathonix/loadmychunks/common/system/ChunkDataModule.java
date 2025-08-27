@@ -311,7 +311,7 @@ public class ChunkDataModule {
     }
 
     public boolean shouldPersist(){
-        return loadState.permanent() || !loaders.isEmpty();
+        return (defaultLoadState != LoadStateEnum.DISABLED) || loadState.permanent() || !loaders.isEmpty();
     }
 
     @SuppressWarnings("all")
