@@ -17,9 +17,9 @@ import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleCommandResult;
 import dan200.computercraft.api.turtle.TurtleSide;
 //? if <=1.19.2 {
-/*import dan200.computercraft.shared.TurtlePermissions;
+import dan200.computercraft.shared.TurtlePermissions;
 import dan200.computercraft.ComputerCraft;
-*///?}
+//?}
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
 import dan200.computercraft.shared.turtle.core.TurtleMoveCommand;
 import dan200.computercraft.shared.turtle.core.TurtlePlayer;
@@ -37,14 +37,14 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @SuppressWarnings("all")
 @Mixin(value = TurtleMoveCommand.class
 //? if forge && <=1.20.1
-/*, remap=false*/
+, remap=false
 )
 public class MixinTurtleMoveCommand {
 
     //? if <=1.19.2 {
-    /*@Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
+    @Redirect(method = "execute",at = @At(value = "INVOKE", target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z")
             //? if forge && <=1.16.5
-            /^,remap = true^/
+            /*,remap = true*/
     )
     public boolean checkCanTP(ITurtleAccess turtle, Level oldWorld, BlockPos newPosition){
         boolean stable = oldWorld.isLoaded(newPosition);
@@ -56,8 +56,8 @@ public class MixinTurtleMoveCommand {
         }
         return false;
     }
-    *///?} else {
-    @Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    //?} else {
+    /*@Inject(method = "execute",at = @At(value = "INVOKE",target = "Ldan200/computercraft/api/turtle/ITurtleAccess;teleportTo(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z"),locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void changeLogic(ITurtleAccess turtle, CallbackInfoReturnable<TurtleCommandResult> cir, Direction direction, ServerLevel oldWorld, BlockPos oldPosition, BlockPos newPosition) {
         boolean stable = oldWorld.isLoaded(newPosition);
         if(turtle instanceof ITurtleBrainMixin){
@@ -69,7 +69,7 @@ public class MixinTurtleMoveCommand {
             cir.setReturnValue(TurtleCommandResult.failure("Cannot enter unloaded area"));
         }
     }
-    //?}
+    *///?}
 
     /**
      * @author Drathonix
@@ -78,10 +78,10 @@ public class MixinTurtleMoveCommand {
     @Overwrite
     private static TurtleCommandResult canEnter(TurtlePlayer turtlePlayer,
                                                 //? if >1.19.2 {
-                                                ServerLevel world,
-                                                //?} else {
-                                                /*Level world,
-                                                *///?}
+                                                /*ServerLevel world,
+                                                *///?} else {
+                                                Level world,
+                                                //?}
                                                 BlockPos position) {
         if (world.isOutsideBuildHeight(position)) {
             return TurtleCommandResult.failure(position.getY() < 0 ? "Too low to move" : "Too high to move");
@@ -90,10 +90,10 @@ public class MixinTurtleMoveCommand {
 
         // Check spawn protection
         //? if <=1.19.2 {
-        /*if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {
-        *///?} else {
-        if (turtlePlayer.isBlockProtected(world, position)) {
-        //?}
+        if( ComputerCraft.turtlesObeyBlockProtection && !TurtlePermissions.isBlockEnterable( world, position, turtlePlayer )) {
+        //?} else {
+        /*if (turtlePlayer.isBlockProtected(world, position)) {
+        *///?}
             return TurtleCommandResult.failure("Cannot enter protected area");
         }
 

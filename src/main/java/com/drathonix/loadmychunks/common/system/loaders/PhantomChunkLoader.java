@@ -25,7 +25,7 @@ public abstract class PhantomChunkLoader implements IChunkLoader{
 
     @Override
     public void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException {
-        chunkPos = new ChunkPos(tag.getLong("chunkpos"));
+        chunkPos = new ChunkPos(tag.getLong("l"));
     }
 
     @Override

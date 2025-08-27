@@ -1,10 +1,11 @@
 package com.drathonix.loadmychunks.common.system;
 
 
+import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
 import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
+import com.drathonix.loadmychunks.common.bridge.IServerLevelMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
-import com.drathonix.loadmychunks.common.mixin.MixinLevelChunk;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry;
 import com.drathonix.loadmychunks.common.system.control.*;
@@ -13,14 +14,26 @@ import com.drathonix.loadmychunks.common.system.loaders.IChunkLoader;
 import com.drathonix.loadmychunks.common.system.loaders.IOwnable;
 import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
 import com.drathonix.loadmychunks.common.util.ModResource;
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
+import com.drathonix.loadmychunks.common.util.ProtectedEntityTickList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+//? if forge {
+import net.minecraftforge.entity.PartEntity;
+//?}
+//? if neoforge {
+/*import net.neoforged.neoforge.entity.PartEntity;
+*///?}
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ChunkDataModule {
+    private final ProtectedEntityTickList entities = new ProtectedEntityTickList();
     private final CombinedTimings chunkTickTimer = new CombinedTimings();
     private Period gracePeriod;
     private Period disabledPeriod;
@@ -39,14 +53,13 @@ public class ChunkDataModule {
     //private ILevelChunkMixin chunk;
     private final Set<IInformable> recipients = new HashSet<>();
     private long nextGameTimeCheckTick = -1;
-    private volatile ILevelChunkMixin mixin;
 
     public ChunkDataModule(ChunkPos position){
         this.position=position;
     }
 
     public ChunkDataModule(long position){
-        this.position=new ChunkPos(position);
+        this(new ChunkPos(position));
     }
 
     public void load(CompoundTag tag, ServerLevel level){
@@ -71,6 +84,11 @@ public class ChunkDataModule {
                     try {
                         loaderInst.load(ct, level);
                         addLoader(level,loaderInst);
+                        try {
+                            loaderInst.postLoad(level);
+                        } catch (DoNotAddException ignored){
+                            removeLoader(level,loaderInst);
+                        }
                         //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
                     } catch (DoNotAddException ignored){}
                 });
@@ -129,6 +147,7 @@ public class ChunkDataModule {
      * @return whether the chunk's loadstate has changed.
      */
     public boolean removeLoader(ServerLevel level, @NotNull IChunkLoader loader){
+        new Exception().printStackTrace();
         if(loader.hasExtensions()){
             loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
         }
@@ -351,11 +370,59 @@ public class ChunkDataModule {
         consumer.accept(loadState);
     }
 
-    public void setChunk(ILevelChunkMixin mixin) {
-        this.mixin = mixin;
+    public void tickEntities(ServerLevel sl, ProfilerFiller profilerfiller){
+        boolean applyTimings = shouldApplyTimings();
+        boolean useTimings = applyTimings || shouldUseTimings();
+        IServerLevelMixin mixin = (IServerLevelMixin) sl;
+        if(useTimings){
+            getTickTimer().startEntities();
+        }
+        entities.forEach(entity -> {
+            if (!MultiversioningHelper.isRemoved(entity)
+                //? if >=1.21.2 {
+                /*&& !sl.tickRateManager().isEntityFrozen(entity)
+                 *///?}
+            ) {
+                if (mixin.lmc$shouldDiscardEntity(entity)) {
+                    //? if >1.16.5 {
+                    entity.discard();
+                    //?} else {
+                    /*entity.remove();
+                     *///?}
+                } else {
+                    profilerfiller.push("checkDespawn");
+                    entity.checkDespawn();
+                    profilerfiller.pop();
+                    if (((IChunkMapMixin)sl.getChunkSource().chunkMap).lmc$inEntityTickingRange(MultiversioningHelper.chunkPosOf(entity).toLong())) {
+                        Entity vehicle = entity.getVehicle();
+                        if (vehicle != null) {
+                            if (!MultiversioningHelper.isRemoved(vehicle) && vehicle.hasPassenger(entity)) {
+                                return; // this continues the forEach for anyone confused.
+                            }
+                            entity.stopRiding();
+                        }
+                        // Anything here will not be a passenger.
+                        profilerfiller.push("tick");
+                        // Neoforge/forge specific
+                        //? if neoforge || forge {
+                        if(!(entity instanceof PartEntity))
+                            //?}
+                            sl.guardEntityTick(sl::tickNonPassenger, entity);
+
+                        profilerfiller.pop();
+                    }
+                }
+            }
+        });
+        if(useTimings){
+            getTickTimer().endEntities();
+        }
     }
 
-    public ILevelChunkMixin getChunk() {
-        return mixin;
+    public void lmc$removeEntity(Entity entity){
+        entities.remove(entity);
+    }
+    public void lmc$addEntity(Entity entity){
+        entities.add(entity);
     }
 }

@@ -33,6 +33,15 @@ public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoa
         return getNumberOfHosts() <= 0;
     }
 
+    default boolean isHosted(){
+        return getNumberOfHosts() > 0;
+    }
+
+    @Override
+    default boolean shouldPersist() {
+        return isHosted();
+    }
+
     /**
      * Accepts only AtomicReference of IChunkLoader and IChunkLoaders
      */
@@ -61,7 +70,7 @@ public interface IExtensionChunkLoader<T extends IChunkLoader> extends IChunkLoa
 
     @Override
     default ILoadState getActiveState() {
-        if(!isUnhosted()){
+        if(isHosted()){
             ILoadState state = LoadStateRegistry.DISABLED;
             for (int i = 0; i < getNumberOfHosts(); i++) {
                 state = getHost(i).getActiveState().getSuperiorLoadState(state);

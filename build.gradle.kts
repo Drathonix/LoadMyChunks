@@ -607,6 +607,7 @@ abstract class ProcessResourcesExtension : ProcessResources() {
         "/data/loadmychunks/loot_table",
         "/data/loadmychunks/recipe",
         "/data/loadmychunks/tags/item",
+        "/data/loadmychunks/computercraft/turtle_upgrade"
     )
     override fun copy() {
         super.copy()

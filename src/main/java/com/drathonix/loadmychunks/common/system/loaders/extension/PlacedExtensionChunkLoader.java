@@ -1,6 +1,7 @@
 package com.drathonix.loadmychunks.common.system.loaders.extension;
 
 import com.drathonix.loadmychunks.common.config.LMCConfig;
+import com.drathonix.loadmychunks.common.registry.LoaderTypeKeys;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.LongTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +75,11 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
     }
 
     @Override
+    public ResourceLocation getTypeId() {
+        return LoaderTypeKeys.PLACED_EXTENSION_LOADER;
+    }
+
+    @Override
     public ILoadState getActiveState() {
         if(hasExceededChunkLimit() || (LMCConfig.cost.enabled && activityEnd == -1)){
             return LoadStateRegistry.DISABLED;
@@ -87,6 +94,6 @@ public class PlacedExtensionChunkLoader extends ExtensionChunkLoader<PlacedChunk
 
     @Override
     public boolean shouldConsumeItems() {
-        return !isUnhosted() && super.shouldConsumeItems();
+        return isHosted() && super.shouldConsumeItems();
     }
 }

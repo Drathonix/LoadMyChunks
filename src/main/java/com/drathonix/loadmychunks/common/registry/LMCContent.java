@@ -21,7 +21,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 //?}
 //? if >1.19.5
-import net.minecraft.core.registries.Registries;
+/*import net.minecraft.core.registries.Registries;*/
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -30,7 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 //? if <1.19.5
-/*import net.minecraft.world.level.material.Material;*/
+import net.minecraft.world.level.material.Material;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,8 @@ import java.util.function.Supplier;
 
 public class LMCContent {
     //? if >1.19.4 {
-    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
-    //?}
+    /*private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(LoadMyChunks.MOD_ID, Registries.CREATIVE_MODE_TAB);
+    *///?}
     public static final Map<String,RegistrySupplier<Block>> chunkLoaderBlockMap = new HashMap<>();
     public static RegistrySupplier<BlockEntityType<BlockEntityChunkLoader>> chunkLoaderBlockEntity;
     public static RegistrySupplier<BlockEntityType<BlockEntityLagometer>> lagometerBlockEntity;
@@ -65,13 +65,13 @@ public class LMCContent {
         //? if <=1.18.1
         /*creativeTab = new FakeRegistrySupplier<>(CreativeTabs.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
         //? if <1.19.3 && >1.18.1
-        /*creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));*/
+        creativeTab = new FakeRegistrySupplier<>(CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         //? if >1.19.3 && <1.19.5
         /*creativeTab = CreativeTabRegistry.create(ModResource.of("creative_tab"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance());*/
         //? if >1.20.0 {
-        creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
+        /*creativeTab = TABS.register(ModResource.of("creative_tab"),()-> CreativeTabRegistry.create(Component.translatable("loadmychunks.creativetab.title"),()->LMCRegistrar.ITEM.get(ModResource.of("chunk_loader")).getDefaultInstance()));
         TABS.register();
-        //?}
+        *///?}
         LMCRegistrar.BLOCK.queue(reg->{
             chunkLoaderBlock = registerCLBlockWithItem(reg,"chunk_loader", () -> {
                 return new BlockChunkLoader(MultiversioningHelper.properties("chunk_loader",50f,1200f));

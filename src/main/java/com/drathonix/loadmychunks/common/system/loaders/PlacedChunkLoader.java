@@ -11,6 +11,7 @@ import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChun
 import com.drathonix.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -29,18 +30,23 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     protected ILoadState loadState = defaultState;
     protected long activityEnd = -1;
 
-    public PlacedChunkLoader(){}
+    public PlacedChunkLoader(){
+        new Exception("reload").printStackTrace();
+    }
 
     public PlacedChunkLoader(BlockPos pos){
         this.position = pos;
+        new Exception("pos").printStackTrace();
     }
     public PlacedChunkLoader(BlockPos pos, long activityEnd){
         this.position = pos;
         this.activityEnd=activityEnd;
+        new Exception("activity").printStackTrace();
     }
     public PlacedChunkLoader(BlockPos pos, @Nullable UUID owner){
         this.position = pos;
         this.owner = owner;
+        new Exception("owner").printStackTrace();
     }
 
     @Override
@@ -60,12 +66,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException {
-        if(tag.contains("pos")) {
-            position = BlockPos.of(tag.getLong("pos"));
-            if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
-                throw new DoNotAddException();
-            }
-        }
+        position = BlockPos.of(tag.getLong("pos"));
         if(tag.contains("owner")){
             owner = tag.getUUID("owner");
         }
@@ -75,9 +76,14 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
         defaultState = LoadStateRegistry.fromCompound("default",tag,LoadStateRegistry.TICKING);
         loadState = LoadStateRegistry.fromCompound("state",tag,defaultState);
         if(tag.contains("extensions")){
-            extensionRange = tag.getInt("extensions");
-            extensions = new ExtensionChunkLoaders(level,this);
-            extensions.recompute(PlacedExtensionChunkLoader.class,extensionRange,this::createExtension);
+            extend(level,tag.getInt("extensions"));
+        }
+    }
+
+    @Override
+    public void postLoad(ServerLevel level) throws DoNotAddException {
+        if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
+            throw new DoNotAddException();
         }
     }
 
@@ -88,6 +94,7 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public void setExtensionsMap(ExtensionChunkLoaders extensions) {
+        new Exception("FUCK").printStackTrace();
         this.extensions=extensions;
     }
 

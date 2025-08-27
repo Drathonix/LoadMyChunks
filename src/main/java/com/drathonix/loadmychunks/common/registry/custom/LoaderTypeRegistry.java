@@ -12,8 +12,8 @@ import net.minecraft.core.Holder;
 //?}
 import net.minecraft.core.MappedRegistry;
 //? if >1.20.4 {
-import net.minecraft.core.RegistrationInfo;
-//?}
+/*import net.minecraft.core.RegistrationInfo;
+*///?}
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -30,10 +30,10 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
 
     private LoaderTypeRegistry() {
         //? if >=1.19.4 {
-        super(KEY, Lifecycle.stable(),true);
-        //?} else if >=1.18.2 {
-        /*super(KEY, Lifecycle.stable(),t-> Holder.Reference.createIntrusive(INSTANCE,t));
-         *///?} else if >1.16.5 {
+        /*super(KEY, Lifecycle.stable(),true);
+        *///?} else if >=1.18.2 {
+        super(KEY, Lifecycle.stable(),t-> Holder.Reference.createIntrusive(INSTANCE,t));
+         //?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
         /*super(KEY, Lifecycle.stable());
@@ -49,10 +49,10 @@ public class LoaderTypeRegistry extends MappedRegistry<LoaderType<?>> {
      */
     public static <T extends IChunkLoader> LoaderType<T> register(ResourceLocation id, LoaderType<T> type){
         //? if >1.20.4 {
-        INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
-        //?} else {
-        /*INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
-        *///?}
+        /*INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        *///?} else {
+        INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
+        //?}
         return type;
     }
 }

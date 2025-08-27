@@ -21,10 +21,10 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.TurtleSide;
 import dan200.computercraft.shared.computer.core.ServerComputer;
 //? if >=1.19.4 {
-import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
-//?} else {
-/*import dan200.computercraft.shared.turtle.blocks.TileTurtle;
-*///?}
+/*import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
+*///?} else {
+import dan200.computercraft.shared.turtle.blocks.TileTurtle;
+//?}
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -88,10 +88,10 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
 
     @Inject(method="setOwner",at = @At("RETURN"))
     //? if >1.19.2 {
-    public void lmc$postMove(TurtleBlockEntity owner, CallbackInfo ci) {
-    //?} else {
-    /*public void lmc$postMove(TileTurtle owner, CallbackInfo ci) {
-    *///?}
+    /*public void lmc$postMove(TurtleBlockEntity owner, CallbackInfo ci) {
+    *///?} else {
+    public void lmc$postMove(TileTurtle owner, CallbackInfo ci) {
+    //?}
         MultiversioningHelper.serverLevel(owner,sl->{
             BlockPos newPosition = getPosition();
             this.lmc$chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent(sl,newPosition,TurtleChunkLoader.class,lmc$shouldChunkLoad(),loader->loader.getPosition().equals(newPosition),()-> new TurtleChunkLoader(newPosition,this)));

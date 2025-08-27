@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 
 /**
  * Copy of the vanilla entity tick list implementation added POST 1.16.5.
+ *
  * @author Jack Andersen
  * @since 1.2.0
  */
@@ -43,6 +44,11 @@ public class ProtectedEntityTickList {
         this.active.remove(entity.getId());
     }
 
+    public void clear(){
+        this.ensureActiveIsNotIterated();
+        this.active.clear();
+    }
+
     public boolean contains(Entity entity) {
         return this.active.containsKey(entity.getId());
     }
@@ -61,5 +67,16 @@ public class ProtectedEntityTickList {
                 this.iterated = null;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ProtectedEntityTickList [active=");
+        forEach(e->{
+            builder.append(e.getUUID()).append(", ");
+        });
+        builder.append("]");
+        return builder.toString();
     }
 }

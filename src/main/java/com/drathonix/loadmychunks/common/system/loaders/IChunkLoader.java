@@ -182,6 +182,14 @@ public interface IChunkLoader extends IChunkPositioned {
     void load(@NotNull CompoundTag tag, ServerLevel level) throws DoNotAddException;
 
     /**
+     * Executed after the chunk loader has had its NBT loaded and added to the chunk loader manager.
+     * @param level the level where loading has occurred.
+     * @throws DoNotAddException if the chunk loader is invalid and should not be added to the {@link ChunkDataModule}
+     * @since 1.2.0
+     */
+    default void postLoad(ServerLevel level) throws DoNotAddException {}
+
+    /**
      * Gets the id of this chunk loader for reference in {@link com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry}
      * @return the registry id.
      */

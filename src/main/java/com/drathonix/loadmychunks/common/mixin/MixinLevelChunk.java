@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import java.util.function.Consumer;
 
 //? if >1.16.5 {
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
@@ -52,13 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-//? if forge {
-/*import net.minecraftforge.entity.PartEntity;
-*///?}
-//? if neoforge {
-import net.neoforged.neoforge.entity.PartEntity;
-//?}
-
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk
@@ -69,22 +63,16 @@ public abstract class MixinLevelChunk
     @Shadow @Final Level level;
 
 
-    @Unique
-    private final ProtectedEntityTickList lmc$entities = new ProtectedEntityTickList();
-
-    @Override
-    public void lmc$addEntity(Entity entity) {
-        lmc$entities.add(entity);
-    }
-
-    @Override
-    public void lmc$removeEntity(Entity entity) {
-        lmc$entities.remove(entity);
-    }
-
     @Override
     public ChunkDataModule loadMyChunks$getDataModule() {
         return loadMyChunks$loadDataModule;
+    }
+
+    public ChunkDataModule loadMyChunks$getAndCache(){
+        if(this.loadMyChunks$loadDataModule == null) {
+            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData((ServerLevel) level, loadMyChunks$posAsLong());
+        }
+        return this.loadMyChunks$loadDataModule;
     }
 
     @Override
@@ -95,11 +83,15 @@ public abstract class MixinLevelChunk
     //? if <1.18.2 {
     /*@Inject(method = "addEntity",at = @At("TAIL"))
     public void onAdd(Entity entity, CallbackInfo ci){
-        lmc$addEntity(entity);
+        if(level instanceof ServerLevel){
+            loadMyChunks$getAndCache().lmc$addEntity(entity);
+        }
     }
     @Inject(method = "removeEntity(Lnet/minecraft/world/entity/Entity;I)V",at = @At("TAIL"))
     public void onRemove(Entity entity, int i, CallbackInfo ci){
-        lmc$removeEntity(entity);
+        if(level instanceof ServerLevel){
+            loadMyChunks$getAndCache().lmc$removeEntity(entity);
+        }
     }
     *///?}
 
@@ -107,53 +99,7 @@ public abstract class MixinLevelChunk
     @Override
     public void loadMyChunks$tickEntities(ProfilerFiller profilerfiller) {
         if(level instanceof ServerLevel) {
-            boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings();
-            boolean useTimings = applyTimings || loadMyChunks$loadDataModule.shouldUseTimings();
-            ServerLevel sl = (ServerLevel) level;
-            IServerLevelMixin mixin = (IServerLevelMixin) sl;
-            if(useTimings){
-                loadMyChunks$loadDataModule.getTickTimer().startEntities();
-            }
-            lmc$entities.forEach(entity -> {
-                if (!MultiversioningHelper.isRemoved(entity)
-                        //? if >=1.21.2 {
-                        /*&& !sl.tickRateManager().isEntityFrozen(entity)
-                        *///?}
-                ) {
-                    if (mixin.lmc$shouldDiscardEntity(entity)) {
-                        //? if >1.16.5 {
-                        entity.discard();
-                        //?} else {
-                        /*entity.remove();
-                        *///?}
-                    } else {
-                        profilerfiller.push("checkDespawn");
-                        entity.checkDespawn();
-                        profilerfiller.pop();
-                        if (((IChunkMapMixin)sl.getChunkSource().chunkMap).lmc$inEntityTickingRange(MultiversioningHelper.chunkPosOf(entity).toLong())) {
-                            Entity vehicle = entity.getVehicle();
-                            if (vehicle != null) {
-                                if (!MultiversioningHelper.isRemoved(vehicle) && vehicle.hasPassenger(entity)) {
-                                    return; // this continues the forEach for anyone confused.
-                                }
-                                entity.stopRiding();
-                            }
-                            // Anything here will not be a passenger.
-                            profilerfiller.push("tick");
-                            // Neoforge/forge specific
-                            //? if neoforge || forge {
-                            if(!(entity instanceof PartEntity))
-                                //?}
-                                sl.guardEntityTick(sl::tickNonPassenger, entity);
-
-                            profilerfiller.pop();
-                        }
-                    }
-                }
-            });
-            if(useTimings){
-                loadMyChunks$loadDataModule.getTickTimer().endEntities();
-            }
+            loadMyChunks$loadDataModule.tickEntities((ServerLevel) level,profilerfiller);
         }
     }
 
@@ -174,7 +120,7 @@ public abstract class MixinLevelChunk
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V",at = @At("RETURN"))
     public void setup(Level arg, ChunkPos arg2, UpgradeData arg3, LevelChunkTicks arg4, LevelChunkTicks arg5, long l, LevelChunkSection[] args, LevelChunk.PostLoadProcessor arg6, BlendingData arg7, CallbackInfo ci){
         if(level instanceof ServerLevel sl) {
-            this.loadMyChunks$loadDataModule = ChunkDataManager.bindChunk(sl,loadMyChunks$posAsLong(),this);
+            loadMyChunks$getAndCache();
         }
     }
 

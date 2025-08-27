@@ -11,8 +11,8 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 //? if >1.20.5 {
-import net.minecraft.core.HolderLookup;
-//?}
+/*import net.minecraft.core.HolderLookup;
+*///?}
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -204,20 +204,6 @@ public class ChunkDataManager {
         getManager(level).requestUpdate(chunkPos);
     }
 
-
-    public static void waitForChunkInit(ServerLevel sl, ChunkPos chunkPos, Consumer<ChunkDataModule> consumer) {
-        getManager(sl).WAITING_FOR_INIT.computeIfAbsent(chunkPos.toLong(),l->new ArrayList<>()).add(consumer);
-    }
-
-    public static ChunkDataModule bindChunk(ServerLevel sl, long l, ILevelChunkMixin mixin) {
-        ChunkDataModule cdm = getOrCreateChunkData(sl,l);
-        cdm.setChunk(mixin);
-        for (Consumer<ChunkDataModule> cons : getManager(sl).WAITING_FOR_INIT.remove(l)) {
-            cons.accept(cdm);
-        }
-        return cdm;
-    }
-
     public static class LevelChunkLoaderManager extends SavedData{
         protected final Long2ObjectLinkedOpenHashMap<List<Consumer<ChunkDataModule>>> WAITING_FOR_INIT = new Long2ObjectLinkedOpenHashMap<>();
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
@@ -312,7 +298,7 @@ public class ChunkDataManager {
         }
 
         //? if <=1.20.5
-        /*@Override*/
+        @Override
         public synchronized @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
             data.forEach((k,v)->{
                 if(v.shouldPersist()) {
@@ -407,10 +393,10 @@ public class ChunkDataManager {
         }
 
         //? if >1.20.5 {
-        @Override
+        /*@Override
         public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
             return save(compoundTag);
         }
-        //?}
+        *///?}
     }
 }

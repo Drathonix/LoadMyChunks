@@ -20,8 +20,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
 //? if >=1.20.1 {
-import net.minecraft.world.RandomSequences;
-//?}
+/*import net.minecraft.world.RandomSequences;
+*///?}
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
@@ -136,12 +136,12 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
 
     //? if >1.20.5 {
-    @Inject(method = "<init>",at = @At("RETURN"))
+    /*@Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey<Level> resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List<CustomSpawner> list, boolean bl2, @Nullable RandomSequences randomSequences, CallbackInfo ci){
         SavedData.Factory<ChunkDataManager.LevelChunkLoaderManager> factory = new SavedData.Factory<>(()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),(tag,other)->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag), DataFixTypes.LEVEL);
         getDataStorage().computeIfAbsent(factory,"loadmychunks_manager");
     }
-    //?}
+    *///?}
 
     //? if >1.20.3 && <=1.20.5 {
     /*@Inject(method = "<init>",at = @At("RETURN"))
@@ -171,11 +171,11 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     *///?}
 
     //? if >1.18.1 && <1.18.3 {
-    /*@Inject(method = "<init>", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, Holder holder, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci) {
         getDataStorage().computeIfAbsent((tag) -> ChunkDataManager.loadManager(ServerLevel.class.cast(this), tag), () -> ChunkDataManager.getManager(ServerLevel.class.cast(this)), "loadmychunks_manager");
     }
-    *///?}
+    //?}
 
     //? if >1.16.5 && <=1.18.1 {
     /*@Inject(method = "<init>",at = @At("RETURN"))

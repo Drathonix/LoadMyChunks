@@ -2,9 +2,9 @@ package com.drathonix.loadmychunks.common.config.regis;
 
 import com.vicious.persist.annotations.Save;
 //? if <1.19.3
-/*import net.minecraft.core.Registry;*/
+import net.minecraft.core.Registry;
 //? if >1.19.2
-import net.minecraft.core.registries.BuiltInRegistries;
+/*import net.minecraft.core.registries.BuiltInRegistries;*/
 import net.minecraft.world.item.ItemStack;
 
 public class ItemStackRetriever {
@@ -17,9 +17,9 @@ public class ItemStackRetriever {
 
     public ItemStackRetriever(ItemStack stack) {
         //? if >1.19.2
-        this.item = new ItemRetriever(BuiltInRegistries.ITEM.getKey(stack.getItem()));
+        /*this.item = new ItemRetriever(BuiltInRegistries.ITEM.getKey(stack.getItem()));*/
         //? if <1.19.3
-        /*this.item = new ItemRetriever(Registry.ITEM.getKey(stack.getItem()));*/
+        this.item = new ItemRetriever(Registry.ITEM.getKey(stack.getItem()));
         this.size=stack.getCount();
     }
 

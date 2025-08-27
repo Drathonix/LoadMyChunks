@@ -18,8 +18,5 @@ public interface ILevelChunkMixin {
     void loadMyChunks$tickEntities(ProfilerFiller profilerFiller);
     ChunkDataModule loadMyChunks$getDataModule();
 
-    void lmc$removeEntity(Entity entity);
-    void lmc$addEntity(Entity entity);
-
     long loadMyChunks$posAsLong();
 }

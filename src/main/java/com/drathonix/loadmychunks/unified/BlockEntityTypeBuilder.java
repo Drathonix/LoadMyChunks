@@ -74,7 +74,7 @@ public class BlockEntityTypeBuilder {
     ^///?}
 }
 *///?} elif forge {
-/*public class BlockEntityTypeBuilder {
+public class BlockEntityTypeBuilder {
     //? if >1.16.5 {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
         return BlockEntityType.Builder.of(factory,blocks.toArray(new Block[0])).build(null);
@@ -102,7 +102,7 @@ public class BlockEntityTypeBuilder {
         return BlockEntityType.Builder.of(factory,blockArr).build(null);
     }
     //?} else {
-    /^public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
+    /*public static <T extends BlockEntity> BlockEntityType<T> build(Supplier<T> factory, Collection<Block> blocks){
         return BlockEntityType.Builder.of(factory,blocks.toArray(new Block[0])).build(null);
     }
 
@@ -127,10 +127,10 @@ public class BlockEntityTypeBuilder {
         }
         return BlockEntityType.Builder.of(factory,blockArr).build(null);
     }
-    ^///?}
+    *///?}
 }
-*///?} elif neoforge {
-public class BlockEntityTypeBuilder {
+//?} elif neoforge {
+/*public class BlockEntityTypeBuilder {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Collection<Block> blocks){
         return build(factory, blocks.toArray(new Block[0]));
     }
@@ -161,4 +161,4 @@ public class BlockEntityTypeBuilder {
         return build(factory,blockArr);
     }
 }
-//?}
+*///?}
