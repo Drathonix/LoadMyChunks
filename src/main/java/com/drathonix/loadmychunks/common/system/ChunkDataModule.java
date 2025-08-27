@@ -147,7 +147,6 @@ public class ChunkDataModule {
      * @return whether the chunk's loadstate has changed.
      */
     public boolean removeLoader(ServerLevel level, @NotNull IChunkLoader loader){
-        new Exception().printStackTrace();
         if(loader.hasExtensions()){
             loader.getExtensionChunkLoaders().recompute(loader.getExtensionClass(),-1, null);
         }

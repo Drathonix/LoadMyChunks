@@ -31,22 +31,18 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     protected long activityEnd = -1;
 
     public PlacedChunkLoader(){
-        new Exception("reload").printStackTrace();
     }
 
     public PlacedChunkLoader(BlockPos pos){
         this.position = pos;
-        new Exception("pos").printStackTrace();
     }
     public PlacedChunkLoader(BlockPos pos, long activityEnd){
         this.position = pos;
         this.activityEnd=activityEnd;
-        new Exception("activity").printStackTrace();
     }
     public PlacedChunkLoader(BlockPos pos, @Nullable UUID owner){
         this.position = pos;
         this.owner = owner;
-        new Exception("owner").printStackTrace();
     }
 
     @Override
@@ -94,7 +90,6 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public void setExtensionsMap(ExtensionChunkLoaders extensions) {
-        new Exception("FUCK").printStackTrace();
         this.extensions=extensions;
     }
 
