@@ -3,14 +3,19 @@ package com.drathonix.loadmychunks.common.util;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.mojang.authlib.GameProfile;
 //? if >1.16.5 {
+import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 //?}
 //? if >1.21.3 {
 /*import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 *///?}
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -22,6 +27,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 //? if <1.19.5
 import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;

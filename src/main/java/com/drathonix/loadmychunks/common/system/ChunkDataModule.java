@@ -28,8 +28,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 //? if forge {
-import net.minecraftforge.entity.PartEntity;
-//?}
+/*import net.minecraftforge.entity.PartEntity;
+*///?}
 //? if neoforge {
 /*import net.neoforged.neoforge.entity.PartEntity;
 *///?}
@@ -404,8 +404,8 @@ public class ChunkDataModule {
                         profilerfiller.push("tick");
                         // Neoforge/forge specific
                         //? if neoforge || forge {
-                        if(!(entity instanceof PartEntity))
-                            //?}
+                        /*if(!(entity instanceof PartEntity))
+                            *///?}
                             sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                         profilerfiller.pop();

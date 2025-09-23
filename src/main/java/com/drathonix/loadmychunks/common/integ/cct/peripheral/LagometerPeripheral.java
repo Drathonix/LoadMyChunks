@@ -1,5 +1,5 @@
 //? if cc-tweaked {
-package com.drathonix.loadmychunks.common.integ.cct.peripheral;
+/*package com.drathonix.loadmychunks.common.integ.cct.peripheral;
 
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
@@ -56,4 +56,4 @@ public class LagometerPeripheral extends AbstractLagometerPeripheral {
         return pos;
     }
 }
-//?}
+*///?}

@@ -49,6 +49,10 @@ public enum LoadStateEnum implements ILoadState {
     LoadStateEnum(){
         this.holder=LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
     }
+    @Override
+    public Holder.Reference<ILoadState> getIntrusiveHolder() {
+        return holder;
+    }
     //?}
 
     @Nullable

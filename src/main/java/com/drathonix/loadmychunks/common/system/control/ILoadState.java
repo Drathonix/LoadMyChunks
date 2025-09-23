@@ -3,6 +3,7 @@ package com.drathonix.loadmychunks.common.system.control;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -84,4 +85,8 @@ public interface ILoadState {
     default void putCompound(String key, CompoundTag tag) {
         tag.putInt(key, id());
     }
+
+    //? if >1.16.5 {
+    Holder.Reference<ILoadState> getIntrusiveHolder();
+    //?}
 }

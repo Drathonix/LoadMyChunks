@@ -44,7 +44,7 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         //? if >=1.19.4 {
         /*super(KEY, Lifecycle.stable(),true);
         *///?} else if >=1.18.2 {
-        super(KEY, Lifecycle.stable(),t->Holder.Reference.createIntrusive(INSTANCE,t));
+        super(KEY, Lifecycle.stable(), ILoadState::getIntrusiveHolder);
         //?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
@@ -108,6 +108,10 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         ENTITY_TICKING = registerLoadState(ModResource.of("entity_ticking"), id->new ILoadState() {
             //? if >1.16.5 {
             private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            @Override
+            public Holder.Reference<ILoadState> getIntrusiveHolder() {
+                return holder;
+            }
             //?}
 
             @Override
@@ -129,6 +133,10 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         ENTITY_TICKING_PERMANENT = registerLoadState(ModResource.of("entity_ticking_permanent"), id->new ILoadState() {
             //? if >1.16.5 {
             private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            @Override
+            public Holder.Reference<ILoadState> getIntrusiveHolder() {
+                return holder;
+            }
             //?}
 
             @Override

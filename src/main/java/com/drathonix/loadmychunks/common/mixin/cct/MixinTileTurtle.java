@@ -1,16 +1,16 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
 //? if !cc-tweaked {
-/*import com.drathonix.loadmychunks.common.LoadMyChunks;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 @Mixin(LoadMyChunks.class)
 public class MixinTileTurtle {
 
 }
-*///?}
+//?}
 //? if cc-tweaked {
 
-import com.drathonix.loadmychunks.common.bridge.IContextDestroyable;
+/*import com.drathonix.loadmychunks.common.bridge.IContextDestroyable;
 import com.drathonix.loadmychunks.common.bridge.IDestroyable;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
@@ -22,7 +22,7 @@ import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.TurtleSide;
 //? if >1.19.2
-/*import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;*/
+/^import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;^/
 //? if <=1.19.2
 import dan200.computercraft.shared.turtle.blocks.TileTurtle;
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 //? if >1.19.2
-/*@Mixin(value = TurtleBlockEntity.class,remap = false)*/
+/^@Mixin(value = TurtleBlockEntity.class,remap = false)^/
 //? if <=1.19.2
 @Mixin(value = TileTurtle.class,remap = false)
 public abstract class MixinTileTurtle implements IDestroyable,IHasChunkloader {
@@ -61,4 +61,4 @@ public abstract class MixinTileTurtle implements IDestroyable,IHasChunkloader {
         return null;
     }
 }
-//?}
+*///?}
