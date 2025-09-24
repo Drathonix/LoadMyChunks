@@ -84,11 +84,12 @@ public class ChunkDataModule {
                     try {
                         loaderInst.load(ct, level);
                         addLoader(level,loaderInst);
-                        try {
+                        //TODO Redo this such that it only runs after a chunk has been added to the chunk map and wont cause a deadlock.
+                        /*try {
                             loaderInst.postLoad(level);
                         } catch (DoNotAddException ignored){
                             removeLoader(level,loaderInst);
-                        }
+                        }*/
                         //Delete loaders that explicitly request to not be added to the CDM (likely due to invalid data).
                     } catch (DoNotAddException ignored){}
                 });

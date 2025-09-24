@@ -20,18 +20,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.lang.reflect.Field;
 import java.util.concurrent.Executor;
 
-@Mixin(value = DistanceManager.class,priority = Integer.MAX_VALUE)
+@Mixin(value = DistanceManager.class,priority = Integer.MIN_VALUE)
 public abstract class MixinDistanceManager implements IDistanceManagerMixin {
     //? if >1.16.5 {
     @Shadow @Final private TickingTracker tickingTicketsTracker;
 
-    //? if c2me && 1.19.2 {
     @Unique
-    private IC2METickingTracker lmc$c2meNoTicksSystem = null;
+    private ITickingTrackerMixin lmc$tracker;
+
+    @Inject(method = "<init>",at=@At("RETURN"))
+    public void onConstruct(CallbackInfo ci) {
+        if(!(lmc$tracker instanceof IC2METickingTracker)) {
+            this.lmc$tracker = (ITickingTrackerMixin) tickingTicketsTracker;
+        }
+    }
 
     @Override
-    public void lmc$setC2MENTS(IC2METickingTracker tracker) {
-        this.lmc$c2meNoTicksSystem=tracker;
+    public void lmc$overrideTracker(ITickingTrackerMixin tracker) {
+        this.lmc$tracker=tracker;
     }
 
     @Inject(method = "addTicket(JLnet/minecraft/server/level/Ticket;)V",at=@At("TAIL"))
@@ -54,11 +60,9 @@ public abstract class MixinDistanceManager implements IDistanceManagerMixin {
 
     @Override
     public boolean lmc$hasEntityForcingTicket(long chunkPos) {
-        //? if c2me && 1.19.2 {
-        return lmc$c2meNoTicksSystem != null ? lmc$c2meNoTicksSystem.lmc$hasEntityForcingTicket(chunkPos) : ITickingTrackerMixin.hasEntityForcingTicket(tickingTicketsTracker, chunkPos);
-        //?} else if >1.16.5 {
-        /*return ITickingTrackerMixin.hasEntityForcingTicket(tickingTicketsTracker, chunkPos);
-        *///?} else {
+        //? if >1.16.5 {
+        return lmc$tracker.lmc$hasEntityForcingTicket(chunkPos);
+        //?} else {
         /*for (Ticket<?> ticket : tickets.getOrDefault(chunkPos, SortedArraySet.create(0))) {
             if(ticket.getTicketLevel() <= ChunkForcer.ENTITY_TICKING_LEVEL){
                 return true;

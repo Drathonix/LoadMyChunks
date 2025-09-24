@@ -11,6 +11,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Allows random ticking in playerless chunks.
+ *
+ * @since 1.2.0
+ * @author Jack Andersen
+ */
 @Mixin(ChunkMap.class)
 public abstract class MixinChunkMap implements IChunkMapMixin {
     // In 1.16.5 this method is called by the server chunk cache to determine if a chunk should tick.

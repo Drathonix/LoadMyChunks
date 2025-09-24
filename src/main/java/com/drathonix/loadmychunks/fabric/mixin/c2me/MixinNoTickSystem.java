@@ -14,13 +14,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Allows getting the C2ME Chunk Ticket Map and using that instead of the default. This allows random ticking in LMC loaded chunks.
+ *
+ * @author Jack Andersen
+ * @since 1.2.0
+ */
 @Mixin(NoTickSystem.class)
 public class MixinNoTickSystem implements IC2METickingTracker {
     @Shadow(remap = false) @Final private NormalTicketDistanceMap normalTicketDistanceMap;
 
     @Inject(method = "<init>",at = @At("RETURN"))
     public void intercept(DistanceManager chunkTicketManager, CallbackInfo ci){
-        IDistanceManagerMixin.lmc$setC2MENTS(chunkTicketManager,this);
+        IDistanceManagerMixin.overrideTracker(chunkTicketManager,this);
     }
 
     @Override

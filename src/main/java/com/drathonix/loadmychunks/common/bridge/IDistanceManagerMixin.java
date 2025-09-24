@@ -1,23 +1,20 @@
 package com.drathonix.loadmychunks.common.bridge;
 
-import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;
-import net.minecraft.server.level.DistanceManager;
-
 /**
  * Accessor Mixin for {@link com.drathonix.loadmychunks.common.mixin.MixinDistanceManager}
  * @since 1.2.0
  * @author Jack Andersen
  */
 public interface IDistanceManagerMixin {
-    static void lmc$setC2MENTS(Object manager, IC2METickingTracker tracker) {
+    static void overrideTracker(Object manager, ITickingTrackerMixin tracker) {
         if(manager instanceof IDistanceManagerMixin){
-            ((IDistanceManagerMixin) manager).lmc$setC2MENTS(tracker);
+            ((IDistanceManagerMixin) manager).lmc$overrideTracker(tracker);
         }
         else{
             throw new IllegalStateException("Distance manager mixin was not applied!");
         }
     }
-    void lmc$setC2MENTS(IC2METickingTracker tracker);
+    void lmc$overrideTracker(ITickingTrackerMixin tracker);
 
     /**
      * Checks for a ticket of type {@link com.drathonix.loadmychunks.common.system.control.ChunkForcer#ENTITY}

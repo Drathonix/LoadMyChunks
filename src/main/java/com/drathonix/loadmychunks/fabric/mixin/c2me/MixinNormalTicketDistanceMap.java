@@ -13,6 +13,12 @@ import org.spongepowered.asm.mixin.Final;
 import com.ishland.c2me.notickvd.common.NormalTicketDistanceMap;
 import org.spongepowered.asm.mixin.Shadow;
 
+/**
+ * Helper mixin for entity ticking in LMC chunks.
+ *
+ * @author Jack Andersen
+ * @since 1.2.0
+ */
 @Mixin(NormalTicketDistanceMap.class)
 public abstract class MixinNormalTicketDistanceMap implements ITickingTrackerMixin {
     @Shadow(remap = false) @Final private Long2ObjectOpenHashMap<SortedArraySet<Ticket<?>>> ticketsByPosition;
