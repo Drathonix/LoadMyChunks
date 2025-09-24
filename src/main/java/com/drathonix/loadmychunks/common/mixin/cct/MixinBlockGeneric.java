@@ -13,13 +13,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BlockGeneric.class)
 public class MixinBlockGeneric {
-    //? if <1.19.2 {
+    //? if <=1.19.4 {
     @Inject(method = "onRemove",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BaseEntityBlock;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V"))
     public void interceptAndDrop(BlockState block, Level world, BlockPos pos, BlockState replace, boolean bool, CallbackInfo ci){
-    //?} else if <1.19.4 {
-    /^@Inject(method = "onRemove",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V"))
+    /^ else if <1.19.4 {
+    @Inject(method = "onRemove",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V"))
     public void interceptAndDrop(BlockState block, Level world, BlockPos pos, BlockState replace, boolean bool, CallbackInfo ci){
-    ^///?} else {
+    ^/
+    //?} else {
     /^@Inject(method = "onRemove",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BaseEntityBlock;onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V"))
     public void interceptAndDrop(BlockState block, Level world, BlockPos pos, BlockState replace, boolean bool, CallbackInfo ci){
     ^///?}

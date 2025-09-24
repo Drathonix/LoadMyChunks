@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_${java_ver}",
   "mixins": [
     "MixinChunkMap",
-    "MixinServerChunkCache"
+    "MixinServerChunkCache",
+    "c2me.MixinNormalTicketDistanceMap",
+    "c2me.MixinNoTickSystem"
   ],
   "client": [
   ],

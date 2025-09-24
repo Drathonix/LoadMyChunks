@@ -8,8 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/versions/1.18.2-fabric" />
-            <option value="$PROJECT_DIR$/versions/1.18.2-forge" />
+            <option value="$PROJECT_DIR$/versions/1.19.2-fabric" />
           </set>
         </option>
       </GradleProjectSettings>

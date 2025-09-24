@@ -13,6 +13,7 @@ plugins {
     id("dev.architectury.loom")
     //id("dev.kikugie.j52j") // Recommended by kiku if using swaps in json5.
     id("me.modmuss50.mod-publish-plugin")
+    id("lol.bai.explosion") version "0.3.1"
 }
 
 // Leave this alone unless adding more dependencies.
@@ -42,6 +43,7 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
+    maven( "https://maven2.bai.lol")
     maven("https://panel.ryuutech.com/nexus/repository/maven-releases/")
 }
 
@@ -217,7 +219,7 @@ enum class DepType {
     }
 }
 
-class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?){
+class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?, val deJarJar: Boolean = false){
     constructor () : this(null,null,null)
     constructor (modid: String) : this(modid,modid,modid)
     constructor (modid: String, slug: String) : this(modid,slug,slug)
@@ -237,6 +239,12 @@ val cctAPISource = APISource(DepType.API_OPTIONAL,
     APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
         src -> src.versionRange.isPresent
 }
+val c2meAPISource = APISource(DepType.API_OPTIONAL,
+    APIModInfo("c2me","c2me","c2me-fabric",true),"maven.modrinth:c2me-fabric",
+    optionalVersionProperty("deps.api.c2me"))
+{ src->
+    src.versionRange.isPresent
+}
 /**
  * APIs with hardcoded support for convenience. These are optional.
  */
@@ -253,6 +261,7 @@ val apis = arrayListOf(
         src.versionRange.isPresent
     },*/
     cctAPISource,
+    c2meAPISource,
     APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){
             _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
@@ -510,13 +519,21 @@ group = property("group").toString()
 
 // Adds both optional and required dependencies to stonecutter version checking.
 dependencies.forEachAfter{mid, ver ->
-    stonecutter.dependency(mid,ver.min)
+    try {
+        stonecutter.dependency(mid, ver.min)
+    } catch(ignored: Throwable){
+
+    }
 }
 apis.forEach{ src ->
     src.modInfo.modid?.let {
         stonecutter.const(it,src.enabled)
         src.versionRange.ifPresent{ ver ->
-            stonecutter.dependency(it,ver.min)
+            try {
+                stonecutter.dependency(it, ver.min)
+            } catch (ignored: Throwable){
+
+            }
         }
     }
 }
@@ -525,7 +542,7 @@ apis.forEach{ src ->
 stonecutter.const("fabric",env.isFabric)
 stonecutter.const("forge",env.isForge)
 stonecutter.const("neoforge",env.isNeo)
-
+stonecutter.const("c2me",c2meAPISource.enabled)
 loom {
     silentMojangMappingsLicense()
     if (env.isForge) forge {
@@ -550,6 +567,16 @@ loom {
 base { archivesName.set(env.archivesBaseName) }
 
 dependencies {
+    fun explode(dep: String){
+        if(env.isFabric) {
+            modApi(explosion.fabric(dep))
+        } else if(env.isForge){
+            modApi(explosion.forge(dep))
+        } else if(env.isNeo){
+            modApi(explosion.neoforge(dep))
+        }
+    }
+
     minecraft("com.mojang:minecraft:${env.mcVersion.min}")
     // TODO do you really want to use yarn though? Like what convenience does it even give you smh?
     mappings(loom.officialMojangMappings())
@@ -569,6 +596,7 @@ dependencies {
             src.versionRange.ifPresent { ver ->
                 if(src.type == DepType.API || src.type == DepType.API_OPTIONAL) {
                     modApi("${src.mavenLocation}:${ver.min}")
+                    if(src.modInfo.deJarJar) explode("${src.mavenLocation}:${ver.min}")
                 }
                 if(src.type == DepType.IMPL) {
                     modImplementation("${src.mavenLocation}:${ver.min}")

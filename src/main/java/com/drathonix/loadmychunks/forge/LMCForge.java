@@ -8,11 +8,11 @@ import com.drathonix.loadmychunks.common.util.BoolArgument;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
 //? if >1.18.2 {
-/^import com.drathonix.loadmychunks.common.util.BoolArgument;
+import com.drathonix.loadmychunks.common.util.BoolArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
-^///?}
+//?}
 
 //? if >1.19.3
 /^import net.minecraft.core.registries.Registries;^/
@@ -48,10 +48,10 @@ public class LMCForge {
         LoadMyChunks.init();
         MinecraftForge.EVENT_BUS.register(LMCForge.class);
         //? if >1.18.2 && <=1.19.3 {
-        /^ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
+        ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
-        ^///?} else if >1.19.3 {
+        //?} else if >1.19.3 {
         /^ArgumentTypeInfo<?,?> info = ArgumentTypeInfos.registerByClass(BoolArgument.class,new BoolArgument.Info());
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);

@@ -32,9 +32,9 @@ import dev.architectury.networking.NetworkManager;
 //?}
 import net.minecraft.ChatFormatting;
 //? if >1.18.2
-/*import net.minecraft.commands.CommandBuildContext;*/
+import net.minecraft.commands.CommandBuildContext;
 //? if <1.18.3
-import net.minecraft.network.chat.TextComponent;
+/*import net.minecraft.network.chat.TextComponent;*/
 //? if <1.20 {
 import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
@@ -140,10 +140,10 @@ public class LoadMyChunks {
 	 * Command registration entry point
 	 */
 	//? <1.19 {
-	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
-	//?} else {
-	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
-	*///?}
+	/*public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+	*///?} else {
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection) {
+	//?}
 		dispatcher.register(Brigadier.admin(Brigadier.literal("loadmychunks",root->{
 			root.add(Brigadier.executes(Brigadier.literal("forceload",forceLoad->{
 				forceLoad.add(Brigadier.executes(Brigadier.bool("permanent",boolForceLoad->{

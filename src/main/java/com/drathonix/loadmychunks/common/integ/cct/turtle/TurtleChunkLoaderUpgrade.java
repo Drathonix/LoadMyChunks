@@ -2,8 +2,8 @@
 /*package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 //? if <=1.18.2 {
-import dan200.computercraft.api.client.TransformedModel;
-//?}
+/^import dan200.computercraft.api.client.TransformedModel;
+^///?}
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
@@ -93,12 +93,12 @@ public class TurtleChunkLoaderUpgrade implements ITurtleUpgrade {
     }
 
     //? if <=1.18.2 {
-    @NotNull
+    /^@NotNull
     @Override
     public TransformedModel getModel(@Nullable ITurtleAccess turtle, @NotNull TurtleSide side) {
         return TransformedModel.of(getCraftingItem(),side == TurtleSide.LEFT ? UpgradeModeller.leftTransform : UpgradeModeller.rightTransform);
     }
-    //?}
+    ^///?}
 
 
     //? if >=1.20.6 {

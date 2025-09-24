@@ -9,6 +9,7 @@ pluginManagement {
         maven("https://maven.kikugie.dev/releases")
         maven("https://maven.kikugie.dev/snapshots")
         maven("https://maven.minecraftforge.net/")
+        maven( "https://maven2.bai.lol")
         mavenCentral()
         gradlePluginPortal()
     }
@@ -30,11 +31,11 @@ stonecutter {
     // The versions listed here, commented out or otherwise, all have pre-made gradle.properties.
     create(rootProject) {
         /*vers("1.16.5-fabric","1.16.5")
-        vers("1.16.5-forge","1.16.5").buildscript = "versions/1.16.5-forge/build.gradle.kts"*/
+        vers("1.16.5-forge","1.16.5").buildscript = "versions/1.16.5-forge/build.gradle.kts"
         vers("1.18.2-fabric","1.18.2")
-        vers("1.18.2-forge","1.18.2")
-        /*vers("1.19.2-fabric","1.19.2")
-        vers("1.19.2-forge","1.19.2")
+        vers("1.18.2-forge","1.18.2")*/
+        vers("1.19.2-fabric","1.19.2")
+        /*vers("1.19.2-forge","1.19.2")
         vers("1.19.4-fabric","1.19.4")
         vers("1.19.4-forge","1.19.4")*/
         /*vers("1.20.1-fabric","1.20.1")
@@ -56,7 +57,7 @@ stonecutter {
         vers("1.21.5-neoforge","1.21.5")
         vers("1.21.6-fabric","1.21.6")
         vers("1.21.6-neoforge","1.21.6")*/
-        vcsVersion="1.18.2-fabric"
+        vcsVersion="1.19.2-fabric"
     }
 }
 
