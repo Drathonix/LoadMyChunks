@@ -4,6 +4,10 @@ import com.drathonix.loadmychunks.common.bridge.IDistanceManagerMixin;
 import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
 import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
+//? if <=1.16.5 {
+/*import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.util.SortedArraySet;
+*///?}
 import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.Ticket;
 //? if >1.16.5 {

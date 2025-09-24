@@ -240,7 +240,7 @@ val cctAPISource = APISource(DepType.API_OPTIONAL,
         src -> src.versionRange.isPresent
 }
 val c2meAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("c2me","c2me","c2me-fabric",true),"maven.modrinth:c2me-fabric",
+    APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else "c2me-neoforge",true),"maven.modrinth:c2me-fabric",
     optionalVersionProperty("deps.api.c2me"))
 { src->
     src.versionRange.isPresent

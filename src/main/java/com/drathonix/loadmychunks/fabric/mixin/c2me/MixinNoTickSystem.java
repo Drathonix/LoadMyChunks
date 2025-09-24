@@ -1,9 +1,10 @@
 package com.drathonix.loadmychunks.fabric.mixin.c2me;
 
+import org.spongepowered.asm.mixin.Mixin;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
+//? if fabric && c2me {
 import com.drathonix.loadmychunks.common.bridge.IDistanceManagerMixin;
 import net.minecraft.server.level.DistanceManager;
-import org.spongepowered.asm.mixin.Mixin;
-//? if fabric && c2me {
 import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;
 import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
 import com.ishland.c2me.notickvd.common.NoTickSystem;
@@ -35,7 +36,7 @@ public class MixinNoTickSystem implements IC2METickingTracker {
     }
 }
 //?} else {
-/*@Mixin(NoTickSystem.class)
+/*@Mixin(LoadMyChunks.class)
 public class MixinNoTickSystem {
 }
 *///?}

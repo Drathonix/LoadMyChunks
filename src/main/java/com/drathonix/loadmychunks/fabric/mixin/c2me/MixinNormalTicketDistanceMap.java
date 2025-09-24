@@ -2,6 +2,7 @@ package com.drathonix.loadmychunks.fabric.mixin.c2me;
 
 
 import org.spongepowered.asm.mixin.Mixin;
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 //? if fabric && c2me {
 import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
 import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;
@@ -38,7 +39,7 @@ public abstract class MixinNormalTicketDistanceMap implements ITickingTrackerMix
     }
 }
 //?} else {
-/*@Mixin(NormalTicketDistanceMap.class)
+/*@Mixin(LoadMyChunks.class)
 public class MixinNormalTicketDistanceMap {
 
 }
