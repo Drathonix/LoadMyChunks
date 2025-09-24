@@ -29,27 +29,10 @@ public abstract class MixinDistanceManager implements IDistanceManagerMixin {
     @Unique
     private IC2METickingTracker lmc$c2meNoTicksSystem = null;
 
-    /**
-     * Used to capture C2ME's NoTicksViewDistanceSystem, this way I don't have to account for their mixin.
-     * @param executor
-     * @param executor2
-     * @param ci
-     */
-    @Inject(method = "<init>", at=@At("RETURN"))
-    public void captureC2MEIfPresent(Executor executor, Executor executor2, CallbackInfo ci){
-        for (Field declaredField : this.getClass().getDeclaredFields()) {
-            if (IC2METickingTracker.class.isAssignableFrom(declaredField.getType())) {
-                try {
-                    declaredField.setAccessible(true);
-                    lmc$c2meNoTicksSystem = (IC2METickingTracker) declaredField.get(this);
-                    return;
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+    @Override
+    public void lmc$setC2MENTS(IC2METickingTracker tracker) {
+        this.lmc$c2meNoTicksSystem=tracker;
     }
-    //?}
 
     @Inject(method = "addTicket(JLnet/minecraft/server/level/Ticket;)V",at=@At("TAIL"))
     public void customAdd(long l, Ticket<?> ticket, CallbackInfo ci){
