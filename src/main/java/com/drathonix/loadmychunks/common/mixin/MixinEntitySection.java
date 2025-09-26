@@ -1,6 +1,9 @@
 package com.drathonix.loadmychunks.common.mixin;
 
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.entity.animal.Panda;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,7 +46,7 @@ public class MixinEntitySection {
             if (entityAccess instanceof Entity) {
                 Entity e = (Entity) entityAccess;
                 MultiversioningHelper.serverLevel(e, sl -> {
-                    ChunkDataManager.getOrCreateChunkData(sl, MultiversioningHelper.chunkPosOf(e)).lmc$removeEntity(e);
+                    ChunkDataManager.getOrCreateChunkData(sl, MultiversioningHelper.chunkPosOfOld(e)).lmc$removeEntity(e);
                 });
             }
         } catch (Exception e){

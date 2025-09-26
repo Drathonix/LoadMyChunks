@@ -4,6 +4,7 @@ import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.mojang.authlib.GameProfile;
 //? if >1.16.5 {
 import com.mojang.datafixers.util.Either;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 //?}
 //? if >1.21.3 {
@@ -11,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 *///?}
 import net.minecraft.core.Registry;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -129,5 +131,9 @@ public class MultiversioningHelper {
         else{
             return (T)obj;
         }
+    }
+
+    public static long chunkPosOfOld(Entity e) {
+        return new ChunkPos(SectionPos.blockToSectionCoord(e.xOld),SectionPos.blockToSectionCoord(e.zOld)).toLong();
     }
 }
