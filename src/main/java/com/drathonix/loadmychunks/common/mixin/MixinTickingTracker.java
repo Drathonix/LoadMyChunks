@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.Ticket;
 import net.minecraft.util.SortedArraySet;
+import net.minecraft.world.level.ChunkPos;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,6 +15,8 @@ import java.util.List;
 
 //? if >1.16.5 {
 import net.minecraft.server.level.TickingTracker;
+import org.spongepowered.asm.mixin.Unique;
+
 @Mixin(TickingTracker.class)
 
 public class MixinTickingTracker implements ITickingTrackerMixin {

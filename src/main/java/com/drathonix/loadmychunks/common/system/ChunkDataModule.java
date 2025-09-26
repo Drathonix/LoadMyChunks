@@ -370,6 +370,7 @@ public class ChunkDataModule {
         consumer.accept(loadState);
     }
 
+    // Note: Its assumed that this method is called on when this chunk that is actually entity ticking.
     public void tickEntities(ServerLevel sl, ProfilerFiller profilerfiller){
         boolean applyTimings = shouldApplyTimings();
         boolean useTimings = applyTimings || shouldUseTimings();
@@ -393,24 +394,23 @@ public class ChunkDataModule {
                     profilerfiller.push("checkDespawn");
                     entity.checkDespawn();
                     profilerfiller.pop();
-                    if (((IChunkMapMixin)sl.getChunkSource().chunkMap).lmc$inEntityTickingRange(MultiversioningHelper.chunkPosOf(entity).toLong())) {
-                        Entity vehicle = entity.getVehicle();
-                        if (vehicle != null) {
-                            if (!MultiversioningHelper.isRemoved(vehicle) && vehicle.hasPassenger(entity)) {
-                                return; // this continues the forEach for anyone confused.
-                            }
-                            entity.stopRiding();
+                    Entity vehicle = entity.getVehicle();
+                    if (vehicle != null) {
+                        if (!MultiversioningHelper.isRemoved(vehicle) && vehicle.hasPassenger(entity)) {
+                            return; // this continues the forEach for anyone confused.
                         }
-                        // Anything here will not be a passenger.
-                        profilerfiller.push("tick");
-                        // Neoforge/forge specific
-                        //? if neoforge || forge {
-                        /*if(!(entity instanceof PartEntity))
-                            *///?}
-                            sl.guardEntityTick(sl::tickNonPassenger, entity);
-
-                        profilerfiller.pop();
+                        entity.stopRiding();
                     }
+                    // Anything here will not be a passenger.
+                    profilerfiller.push("tick");
+                    // Neoforge/forge specific
+                    //? if neoforge || forge {
+                    /*if(!(entity instanceof PartEntity))
+                        *///?}
+                        sl.guardEntityTick(sl::tickNonPassenger, entity);
+
+                    profilerfiller.pop();
+
                 }
             }
         });

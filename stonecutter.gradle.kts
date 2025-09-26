@@ -12,7 +12,7 @@ plugins {
     id("lol.bai.explosion") version "0.3.1" apply false
 
 }
-stonecutter active "1.19.4-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.19.2-fabric" /* [SC] DO NOT EDIT */
 
 abstract class SymlinkBuildsTask : DefaultTask() {
     @get:Input

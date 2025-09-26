@@ -118,7 +118,7 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
             for (ChunkHolder value : updatingChunkMap.values()) {
                 if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin) {
                     ILevelChunkMixin chunk = (ILevelChunkMixin) value.getTickingChunk();
-                    if (((IChunkMapMixin)scc.chunkMap).lmc$inEntityTickingRange(chunk.loadMyChunks$posAsLong())) {
+                    if (scc.chunkMap.getDistanceManager().inEntityTickingRange(value.getPos().toLong())) {
                         chunk.loadMyChunks$tickEntities(getProfiler());
                     }
                 }
