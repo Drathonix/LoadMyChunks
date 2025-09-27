@@ -36,9 +36,9 @@ import net.minecraft.commands.CommandBuildContext;
 //? if <1.18.3
 /*import net.minecraft.network.chat.TextComponent;*/
 //? if <1.20 {
-import net.minecraft.world.phys.Vec3;
+/*import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
-//?}
+*///?}
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.commands.CommandSourceStack;

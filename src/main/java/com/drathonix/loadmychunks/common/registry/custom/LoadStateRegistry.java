@@ -42,10 +42,10 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
 
     private LoadStateRegistry() {
         //? if >=1.19.4 {
-        /*super(KEY, Lifecycle.stable(),true);
-        *///?} else if >=1.18.2 {
-        super(KEY, Lifecycle.stable(), ILoadState::getIntrusiveHolder);
-        //?} else if >1.16.5 {
+        super(KEY, Lifecycle.stable(),true);
+        //?} else if >=1.18.2 {
+        /*super(KEY, Lifecycle.stable(), ILoadState::getIntrusiveHolder);
+        *///?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
         /*super(KEY, Lifecycle.stable());

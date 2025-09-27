@@ -31,7 +31,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 //? if <1.19.5
-import net.minecraft.world.level.material.Material;
+/*import net.minecraft.world.level.material.Material;*/
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -46,10 +46,10 @@ public class MultiversioningHelper {
         //? if >1.21.3 {
         /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().setId(ResourceKey.create(Registries.BLOCK,ModResource.of(key)));
         *///?} else if >1.19.4 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
-        *///?} else {
-        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
-        //?}
+        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        //?} else {
+        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
+        *///?}
     }
 
     /**
@@ -88,10 +88,10 @@ public class MultiversioningHelper {
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
         //? if >1.19.4 {
-        /*Level l = arg.level();
-        *///?} else {
-        Level l = arg.level;
-        //?}
+        Level l = arg.level();
+        //?} else {
+        /*Level l = arg.level;
+        *///?}
         serverLevel(l, cons);
     }
 
