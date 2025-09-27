@@ -28,6 +28,7 @@ import java.util.concurrent.Executor;
 public abstract class MixinDistanceManager implements IDistanceManagerMixin {
     //? if >1.16.5 {
     @Shadow @Final private TickingTracker tickingTicketsTracker;
+    @Shadow public abstract boolean inEntityTickingRange(long l);
 
     @Unique
     private ITickingTrackerMixin lmc$tracker;
@@ -62,6 +63,7 @@ public abstract class MixinDistanceManager implements IDistanceManagerMixin {
     *///?}
     @Shadow public abstract boolean hasPlayersNearby(long l);
 
+
     @Override
     public boolean lmc$hasEntityForcingTicket(long chunkPos) {
         //? if >1.16.5 {
@@ -79,7 +81,12 @@ public abstract class MixinDistanceManager implements IDistanceManagerMixin {
 
     @Override
     public boolean lmc$inEntityTickingRange(long pos) {
-        return lmc$hasEntityForcingTicket(pos);
+        // Note: in 1.16.5 and older entity-ticking tickets are added to all chunks in view of a player.
+        //? if >1.16.5 {
+        return inEntityTickingRange(pos);
+        //?} else {
+        /*return lmc$hasEntityForcingTicket(pos);
+        *///?}
     }
 
     @Override

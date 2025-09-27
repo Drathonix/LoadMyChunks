@@ -9,6 +9,7 @@
     "MixinChunkMap",
     "MixinDistanceManager",
     "MixinEntitySection",
+    "MixinEntitySectionStorage",
     "MixinLevel",
     "MixinLevelChunk",
     "MixinMinecraftServer",

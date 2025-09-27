@@ -13,9 +13,9 @@ import com.mojang.datafixers.util.Either;
 import dev.architectury.registry.registries.RegistrySupplier;
 import dev.architectury.registry.registries.Registrar;
 //? if <1.19.3
-/*import dev.architectury.registry.registries.Registries;*/
+import dev.architectury.registry.registries.Registries;
 //? if >1.19.3
-import dev.architectury.registry.registries.RegistrarManager;
+/*import dev.architectury.registry.registries.RegistrarManager;*/
 //?}
 //? if >1.20.3 {
 /*import net.minecraft.core.HolderOwner;
@@ -68,18 +68,18 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     }
 
     //? if >1.19.3 {
-    @Override
+    /*@Override
     public RegistrarManager getRegistrarManager() {
         return null;
     }
-    //?}
+    *///?}
 
     //? if <1.19.3 && >1.16.5 {
-    /*@Override
+    @Override
     public Registries getRegistries() {
         return null;
     }
-    *///?}
+    //?}
 
     //? if >1.16.5 {
     @Override

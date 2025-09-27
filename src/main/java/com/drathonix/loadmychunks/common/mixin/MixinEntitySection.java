@@ -1,11 +1,13 @@
 package com.drathonix.loadmychunks.common.mixin;
 
+import com.drathonix.loadmychunks.common.bridge.IEntitySectionMixin;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,14 +27,17 @@ import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntitySection;
 
 @Mixin(EntitySection.class)
-public class MixinEntitySection {
+public class MixinEntitySection implements IEntitySectionMixin {
+    @Unique
+    private long lmc$longChunk;
+
     @Inject(method = "add",at = @At("TAIL"))
     public <T extends EntityAccess> void addToChunkTicker(T entityAccess, CallbackInfo ci){
         try{
             if(entityAccess instanceof Entity){
                 Entity e = (Entity) entityAccess;
                 MultiversioningHelper.serverLevel(e,sl->{
-                    ChunkDataManager.getOrCreateChunkData(sl, MultiversioningHelper.chunkPosOf(e)).lmc$addEntity(e);
+                    ChunkDataManager.getOrCreateChunkData(sl, lmc$longChunk).lmc$addEntity(e);
                 });
             }
         } catch (Exception e){
@@ -46,12 +51,17 @@ public class MixinEntitySection {
             if (entityAccess instanceof Entity) {
                 Entity e = (Entity) entityAccess;
                 MultiversioningHelper.serverLevel(e, sl -> {
-                    ChunkDataManager.getOrCreateChunkData(sl, MultiversioningHelper.chunkPosOfOld(e)).lmc$removeEntity(e);
+                    ChunkDataManager.getOrCreateChunkData(sl, lmc$longChunk).lmc$removeEntity(e);
                 });
             }
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void lmc$setChunkPos(long pos) {
+        lmc$longChunk=pos;
     }
 }
 //?} else {

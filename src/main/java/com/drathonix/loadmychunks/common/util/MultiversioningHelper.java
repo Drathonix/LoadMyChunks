@@ -134,6 +134,6 @@ public class MultiversioningHelper {
     }
 
     public static long chunkPosOfOld(Entity e) {
-        return new ChunkPos(SectionPos.blockToSectionCoord(e.xOld),SectionPos.blockToSectionCoord(e.zOld)).toLong();
+        return new ChunkPos(SectionPos.blockToSectionCoord((int)e.xOld),SectionPos.blockToSectionCoord((int)e.zOld)).toLong();
     }
 }
