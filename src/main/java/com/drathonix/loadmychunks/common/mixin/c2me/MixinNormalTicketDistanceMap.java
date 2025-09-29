@@ -1,11 +1,9 @@
-package com.drathonix.loadmychunks.fabric.mixin.c2me;
+package com.drathonix.loadmychunks.common.mixin.c2me;
 
-
-import org.spongepowered.asm.mixin.Mixin;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
-//? if fabric && c2me {
+import org.spongepowered.asm.mixin.Mixin;
+//? if c2me {
 import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
-import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.server.level.Ticket;

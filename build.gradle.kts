@@ -3,6 +3,7 @@ import java.util.Optional
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 // Baseline code. Minimal edits necessary.
 // TODO acknowledge that you add plugins here.
@@ -219,7 +220,7 @@ enum class DepType {
     }
 }
 
-class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?, val deJarJar: Boolean = false){
+class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?, val deJarJar: Boolean = false, val overrideDeJarJar: String? = null){
     constructor () : this(null,null,null)
     constructor (modid: String) : this(modid,modid,modid)
     constructor (modid: String, slug: String) : this(modid,slug,slug)
@@ -240,7 +241,7 @@ val cctAPISource = APISource(DepType.API_OPTIONAL,
         src -> src.versionRange.isPresent
 }
 val c2meAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else "c2me-neoforge",true),"maven.modrinth:c2me-fabric",
+    APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else if(env.isForge) "c2mef" else "c2me-neoforge",true, optionalStrProperty("deps.api.c2me.explode").getOrNull()),"maven.modrinth:" + property("deps.api.c2me.source").toString(),
     optionalVersionProperty("deps.api.c2me"))
 { src->
     src.versionRange.isPresent
@@ -422,7 +423,7 @@ val dependencies = ModDependencies()
  * These values will change between versions and mod loaders. Handles generation of specific entries in mods.toml and neoforge.mods.toml
  */
 class SpecialMultiversionedConstants {
-    private val mandatoryIndicator = if(env.isNeo) "required" else "mandatory"
+    private val mandatoryIndicator = if(env.isNeo && !env.atMost("1.20.4")) "required" else "mandatory"
     val mixinField = if(env.isNeo) neoForgeMixinField() else if(env.isFabric) fabricMixinField() else ""
 
     val forgelikeLoaderVer =  if(env.isForge) env.forgeLanguageVersion.asForgelike() else env.neoforgeLoaderVersion.asForgelike()
@@ -432,15 +433,15 @@ class SpecialMultiversionedConstants {
     private fun excludes0() : List<String> {
         val out = arrayListOf<String>()
         if(!env.isForge) {
-            // NeoForge before 1.21 still uses the forge mods.toml :/ One of those goofy changes between versions.
-            if(!env.isNeo || !env.atLeast("1.20.6")) {
+            // NeoForge before 1.20.6 still uses the forge mods.toml :/ One of those goofy changes between versions.
+            if(!env.isNeo || !env.atMost("1.20.4")) {
                 out.add("META-INF/mods.toml")
             }
         }
         if(!env.isFabric){
             out.add("fabric.mod.json")
         }
-        if(!env.isNeo){
+        if(!env.isNeo || env.atMost("1.20.4")){
             out.add("META-INF/neoforge.mods.toml")
         }
         if(!cctAPISource.enabled){
@@ -567,13 +568,19 @@ loom {
 base { archivesName.set(env.archivesBaseName) }
 
 dependencies {
-    fun explode(dep: String){
-        if(env.isFabric) {
-            modApi(explosion.fabric(dep))
-        } else if(env.isForge){
-            modApi(explosion.forge(dep))
-        } else if(env.isNeo){
-            modApi(explosion.neoforge(dep))
+    fun explode(dep: String, override: String?){
+        if(env.isFabric || override == "fabric") {
+            modApi(explosion.fabric(dep)) {
+                exclude("exploded","mixinextras")
+            }
+        } else if(env.isForge || override == "forge"){
+            modApi(explosion.forge(dep)) {
+                exclude("exploded","mixinextras")
+            }
+        } else if(env.isNeo || override == "neoforge"){
+            modApi(explosion.neoforge(dep)) {
+                exclude("exploded","mixinextras")
+            }
         }
     }
 
@@ -596,7 +603,7 @@ dependencies {
             src.versionRange.ifPresent { ver ->
                 if(src.type == DepType.API || src.type == DepType.API_OPTIONAL) {
                     modApi("${src.mavenLocation}:${ver.min}")
-                    if(src.modInfo.deJarJar) explode("${src.mavenLocation}:${ver.min}")
+                    if(src.modInfo.deJarJar) explode("${src.mavenLocation}:${ver.min}",src.modInfo.overrideDeJarJar)
                 }
                 if(src.type == DepType.IMPL) {
                     modImplementation("${src.mavenLocation}:${ver.min}")

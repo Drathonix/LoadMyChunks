@@ -1,8 +1,8 @@
-package com.drathonix.loadmychunks.fabric.mixin.c2me;
+package com.drathonix.loadmychunks.common.mixin.c2me;
 
-import org.spongepowered.asm.mixin.Mixin;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
-//? if fabric && c2me {
+import org.spongepowered.asm.mixin.Mixin;
+//? if c2me {
 import com.drathonix.loadmychunks.common.bridge.IDistanceManagerMixin;
 import net.minecraft.server.level.DistanceManager;
 import com.drathonix.loadmychunks.common.integ.c2me.bridge.IC2METickingTracker;

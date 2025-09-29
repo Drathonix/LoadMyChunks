@@ -93,6 +93,7 @@ public class CCTForge {
         //? >=1.18.2
         turtleUpgrades.register(meb);
         MinecraftForge.EVENT_BUS.register(CCTForge.class);
+        CCTRegistryContent.register();
     }
 
     public static void clientInit(){

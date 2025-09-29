@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ItemLifeforceBroadcaster extends ItemHasTooltip {
     public ItemLifeforceBroadcaster(Properties properties) {
-        super(properties,4);
+        super(properties,5);
     }
 
     @Override

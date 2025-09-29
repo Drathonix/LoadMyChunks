@@ -1,5 +1,5 @@
 //? if neoforge && cc-tweaked {
-/*package com.drathonix.loadmychunks.neoforge.integ;
+package com.drathonix.loadmychunks.neoforge.integ;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.block.blockentity.BlockEntityChunkLoader;
@@ -17,7 +17,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 //? if <1.20.6
 import dan200.computercraft.api.upgrades.UpgradeSerialiser;
 //? if >=1.20.6
-/^import dan200.computercraft.api.upgrades.UpgradeType;^/
+/*import dan200.computercraft.api.upgrades.UpgradeType;*/
 import dan200.computercraft.shared.ModRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.level.block.Block;
@@ -27,7 +27,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CCTNeo {
     //? if >=1.20.6 {
-    /^public static DeferredRegister<UpgradeType<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.typeRegistry(),LoadMyChunks.MOD_ID);
+    /*public static DeferredRegister<UpgradeType<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.typeRegistry(),LoadMyChunks.MOD_ID);
     static {
         LMCContent.chunkLoaderBlockMap.forEach((color,supplier)->{
             TurtleChunkLoaderUpgrade tclu = new TurtleChunkLoaderUpgrade(supplier);
@@ -36,7 +36,7 @@ public class CCTNeo {
             CCTRegistryContent.registrySuppliers.add(reg);
         });
     }
-    ^///?}
+    *///?}
     //? if <1.20.6 {
     public static DeferredRegister<UpgradeSerialiser<? extends ITurtleUpgrade>> turtleUpgrades = DeferredRegister.create(ITurtleUpgrade.serialiserRegistryKey(),LoadMyChunks.MOD_ID);
     static {
@@ -50,6 +50,7 @@ public class CCTNeo {
 
     public static void register(IEventBus bus) {
         turtleUpgrades.register(bus);
+        CCTRegistryContent.register();
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -83,4 +84,4 @@ public class CCTNeo {
         CCTRegistryContent.registerClient();
     }
 }
-*///?}
+//?}

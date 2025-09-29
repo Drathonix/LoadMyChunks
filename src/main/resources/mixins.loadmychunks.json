@@ -16,6 +16,8 @@
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinTickingTracker",
+    "c2me.MixinNormalTicketDistanceMap",
+    "c2me.MixinNoTickSystem",
     "cct.MixinBlockGeneric",
     "cct.MixinTileTurtle",
     "cct.MixinTurtleBlock",

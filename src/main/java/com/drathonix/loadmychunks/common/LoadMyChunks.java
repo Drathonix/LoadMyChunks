@@ -269,6 +269,9 @@ public class LoadMyChunks {
 				Message.sendSystem(ctx,Message.translatable("commands.loadmychunks.config.reload_complete"));
 				return 1;
 			}));
+			root.add(Brigadier.executes(Brigadier.literal("awaken",awaken->{
+				awaken.add(Brigadier.executes(Brigadier.blockPos("pos",empty->{}),ctx->handleCMDAwaken(ctx,Brigadier.getBlockPos(ctx,"pos"))));
+			}),ctx->handleCMDAwaken(ctx,null)));
 		})));
 	}
 
@@ -304,6 +307,20 @@ public class LoadMyChunks {
 		}
 		else{
 			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.forceload.unset", pos.x, pos.z));
+		}
+		return 1;
+	}
+
+	private static int handleCMDAwaken(CommandContext<CommandSourceStack> ctx, @Nullable BlockPos bp){
+		bp = Brigadier.defaultedPos(ctx,bp);
+		ChunkPos pos = new ChunkPos(bp);
+		ServerLevel level = Brigadier.getLevel(ctx);
+		ChunkDataModule cdm = ChunkDataManager.getOrCreateChunkData(level,pos);
+		if(cdm.onCooldown()) {
+			cdm.clearCooldowns();
+			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.awaken.success", pos.x, pos.z));
+		} else {
+			Message.sendSystem(ctx, Message.translatable("loadmychunks.command.awaken.redundant", pos.x, pos.z));
 		}
 		return 1;
 	}

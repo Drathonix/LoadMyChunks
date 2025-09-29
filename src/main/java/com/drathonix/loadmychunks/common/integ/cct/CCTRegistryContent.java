@@ -14,7 +14,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade;
 import dev.architectury.registry.registries.RegistrySupplier;
 
 //? if >1.16.5 && <1.20.4
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;
+/*import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;*/
 //? if >1.16.5 && <1.20.6
 import dan200.computercraft.api.upgrades.UpgradeSerialiser;
 
@@ -32,10 +32,10 @@ public class CCTRegistryContent {
     //? if >=1.20.6 {
     /*public static List<RegistrySupplier<UpgradeType<? extends TurtleChunkLoaderUpgrade>>> registrySuppliers = new ArrayList<>();
     *///?} else if <1.20.6 && >1.20.1 {
-    /*public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
-    *///?} else if <=1.20.1 && >1.16.5 {
-    public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
-    //?} else {
+    public static List<RegistrySupplier<UpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
+    //?} else if <=1.20.1 && >1.16.5 {
+    /*public static List<RegistrySupplier<TurtleUpgradeSerialiser<? extends ITurtleUpgrade>>> registrySuppliers = new ArrayList<>();
+    *///?} else {
     /*public static List<RegistrySupplier<ITurtleUpgrade>> registrySuppliers = new ArrayList<>();
     *///?}
 
@@ -45,6 +45,9 @@ public class CCTRegistryContent {
             TurtleUpgradeModellers.register(v.get(), new UpgradeModeller<>());
         });
         //?}
+    }
+
+    public static void register(){
         LoaderTypeRegistry.register(LoaderTypeKeys.CCT_TURTLE_LOADER, new LoaderType<>(TurtleChunkLoader::new));
     }
 }

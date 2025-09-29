@@ -40,7 +40,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
                 null);
     }
     //? if <=1.20.1 && >1.19.2 {
-    @Override
+    /*@Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess iTurtleAccess, TurtleSide side) {
         ItemStack stack = t.getUpgradeItem(null);
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
@@ -48,7 +48,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
         TransformedModel out = new TransformedModel(model, side == TurtleSide.LEFT ? leftTransform : rightTransform);
         return out;
     }
-    //?}
+    *///?}
     //? if <=1.19.2 && >1.18.2 {
     /*@Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess iTurtleAccess, TurtleSide side) {
@@ -58,7 +58,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
 
 
     //? if <1.20.6 && >=1.20.4 {
-    /*@Override
+    @Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess turtle, TurtleSide side, CompoundTag compoundTag) {
         ItemStack stack = t.getUpgradeItem(compoundTag);
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
@@ -67,7 +67,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
         return out;
     }
 
-    *///?}
+    //?}
 
     //? if >=1.20.6 {
     /*@Override

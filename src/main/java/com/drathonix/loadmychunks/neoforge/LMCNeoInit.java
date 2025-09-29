@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.drathonix.loadmychunks.neoforge;
+package com.drathonix.loadmychunks.neoforge;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -57,4 +57,4 @@ public class LMCNeoInit {
         });
     }
 }
-*///?}
+//?}
