@@ -1,7 +1,7 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
-//? if cc-tweaked {
+//? if computercraft {
 
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
 import com.drathonix.loadmychunks.common.registry.LMCContent;

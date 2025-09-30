@@ -1,4 +1,4 @@
-//? if cc-tweaked && forge {
+//? if computercraft && forge {
 /*package com.drathonix.loadmychunks.forge.integ;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;

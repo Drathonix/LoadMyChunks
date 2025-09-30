@@ -79,9 +79,10 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
 
     @Override
     public void postLoad(ServerLevel level) throws DoNotAddException {
-        if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
-            throw new DoNotAddException();
-        }
+    // TODO: fix this so that postLoad is caused after the entire chunk is loaded.
+       // if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
+      //      throw new DoNotAddException();
+       // }
     }
 
     @Override

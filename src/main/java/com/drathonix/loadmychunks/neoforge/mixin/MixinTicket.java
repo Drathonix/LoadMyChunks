@@ -1,5 +1,5 @@
 //? if neoforge {
-package com.drathonix.loadmychunks.neoforge.mixin;
+/*package com.drathonix.loadmychunks.neoforge.mixin;
 
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import net.minecraft.server.level.Ticket;
@@ -17,9 +17,9 @@ public class MixinTicket {
 
     @Inject(method = "isForceTicks",at=@At("HEAD"), cancellable = true)
     public void overrideLMC(CallbackInfoReturnable<Boolean> cir) {
-        if(type == ChunkForcer.FORCED || type == ChunkForcer.ENTITY){
+        if(type == ChunkForcer.ENTITY){
             cir.setReturnValue(true);
         }
     }
 }
-//?}
+*///?}

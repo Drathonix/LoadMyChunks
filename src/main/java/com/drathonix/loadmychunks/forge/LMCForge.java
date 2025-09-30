@@ -56,7 +56,7 @@ public class LMCForge {
         DeferredRegister<ArgumentTypeInfo<?,?>> args = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE,LoadMyChunks.MOD_ID);
         args.register("lmcbool",()->info);
         ^///?}
-        //? if cc-tweaked
+        //? if computercraft
         /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.forge.integ.CCTForge","init",new Class[]{IEventBus.class}, FMLJavaModLoadingContext.get().getModEventBus());^/
     }
 

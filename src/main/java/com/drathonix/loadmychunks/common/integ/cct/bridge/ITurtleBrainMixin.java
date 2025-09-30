@@ -1,6 +1,6 @@
 package com.drathonix.loadmychunks.common.integ.cct.bridge;
 
-//? if cc-tweaked {
+//? if computercraft {
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;

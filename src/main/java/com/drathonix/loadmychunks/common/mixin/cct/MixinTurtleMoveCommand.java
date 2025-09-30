@@ -1,6 +1,6 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
-//? if !cc-tweaked {
+//? if !computercraft {
 /*import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 

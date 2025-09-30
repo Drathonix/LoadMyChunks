@@ -120,11 +120,11 @@ public class FakeRegistrySupplier<T> implements RegistrySupplier<T> {
     }
 
     //? if >1.20.5 {
-    /*@Override
+    @Override
     public boolean is(Holder<T> holder) {
         return false;
     }
-    *///?}
+    //?}
 
     @Override
     public Stream<TagKey<T>> tags() {

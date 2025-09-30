@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
-//? if cc-tweaked && <1.19.4 {
+//? if computercraft && <1.19.4 {
 /*import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
 import dan200.computercraft.shared.common.BlockGeneric;
 import org.spongepowered.asm.mixin.injection.At;

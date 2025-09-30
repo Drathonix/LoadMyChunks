@@ -1,5 +1,5 @@
 //? if fabric {
-/*package com.drathonix.loadmychunks.fabric;
+package com.drathonix.loadmychunks.fabric;
 
 import com.drathonix.loadmychunks.client.LoadMyChunksClient;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -13,9 +13,9 @@ public class LMCFabricClientInit implements ClientModInitializer {
     }
 
     public static void clientInit(){
-        //? if cc-tweaked {
+        //? if computercraft {
         Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
         //?}
     }
 }
-*///?}
+//?}

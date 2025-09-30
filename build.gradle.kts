@@ -220,7 +220,7 @@ enum class DepType {
     }
 }
 
-class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?, val deJarJar: Boolean = false, val overrideDeJarJar: String? = null){
+class APIModInfo(val modid: String?, val curseSlug: String?, val rinthSlug: String?, val deJarJar: Boolean = false, val customVersionRange: VersionRange? = null, val overrideDeJarJar: String? = null){
     constructor () : this(null,null,null)
     constructor (modid: String) : this(modid,modid,modid)
     constructor (modid: String, slug: String) : this(modid,slug,slug)
@@ -237,12 +237,12 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
 }
 
 val cctAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("cc-tweaked"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
+    APIModInfo("computercraft"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
         src -> src.versionRange.isPresent
 }
 val c2meAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else if(env.isForge) "c2mef" else "c2me-neoforge",true, optionalStrProperty("deps.api.c2me.explode").getOrNull()),"maven.modrinth:" + property("deps.api.c2me.source").toString(),
-    optionalVersionProperty("deps.api.c2me"))
+    APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else if(env.isForge) "c2mef" else "c2me-neoforge",true,VersionRange("0",""), optionalStrProperty("deps.api.c2me.explode").getOrNull()),"maven.modrinth:" + property("deps.api.c2me.source").toString(),
+    optionalVersionProperty("deps.api.c2me"),)
 { src->
     src.versionRange.isPresent
 }
@@ -393,7 +393,11 @@ class ModDependencies {
         fre(loadAfterOptional,cons)
         apis.forEach{src->
             if(src.enabled && src.type.isOptional() && src.type.includeInDepsList()) src.versionRange.ifPresent { ver -> src.modInfo.modid?.let {
-                cons.accept(it, ver)
+                if(src.modInfo.customVersionRange != null) {
+                    cons.accept(it, src.modInfo.customVersionRange)
+                } else {
+                    cons.accept(it, ver)
+                }
             }}
         }
     }
@@ -412,7 +416,11 @@ class ModDependencies {
         }
         apis.forEach{src->
             if(src.enabled && !src.type.isOptional() && src.type.includeInDepsList()) src.versionRange.ifPresent { ver -> src.modInfo.modid?.let {
-                cons.accept(it, ver)
+                if(src.modInfo.customVersionRange != null) {
+                    cons.accept(it, src.modInfo.customVersionRange)
+                } else {
+                    cons.accept(it, ver)
+                }
             }}
         }
     }
@@ -423,7 +431,6 @@ val dependencies = ModDependencies()
  * These values will change between versions and mod loaders. Handles generation of specific entries in mods.toml and neoforge.mods.toml
  */
 class SpecialMultiversionedConstants {
-    private val mandatoryIndicator = if(env.isNeo && !env.atMost("1.20.4")) "required" else "mandatory"
     val mixinField = if(env.isNeo) neoForgeMixinField() else if(env.isFabric) fabricMixinField() else ""
 
     val forgelikeLoaderVer =  if(env.isForge) env.forgeLanguageVersion.asForgelike() else env.neoforgeLoaderVersion.asForgelike()
@@ -503,7 +510,7 @@ class SpecialMultiversionedConstants {
     private fun forgedep(modid: String, versionRange: VersionRange, order: String, mandatory: Boolean) : String {
         return "[[dependencies.${mod.id}]]\n" +
                 "modId=\"${modid}\"\n" +
-                "${mandatoryIndicator}=${mandatory}\n" +
+                (if(env.isForge) "mandatory=${mandatory}\n" else "type=\"${if(mandatory) "required" else "optional"}\"\n") +
                 "versionRange=\"${versionRange.asForgelike()}\"\n" +
                 "ordering=\"${order}\"\n" +
                 "side=\"BOTH\"\n"
@@ -634,7 +641,7 @@ java {
  * Replaces the normal copy task and post-processes the files.
  * Effectively renames datapack directories due to depluralization past 1.20.4.
  */
-abstract class ProcessResourcesExtension : ProcessResources() {
+abstract class ProcessResourcesExtensionA : ProcessResources() {
     @get:Input
     val autoPluralize = arrayListOf(
         "/data/minecraft/tags/block",
@@ -644,6 +651,7 @@ abstract class ProcessResourcesExtension : ProcessResources() {
         "/data/loadmychunks/tags/item",
         "/data/loadmychunks/computercraft/turtle_upgrade"
     )
+
     override fun copy() {
         super.copy()
         autoPluralize.forEach { path ->
@@ -655,8 +663,34 @@ abstract class ProcessResourcesExtension : ProcessResources() {
         }
     }
 }
-if(env.atMost("1.20.6")){
-    tasks.replace("processResources",ProcessResourcesExtension::class)
+
+abstract class ProcessResourcesExtensionB : ProcessResources() {
+    @get:Input
+    val autoPluralize = arrayListOf(
+        "/data/minecraft/tags/block",
+        "/data/minecraft/tags/item",
+        "/data/loadmychunks/loot_table",
+        "/data/loadmychunks/recipe",
+        "/data/loadmychunks/tags/item",
+    )
+
+    override fun copy() {
+        super.copy()
+        autoPluralize.forEach { path ->
+            val file = File(destinationDir.absolutePath.plus(path))
+            if(file.exists()){
+                file.copyRecursively(File(file.absolutePath.plus("s")),true)
+                file.deleteRecursively()
+            }
+        }
+    }
+}
+
+// Annoying garbage I have to do (losing my mind I really need to figure out how to make gradle plugins)
+if(env.atMost("1.20.4")){
+    tasks.replace("processResources",ProcessResourcesExtensionA::class)
+} else if(env.atMost("1.20.6")){
+    tasks.replace("processResources",ProcessResourcesExtensionB::class)
 }
 
 tasks.processResources {

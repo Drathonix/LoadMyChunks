@@ -18,10 +18,10 @@ import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 //? if >1.20.4 {
-/*import net.minecraft.world.level.chunk.status.ChunkStatus;
-*///?} else {
-import net.minecraft.world.level.chunk.ChunkStatus;
-//?}
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+//?} else {
+/*import net.minecraft.world.level.chunk.ChunkStatus;
+*///?}
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntitySection;
 

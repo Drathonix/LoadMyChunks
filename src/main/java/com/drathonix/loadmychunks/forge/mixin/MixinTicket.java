@@ -17,7 +17,7 @@ public class MixinTicket {
 
     @Inject(method = "isForceTicks",at=@At("HEAD"), cancellable = true,remap = false)
     public void overrideLMC(CallbackInfoReturnable<Boolean> cir) {
-        if(type == ChunkForcer.FORCED || type == ChunkForcer.ENTITY){
+        if(type == ChunkForcer.ENTITY){
             cir.setReturnValue(true);
         }
     }

@@ -17,5 +17,6 @@
 1. Chunk Loader Types are now actually registered to a Mapped Registry, this registry is also registered to the minecraft root registry.
 2. Load States are now dynamic and also stored in their own registry.
 3. CCT turtle chunk loaders have been reworked internally.
+4. Swapped to a heavily modified Rockbreaker buildscript.
 # Support dropped for 1.16.5 Forge
 Sadly I have to drop support for forge 1.16.5, this is because it crashes without providing ANY information. So I'm screwed there.

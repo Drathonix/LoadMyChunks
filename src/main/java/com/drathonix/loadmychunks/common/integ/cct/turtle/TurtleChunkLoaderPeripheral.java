@@ -1,4 +1,4 @@
-//? if cc-tweaked {
+//? if computercraft {
 package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;

@@ -1,5 +1,5 @@
 //? if fabric {
-/*package com.drathonix.loadmychunks.fabric;
+package com.drathonix.loadmychunks.fabric;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.integ.Integrations;
@@ -21,7 +21,7 @@ public class LMCFabricInit implements ModInitializer {
         //?}
         ServerLifecycleEvents.SERVER_STARTED.register(LoadMyChunks::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(LoadMyChunks::serverStopped);
-        //? if cc-tweaked {
+        //? if computercraft {
         Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","init",new Class[0]);
         //?}
         LoadMyChunks.modMode(()->{
@@ -36,4 +36,4 @@ public class LMCFabricInit implements ModInitializer {
         LMCFabricInit.init();
     }
 }
-*///?}
+//?}

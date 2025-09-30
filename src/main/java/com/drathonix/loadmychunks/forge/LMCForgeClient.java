@@ -16,7 +16,7 @@ public class LMCForgeClient {
             clientInit();
     }
     public static void clientInit() {
-        //? if cc-tweaked
+        //? if computercraft
         /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.forge.integ.CCTForge","clientInit",new Class[0]);^/
     }
 }

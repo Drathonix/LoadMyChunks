@@ -1,5 +1,8 @@
 Because this is an MC mod, tests need to be done manually.
 
+# How I do tests
+All tests are performed at least once on each Version-Loader combination using a prism instance and using the world file in testsaves.
+
 # Procedures
 ### Boots
 Self-explanatory, the game must successfully load and joining a world must work as expected.
@@ -85,8 +88,8 @@ Forceload Command: Works
 | 1.20.4-Forge         | 1     | 1                   | 1                    | 1                              | 1                             | 1                   | 2                         |
 | 1.20.4-Fabric        | 1     | 1                   | 1                    | 1                              | 1                             | 1                   | 1                         |
 | 1.20.4-Neoforge      | 1     | 1                   | 1                    | 1                              | 1                             | 1                   | 1                         |
-| 1.20.6-Fabric        | 1     |                     |                      |                                |                               |                     |                           |
-| 1.20.6-Neoforge      | 1     |                     |                      |                                |                               |                     |                           |
+| 1.20.6-Fabric        | 1     | 1                   | 1                    | 1                              | 1                             | 1                   | 1                         |
+| 1.20.6-Neoforge      | 1     | 1                   | 1                    | 1                              | 1                             | 1                   | 1                         |
 | 1.21-Fabric          | 1     |                     |                      |                                |                               |                     |                           |
 | 1.21-Neoforge        | 1     |                     |                      |                                |                               |                     |                           |
 | 1.21.1-Fabric        | 1     |                     |                      |                                |                               |                     |                           |

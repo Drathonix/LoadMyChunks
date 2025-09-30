@@ -25,24 +25,24 @@ public class ItemHasTooltip extends ItemLMC {
     }
 
     //? if <=1.20.5 {
-    @Override
+    /*@Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, level, list, tooltipFlag);
         for (int i = 0; i < nLines; i++) {
             list.add(Message.translatable(getTooltipTranslationKey(i)));
         }
     }
-    //?}
+    *///?}
 
     //? if >1.20.5 {
-    /*@Override
+    @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         for (int i = 0; i < nLines; i++) {
             list.add(Message.translatable(getTooltipTranslationKey(i)));
         }
     }
-    *///?}
+    //?}
 
     public String getTooltipTranslationKey(int k){
         //? if <=1.19.3 {
