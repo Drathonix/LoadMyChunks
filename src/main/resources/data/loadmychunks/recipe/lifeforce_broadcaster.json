@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "E": {
-      "item": "minecraft:ender_pearl"
-    },
-    "D": {
-      "item": "loadmychunks:diamond_wire"
-    },
-    "I": {
-      "item": "minecraft:iron_block"
-    },
-    "N": {
-      "item": "minecraft:iron_ingot"
-    },
-    "C": {
-      "item": "minecraft:clock"
-    }
+    "E": ${INGSTARTITEM}minecraft:ender_pearl${INGEND},
+    "D": ${INGSTARTITEM}loadmychunks:diamond_wire${INGEND},
+    "I": ${INGSTARTITEM}minecraft:iron_block${INGEND},
+    "N": ${INGSTARTITEM}minecraft:iron_ingot${INGEND},
+    "C": ${INGSTARTITEM}minecraft:clock${INGEND}
   },
   "pattern": [
     "EDN",

@@ -1,14 +1,11 @@
 {
   "type": "minecraft:crafting_shapeless",
+
   "category": "misc",
   "group": "dyed_chunk_loader",
   "ingredients": [
-    {
-      "tag": "loadmychunks:chunk_loaders"
-    },
-    {
-      "item": "minecraft:brown_dye"
-    }
+    ${INGSTARTTAG}loadmychunks:chunk_loaders${INGEND},
+    ${INGSTARTITEM}minecraft:brown_dye${INGEND}
   ],
   "result": {
     "item": "loadmychunks:brown_chunk_loader",

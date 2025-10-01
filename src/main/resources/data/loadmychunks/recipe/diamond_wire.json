@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:diamond"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "I": {
-      "item": "minecraft:iron_nugget"
-    }
+    "#": ${INGSTARTITEM}minecraft:diamond${INGEND},
+    "R": ${INGSTARTITEM}minecraft:redstone${INGEND},
+    "I": ${INGSTARTITEM}minecraft:iron_nugget${INGEND}
   },
   "pattern": [
     "III",

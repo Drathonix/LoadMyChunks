@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "A": {
-      "item": "minecraft:obsidian"
-    },
-    "T": {
-      "item": "loadmychunks:tickometer"
-    },
-    "D": {
-      "item": "loadmychunks:diamond_wire"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    }
+    "A": ${INGSTARTITEM}minecraft:obsidian${INGEND},
+    "T": ${INGSTARTITEM}loadmychunks:tickometer${INGEND},
+    "D": ${INGSTARTITEM}loadmychunks:diamond_wire${INGEND},
+    "G": ${INGSTARTITEM}minecraft:glass${INGEND}
   },
   "pattern": [
     "D A",

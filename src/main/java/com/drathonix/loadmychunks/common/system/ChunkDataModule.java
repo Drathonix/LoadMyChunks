@@ -31,8 +31,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /*import net.minecraftforge.entity.PartEntity;
 *///?}
 //? if neoforge {
-/*import net.neoforged.neoforge.entity.PartEntity;
-*///?}
+import net.neoforged.neoforge.entity.PartEntity;
+//?}
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -381,8 +381,8 @@ public class ChunkDataModule {
         entities.forEach(entity -> {
             if (!MultiversioningHelper.isRemoved(entity)
                 //? if >=1.21.2 {
-                /*&& !sl.tickRateManager().isEntityFrozen(entity)
-                 *///?}
+                && !sl.tickRateManager().isEntityFrozen(entity)
+                 //?}
             ) {
                 if (mixin.lmc$shouldDiscardEntity(entity)) {
                     //? if >1.16.5 {
@@ -405,8 +405,8 @@ public class ChunkDataModule {
                     profilerfiller.push("tick");
                     // Neoforge/forge specific
                     //? if neoforge || forge {
-                    /*if(!(entity instanceof PartEntity))
-                        *///?}
+                    if(!(entity instanceof PartEntity))
+                        //?}
                         sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                     profilerfiller.pop();

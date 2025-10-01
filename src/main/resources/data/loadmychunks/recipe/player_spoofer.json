@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "minecraft:glowstone_dust"
-    },
-    "E": {
-      "item": "minecraft:emerald"
-    },
-    "D": {
-      "item": "loadmychunks:diamond_wire"
-    }
+    "G": ${INGSTARTITEM}minecraft:glowstone_dust${INGEND},
+    "E": ${INGSTARTITEM}minecraft:emerald${INGEND},
+    "D": ${INGSTARTITEM}loadmychunks:diamond_wire${INGEND}
   },
   "pattern": [
     "DDG",

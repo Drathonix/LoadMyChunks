@@ -70,19 +70,19 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
     //@Shadow @Final private PersistentEntitySectionManager<Entity> entityManager;
     //? if >1.21.1 {
-    /*@Override
+    @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return false;
     }
-    *///?} else if >1.16.5 {
-    @Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
+    //?} else if >1.16.5 {
+    /*@Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
 
 
     @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return shouldDiscardEntity(entity);
     }
-    //?} else {
+    *///?} else {
     /*@Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return this.server.isSpawningAnimals() || !(entity instanceof Animal) && !(entity instanceof WaterAnimal)
@@ -115,11 +115,13 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
         if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache) {
             ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
             Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).lmc$getUpdatingChunkMap();
-            for (ChunkHolder value : updatingChunkMap.values()) {
-                if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin) {
-                    ILevelChunkMixin chunk = (ILevelChunkMixin) value.getTickingChunk();
-                    if (((IChunkMapMixin) scc.chunkMap).lmc$inEntityTickingRange(value.getPos().toLong())) {
-                        chunk.loadMyChunks$tickEntities(getProfiler());
+            synchronized (updatingChunkMap) {
+                for (ChunkHolder value : updatingChunkMap.values()) {
+                    if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin) {
+                        ILevelChunkMixin chunk = (ILevelChunkMixin) value.getTickingChunk();
+                        if (((IChunkMapMixin) scc.chunkMap).lmc$inEntityTickingRange(value.getPos().toLong())) {
+                            chunk.loadMyChunks$tickEntities(getProfiler());
+                        }
                     }
                 }
             }

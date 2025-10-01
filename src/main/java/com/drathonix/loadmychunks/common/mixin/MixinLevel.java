@@ -7,8 +7,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 //? if >1.21.1 {
-/*import net.minecraft.util.profiling.Profiler;
-*///?}
+import net.minecraft.util.profiling.Profiler;
+//?}
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 //? if >1.16.5 {
@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -40,12 +41,12 @@ public abstract class MixinLevel implements ILevelMixin {
     @Unique private static final Iterator<TickingBlockEntity> lmc$emptyIter = Collections.emptyIterator();
 
     //? if <1.21.2 {
-    @Shadow public abstract ProfilerFiller getProfiler();
-    //?} else {
-    /*public ProfilerFiller getProfiler(){
+    /*@Shadow public abstract ProfilerFiller getProfiler();
+    *///?} else {
+    public ProfilerFiller getProfiler(){
         return Profiler.get();
     }
-    *///?}
+    //?}
     /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
      */
@@ -55,10 +56,12 @@ public abstract class MixinLevel implements ILevelMixin {
             //noinspection resource
             if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).lmc$getUpdatingChunkMap();
-                for (ChunkHolder value : updatingChunkMap.values()) {
-                    if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
-                        if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
-                            chunk.loadMyChunks$tick();
+                synchronized (updatingChunkMap) {
+                    for (ChunkHolder value : updatingChunkMap.values()) {
+                        if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
+                            if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
+                                chunk.loadMyChunks$tick();
+                            }
                         }
                     }
                 }

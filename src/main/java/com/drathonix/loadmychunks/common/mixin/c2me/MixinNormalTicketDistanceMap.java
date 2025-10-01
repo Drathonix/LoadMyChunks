@@ -2,7 +2,7 @@ package com.drathonix.loadmychunks.common.mixin.c2me;
 
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
-//? if c2me {
+//? if c2me && <1.21.1 {
 /*import com.drathonix.loadmychunks.common.bridge.ITickingTrackerMixin;
 import com.drathonix.loadmychunks.common.system.control.ChunkForcer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "T": {
-      "item": "loadmychunks:tickometer"
-    },
-    "C": {
-      "item": "minecraft:cobblestone"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "T": ${INGSTARTITEM}loadmychunks:tickometer${INGEND},
+    "C": ${INGSTARTITEM}minecraft:cobblestone${INGEND},
+    "R": ${INGSTARTITEM}minecraft:redstone${INGEND}
   },
   "pattern": [
     "CCC",

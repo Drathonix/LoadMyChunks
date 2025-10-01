@@ -4,6 +4,7 @@
   "package": "com.drathonix.loadmychunks.neoforge.mixin",
   "compatibilityLevel": "JAVA_${java_ver}",
   "mixins": [
+    "MixinServerChunkCache",
     "MixinTicket"
   ],
   "client": [

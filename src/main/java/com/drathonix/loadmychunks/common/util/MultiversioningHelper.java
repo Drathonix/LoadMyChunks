@@ -7,10 +7,10 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 //?}
-//? if >1.21.3 {
-/*import net.minecraft.core.registries.Registries;
+//? if >=1.21.2 {
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-*///?}
+//?}
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceKey;
@@ -43,11 +43,11 @@ public class MultiversioningHelper {
      * @return some properties.
      */
     public static @NotNull BlockBehaviour.Properties properties(String key) {
-        //? if >1.21.3 {
-        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().setId(ResourceKey.create(Registries.BLOCK,ModResource.of(key)));
-        *///?} else if >1.19.4 {
-        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
-        //?} else {
+        //? if >=1.21.2 {
+        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().setId(ResourceKey.create(Registries.BLOCK,ModResource.of(key)));
+        //?} else if >1.19.4 {
+        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        *///?} else {
         /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
         *///?}
     }

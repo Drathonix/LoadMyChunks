@@ -242,7 +242,7 @@ val cctAPISource = APISource(DepType.API_OPTIONAL,
 }
 val c2meAPISource = APISource(DepType.API_OPTIONAL,
     APIModInfo("c2me","c2me",if(env.isFabric) "c2me-fabric" else if(env.isForge) "c2mef" else "c2me-neoforge",true,VersionRange("0",""), optionalStrProperty("deps.api.c2me.explode").getOrNull()),"maven.modrinth:" + property("deps.api.c2me.source").toString(),
-    optionalVersionProperty("deps.api.c2me"),)
+    optionalVersionProperty("deps.api.c2me"))
 { src->
     src.versionRange.isPresent
 }
@@ -453,6 +453,7 @@ class SpecialMultiversionedConstants {
         }
         if(!cctAPISource.enabled){
             out.add("data/loadmychunks/computercraft.turtle_upgrade")
+            out.add("data/loadmychunks/computercraft.turtle_upgrades")
         }
         return out
     }
@@ -717,7 +718,10 @@ tasks.processResources {
         "license" to mod.license,
         "mixin_field" to dynamics.mixinField,
         "dependencies_field" to dynamics.dependenciesField,
-        "REFMAP_TEMPFIX" to ""
+        "REFMAP_TEMPFIX" to "",
+        "INGSTARTTAG" to if(env.atLeast("1.21.2")) "\"#" else "{\n      \"tag\": \"",
+        "INGSTARTITEM" to if(env.atLeast("1.21.2")) "\"" else "{\n      \"item\": \"",
+        "INGEND" to if(env.atLeast("1.21.2")) "\"" else "\"\n    }"
     )
     map.forEach{ (key, value) ->
         inputs.property(key,value)
@@ -725,6 +729,8 @@ tasks.processResources {
     dynamics.excludes.forEach{file->
         exclude(file)
     }
+    filesMatching("data/loadmychunks/recipe/*.json") { expand(map) }
+    filesMatching("data/loadmychunks/recipes/*.json") { expand(map) }
     filesMatching("fabric.mod.json") { expand(map) }
     filesMatching("META-INF/mods.toml") { expand(map) }
     filesMatching("META-INF/neoforge.mods.toml") { expand(map) }

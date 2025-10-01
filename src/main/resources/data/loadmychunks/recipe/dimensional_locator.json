@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "C": {
-      "item": "minecraft:compass"
-    },
-    "D": {
-      "item": "loadmychunks:diamond_wire"
-    },
-    "L": {
-      "item": "minecraft:lodestone"
-    }
+    "E": ${INGSTARTITEM}minecraft:ender_eye${INGEND},
+    "I": ${INGSTARTITEM}minecraft:iron_ingot${INGEND},
+    "C": ${INGSTARTITEM}minecraft:compass${INGEND},
+    "D": ${INGSTARTITEM}loadmychunks:diamond_wire${INGEND},
+    "L": ${INGSTARTITEM}minecraft:lodestone${INGEND}
 
   },
   "pattern": [
