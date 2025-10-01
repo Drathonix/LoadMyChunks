@@ -353,7 +353,7 @@ class ModPublish {
     val dryRunMode = boolProperty("publish.dry_run")
 
     init {
-        val tempmcTargets = listProperty("publish_acceptable_mc_versions")
+        val tempmcTargets = listProperty("publish.acceptable_mc_versions")
         if(tempmcTargets.isEmpty()){
             mcTargets.add(env.mcVersion.min)
         }
@@ -719,6 +719,7 @@ tasks.processResources {
         "mixin_field" to dynamics.mixinField,
         "dependencies_field" to dynamics.dependenciesField,
         "REFMAP_TEMPFIX" to "",
+        // When Minecraft changed the recipe.json ingredients and key syntax I LOST MY MIND. This was the solution I thought of AAAAAAAAAAAAAAAAAAHHHHH
         "INGSTARTTAG" to if(env.atLeast("1.21.2")) "\"#" else "{\n      \"tag\": \"",
         "INGSTARTITEM" to if(env.atLeast("1.21.2")) "\"" else "{\n      \"item\": \"",
         "INGEND" to if(env.atLeast("1.21.2")) "\"" else "\"\n    }"
@@ -761,8 +762,11 @@ publishMods {
                     src.modInfo.rinthSlug?.let {
                         optional {
                             slug = it
-                            version = ver.min
-
+                           // version = if(it.equals("architectury-api")) {
+                           //     ver.min + "+" + env.loader
+                           // } else {
+                           //     ver.min
+                           // }
                         }
                     }
                 }
@@ -770,7 +774,11 @@ publishMods {
                     src.modInfo.rinthSlug?.let {
                         requires {
                             slug = it
-                            version = ver.min
+                           // version = if(it.equals("architectury-api")) {
+                           //     ver.min + "+" + env.loader
+                           // } else {
+                           //     ver.min
+                           // }
                         }
                     }
                 }
