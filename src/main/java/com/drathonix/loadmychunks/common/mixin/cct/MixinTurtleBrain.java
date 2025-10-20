@@ -1,16 +1,16 @@
 package com.drathonix.loadmychunks.common.mixin.cct;
 
 //? if !computercraft {
-import com.drathonix.loadmychunks.common.LoadMyChunks;
+/*import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 @Mixin(LoadMyChunks.class)
 public class MixinTurtleBrain {
 
 }
-//?}
+*///?}
 //? if computercraft {
 
-/*import com.drathonix.loadmychunks.common.config.LMCConfig;
+import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBrainMixin;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoader;
 import com.drathonix.loadmychunks.common.integ.cct.turtle.TurtleChunkLoaderPeripheral;
@@ -23,8 +23,8 @@ import dan200.computercraft.shared.computer.core.ServerComputer;
 //? if >=1.19.4 {
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
 //?} else {
-/^import dan200.computercraft.shared.turtle.blocks.TileTurtle;
-^///?}
+/*import dan200.computercraft.shared.turtle.blocks.TileTurtle;
+*///?}
 import dan200.computercraft.shared.turtle.core.TurtleBrain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -48,8 +48,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     //? if >1.16.5 {
     @Shadow public abstract Level getLevel();
     //?} else {
-    /^@Shadow public abstract Level getWorld();
-    ^///?}
+    /*@Shadow public abstract Level getWorld();
+    *///?}
 
     @Shadow @NotNull
     public abstract BlockPos getPosition();
@@ -90,8 +90,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
     //? if >1.19.2 {
     public void lmc$postMove(TurtleBlockEntity owner, CallbackInfo ci) {
     //?} else {
-    /^public void lmc$postMove(TileTurtle owner, CallbackInfo ci) {
-    ^///?}
+    /*public void lmc$postMove(TileTurtle owner, CallbackInfo ci) {
+    *///?}
         MultiversioningHelper.serverLevel(owner,sl->{
             BlockPos newPosition = getPosition();
             this.lmc$chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent(sl,newPosition,TurtleChunkLoader.class,lmc$shouldChunkLoad(),loader->loader.getPosition().equals(newPosition),()-> new TurtleChunkLoader(newPosition,this)));
@@ -107,8 +107,8 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
             //? if >1.16.5 {
             MultiversioningHelper.serverLevel(getLevel(), sl-> {
             //?} else {
-            /^MultiversioningHelper.serverLevel(getWorld(), sl-> {
-            ^///?}
+            /*MultiversioningHelper.serverLevel(getWorld(), sl-> {
+            *///?}
                 BlockPos pos = getPosition();
                 lmc$chunkLoader.set(ChunkDataManager.computeChunkLoaderIfAbsent(
                         sl,
@@ -130,12 +130,12 @@ public abstract class MixinTurtleBrain implements ITurtleBrainMixin {
             //? if >1.16.5 {
             MultiversioningHelper.serverLevel(getLevel(), sl-> {
             //?} else {
-            /^MultiversioningHelper.serverLevel(getWorld(), sl-> {
-            ^///?}
+            /*MultiversioningHelper.serverLevel(getWorld(), sl-> {
+            *///?}
                 this.lmc$cdm = ChunkDataManager.getOrCreateChunkData(sl, getPosition());
             });
         }
         return lmc$cdm;
     }
 }
-*///?}
+//?}

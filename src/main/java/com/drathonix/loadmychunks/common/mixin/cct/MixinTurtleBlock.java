@@ -3,13 +3,13 @@ import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 //? if computercraft {
 
-/*import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
+import com.drathonix.loadmychunks.common.integ.cct.bridge.ITurtleBlockMixin;
 import com.drathonix.loadmychunks.common.registry.LMCContent;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.system.loaders.IHasChunkloader;
 //? if <=1.19.2 {
-/^import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
-^///?}
+/*import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
+*///?}
 import dan200.computercraft.shared.computer.core.ComputerFamily;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -31,9 +31,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TurtleBlock.class)
 //?} else {
-/^import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
+/*import dan200.computercraft.shared.turtle.blocks.BlockTurtle;
 @Mixin(BlockTurtle.class)
-^///?}
+*///?}
 public abstract class MixinTurtleBlock implements ITurtleBlockMixin
 {
     @Override
@@ -55,9 +55,9 @@ public abstract class MixinTurtleBlock implements ITurtleBlockMixin
     }
     //?}
 }
-*///?} else {
-@Mixin(LoadMyChunks.class)
+//?} else {
+/*@Mixin(LoadMyChunks.class)
 public abstract class MixinTurtleBlock {
 
 }
-//?}
+*///?}

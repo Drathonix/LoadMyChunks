@@ -7,8 +7,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 //? if >1.21.1 {
-import net.minecraft.util.profiling.Profiler;
-//?}
+/*import net.minecraft.util.profiling.Profiler;
+*///?}
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 //? if >1.16.5 {
@@ -41,12 +41,12 @@ public abstract class MixinLevel implements ILevelMixin {
     @Unique private static final Iterator<TickingBlockEntity> lmc$emptyIter = Collections.emptyIterator();
 
     //? if <1.21.2 {
-    /*@Shadow public abstract ProfilerFiller getProfiler();
-    *///?} else {
-    public ProfilerFiller getProfiler(){
+    @Shadow public abstract ProfilerFiller getProfiler();
+    //?} else {
+    /*public ProfilerFiller getProfiler(){
         return Profiler.get();
     }
-    //?}
+    *///?}
     /**
      * Overrides the default block ticking logic by ticking each chunk's tile entities in groups rather than all TEs individually.
      */

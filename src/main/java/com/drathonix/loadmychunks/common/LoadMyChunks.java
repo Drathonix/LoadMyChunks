@@ -24,9 +24,11 @@ import com.drathonix.loadmychunks.common.util.Brigadier;
 import com.drathonix.loadmychunks.common.util.Message;
 //? if <=1.16.5 {
 /*import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
+import me.shedaniel.architectury.event.events.ChunkEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
 *///?}
 //? if >1.16.5 {
+import dev.architectury.event.events.common.ChunkEvent;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.networking.NetworkManager;
 //?}
@@ -109,6 +111,12 @@ public class LoadMyChunks {
 			NetworkManager.registerS2CPayloadType(LagReadingPacket.TYPE,LagReadingPacket.STREAM_CODEC);
 		});
 		//?}
+		ChunkEvent.LOAD_DATA.register((chunkAccess, serverLevel, compoundTag) ->{
+			if(serverLevel != null){
+				//TODO: either enable or remove if I can figure out how to prevent infinite looping
+				//ChunkDataManager.onChunkLoaded(serverLevel,chunkAccess);
+			}
+		});
 	}
 
 	/**

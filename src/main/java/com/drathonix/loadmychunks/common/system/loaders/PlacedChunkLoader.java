@@ -3,7 +3,6 @@ package com.drathonix.loadmychunks.common.system.loaders;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.registry.LoaderTypeKeys;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
-import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.system.loaders.extension.ExtensionChunkLoaders;
@@ -11,11 +10,10 @@ import com.drathonix.loadmychunks.common.system.loaders.extension.IExtensionChun
 import com.drathonix.loadmychunks.common.system.loaders.extension.PlacedExtensionChunkLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,11 +76,12 @@ public class PlacedChunkLoader implements IChunkLoader,IOwnable {
     }
 
     @Override
-    public void postLoad(ServerLevel level) throws DoNotAddException {
-    // TODO: fix this so that postLoad is caused after the entire chunk is loaded.
-       // if(!(level.getBlockEntity(position) instanceof IHasChunkloader)){
-      //      throw new DoNotAddException();
-       // }
+    public boolean postLoad(ChunkAccess chunk) throws DoNotAddException {
+        //TODO: fix an infinite loop caused by this line.
+        //if(!(chunk.getBlockEntity(position) instanceof IHasChunkloader)){
+        //throw new DoNotAddException();
+        //}
+        return false;
     }
 
     @Override

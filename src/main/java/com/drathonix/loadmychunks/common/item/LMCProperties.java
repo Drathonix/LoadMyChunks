@@ -6,16 +6,16 @@ import com.drathonix.loadmychunks.common.util.ModResource;
 import dev.architectury.extensions.injected.InjectedItemPropertiesExtension;
 //?}
 //? if >=1.21.2 {
-import net.minecraft.core.registries.Registries;
+/*import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-//?}
+*///?}
 import net.minecraft.world.item.Item;
 
 public class LMCProperties extends Item.Properties {
     public LMCProperties(String key){
         //? if >=1.21.2 {
-        setId(ResourceKey.create(Registries.ITEM, ModResource.of(key)));
-        //?}
+        /*setId(ResourceKey.create(Registries.ITEM, ModResource.of(key)));
+        *///?}
         //? if <=1.19.3 {
         /*this.tab(LMCContent.creativeTab.get());
         *///?} else {

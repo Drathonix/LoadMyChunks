@@ -1,6 +1,10 @@
-# Load My Chunks Version 1.2.0 - The Big One: Entity ticking and other QOL improvements.
-**IMPORTANT**: If you are planning to continue using a world previously running an older LMC version [do not update to this version without reading this](https://github.com/Drathonix/LoadMyChunks/issues/31)
+# Load My Chunks Version 1.2.1 - Turtle Chunkloading Bug Fix
+**IMPORTANT**: If you are planning to continue using a world previously running an LMC version OLDER THAN 1.2.0 [do not update to this version without reading this](https://github.com/Drathonix/LoadMyChunks/issues/31)
 
+# Fixes
+1. Fixes [#33](https://github.com/Drathonix/LoadMyChunks/issues/33), a bug where chunkloading turtles would not reload when added to the world in an area that is too far away from a player.
+
+# Load My Chunks Version 1.2.0 - The Big One: Entity ticking and other QOL improvements.
 # Changes
 1. LMC no longer uses the same method of forcing chunks as the vanilla command. Instead, the chunk is forced using Tickets. 
 2. Entity ticking is now possible with the "Lifeforce Broadcaster" upgrade. This enables entity ticking and random block ticking.
@@ -14,6 +18,7 @@
 1. Made a mixin less intrusive as it was breaking other mods. Fixes [32](https://github.com/Drathonix/LoadMyChunks/issues/32)
 2. Made another mixin less intrusive as it was conflicting with Forgified-fabric/sinytra connector breaking the mod on forge/neo only. Fixes [35](https://github.com/Drathonix/LoadMyChunks/issues/35) and the long problematic [24](https://github.com/Drathonix/LoadMyChunks/issues/24)
 3. Fixed another deadlocking issue with C2ME. Fixes [30](https://github.com/Drathonix/LoadMyChunks/issues/30)
+
 
 # Internal Changes
 1. Chunk Loader Types are now actually registered to a Mapped Registry, this registry is also registered to the minecraft root registry.

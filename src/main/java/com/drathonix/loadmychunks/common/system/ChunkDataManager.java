@@ -1,7 +1,6 @@
 package com.drathonix.loadmychunks.common.system;
 
 
-import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.drathonix.loadmychunks.common.system.loaders.IChunkLoader;
@@ -16,6 +15,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.ServerLevelData;
 import org.jetbrains.annotations.NotNull;
@@ -202,6 +202,10 @@ public class ChunkDataManager {
 
     public synchronized static void requestUpdate(ServerLevel level, ChunkPos chunkPos) {
         getManager(level).requestUpdate(chunkPos);
+    }
+
+    public static void onChunkLoaded(ServerLevel level, ChunkAccess chunk) {
+        getOrCreateChunkData(level,chunk.getPos()).postLoad(level, chunk);
     }
 
     public static class LevelChunkLoaderManager extends SavedData{

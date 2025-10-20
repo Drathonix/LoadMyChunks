@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -183,11 +184,15 @@ public interface IChunkLoader extends IChunkPositioned {
 
     /**
      * Executed after the chunk loader has had its NBT loaded and added to the chunk loader manager.
+     *
      * @param level the level where loading has occurred.
+     * @return
      * @throws DoNotAddException if the chunk loader is invalid and should not be added to the {@link ChunkDataModule}
      * @since 1.2.0
      */
-    default void postLoad(ServerLevel level) throws DoNotAddException {}
+    default boolean postLoad(ChunkAccess level) throws DoNotAddException {
+        return false;
+    }
 
     /**
      * Gets the id of this chunk loader for reference in {@link com.drathonix.loadmychunks.common.registry.custom.LoaderTypeRegistry}

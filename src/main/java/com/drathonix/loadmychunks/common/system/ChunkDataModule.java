@@ -1,9 +1,7 @@
 package com.drathonix.loadmychunks.common.system;
 
 
-import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
 import com.drathonix.loadmychunks.common.bridge.IInformable;
-import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.bridge.IServerLevelMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
@@ -23,7 +21,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -31,9 +28,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /*import net.minecraftforge.entity.PartEntity;
 *///?}
 //? if neoforge {
-import net.neoforged.neoforge.entity.PartEntity;
-//?}
+/*import net.neoforged.neoforge.entity.PartEntity;
+*///?}
 
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -381,8 +380,8 @@ public class ChunkDataModule {
         entities.forEach(entity -> {
             if (!MultiversioningHelper.isRemoved(entity)
                 //? if >=1.21.2 {
-                && !sl.tickRateManager().isEntityFrozen(entity)
-                 //?}
+                /*&& !sl.tickRateManager().isEntityFrozen(entity)
+                 *///?}
             ) {
                 if (mixin.lmc$shouldDiscardEntity(entity)) {
                     //? if >1.16.5 {
@@ -405,8 +404,8 @@ public class ChunkDataModule {
                     profilerfiller.push("tick");
                     // Neoforge/forge specific
                     //? if neoforge || forge {
-                    if(!(entity instanceof PartEntity))
-                        //?}
+                    /*if(!(entity instanceof PartEntity))
+                        *///?}
                         sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                     profilerfiller.pop();
@@ -424,5 +423,29 @@ public class ChunkDataModule {
     }
     public void lmc$addEntity(Entity entity){
         entities.add(entity);
+    }
+
+    /**
+     * Ran after the chunk has fully loaded its own data. This will check if any loaders have changed state or should not be added due to the chunk state.
+     */
+    public void postLoad(ServerLevel level, ChunkAccess chunkAccess) {
+        Iterator<IChunkLoader> iter = loaders.iterator();
+        boolean shouldUpdate = false;
+        while(iter.hasNext()){
+            IChunkLoader loader = iter.next();
+            try{
+                if(loader.postLoad(chunkAccess)){
+                    shouldUpdate = true;
+                }
+            } catch (DoNotAddException ex){
+                iter.remove();
+                removeLoader(level,loader);
+            }
+        }
+        if(shouldUpdate){
+            consumeLoadState(previous->{
+                update(()->updateChunkLoadState(level,previous));
+            });
+        }
     }
 }

@@ -70,19 +70,19 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
     //@Shadow @Final private PersistentEntitySectionManager<Entity> entityManager;
     //? if >1.21.1 {
-    @Override
+    /*@Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return false;
     }
-    //?} else if >1.16.5 {
-    /*@Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
+    *///?} else if >1.16.5 {
+    @Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
 
 
     @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return shouldDiscardEntity(entity);
     }
-    *///?} else {
+    //?} else {
     /*@Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return this.server.isSpawningAnimals() || !(entity instanceof Animal) && !(entity instanceof WaterAnimal)
