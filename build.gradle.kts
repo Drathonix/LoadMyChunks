@@ -45,7 +45,7 @@ repositories {
         }
     }
     maven( "https://maven2.bai.lol")
-    maven("https://panel.ryuutech.com/nexus/repository/maven-releases/")
+    maven("https://maven.ryuutech.com/repository/maven-releases/")
 }
 
 fun bool(str: String) : Boolean {
@@ -258,9 +258,9 @@ val apis = arrayListOf(
     { src ->
         src.versionRange.isPresent
     },
-    /*APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
+    APISource(DepType.INCLUDE,APIModInfo(),"com.vicious:persist",optionalVersionProperty("deps.api.persist")){ src ->
         src.versionRange.isPresent
-    },*/
+    },
     cctAPISource,
     c2meAPISource,
     APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){

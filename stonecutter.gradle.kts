@@ -12,7 +12,7 @@ plugins {
     id("lol.bai.explosion") version "0.3.1" apply false
 
 }
-stonecutter active "1.21.1-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.2+3-neoforge" /* [SC] DO NOT EDIT */
 
 abstract class SymlinkBuildsTask : DefaultTask() {
     @get:Input
@@ -73,3 +73,7 @@ stonecutter registerChiseled tasks.register("chiseledPublishModrinth", stonecutt
     ofTask("publishModrinth")
 }
 
+stonecutter registerChiseled tasks.register("chiseledPublishMaven", stonecutter.chiseled) {
+    group = "project"
+    ofTask("publish")
+}
