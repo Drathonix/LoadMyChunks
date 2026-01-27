@@ -37,7 +37,7 @@ public class MixinServerChunkCache {
         });
     }
     *///?} else if >1.16.5 {
-    @Shadow @Final private DistanceManager distanceManager;
+    /*@Shadow @Final private DistanceManager distanceManager;
     @Redirect(method="tickChunks",at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkMap;anyPlayerCloseEnoughForSpawning(Lnet/minecraft/world/level/ChunkPos;)Z"))
     public boolean doNotCareAboutPlayerDist(ChunkMap instance, ChunkPos chunkPos){
         if(((IChunkMapMixin)instance).lmc$playerDistCheck(chunkPos)){
@@ -45,6 +45,6 @@ public class MixinServerChunkCache {
         }
         return IDistanceManagerMixin.lmc$hasEntityForcingTicket(distanceManager,chunkPos.toLong());
     }
-    //?}
+    *///?}
 }
 //?}

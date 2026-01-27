@@ -10,13 +10,13 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.SharedSuggestionProvider;
 //? if >1.18.2 {
-import net.minecraft.commands.CommandBuildContext;
+/*import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-//?}
+*///?}
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 //? if <1.18.3
-/*import net.minecraft.network.chat.TranslatableComponent;*/
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,13 +25,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class BoolArgument implements ArgumentType<Boolean> {
     //? if <1.18.3 {
-    /*private static final Dynamic2CommandExceptionType INVALID_BOOL = new Dynamic2CommandExceptionType(
-            (found, constants) -> new TranslatableComponent("commands.loadmychunks.arguments.bool.invalid", constants, found));
-    *///?}
-    //? if >1.18.2 {
     private static final Dynamic2CommandExceptionType INVALID_BOOL = new Dynamic2CommandExceptionType(
-            (found, constants) -> Component.translatable("commands.loadmychunks.arguments.bool.invalid", constants, found));
+            (found, constants) -> new TranslatableComponent("commands.loadmychunks.arguments.bool.invalid", constants, found));
     //?}
+    //? if >1.18.2 {
+    /*private static final Dynamic2CommandExceptionType INVALID_BOOL = new Dynamic2CommandExceptionType(
+            (found, constants) -> Component.translatable("commands.loadmychunks.arguments.bool.invalid", constants, found));
+    *///?}
 
     public static BoolArgument boolArgument() {
         return new BoolArgument();
@@ -66,7 +66,7 @@ public class BoolArgument implements ArgumentType<Boolean> {
     }
 
     //? if >1.18.2 {
-    public static class Info implements ArgumentTypeInfo<BoolArgument, Info.Template>
+    /*public static class Info implements ArgumentTypeInfo<BoolArgument, Info.Template>
     {
         @Override
         public void serializeToNetwork(Template template, FriendlyByteBuf buffer) {}
@@ -104,5 +104,5 @@ public class BoolArgument implements ArgumentType<Boolean> {
             }
         }
     }
-    //?}
+    *///?}
 }

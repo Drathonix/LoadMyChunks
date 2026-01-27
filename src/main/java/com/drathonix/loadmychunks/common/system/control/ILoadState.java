@@ -1,8 +1,8 @@
 package com.drathonix.loadmychunks.common.system.control;
 
 //? if >1.16.5 {
-import net.minecraft.core.Holder;
-//?}
+/*import net.minecraft.core.Holder;
+*///?}
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import net.minecraft.core.BlockPos;
@@ -89,6 +89,6 @@ public interface ILoadState {
     }
 
     //? if >1.16.5 {
-    Holder.Reference<ILoadState> getIntrusiveHolder();
-    //?}
+    /*Holder.Reference<ILoadState> getIntrusiveHolder();
+    *///?}
 }

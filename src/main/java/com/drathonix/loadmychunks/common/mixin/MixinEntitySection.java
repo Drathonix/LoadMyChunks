@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? if >1.16.5 {
-import com.drathonix.loadmychunks.common.bridge.IEntitySectionMixin;
+/*import com.drathonix.loadmychunks.common.bridge.IEntitySectionMixin;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
 import net.minecraft.world.level.entity.Visibility;
@@ -18,10 +18,10 @@ import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 //? if >1.20.4 {
-import net.minecraft.world.level.chunk.status.ChunkStatus;
-//?} else {
-/*import net.minecraft.world.level.chunk.ChunkStatus;
-*///?}
+/^import net.minecraft.world.level.chunk.status.ChunkStatus;
+^///?} else {
+import net.minecraft.world.level.chunk.ChunkStatus;
+//?}
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntitySection;
 
@@ -37,6 +37,7 @@ public abstract class MixinEntitySection<T extends EntityAccess> implements IEnt
 
     @Inject(method = "add",at = @At("TAIL"))
     public void addToChunkTicker(T entityAccess, CallbackInfo ci){
+
         try{
             if(entityAccess instanceof Entity){
                 Entity e = (Entity) entityAccess;
@@ -83,10 +84,10 @@ public abstract class MixinEntitySection<T extends EntityAccess> implements IEnt
         lmc$longChunk=pos;
     }
 }
-//?} else {
-/*import com.drathonix.loadmychunks.common.LoadMyChunks;
+*///?} else {
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 @Mixin(LoadMyChunks.class)
 public class MixinEntitySection{
 
 }
-*///?}
+//?}

@@ -2,6 +2,7 @@ package com.drathonix.loadmychunks.common.system;
 
 
 import com.drathonix.loadmychunks.common.bridge.IInformable;
+import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.bridge.IServerLevelMixin;
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
@@ -269,16 +270,16 @@ public class ChunkDataModule {
             }
             if(informable instanceof Entity){
                 //? if >1.16.5 {
-                if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
-                    iterator.remove();
-                }
-                //?}
-                //? if <=1.16.5 {
-                /*Entity e = (Entity) informable;
-                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                /*if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
                     iterator.remove();
                 }
                 *///?}
+                //? if <=1.16.5 {
+                Entity e = (Entity) informable;
+                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                    iterator.remove();
+                }
+                //?}
             }
         }
     }
@@ -385,10 +386,10 @@ public class ChunkDataModule {
             ) {
                 if (mixin.lmc$shouldDiscardEntity(entity)) {
                     //? if >1.16.5 {
-                    entity.discard();
-                    //?} else {
-                    /*entity.remove();
-                     *///?}
+                    /*entity.discard();
+                    *///?} else {
+                    entity.remove();
+                     //?}
                 } else {
                     profilerfiller.push("checkDespawn");
                     entity.checkDespawn();
@@ -447,5 +448,22 @@ public class ChunkDataModule {
                 update(()->updateChunkLoadState(level,previous));
             });
         }
+    }
+
+    public String getEntityList() {
+        return entities.toString();
+    }
+
+    /**
+     * Marked as invalid when the CDM is removed from the manager.
+     * @since 1.2.2
+     * @return whether the CDM is still valid.
+     */
+    public boolean isInvalid() {
+        return this.defaultLoadState == LoadStateRegistry.INVALID;
+    }
+
+    public void invalidate() {
+        this.defaultLoadState = LoadStateRegistry.INVALID;
     }
 }

@@ -24,7 +24,7 @@ public class LMCNeoforgeClient {
         }
         public static void clientInit() {
             //? if computercraft
-            Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);
+            /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","clientInit",new Class[0]);^/
         }
 }
 *///?}

@@ -2,7 +2,7 @@ package com.drathonix.loadmychunks.common.block.blockentity;
 
 import net.minecraft.core.BlockPos;
 //? if >1.20.5
-import net.minecraft.core.HolderLookup;
+/*import net.minecraft.core.HolderLookup;*/
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BEBase extends BlockEntity {
     //? if >1.16.5 {
-    public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+    /*public BEBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
     @Override
@@ -20,8 +20,8 @@ public class BEBase extends BlockEntity {
         super.setLevel(level);
         validate(level);
     }
-    //?} else {
-    /*public BEBase(BlockEntityType<?> blockEntityType) {
+    *///?} else {
+    public BEBase(BlockEntityType<?> blockEntityType) {
         super(blockEntityType);
     }
     @Override
@@ -29,10 +29,10 @@ public class BEBase extends BlockEntity {
         super.setLevelAndPosition(level, blockPos);
         validate(level);
     }
-    *///?}
+    //?}
 
     //? if >1.20.5 {
-    @Override
+    /*@Override
     protected void loadAdditional(@NotNull CompoundTag arg, HolderLookup.@NotNull Provider arg2) {
         this.write(arg);
     }
@@ -41,7 +41,7 @@ public class BEBase extends BlockEntity {
     protected void saveAdditional(@NotNull CompoundTag arg, HolderLookup.@NotNull Provider arg2) {
         this.read(arg);
     }
-    //?} else if >1.16.5 && <1.20.5 {
+    *///?} else if >1.16.5 && <1.20.5 {
     /*@Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
@@ -54,7 +54,7 @@ public class BEBase extends BlockEntity {
         this.read(compoundTag);
     }
     *///?} else if <=1.16.5 {
-    /*@Override
+    @Override
     public CompoundTag save(CompoundTag compoundTag) {
         super.save(compoundTag);
         this.read(compoundTag);
@@ -66,7 +66,7 @@ public class BEBase extends BlockEntity {
         super.load(blockState, compoundTag);
         this.write(compoundTag);
     }
-    *///?}
+    //?}
 
     protected void write(CompoundTag tag) {}
 

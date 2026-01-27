@@ -3,10 +3,10 @@ package com.drathonix.loadmychunks.common.util;
 import com.drathonix.loadmychunks.common.system.control.ILoadState;
 import com.mojang.authlib.GameProfile;
 //? if >1.16.5 {
-import com.mojang.datafixers.util.Either;
+/*import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-//?}
+*///?}
 //? if >=1.21.2 {
 /*import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -31,7 +31,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 //? if <1.19.5
-/*import net.minecraft.world.level.material.Material;*/
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -46,10 +46,10 @@ public class MultiversioningHelper {
         //? if >=1.21.2 {
         /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops().setId(ResourceKey.create(Registries.BLOCK,ModResource.of(key)));
         *///?} else if >1.19.4 {
-        return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
-        //?} else {
-        /*return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
-        *///?}
+        /*return BlockBehaviour.Properties.of().requiresCorrectToolForDrops();
+        *///?} else {
+        return BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops();
+        //?}
     }
 
     /**
@@ -72,26 +72,26 @@ public class MultiversioningHelper {
 
     public static boolean isRemoved(Entity entity) {
         //? if >1.16.5 {
-        return entity.isRemoved();
-        //?} else {
-        /*return entity.removed;
-        *///?}
+        /*return entity.isRemoved();
+        *///?} else {
+        return entity.removed;
+        //?}
     }
 
     public static ChunkPos chunkPosOf(Entity entity) {
         //? if >1.16.5 {
-        return entity.chunkPosition();
-        //?} else {
-        /*return new ChunkPos(entity.xChunk, entity.zChunk);
-        *///?}
+        /*return entity.chunkPosition();
+        *///?} else {
+        return new ChunkPos(entity.xChunk, entity.zChunk);
+        //?}
     }
 
     public static void serverLevel(Entity arg, Consumer<ServerLevel> cons) {
         //? if >1.19.4 {
-        Level l = arg.level();
-        //?} else {
-        /*Level l = arg.level;
-        *///?}
+        /*Level l = arg.level();
+        *///?} else {
+        Level l = arg.level;
+        //?}
         serverLevel(l, cons);
     }
 
@@ -124,10 +124,10 @@ public class MultiversioningHelper {
             return enforceValue((T)((Optional<?>) obj).get());
         }
         //? if >1.16.5 {
-        else if(obj instanceof Holder.Reference<?>){
+        /*else if(obj instanceof Holder.Reference<?>){
             return (T)((Holder.Reference<?>) obj).value();
         }
-        //?}
+        *///?}
         else{
             return (T)obj;
         }

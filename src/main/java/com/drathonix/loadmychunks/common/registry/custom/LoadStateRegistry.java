@@ -6,11 +6,11 @@ import com.drathonix.loadmychunks.common.system.control.LoadStateEnum;
 import com.drathonix.loadmychunks.common.system.control.LoaderPower;
 import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
-import net.minecraft.core.Holder;
-//?}
+/*import net.minecraft.core.Holder;
+*///?}
 //? if >1.20.4 {
-import net.minecraft.core.RegistrationInfo;
-//?}
+/*import net.minecraft.core.RegistrationInfo;
+*///?}
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -36,28 +36,29 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
     public static final ILoadState TICKING = LoadStateEnum.TICKING;
     public static final ILoadState ENTITY_TICKING;
     public static final ILoadState ENTITY_TICKING_PERMANENT;
+    public static final ILoadState INVALID;
     public static final ILoadState OVERTICKED = LoadStateEnum.OVERTICKED;
     public static final ILoadState PERMANENT = LoadStateEnum.PERMANENT;
     public static final ILoadState PERMANENTLY_DISABLED = LoadStateEnum.PERMANENTLY_DISABLED;
 
     private LoadStateRegistry() {
         //? if >=1.19.4 {
-        super(KEY, Lifecycle.stable(),true);
-        //?} else if >=1.18.2 {
+        /*super(KEY, Lifecycle.stable(),true);
+        *///?} else if >=1.18.2 {
         /*super(KEY, Lifecycle.stable(), ILoadState::getIntrusiveHolder);
         *///?} else if >1.16.5 {
         /*super(KEY, Lifecycle.stable(),true);
          *///?} else {
-        /*super(KEY, Lifecycle.stable());
-         *///?}
+        super(KEY, Lifecycle.stable());
+         //?}
     }
 
     private static ILoadState register(ResourceLocation id, ILoadState type){
         //? if >1.20.4 {
-        INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
-        //?} else {
-        /*INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
-        *///?}
+        /*INSTANCE.register(ResourceKey.create(KEY,id), type, RegistrationInfo.BUILT_IN);
+        *///?} else {
+        INSTANCE.register(ResourceKey.create(KEY,id), type,Lifecycle.stable());
+        //?}
         return type;
     }
 
@@ -107,12 +108,12 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
         }
         ENTITY_TICKING = registerLoadState(ModResource.of("entity_ticking"), id->new ILoadState() {
             //? if >1.16.5 {
-            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
             @Override
             public Holder.Reference<ILoadState> getIntrusiveHolder() {
                 return holder;
             }
-            //?}
+            *///?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {
@@ -127,17 +128,22 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
             @Override
             public int id() {
                 return id;
+            }
+
+            @Override
+            public String toString() {
+                return "ENTITY_TICKING";
             }
         });
 
         ENTITY_TICKING_PERMANENT = registerLoadState(ModResource.of("entity_ticking_permanent"), id->new ILoadState() {
             //? if >1.16.5 {
-            private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
             @Override
             public Holder.Reference<ILoadState> getIntrusiveHolder() {
                 return holder;
             }
-            //?}
+            *///?}
 
             @Override
             public LoaderPower blockEntityTickingPower() {
@@ -153,8 +159,41 @@ public class LoadStateRegistry extends MappedRegistry<ILoadState> {
             public int id() {
                 return id;
             }
+
+            @Override
+            public String toString() {
+                return "ENTITY_TICKING_PERMANENT";
+            }
         });
 
+        INVALID = registerLoadState(ModResource.of("invalid"), id->new ILoadState() {
+            //? if >1.16.5 {
+            /*private final Holder.Reference<ILoadState> holder = LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
+            @Override
+            public Holder.Reference<ILoadState> getIntrusiveHolder() {
+                return holder;
+            }
+            *///?}
 
+            @Override
+            public LoaderPower blockEntityTickingPower() {
+                return LoaderPower.DISABLED;
+            }
+
+            @Override
+            public LoaderPower entityForcingPower() {
+                return LoaderPower.DISABLED;
+            }
+
+            @Override
+            public int id() {
+                return id;
+            }
+
+            @Override
+            public String toString() {
+                return "INVALID";
+            }
+        });
     }
 }

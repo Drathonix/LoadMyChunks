@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/versions/1.21.2+3-neoforge" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

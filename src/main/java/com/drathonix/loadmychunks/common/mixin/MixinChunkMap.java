@@ -17,11 +17,11 @@ import net.minecraft.world.level.chunk.LightChunkGetter;
 *///?}
 
 //? if <1.19.2 {
-/*import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
-*///?} else {
-import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+//?} else {
+/*import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-//?}
+*///?}
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,23 +40,23 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
     @Shadow @Final private Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap;
 
     //? if >1.16.5 {
-    @Shadow abstract boolean anyPlayerCloseEnoughForSpawning(ChunkPos chunkPos);
-    //?}
+    /*@Shadow abstract boolean anyPlayerCloseEnoughForSpawning(ChunkPos chunkPos);
+    *///?}
 
     /**
      * method to capture the distance manager instance without using access transformers in 1.16.5 because I HATE them. I HATE THEM SO MUCH!
      */
     @Unique private IDistanceManagerMixin lmc$distanceManager;
     //? if <1.18.2 {
-    /*@Inject(method = "<init>",at = @At(value = "RETURN"))
+    @Inject(method = "<init>",at = @At(value = "RETURN"))
     public void captureDistMan(ServerLevel arg, LevelStorageSource.LevelStorageAccess arg2, DataFixer dataFixer, StructureManager arg3, Executor executor, BlockableEventLoop arg4, LightChunkGetter arg5, ChunkGenerator arg6, ChunkProgressListener arg7, Supplier supplier, int i, boolean bl, CallbackInfo ci){
-    *///?} elif <1.19.2 {
+    //?} elif <1.19.2 {
     /*@Inject(method = "<init>",at = @At(value = "RETURN"))
     public void captureDistMan(ServerLevel arg, LevelStorageSource.LevelStorageAccess arg2, DataFixer dataFixer, StructureManager arg3, Executor executor, BlockableEventLoop arg4, LightChunkGetter arg5, ChunkGenerator arg6, ChunkProgressListener arg7, ChunkStatusUpdateListener arg8, Supplier supplier, int i, boolean bl, CallbackInfo ci){
     *///?} else {
-    @Inject(method = "<init>",at = @At(value = "RETURN"))
+    /*@Inject(method = "<init>",at = @At(value = "RETURN"))
     public void captureDistMan(ServerLevel serverLevel, LevelStorageSource.LevelStorageAccess levelStorageAccess, DataFixer dataFixer, StructureTemplateManager structureTemplateManager, Executor executor, BlockableEventLoop blockableEventLoop, LightChunkGetter lightChunkGetter, ChunkGenerator chunkGenerator, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusUpdateListener, Supplier supplier, int i, boolean bl, CallbackInfo ci){
-    //?}
+    *///?}
         for (Field declaredField : this.getClass().getDeclaredFields()) {
             if(IDistanceManagerMixin.class.isAssignableFrom(declaredField.getType())){
                 try {
@@ -82,9 +82,9 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
     @Override
     public boolean lmc$playerDistCheck(ChunkPos pos) {
         //? if >1.16.5 {
-        return anyPlayerCloseEnoughForSpawning(pos);
-        //?} else {
-        /*if (!lmc$distanceManager.lmc$hasPlayersNearby(pos.toLong())) {
+        /*return anyPlayerCloseEnoughForSpawning(pos);
+        *///?} else {
+        if (!lmc$distanceManager.lmc$hasPlayersNearby(pos.toLong())) {
             return false;
         } else {
             for (ServerPlayer serverplayer : this.level.getServer().getPlayerList().getPlayers()) {
@@ -95,7 +95,7 @@ public abstract class MixinChunkMap implements IChunkMapMixin {
 
             return false;
         }
-        *///?}
+        //?}
     }
 
     @Unique

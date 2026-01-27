@@ -3,8 +3,8 @@ package com.drathonix.loadmychunks.common.system.control;
 import com.drathonix.loadmychunks.common.registry.custom.LoadStateRegistry;
 import com.drathonix.loadmychunks.common.util.ModResource;
 //? if >1.16.5 {
-import net.minecraft.core.Holder;
-//?}
+/*import net.minecraft.core.Holder;
+*///?}
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,9 +42,9 @@ public enum LoadStateEnum implements ILoadState {
     };
 
     //? if >1.16.5 {
-    /**
+    /*/^*
      * Holder instance is being stored for use in datapacks (although I have no idea why you'd want to use datapacks for these).
-     */
+     ^/
     public final Holder.Reference<ILoadState> holder;
     LoadStateEnum(){
         this.holder=LoadStateRegistry.INSTANCE.createIntrusiveHolder(this);
@@ -53,7 +53,7 @@ public enum LoadStateEnum implements ILoadState {
     public Holder.Reference<ILoadState> getIntrusiveHolder() {
         return holder;
     }
-    //?}
+    *///?}
 
     @Nullable
     public static LoadStateEnum fromInt(int i) {

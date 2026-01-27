@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 //? if >1.16.5 {
-import net.minecraft.server.level.TickingTracker;
+/*import net.minecraft.server.level.TickingTracker;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(TickingTracker.class)
@@ -36,9 +36,9 @@ public class MixinTickingTracker implements ITickingTrackerMixin {
         return false;
     }
 }
-//?} else {
-/*@Mixin(targets="net.minecraft.server.level.DistanceManager$ChunkTicketTracker")
+*///?} else {
+@Mixin(targets="net.minecraft.server.level.DistanceManager$ChunkTicketTracker")
 public abstract class MixinTickingTracker implements ITickingTrackerMixin {
 
 }
-*///?}
+//?}

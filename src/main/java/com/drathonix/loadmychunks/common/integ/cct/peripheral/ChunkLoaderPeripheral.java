@@ -1,5 +1,5 @@
 //? if computercraft {
-package com.drathonix.loadmychunks.common.integ.cct.peripheral;
+/*package com.drathonix.loadmychunks.common.integ.cct.peripheral;
 
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import com.drathonix.loadmychunks.common.system.ChunkDataModule;
@@ -49,4 +49,4 @@ public class ChunkLoaderPeripheral extends AbstractChunkLoaderPeripheral {
         return false;
     }
 }
-//?}
+*///?}

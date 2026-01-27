@@ -37,7 +37,7 @@ public class LMCNeoInit {
         args.register("lmcbool",()->info);
         args.register(meb);
         //? if computercraft
-        Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);
+        /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.neoforge.integ.CCTNeo","init",new Class[]{IEventBus.class},meb);^/
     }
 
     @SubscribeEvent

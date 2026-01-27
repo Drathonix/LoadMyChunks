@@ -9,31 +9,30 @@ import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import com.drathonix.loadmychunks.common.util.ProtectedEntityTickList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ClassInstanceMultiMap;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.function.Consumer;
+import net.minecraft.world.level.chunk.*;
 
 //? if >1.16.5 {
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+/*import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-//?} else {
-/*import net.minecraft.world.level.TickList;
+*///?} else {
+import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
-import net.minecraft.world.level.chunk.ChunkBiomeContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-*///?}
+import net.minecraft.server.level.ChunkHolder;
+//?}
 
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.chunk.UpgradeData;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,24 +51,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 @Mixin(LevelChunk.class)
 
 public abstract class MixinLevelChunk
     //? if >1.16.5 {
-        extends MixinChunkAccess
-    //?}
+        /*extends MixinChunkAccess
+    *///?}
         implements ILevelChunkMixin {
-    @Shadow @Final Level level;
+    @Shadow
+    @Final
+    Level level;
 
+    @Unique private ChunkDataModule loadMyChunks$loadDataModule;
 
     @Override
     public ChunkDataModule loadMyChunks$getDataModule() {
-        return loadMyChunks$loadDataModule;
-    }
-
-    public ChunkDataModule loadMyChunks$getAndCache(){
-        if(this.loadMyChunks$loadDataModule == null) {
+        if (this.loadMyChunks$loadDataModule == null || this.loadMyChunks$loadDataModule.isInvalid()) {
             this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData((ServerLevel) level, loadMyChunks$posAsLong());
         }
         return this.loadMyChunks$loadDataModule;
@@ -81,31 +80,41 @@ public abstract class MixinLevelChunk
     }
 
     //? if <1.18.2 {
-    /*@Inject(method = "addEntity",at = @At("TAIL"))
+    @Inject(method = "addEntity",at = @At("TAIL"))
     public void onAdd(Entity entity, CallbackInfo ci){
         if(level instanceof ServerLevel){
-            loadMyChunks$getAndCache().lmc$addEntity(entity);
+            loadMyChunks$getDataModule().lmc$addEntity(entity);
         }
     }
     @Inject(method = "removeEntity(Lnet/minecraft/world/entity/Entity;I)V",at = @At("TAIL"))
     public void onRemove(Entity entity, int i, CallbackInfo ci){
         if(level instanceof ServerLevel){
-            loadMyChunks$getAndCache().lmc$removeEntity(entity);
+            loadMyChunks$getDataModule().lmc$removeEntity(entity);
         }
     }
-    *///?}
+    @Override
+    public void loadMyChunks$1165reloadEntities(){
+        if(level instanceof ServerLevel) {
+            for (ClassInstanceMultiMap<Entity> entitySection : entitySections) {
+                for (Entity ent : entitySection) {
+                    loadMyChunks$getDataModule().lmc$addEntity(ent);
+                }
+            }
+        }
+    }
+    //?}
 
     @Unique
     @Override
     public void loadMyChunks$tickEntities(ProfilerFiller profilerfiller) {
         if(level instanceof ServerLevel) {
-            loadMyChunks$loadDataModule.tickEntities((ServerLevel) level,profilerfiller);
+            loadMyChunks$getDataModule().tickEntities((ServerLevel) level,profilerfiller);
         }
     }
 
 
     //? if >1.16.5 {
-    @Unique
+    /*@Unique
     private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
     @Unique
     private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
@@ -115,22 +124,21 @@ public abstract class MixinLevelChunk
 
     @Shadow public abstract Level getLevel();
 
-    @Unique private ChunkDataModule loadMyChunks$loadDataModule;
-
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V",at = @At("RETURN"))
     public void setup(Level arg, ChunkPos arg2, UpgradeData arg3, LevelChunkTicks arg4, LevelChunkTicks arg5, long l, LevelChunkSection[] args, LevelChunk.PostLoadProcessor arg6, BlendingData arg7, CallbackInfo ci){
-        if(level instanceof ServerLevel sl) {
-            loadMyChunks$getAndCache();
+        if(level instanceof ServerLevel) {
+            loadMyChunks$getDataModule();
         }
     }
 
     @Override
     public void loadMyChunks$tick() {
+        ChunkDataModule cdm = loadMyChunks$getDataModule();
         if(level instanceof ServerLevel) {
-            loadMyChunks$loadDataModule.preTick((ServerLevel) level);
+            cdm.preTick((ServerLevel) level);
         }
-        boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings() && !level.isClientSide;
-        boolean useTimings = applyTimings || (!level.isClientSide && loadMyChunks$loadDataModule.shouldUseTimings());
+        boolean applyTimings = cdm.shouldApplyTimings() && !level.isClientSide;
+        boolean useTimings = applyTimings || (!level.isClientSide && cdm.shouldUseTimings());
         Iterator<TickingBlockEntity> iterator = loadMyChunks$queuedTickers.iterator();
         // 1.0.3 Conmod patch
         while(iterator.hasNext()){
@@ -139,7 +147,7 @@ public abstract class MixinLevelChunk
             iterator.remove();
         }
         if(useTimings){
-            loadMyChunks$loadDataModule.getTickTimer().startBlockEntities();
+            cdm.getTickTimer().startBlockEntities();
         }
         iterator = loadMyChunks$tickers.iterator();
         // patch end
@@ -153,11 +161,11 @@ public abstract class MixinLevelChunk
             }
         }
         if(useTimings){
-            loadMyChunks$loadDataModule.getTickTimer().endBlockEntities();
-            loadMyChunks$loadDataModule.inform();
-            if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){
-                ILoadState prev = loadMyChunks$loadDataModule.getLoadState();
-                loadMyChunks$loadDataModule.startShutoff();
+            cdm.getTickTimer().endBlockEntities();
+            cdm.inform();
+            if(applyTimings && cdm.isOverticked()){
+                ILoadState prev = cdm.getLoadState();
+                cdm.startShutoff();
                 ChunkDataManager.markShutDown((ServerLevel)level,chunkPos,prev);
             }
         }
@@ -206,6 +214,7 @@ public abstract class MixinLevelChunk
                 loadMyChunks$queuedTickers.add(result);
             }
             //Account for the new ticker being invalidated (somehow)
+            //TODO: figure out what I was thinking here (I don't think this actually does anything)
             else if(current != null){
                 loadMyChunks$tickers.remove(result);
                 loadMyChunks$queuedTickers.remove(result);
@@ -215,12 +224,12 @@ public abstract class MixinLevelChunk
         return remappingFunction.apply(key, instance.get(key));
     }
 
-    //?}
+    *///?}
 
     //TODO: Remove redundant code. For now I'm just assuming 1.16.5 is too complex to really integrate well (I'm definitely wrong)
     //? if <=1.16.5 {
 
-    /*@Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
     @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
@@ -232,19 +241,22 @@ public abstract class MixinLevelChunk
 
     @Shadow @Nullable public abstract BlockEntity getBlockEntity(BlockPos blockPos, LevelChunk.EntityCreationType entityCreationType);
 
-    @Unique private ChunkDataModule loadMyChunks$loadDataModule;
+    @Shadow
+    @Final
+    private ClassInstanceMultiMap<Entity>[] entitySections;
 
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/ChunkBiomeContainer;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/level/TickList;Lnet/minecraft/world/level/TickList;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Ljava/util/function/Consumer;)V",at = @At("RETURN"))
     public void setup(Level level, ChunkPos chunkPos, ChunkBiomeContainer chunkBiomeContainer, UpgradeData upgradeData, TickList tickList, TickList tickList2, long l, LevelChunkSection[] levelChunkSections, Consumer consumer, CallbackInfo ci){
         if(level instanceof ServerLevel) {
-            this.loadMyChunks$loadDataModule = ChunkDataManager.getOrCreateChunkData((ServerLevel)level,chunkPos);
+            loadMyChunks$getDataModule();
         }
     }
 
     @Override
     public void loadMyChunks$tick(ProfilerFiller profilerFiller) {
+        ChunkDataModule cdm = loadMyChunks$getDataModule();
         if(level instanceof ServerLevel) {
-            loadMyChunks$loadDataModule.preTick((ServerLevel) level);
+            cdm.preTick((ServerLevel) level);
         }
         Iterator<BlockEntity> iterator = loadMyChunks$queued.iterator();
         while(iterator.hasNext()){
@@ -252,10 +264,10 @@ public abstract class MixinLevelChunk
             iterator.remove();
         }
 
-        boolean applyTimings = loadMyChunks$loadDataModule.shouldApplyTimings() && !level.isClientSide;
+        boolean applyTimings = cdm.shouldApplyTimings() && !level.isClientSide;
         boolean useTimings = applyTimings || (!level.isClientSide && loadMyChunks$getDataModule().shouldUseTimings());
         if(useTimings){
-            loadMyChunks$loadDataModule.getTickTimer().startBlockEntities();
+            cdm.getTickTimer().startBlockEntities();
         }
         iterator = loadMyChunks$tickers.iterator();
         while(iterator.hasNext()){
@@ -282,11 +294,11 @@ public abstract class MixinLevelChunk
             }
         }
         if(useTimings){
-            loadMyChunks$loadDataModule.getTickTimer().endBlockEntities();
-            loadMyChunks$loadDataModule.inform();
-            if(applyTimings && loadMyChunks$loadDataModule.isOverticked()){
-                loadMyChunks$loadDataModule.consumeLoadState(prev->{
-                    loadMyChunks$loadDataModule.startShutoff();
+            cdm.getTickTimer().endBlockEntities();
+            cdm.inform();
+            if(applyTimings && cdm.isOverticked()){
+                cdm.consumeLoadState(prev->{
+                    cdm.startShutoff();
                     ChunkDataManager.markShutDown((ServerLevel)level,chunkPos,prev);
                 });
             }
@@ -326,5 +338,5 @@ public abstract class MixinLevelChunk
             }
         }
     }
-    *///?}
+    //?}
 }
