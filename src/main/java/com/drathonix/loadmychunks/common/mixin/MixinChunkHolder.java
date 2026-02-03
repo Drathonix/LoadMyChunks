@@ -18,7 +18,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 //? if <=1.16.5 {
-@Mixin(ChunkHolder.class)
+/*@Mixin(ChunkHolder.class)
 public abstract class MixinChunkHolder {
     @Shadow
     public static ChunkHolder.FullChunkStatus getFullChunkStatus(int i) {
@@ -41,10 +41,10 @@ public abstract class MixinChunkHolder {
         }
     }
 }
-//?} else {
-/*import com.drathonix.loadmychunks.common.LoadMyChunks;
+*///?} else {
+import com.drathonix.loadmychunks.common.LoadMyChunks;
 
 @Mixin(LoadMyChunks.class)
 public class MixinChunkHolder {
 }
-*///?}
+//?}

@@ -10,8 +10,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 //? if >1.16.5 {
-/*import net.minecraft.core.Holder;
-*///?}
+import net.minecraft.core.Holder;
+//?}
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
@@ -20,8 +20,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.datafix.DataFixTypes;
 //? if >=1.20.1 {
-/*import net.minecraft.world.RandomSequences;
-*///?}
+import net.minecraft.world.RandomSequences;
+//?}
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
@@ -33,11 +33,11 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
 
 //? if >1.16.5 {
-/*import net.minecraft.world.level.entity.EntityTickList;
+import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
-*///?} else {
-import net.minecraft.world.level.dimension.DimensionType;
-//?}
+//?} else {
+/*import net.minecraft.world.level.dimension.DimensionType;
+*///?}
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -75,21 +75,21 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
         return false;
     }
     *///?} else if >1.16.5 {
-    /*@Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
+    @Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
 
 
     @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return shouldDiscardEntity(entity);
     }
-    *///?} else {
-    @Override
+    //?} else {
+    /*@Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return this.server.isSpawningAnimals() || !(entity instanceof Animal) && !(entity instanceof WaterAnimal)
                 ? !this.server.areNpcsEnabled() && entity instanceof Npc
                 : true;
     }
-    //?}
+    *///?}
 
     @Unique
     private static final ObjectIterator<Entity> lmc$emptyEntityIter = new ObjectIterator<Entity>(){
@@ -105,12 +105,12 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     };
 
     //? if >1.16.5 {
-    /*@Redirect(method = "tick",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/entity/EntityTickList;forEach(Ljava/util/function/Consumer;)V"))
+    @Redirect(method = "tick",at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/entity/EntityTickList;forEach(Ljava/util/function/Consumer;)V"))
     public void lmcEntitiesTickChunkwiseOverride(EntityTickList instance, Consumer<Entity> entity){
-    *///?} else {
-    @Redirect(method = "tick",at = @At(remap = false,value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
+    //?} else {
+    /*@Redirect(method = "tick",at = @At(remap = false,value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
     public ObjectIterator<Entity> lmcEntitiesTickChunkwiseOverride(ObjectSet<Entity> instance){
-    //?}
+    *///?}
         //noinspection resource
         if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache) {
             ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
@@ -127,23 +127,23 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
             }
             // Effectively skips the vanilla behavior.
             //? if <1.16.6 {
-            return lmc$emptyEntityIter;
-            //?}
+            /*return lmc$emptyEntityIter;
+            *///?}
         }
         //? if <1.16.6 {
-        return instance.iterator();
-        //?}
+        /*return instance.iterator();
+        *///?}
     }
 
 
 
     //? if >1.20.5 {
-    /*@Inject(method = "<init>",at = @At("RETURN"))
+    @Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey<Level> resourceKey, LevelStem levelStem, ChunkProgressListener chunkProgressListener, boolean bl, long l, List<CustomSpawner> list, boolean bl2, @Nullable RandomSequences randomSequences, CallbackInfo ci){
         SavedData.Factory<ChunkDataManager.LevelChunkLoaderManager> factory = new SavedData.Factory<>(()->ChunkDataManager.getManager(ServerLevel.class.cast(this)),(tag,other)->ChunkDataManager.loadManager(ServerLevel.class.cast(this),tag), DataFixTypes.LEVEL);
         getDataStorage().computeIfAbsent(factory,"loadmychunks_manager");
     }
-    *///?}
+    //?}
 
     //? if >1.20.3 && <=1.20.5 {
     /*@Inject(method = "<init>",at = @At("RETURN"))
@@ -187,9 +187,9 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     *///?}
 
     //? if <=1.16.5 {
-    @Inject(method = "<init>",at = @At("RETURN"))
+    /*@Inject(method = "<init>",at = @At("RETURN"))
     public void injectCustomSaveData(MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey resourceKey, DimensionType dimensionType, ChunkProgressListener chunkProgressListener, ChunkGenerator chunkGenerator, boolean bl, long l, List list, boolean bl2, CallbackInfo ci) {
         getDataStorage().computeIfAbsent(() -> ChunkDataManager.getManager(ServerLevel.class.cast(this)), "loadmychunks_manager");
     }
-    //?}
+    *///?}
 }

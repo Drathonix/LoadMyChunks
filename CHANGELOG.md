@@ -1,3 +1,5 @@
+# Load My Chunks Version 1.2.2.1 - Neoforge Hotfix
+1. Fixes a mixin crash on neoforge due to some multiversioning issues.
 # Load My Chunks Version 1.2.2 - Entity Ticking Bug Fix
 **IMPORTANT**: If you are planning to continue using a world previously running an LMC version OLDER THAN 1.2.0 [do not update to this version without reading this](https://github.com/Drathonix/LoadMyChunks/issues/31)
 1. Fixes [#38](https://github.com/Drathonix/LoadMyChunks/issues/38), a bug where chunks previously unloaded could no longer tick entities when reloaded.

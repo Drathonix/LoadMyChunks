@@ -29,8 +29,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /*import net.minecraftforge.entity.PartEntity;
 *///?}
 //? if neoforge {
-/*import net.neoforged.neoforge.entity.PartEntity;
-*///?}
+import net.neoforged.neoforge.entity.PartEntity;
+//?}
 
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -270,16 +270,16 @@ public class ChunkDataModule {
             }
             if(informable instanceof Entity){
                 //? if >1.16.5 {
-                /*if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
-                    iterator.remove();
-                }
-                *///?}
-                //? if <=1.16.5 {
-                Entity e = (Entity) informable;
-                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                if(((Entity) informable).chunkPosition().toLong() != position.toLong()){
                     iterator.remove();
                 }
                 //?}
+                //? if <=1.16.5 {
+                /*Entity e = (Entity) informable;
+                if(new ChunkPos(e.xChunk,e.zChunk).toLong() != position.toLong()){
+                    iterator.remove();
+                }
+                *///?}
             }
         }
     }
@@ -386,10 +386,10 @@ public class ChunkDataModule {
             ) {
                 if (mixin.lmc$shouldDiscardEntity(entity)) {
                     //? if >1.16.5 {
-                    /*entity.discard();
-                    *///?} else {
-                    entity.remove();
-                     //?}
+                    entity.discard();
+                    //?} else {
+                    /*entity.remove();
+                     *///?}
                 } else {
                     profilerfiller.push("checkDespawn");
                     entity.checkDespawn();
@@ -405,8 +405,8 @@ public class ChunkDataModule {
                     profilerfiller.push("tick");
                     // Neoforge/forge specific
                     //? if neoforge || forge {
-                    /*if(!(entity instanceof PartEntity))
-                        *///?}
+                    if(!(entity instanceof PartEntity))
+                        //?}
                         sl.guardEntityTick(sl::tickNonPassenger, entity);
 
                     profilerfiller.pop();

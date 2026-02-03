@@ -51,8 +51,16 @@ public class LMCConfig {
     @Save(description = "Maximum number of times a chunk loader's range can be extended.")
     @Range(minimum=0,maximum=10)
     public static int maximumRangeExtensions=1;
-    @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
+    @Save(description = "Controls the default level for placed load my chunks chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:entity_ticking_permanent\" for unmanaged entity ticking.")
     public static LoadStateRetriever placedChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
+
+    @Save.Setter("placedChunkLoaderDefaultLevel")
+    public static void validate(LoadStateRetriever retriever){
+        if(retriever == null){
+            return;
+        }
+        placedChunkLoaderDefaultLevel=retriever;
+    }
 
     @Save(description = "When true, no mod items or blocks will be registered, allowing clients without the mod to be able to connect. This is intended for servers that merely want to run the LMC chunk loading engine. Must restart the game to enable!")
     public static boolean zeroContent = false;
@@ -96,8 +104,16 @@ public class LMCConfig {
         @Save(description = "When 2: Usage allowed in all computers. When 1: Usage banned in turtles and pocket computers. When 0: Usage banned in all computers")
         @Range(minimum = 0, maximum = 2)
         public int lagometerComputerExposureLevel=2;
-        @Save(description = "Controls the default level for turtle chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:permanent_entity_ticking\" for unmanaged entity ticking.")
+        @Save(description = "Controls the default level for turtle chunk loaders. Set to \"loadmychunks:ticking\" for managed forced ticking, \"loadmychunks:entity_ticking\" for managed entity ticking, \"loadmychunks:permanent\" for unmanaged ticking, \"loadmychunks:entity_ticking_permanent\" for unmanaged entity ticking.")
         public LoadStateRetriever turtleChunkLoaderDefaultLevel = new LoadStateRetriever(LoadStateRegistry.INSTANCE.getKey(LoadStateRegistry.TICKING));
+
+        @Save.Setter("turtleChunkLoaderDefaultLevel")
+        public void validate(LoadStateRetriever retriever){
+            if(retriever == null){
+                return;
+            }
+            this.turtleChunkLoaderDefaultLevel=retriever;
+        }
     }
 
     public static class Cost {
@@ -114,6 +130,14 @@ public class LMCConfig {
 
         @Save(description = "Change this to set the itemstack consumed.")
         public ItemStackRetriever itemStack = new ItemStackRetriever(Items.ENDER_PEARL.getDefaultInstance());
+
+        @Save.Setter("itemStack")
+        public void validate(ItemStackRetriever retriever){
+            if(retriever == null){
+                return;
+            }
+            this.itemStack=retriever;
+        }
 
         public long getDurationFor(ILoadState defaultState) {
             if(defaultState.shouldForceEntities()){

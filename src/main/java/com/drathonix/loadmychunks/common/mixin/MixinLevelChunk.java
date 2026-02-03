@@ -19,11 +19,11 @@ import java.util.function.Consumer;
 import net.minecraft.world.level.chunk.*;
 
 //? if >1.16.5 {
-/*import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-*///?} else {
-import net.minecraft.world.level.TickList;
+//?} else {
+/*import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,7 +31,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.server.level.ChunkHolder;
-//?}
+*///?}
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -57,8 +57,8 @@ import java.util.function.Supplier;
 
 public abstract class MixinLevelChunk
     //? if >1.16.5 {
-        /*extends MixinChunkAccess
-    *///?}
+        extends MixinChunkAccess
+    //?}
         implements ILevelChunkMixin {
     @Shadow
     @Final
@@ -80,7 +80,7 @@ public abstract class MixinLevelChunk
     }
 
     //? if <1.18.2 {
-    @Inject(method = "addEntity",at = @At("TAIL"))
+    /*@Inject(method = "addEntity",at = @At("TAIL"))
     public void onAdd(Entity entity, CallbackInfo ci){
         if(level instanceof ServerLevel){
             loadMyChunks$getDataModule().lmc$addEntity(entity);
@@ -102,7 +102,7 @@ public abstract class MixinLevelChunk
             }
         }
     }
-    //?}
+    *///?}
 
     @Unique
     @Override
@@ -114,7 +114,7 @@ public abstract class MixinLevelChunk
 
 
     //? if >1.16.5 {
-    /*@Unique
+    @Unique
     private final List<TickingBlockEntity> loadMyChunks$queuedTickers = new ArrayList<>();
     @Unique
     private final List<TickingBlockEntity> loadMyChunks$tickers = new ArrayList<>();
@@ -224,12 +224,12 @@ public abstract class MixinLevelChunk
         return remappingFunction.apply(key, instance.get(key));
     }
 
-    *///?}
+    //?}
 
     //TODO: Remove redundant code. For now I'm just assuming 1.16.5 is too complex to really integrate well (I'm definitely wrong)
     //? if <=1.16.5 {
 
-    @Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
+    /*@Unique private final List<BlockEntity> loadMyChunks$queued = new ArrayList<>();
     @Unique private final List<BlockEntity> loadMyChunks$tickers = new ArrayList<>();
 
     @Shadow @Nullable
@@ -338,5 +338,5 @@ public abstract class MixinLevelChunk
             }
         }
     }
-    //?}
+    *///?}
 }

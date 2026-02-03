@@ -4,10 +4,10 @@ import com.drathonix.loadmychunks.common.LoadMyChunks;
 import com.drathonix.loadmychunks.common.bridge.IInformable;
 import com.drathonix.loadmychunks.common.network.LagReadingPacket;
 //? if >1.16.5 {
-/*import dev.architectury.networking.NetworkManager;
-*///?} else {
-import me.shedaniel.architectury.networking.NetworkManager;
-//?}
+import dev.architectury.networking.NetworkManager;
+//?} else {
+/*import me.shedaniel.architectury.networking.NetworkManager;
+*///?}
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,12 +18,12 @@ public class MixinServerPlayer implements IInformable {
     @Override
     public void lmc$informLagFrac(float frac) {
         //? if <=1.20.5 {
-        FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
+        /*FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
         newBuf.writeFloat(frac);
         NetworkManager.sendToPlayer(ServerPlayer.class.cast(this), LoadMyChunks.LAG_READING_PACKET_ID, newBuf);
-        //?}
-        //? if >1.20.5 {
-        /*NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
         *///?}
+        //? if >1.20.5 {
+        NetworkManager.sendToPlayer(ServerPlayer.class.cast(this),new LagReadingPacket(frac));
+        //?}
     }
 }

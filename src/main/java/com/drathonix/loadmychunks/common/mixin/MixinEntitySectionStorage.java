@@ -3,7 +3,7 @@ package com.drathonix.loadmychunks.common.mixin;
 import com.drathonix.loadmychunks.common.LoadMyChunks;
 import org.spongepowered.asm.mixin.Mixin;
 //? if >1.16.5 {
-/*import net.minecraft.world.level.entity.Visibility;
+import net.minecraft.world.level.entity.Visibility;
 import net.minecraft.world.level.entity.EntityAccess;
 import org.spongepowered.asm.mixin.Final;
 import com.drathonix.loadmychunks.common.bridge.IEntitySectionMixin;
@@ -26,7 +26,7 @@ public class MixinEntitySectionStorage<T extends EntityAccess> {
         cir.setReturnValue(sec);
     }
 }
-*///?} else {
-@Mixin(LoadMyChunks.class)
+//?} else {
+/*@Mixin(LoadMyChunks.class)
 public class MixinEntitySectionStorage {}
-//?}
+*///?}

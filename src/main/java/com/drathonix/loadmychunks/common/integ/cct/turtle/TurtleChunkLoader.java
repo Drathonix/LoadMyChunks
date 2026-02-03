@@ -1,5 +1,5 @@
 //? if computercraft {
-/*package com.drathonix.loadmychunks.common.integ.cct.turtle;
+package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.drathonix.loadmychunks.common.config.LMCConfig;
 import com.drathonix.loadmychunks.common.integ.cct.bridge.ITileTurtleMixin;
@@ -12,8 +12,8 @@ import com.drathonix.loadmychunks.common.system.loaders.PlacedChunkLoader;
 //? if >1.19.2 {
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity;
 //?} else {
-/^import dan200.computercraft.shared.turtle.blocks.TileTurtle;
-^///?}
+/*import dan200.computercraft.shared.turtle.blocks.TileTurtle;
+*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -71,10 +71,10 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         //    ((TurtleBlockEntity) target).createServerComputer().turnOn();
         //}
         //} else {
-        /^if(target instanceof TileTurtle){
+        /*if(target instanceof TileTurtle){
             ((TileTurtle) target).createServerComputer().turnOn();
         }
-        ^///}
+        *///}
         //return true;
         return false;
     }
@@ -110,4 +110,4 @@ public class TurtleChunkLoader extends PlacedChunkLoader {
         return getPosition();
     }
 }
-*///?}
+//?}

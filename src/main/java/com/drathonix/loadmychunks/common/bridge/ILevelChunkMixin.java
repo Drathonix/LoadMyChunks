@@ -6,11 +6,11 @@ import net.minecraft.world.entity.Entity;
 
 public interface ILevelChunkMixin {
     //? if <=1.16.5 {
-    void loadMyChunks$tick(ProfilerFiller profilerFiller);
+    /*void loadMyChunks$tick(ProfilerFiller profilerFiller);
     void loadMyChunks$1165reloadEntities();
-    //?} else {
-    /*void loadMyChunks$tick();
-    *///?}
+    *///?} else {
+    void loadMyChunks$tick();
+    //?}
 
     /**
      * Ticks entities. Critically important fact that this happens before block entity ticking.

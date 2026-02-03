@@ -1,5 +1,5 @@
 //? if fabric {
-package com.drathonix.loadmychunks.fabric.mixin;
+/*package com.drathonix.loadmychunks.fabric.mixin;
 
 import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
 import com.drathonix.loadmychunks.common.bridge.IDistanceManagerMixin;
@@ -16,17 +16,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Consumer;
 
-/**
+/^*
  * Allows LMC to enable random ticks in entity ticking forced chunks.
  * Normally vanilla does not randomly tick when a chunk is forced. This behavior is maintained except for LMC chunkloading.
  * @since 1.2.0
  * @author Jack Andersen
- */
+ ^/
 @Mixin(ServerChunkCache.class)
 public class MixinServerChunkCache {
 
     //? if >=1.21.2 {
-    /*@Shadow @Final private DistanceManager distanceManager;
+    @Shadow @Final private DistanceManager distanceManager;
     @Redirect(method = "collectTickingChunks",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/level/ChunkMap;forEachSpawnCandidateChunk(Ljava/util/function/Consumer;)V"))
     public void doNotCareAboutPlayerDist(ChunkMap instance, Consumer<ChunkHolder> consumer){
         ((IChunkMapMixin)instance).lmc$getUpdatingChunkMap().forEach((inst,holder)->{
@@ -36,8 +36,8 @@ public class MixinServerChunkCache {
             }
         });
     }
-    *///?} else if >1.16.5 {
-    /*@Shadow @Final private DistanceManager distanceManager;
+    //?} else if >1.16.5 {
+    /^@Shadow @Final private DistanceManager distanceManager;
     @Redirect(method="tickChunks",at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkMap;anyPlayerCloseEnoughForSpawning(Lnet/minecraft/world/level/ChunkPos;)Z"))
     public boolean doNotCareAboutPlayerDist(ChunkMap instance, ChunkPos chunkPos){
         if(((IChunkMapMixin)instance).lmc$playerDistCheck(chunkPos)){
@@ -45,6 +45,6 @@ public class MixinServerChunkCache {
         }
         return IDistanceManagerMixin.lmc$hasEntityForcingTicket(distanceManager,chunkPos.toLong());
     }
-    *///?}
+    ^///?}
 }
-//?}
+*///?}
