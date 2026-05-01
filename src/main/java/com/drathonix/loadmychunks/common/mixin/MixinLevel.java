@@ -3,12 +3,14 @@ package com.drathonix.loadmychunks.common.mixin;
 import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
 import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.bridge.ILevelMixin;
+import com.drathonix.loadmychunks.common.registry.custom.LoadedChunkProviders;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 //? if >1.21.1 {
 /*import net.minecraft.util.profiling.Profiler;
 *///?}
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 //? if >1.16.5 {
@@ -54,18 +56,11 @@ public abstract class MixinLevel implements ILevelMixin {
     public Iterator<TickingBlockEntity> tickChunkWise(List<TickingBlockEntity> instance){
         if(!this.isClientSide()){
             //noinspection resource
-            if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache scc) {
-                Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).lmc$getUpdatingChunkMap();
-                synchronized (updatingChunkMap) {
-                    for (ChunkHolder value : updatingChunkMap.values()) {
-                        if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
-                            if (scc.chunkMap.getDistanceManager().inBlockTickingRange(chunk.loadMyChunks$posAsLong())) {
-                                chunk.loadMyChunks$tick();
-                            }
-                        }
-                    }
+            LoadedChunkProviders.iterateChunksBlockEntityTicking((ServerLevel) loadMyChunks$cast(), value->{
+                if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin chunk) {
+                    chunk.loadMyChunks$tick();
                 }
-            }
+            });
             return lmc$emptyIter;
         } else {
             return instance.iterator();

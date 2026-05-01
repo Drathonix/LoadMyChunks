@@ -41,18 +41,18 @@ stonecutter {
         vers("1.20.1-fabric","1.20.1")
         vers("1.20.1-forge","1.20.1")
         vers("1.20.4-fabric","1.20.4")
-        vers("1.20.4-forge","1.20.4")*/
+        vers("1.20.4-forge","1.20.4")*
         vers("1.20.4-neoforge","1.20.4")
         //vers("1.20.6-fabric","1.20.6")
         vers("1.20.6-neoforge","1.20.6")
        // vers("1.21-fabric","1.21")
-        vers("1.21-neoforge","1.21")
+        vers("1.21-neoforge","1.21")*/
         //vers("1.21.1-fabric","1.21.1")
         vers("1.21.1-neoforge","1.21.1")
         //vers("1.21.2+3-fabric","1.21.2")
-        vers("1.21.2+3-neoforge","1.21.2")
+        //vers("1.21.2+3-neoforge","1.21.2")
         //vcsVersion="1.21.2+3-neoforge"
-        vcsVersion="1.21.2+3-neoforge"
+        vcsVersion="1.21.1-neoforge"
     }
 }
 

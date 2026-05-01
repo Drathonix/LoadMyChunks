@@ -3,6 +3,7 @@ package com.drathonix.loadmychunks.common.mixin;
 import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
 import com.drathonix.loadmychunks.common.bridge.ILevelChunkMixin;
 import com.drathonix.loadmychunks.common.bridge.IServerLevelMixin;
+import com.drathonix.loadmychunks.common.registry.custom.LoadedChunkProviders;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 //? if >1.18.1 {
 //?}
@@ -113,18 +114,12 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     *///?}
         //noinspection resource
         if (loadMyChunks$cast().getChunkSource() instanceof ServerChunkCache) {
-            ServerChunkCache scc = (ServerChunkCache) loadMyChunks$cast().getChunkSource();
-            Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).lmc$getUpdatingChunkMap();
-            synchronized (updatingChunkMap) {
-                for (ChunkHolder value : updatingChunkMap.values()) {
-                    if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin) {
-                        ILevelChunkMixin chunk = (ILevelChunkMixin) value.getTickingChunk();
-                        if (((IChunkMapMixin) scc.chunkMap).lmc$inEntityTickingRange(value.getPos().toLong())) {
-                            chunk.loadMyChunks$tickEntities(getProfiler());
-                        }
-                    }
+            LoadedChunkProviders.iterateChunksEntityTicking((ServerLevel) loadMyChunks$cast(),value->{
+                if (value != null && value.getTickingChunk() instanceof ILevelChunkMixin) {
+                    ILevelChunkMixin chunk = (ILevelChunkMixin) value.getTickingChunk();
+                    chunk.loadMyChunks$tickEntities(getProfiler());
                 }
-            }
+            });
             // Effectively skips the vanilla behavior.
             //? if <1.16.6 {
             /*return lmc$emptyEntityIter;

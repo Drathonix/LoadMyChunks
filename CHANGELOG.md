@@ -1,3 +1,9 @@
+# Load My Chunks Version 1.2.3 - Neoforge 1.21.1 only - Sable/Create Aeronautics Compatibility partial fix
+1. Fixes an incompatibility with Sable which broke tile entity ticking on physics objects.
+
+DO NOT CHUNK LOAD PHYSICS OBJECTS! ATTEMPTING TO DO SO WILL CAUSE WORLD CORRUPTION ON EXIT! THIS IS NOT AN LMC ISSUE!
+[Related Sable issue](https://github.com/ryanhcode/sable/issues/144)
+
 # Load My Chunks Version 1.2.2.1 - Neoforge Hotfix
 1. Fixes a mixin crash on neoforge due to some multiversioning issues.
 # Load My Chunks Version 1.2.2 - Entity Ticking Bug Fix

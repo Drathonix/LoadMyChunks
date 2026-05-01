@@ -44,6 +44,9 @@ repositories {
             includeGroup("cc.tweaked")
         }
     }
+    maven("https://maven.ryanhcode.dev/releases"){
+        isAllowInsecureProtocol = true
+    }
     maven( "https://maven2.bai.lol")
     maven("https://maven.ryuutech.com/repository/maven-releases/")
 }
@@ -237,7 +240,8 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
 }
 
 val cctAPISource = APISource(DepType.API_OPTIONAL,
-    APIModInfo("computercraft"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}", optionalVersionProperty("deps.api.cct")){
+    APIModInfo("computercraft"),"${if(env.atMost("1.19.2")) "org.squiddev" else "cc.tweaked"}:cc-tweaked-${env.mcVersion.min}${if(env.atMost("1.19.2")) "" else "-${if(env.isFabric) "fabric" else "forge"}"}",
+    optionalVersionProperty("deps.api.cct")){
         src -> src.versionRange.isPresent
 }
 val c2meAPISource = APISource(DepType.API_OPTIONAL,
@@ -246,6 +250,16 @@ val c2meAPISource = APISource(DepType.API_OPTIONAL,
 { src->
     src.versionRange.isPresent
 }
+
+val sableAPISource = APISource(DepType.API_OPTIONAL,
+    APIModInfo("sable","sable","sable",true, VersionRange("0","")),
+    //TODO swap to this when the maven is back: "dev.ryanhcode.sable:sable-common",
+    "maven.modrinth:sable",
+    optionalVersionProperty("deps.api.sable"))
+{
+    src-> src.versionRange.isPresent
+}
+
 /**
  * APIs with hardcoded support for convenience. These are optional.
  */
@@ -263,6 +277,7 @@ val apis = arrayListOf(
     },
     cctAPISource,
     c2meAPISource,
+    sableAPISource,
     APISource(DepType.FRL,APIModInfo(),"com.jcraft:jzlib",Optional.of(VersionRange("1.1.3",""))){
             _ -> env.atLeast("1.19.4") && cctAPISource.versionRange.isPresent
     },
