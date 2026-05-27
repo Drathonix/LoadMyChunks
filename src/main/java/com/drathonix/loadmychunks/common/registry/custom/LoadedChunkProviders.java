@@ -27,7 +27,10 @@ public class LoadedChunkProviders {
                 ServerChunkCache scc = level.getChunkSource();
                 Long2ObjectLinkedOpenHashMap<ChunkHolder> updatingChunkMap = ((IChunkMapMixin) scc.chunkMap).lmc$getUpdatingChunkMap();
                 for (ChunkHolder value : updatingChunkMap.values()) {
-                    consumer.accept(value);
+                    // somehow this can happen? The UCM shouldn't have null values in it but I guess other mods can mess with that.
+                    if(value != null) {
+                        consumer.accept(value);
+                    }
                 }
             }
 

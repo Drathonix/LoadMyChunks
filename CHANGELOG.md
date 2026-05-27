@@ -1,3 +1,5 @@
+# Load My Chunks Version 1.2.4 - Fixes an unusual crash caused by a null value being present in the updating chunk map (should be impossible but who knows how that happens)
+
 # Load My Chunks Version 1.2.3 - Neoforge 1.21.1 only - Sable/Create Aeronautics Compatibility partial fix
 1. Fixes an incompatibility with Sable which broke tile entity ticking on physics objects.
 

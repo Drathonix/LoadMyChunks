@@ -16,7 +16,11 @@ public class SableNeo {
             @Override
             public void iterateChunks(ServerLevel level, Consumer<ChunkHolder> consumer) {
                 for (ServerSubLevel subLevel : SubLevelContainer.getContainer(level).getAllSubLevels()) {
-                    subLevel.getPlot().getLoadedChunks().forEach(consumer);
+                    subLevel.getPlot().getLoadedChunks().forEach(v -> {
+                        if(v != null){
+                            consumer.accept(v);
+                        }
+                    });
                 }
             }
 
