@@ -1,6 +1,7 @@
 package com.drathonix.loadmychunks.common.system.control;
 
 import com.drathonix.loadmychunks.common.bridge.IChunkMapMixin;
+import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 import net.minecraft.server.level.DistanceManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
@@ -39,6 +40,7 @@ public class ChunkForcer {
      */
     public static void unforceChunk(ServerLevel level, ChunkPos pos, boolean wasEntityTicking){
         removeTicket(((IChunkMapMixin)level.getChunkSource().chunkMap).lmc$getDistanceManager(),pos,wasEntityTicking);
+        ChunkDataManager.incrementForced(level,-1);
     }
 
     /**
@@ -49,5 +51,6 @@ public class ChunkForcer {
      */
     public static void forceChunk(ServerLevel level, ChunkPos pos, boolean doEntityTicking){
         addTicket(((IChunkMapMixin)level.getChunkSource().chunkMap).lmc$getDistanceManager(),pos,doEntityTicking);
+        ChunkDataManager.incrementForced(level,1);
     }
 }

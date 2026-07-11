@@ -138,8 +138,8 @@ public class BlockEntityTypeBuilder {
     public static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.BlockEntitySupplier<T> factory, Block... blocks) {
         return new BlockEntityType<>(factory, Set.of(blocks)
                 //? if <1.21.2 {
-                , null
-                //?}
+                /*, null
+                *///?}
         );
     }
 

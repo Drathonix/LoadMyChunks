@@ -7,6 +7,7 @@ import com.drathonix.loadmychunks.common.registry.custom.LoadedChunkProviders;
 import com.drathonix.loadmychunks.common.system.ChunkDataManager;
 //? if >1.18.1 {
 //?}
+import com.drathonix.loadmychunks.common.util.MultiversioningHelper;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -38,7 +39,7 @@ import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 //?} else {
 /*import net.minecraft.world.level.dimension.DimensionType;
-*///?}
+ *///?}
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -71,19 +72,19 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
 
     //@Shadow @Final private PersistentEntitySectionManager<Entity> entityManager;
     //? if >1.21.1 {
-    /*@Override
+    @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return false;
     }
-    *///?} else if >1.16.5 {
-    @Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
+    //?} else if >1.16.5 {
+    /*@Shadow protected abstract boolean shouldDiscardEntity(Entity arg);
 
 
     @Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return shouldDiscardEntity(entity);
     }
-    //?} else {
+    *///?} else {
     /*@Override
     public boolean lmc$shouldDiscardEntity(Entity entity) {
         return this.server.isSpawningAnimals() || !(entity instanceof Animal) && !(entity instanceof WaterAnimal)
@@ -130,7 +131,16 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
         *///?}
     }
 
-
+    // Fixes #45 and #41
+    //? if >1.16.5 {
+    @Redirect(method = "tick",at = @At(value = "INVOKE",target = "Ljava/util/List;isEmpty()Z",ordinal = 0))
+    public boolean lmcDisableDimensionTimeout(List instance){
+        //?} else {
+    /*@Redirect(method = "tick",at = @At(remap = false,value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
+    public boolean lmcDisableDimensionTimeout(List instance){
+    *///?}
+        return instance.isEmpty() && ChunkDataManager.isEmpty((ServerLevel)(Object)this);
+    }
 
     //? if >1.20.5 {
     @Inject(method = "<init>",at = @At("RETURN"))

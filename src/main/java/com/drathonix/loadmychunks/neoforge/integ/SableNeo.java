@@ -1,5 +1,5 @@
 //? if neoforge && sable {
-package com.drathonix.loadmychunks.neoforge.integ;
+/*package com.drathonix.loadmychunks.neoforge.integ;
 
 import com.drathonix.loadmychunks.common.registry.ILoadedChunkProvider;
 import com.drathonix.loadmychunks.common.registry.custom.LoadedChunkProviders;
@@ -42,4 +42,4 @@ public class SableNeo {
 
     }
 }
-//?}
+*///?}

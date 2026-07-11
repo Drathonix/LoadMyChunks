@@ -1,10 +1,10 @@
 //? if computercraft {
-package com.drathonix.loadmychunks.common.integ.cct.turtle;
+/*package com.drathonix.loadmychunks.common.integ.cct.turtle;
 
 import com.mojang.math.Transformation;
 //? if <=1.19.2 {
-/*import com.mojang.math.Vector3f;
-*///?}
+/^import com.mojang.math.Vector3f;
+^///?}
 import dan200.computercraft.api.client.TransformedModel;
 //? if >1.18.2 {
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
@@ -40,7 +40,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
                 null);
     }
     //? if <=1.20.1 && >1.19.2 {
-    /*@Override
+    /^@Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess iTurtleAccess, TurtleSide side) {
         ItemStack stack = t.getUpgradeItem(null);
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
@@ -48,17 +48,17 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
         TransformedModel out = new TransformedModel(model, side == TurtleSide.LEFT ? leftTransform : rightTransform);
         return out;
     }
-    *///?}
+    ^///?}
     //? if <=1.19.2 && >1.18.2 {
-    /*@Override
+    /^@Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess iTurtleAccess, TurtleSide side) {
         return TransformedModel.of(t.getCraftingItem(),side == TurtleSide.LEFT ? leftTransform : rightTransform);
     }
-    *///?}
+    ^///?}
 
 
     //? if <1.20.6 && >=1.20.4 {
-    /*@Override
+    /^@Override
     public TransformedModel getModel(T t, @Nullable ITurtleAccess turtle, TurtleSide side, CompoundTag compoundTag) {
         ItemStack stack = t.getUpgradeItem(compoundTag);
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
@@ -67,7 +67,7 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
         return out;
     }
 
-    *///?}
+    ^///?}
 
     //? if >=1.20.6 {
     @Override
@@ -80,4 +80,4 @@ public class UpgradeModeller<T extends ITurtleUpgrade>
     }
     //?}
 }
-//?}
+*///?}

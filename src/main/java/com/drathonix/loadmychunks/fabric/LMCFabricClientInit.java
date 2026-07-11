@@ -14,8 +14,8 @@ public class LMCFabricClientInit implements ClientModInitializer {
 
     public static void clientInit(){
         //? if computercraft {
-        /^Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
-        ^///?}
+        Integrations.invokeWhenLoaded("computercraft","com.drathonix.loadmychunks.fabric.integ.CCTFabric","clientInit",new Class[0]);
+        //?}
     }
 }
 *///?}

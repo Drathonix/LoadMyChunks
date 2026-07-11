@@ -381,8 +381,8 @@ public class ChunkDataModule {
         entities.forEach(entity -> {
             if (!MultiversioningHelper.isRemoved(entity)
                 //? if >=1.21.2 {
-                /*&& !sl.tickRateManager().isEntityFrozen(entity)
-                 *///?}
+                && !sl.tickRateManager().isEntityFrozen(entity)
+                 //?}
             ) {
                 if (mixin.lmc$shouldDiscardEntity(entity)) {
                     //? if >1.16.5 {

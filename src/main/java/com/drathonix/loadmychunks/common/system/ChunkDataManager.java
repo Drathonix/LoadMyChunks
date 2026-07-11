@@ -211,11 +211,23 @@ public class ChunkDataManager {
     public static void forceLevelChunkCDMUpdate(long lmc$longChunk) {
     }
 
+    public static boolean isEmpty(ServerLevel level) {
+        if(!levelManagers.containsKey(level)) {
+            return true;
+        } else{
+            return getManager(level).numberChunksForced <= 0;
+        }
+    }
+
+    public static void incrementForced(ServerLevel level, int i) {
+        getManager(level).incrementForced(i);
+    }
+
     public static class LevelChunkLoaderManager extends SavedData{
-        protected final Long2ObjectLinkedOpenHashMap<List<Consumer<ChunkDataModule>>> WAITING_FOR_INIT = new Long2ObjectLinkedOpenHashMap<>();
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
         private final Map<UUID, LongOpenHashSet> forcedChunksByUUID = new HashMap<>();
+        private long numberChunksForced;
         private final ServerLevel level;
         protected boolean configReloaded = false;
 
@@ -404,6 +416,10 @@ public class ChunkDataManager {
 
         public synchronized void clear() {
             data.clear();
+        }
+
+        public void incrementForced(int i) {
+            numberChunksForced+=i;
         }
 
         //? if >1.20.5 {
