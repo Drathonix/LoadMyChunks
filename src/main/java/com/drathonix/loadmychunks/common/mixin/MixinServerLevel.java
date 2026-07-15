@@ -139,7 +139,7 @@ public abstract class MixinServerLevel extends MixinLevel implements IServerLeve
     /*@Redirect(method = "tick",at = @At(remap = false,value = "INVOKE",target = "Lit/unimi/dsi/fastutil/objects/ObjectSet;iterator()Lit/unimi/dsi/fastutil/objects/ObjectIterator;"))
     public boolean lmcDisableDimensionTimeout(List instance){
     *///?}
-        return instance.isEmpty() && ChunkDataManager.isEmpty((ServerLevel)(Object)this);
+        return instance.isEmpty() && ChunkDataManager.shouldTimeoutLevels((ServerLevel)(Object)this);
     }
 
     //? if >1.20.5 {

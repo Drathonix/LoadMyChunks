@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -211,25 +210,21 @@ public class ChunkDataManager {
     public static void forceLevelChunkCDMUpdate(long lmc$longChunk) {
     }
 
-    public static boolean isEmpty(ServerLevel level) {
+    public static boolean shouldTimeoutLevels(ServerLevel level) {
         if(!levelManagers.containsKey(level)) {
             return true;
         } else{
-            return getManager(level).numberChunksForced <= 0;
+            return getManager(level).shouldTimeoutLevel;
         }
-    }
-
-    public static void incrementForced(ServerLevel level, int i) {
-        getManager(level).incrementForced(i);
     }
 
     public static class LevelChunkLoaderManager extends SavedData{
         private final Long2ObjectLinkedOpenHashMap<ChunkDataModule> data = new Long2ObjectLinkedOpenHashMap<>();
         private final Set<ChunkDataModule> shutoffLoaders = new HashSet<>();
         private final Map<UUID, LongOpenHashSet> forcedChunksByUUID = new HashMap<>();
-        private long numberChunksForced;
         private final ServerLevel level;
         protected boolean configReloaded = false;
+        private boolean shouldTimeoutLevel = false;
 
         public synchronized void markChunkOwnedBy(long longChunkPos, @Nullable UUID uuid){
             if(uuid == null) uuid = Util.NIL_UUID;
@@ -342,11 +337,15 @@ public class ChunkDataManager {
             }
             if(tickCounter >= purgeTimer){
                 Iterator<ChunkDataModule> iterator = data.values().iterator();
+                shouldTimeoutLevel = true;
                 while(iterator.hasNext()){
                     ChunkDataModule cdm = iterator.next();
                     if(!cdm.shouldPersist() && !level.hasChunk(cdm.getPosition().x, cdm.getPosition().z)){
                         cdm.invalidate();
                         iterator.remove();
+                    }
+                    if(!cdm.getLoadState().allowsLevelTimeouts()){
+                        shouldTimeoutLevel = false;
                     }
                 }
                 tickCounter = 0;
@@ -416,10 +415,6 @@ public class ChunkDataManager {
 
         public synchronized void clear() {
             data.clear();
-        }
-
-        public void incrementForced(int i) {
-            numberChunksForced+=i;
         }
 
         //? if >1.20.5 {

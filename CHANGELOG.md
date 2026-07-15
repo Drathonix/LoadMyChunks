@@ -1,5 +1,6 @@
+# Load My Chunks Version 1.2.5.1 - Actually fixes the dimension unloading issue.
 # Load My Chunks Version 1.2.5 - Fixes a bug where vanilla unloads dimensions containing LMC forced chunks when it shouldn't.
-Not out for 1.16.5 fabric (relatively unused)
+
 # Load My Chunks Version 1.2.4 - Fixes an unusual crash caused by a null value being present in the updating chunk map (should be impossible but who knows how that happens)
 
 # Load My Chunks Version 1.2.3 - Neoforge 1.21.1 only - Sable/Create Aeronautics Compatibility partial fix

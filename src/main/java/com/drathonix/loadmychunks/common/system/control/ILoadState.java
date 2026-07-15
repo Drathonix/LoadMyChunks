@@ -50,6 +50,10 @@ public interface ILoadState {
         return entityForcingPower() == LoaderPower.FORCED_MANAGED || entityForcingPower() == LoaderPower.FORCED;
     }
 
+    default boolean allowsLevelTimeouts(){
+        return this == LoadStateEnum.DISABLED || this == LoadStateEnum.PERMANENTLY_DISABLED || this == LoadStateRegistry.INVALID;
+    }
+
     default ILoadState getSuperiorLoadState(ILoadState loadState) {
         if (loadState.overrides(this)) {
             return loadState;
@@ -73,13 +77,13 @@ public interface ILoadState {
         if(previous == null) previous = LoadStateRegistry.DISABLED;
         if (shouldLoad()) {
             if (!shouldForceEntities()) {
-                LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Forceloading Chunk at: (" + pos.x + "," + pos.z + ") with level " + blockEntityTickingPower().name());
+                LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "BE ticking Chunk at: ({},{}) with level {}", pos.x, pos.z, blockEntityTickingPower().name());
             } else {
-                LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Entity Ticking Chunk at: (" + pos.x + "," + pos.z + ") with level " + entityForcingPower().name());
+                LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Entity  Ticking Chunk at: ({},{}) with level {}", pos.x, pos.z, entityForcingPower().name());
             }
             ChunkForcer.forceChunk(level, pos, shouldForceEntities());
         } else {
-            LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Unforceloading Chunk at: (" + pos.x + "," + pos.z + ")");
+            LoadMyChunks.logger.log(LoadMyChunks.debugLevel, "Unforceloading Chunk at: ({},{})", pos.x, pos.z);
             ChunkForcer.unforceChunk(level, pos, previous.shouldForceEntities());
         }
     }
