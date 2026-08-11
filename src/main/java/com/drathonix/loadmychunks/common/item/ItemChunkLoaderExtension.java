@@ -30,7 +30,7 @@ public class ItemChunkLoaderExtension extends ItemHasTooltip {
                         ItemStack stack = ctx.getItemInHand();
                         stack.shrink(1);
                         ctx.getPlayer().setItemInHand(ctx.getHand(),stack);
-                        return Message.translatable("loadmychunks.chunk_loader_extension.extended_range",1, loader.getExtensionRange());
+                        return Message.translatable("loadmychunks.chunk_loader_extension.extended_range",1, loader.getExtensionRange()+1);
                     }
                 }
                 else{
